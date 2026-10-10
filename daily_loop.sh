@@ -10,6 +10,7 @@ mkdir -p logs
   TOK0=$(gh auth token 2>/dev/null)
   git pull --rebase --autostash --quiet "https://x-access-token:${TOK0}@github.com/part676392/dsh-money-engine.git" main 2>&1 | tail -2
 
+  python3 ensure_inbox.py     2>&1 | tail -4
   python3 extract_deadlines.py 2>&1 | tail -3
   python3 make_deadlines.py  2>&1 | tail -2
 

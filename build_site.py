@@ -275,7 +275,7 @@ code{{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.85em}}
 function f(){{var v=document.getElementById('q').value.toLowerCase();
 document.querySelectorAll('#t tbody tr').forEach(function(r){{
 r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
-</script><img src="https://abacus.jasoncameron.dev/hit/dsh-money-engine/home" width="1" height="1" alt="" aria-hidden="true" style="position:absolute;left:-9999px"></body></html>"""
+</script><script>(function(){try{fetch("https://abacus.jasoncameron.dev/hit/dsh-money-engine/home",{mode:"no-cors",keepalive:true});}catch(e){}})();</script></body></html>"""
     (OUT / "index.html").write_text(html_doc, encoding="utf-8")
 
     # ---- 企業別ページ : AI Overview に引用される「独立した回答単位」 ----
@@ -352,7 +352,7 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
 {cai}
 <section class="about"><h2>この目録を運営している人</h2><p><b>{esc(OPERATOR["name"])}</b> — {esc(OPERATOR["credential"])}</p><p class="src">データは {esc(snapshot.get("captured_at",""))} 時点。<a href=\'{OPERATOR['note']}\'>note</a> で本文を買えます。</p></section>
 </main>
-<img src="https://abacus.jasoncameron.dev/hit/dsh-money-engine/home" width="1" height="1" alt="" aria-hidden="true" style="position:absolute;left:-9999px">
+<script>(function(){try{fetch("https://abacus.jasoncameron.dev/hit/dsh-money-engine/home",{mode:"no-cors",keepalive:true});}catch(e){}})();</script>
 </body></html>""",
             encoding="utf-8",
         )

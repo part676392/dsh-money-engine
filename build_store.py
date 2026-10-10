@@ -177,7 +177,7 @@ a{{color:#f0c98a}}
 <p class="warn">All characters are adults. Fiction for personal use. No minors, no non-consent.
 Page built {today}. No reviews are shown because there are none yet.</p>
 </main>
-<img src="https://abacus.jasoncameron.dev/hit/dsh-money-engine/store" width="1" height="1" alt="" aria-hidden="true" style="position:absolute;left:-9999px">
+<script>(function(){try{fetch("https://abacus.jasoncameron.dev/hit/dsh-money-engine/store",{mode:"no-cors",keepalive:true});}catch(e){}})();</script>
 </body></html>"""
     (OUT / "index.html").write_text(doc, encoding="utf-8")
     json.dump({"title": p["title"], "words": v["words"], "price_usd": PRICE_USD,

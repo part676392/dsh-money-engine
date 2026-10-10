@@ -54,6 +54,33 @@ def has_price(text: str, usd: int) -> bool:
     return bool(re.search(rf"\$\s?{usd}\b", text) or re.search(rf"\b{usd}\s*(?:USD|usd|ドル)", text))
 
 
+def issue_form_check() -> bool:
+    """GitHub の注文フォーム (.github/ISSUE_TEMPLATE/order.yml) の契約検査。
+    YAML lib が無い環境なので、issue form に必要な形だけを構文として見る
+    (壊れると GitHub は無言で blank form に落ちる = 注文が取りこぼれる)。"""
+    fp = ROOT / ".github" / "ISSUE_TEMPLATE" / "order.yml"
+    if not fp.exists():
+        print("    issue form       : ★ file が無い")
+        return False
+    raw = fp.read_text(encoding="utf-8")
+    lines = [l for l in raw.split("\n") if l.strip() and not l.strip().startswith("#")]
+    top = [l.split(":")[0] for l in lines if not l.startswith((" ", "-"))]
+    need_top = [k for k in ("name", "description", "body") if k not in top]
+    types = re.findall(r"^[ \t]*(?:-[ \t]+)?type:[ \t]+([a-z]+)", raw, re.M)
+    bad_type = [t for t in types if t not in ("markdown", "textarea", "input", "dropdown", "checkboxes")]
+    n_label = len(re.findall(r"^[ \t]+label:", raw, re.M))
+    n_opt = len(re.findall(r"^[ \t]+options:", raw, re.M))
+    n_req = len(re.findall(r"required: true", raw))
+    # dropdown には options, input/textarea には label が必須
+    n_drop = len(re.findall(r"^[ \t]*(?:-[ \t]+)?type:[ \t]+dropdown", raw, re.M))
+    n_text = len(re.findall(r"^[ \t]*(?:-[ \t]+)?type:[ \t]+(?:input|textarea)", raw, re.M))
+    ok = (not need_top) and (not bad_type) and n_drop <= n_opt and n_text <= n_label
+    print(f"    issue form       : {'OK' if ok else '★'}  top={top} fields={len(types)}"
+          f" dropdown={n_drop}/options={n_opt} input系={n_text}/label={n_label} required={n_req}"
+          + (f"  欠け={need_top or []} 不正type={bad_type}" if not ok else ""))
+    return ok
+
+
 def qcount_check() -> bool:
     """公称の質問数と納品 CSV の行数は同じでなければならない。
     実測で 1,873 (公称) / 1,779 (CSV) の差が出ていた。asarkan モードでは落ちない。"""
@@ -263,7 +290,9 @@ def main() -> int:
     print(f"  parser tiers: {tr}")
     print(f"  公開価格の突合: {'PASS' if not missing else 'FAIL ' + str(missing)}")
     if not qcount_check():
-        bad.append("question count")
+        all_ok = False
+    if not issue_form_check():
+        all_ok = False
     print(f"\n  money pages ready: {all_ok}")
     out = ROOT / "data" / "rails" / "money_latest.json"
     out.parent.mkdir(parents=True, exist_ok=True)

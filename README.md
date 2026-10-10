@@ -30,6 +30,8 @@ Live: https://part676392.github.io/dsh-money-engine ｜ 日本語のデータセ
 - [選考段階の言及 350 社・403 件（引用つき）](https://part676392.github.io/dsh-money-engine/selection-signals.html)
 - [面接質問 1,873 問・472 社（面接官の意図つき）](https://part676392.github.io/dsh-money-engine/interview-questions.html)
 - [公式選考フロー 56 本・22 社（順序つき）](https://part676392.github.io/dsh-money-engine/selection-flows.html)
+
+提出済みの掲載申請: [okhosting/awesome-open-data#57](https://github.com/okhosting/awesome-open-data/pull/57) — `### Natural language` 節に1行。このリストは 2026-10-10 にも PR が merge されている (活性を確認してから出した)。巡回が `data/pr_watches.json` 経由で merge を監視する。
 - [注文受付（カスタム執筆・暗号決済）](https://part676392.github.io/dsh-money-engine/store/)
 
 ## 正直な制約

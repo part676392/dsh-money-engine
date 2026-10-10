@@ -70,6 +70,42 @@ def load_urls() -> None:
                     encoding="utf-8")).get("url") if (ROOT / "data" / "dpaste.json").exists() else None
 
 
+PR_WATCH = ROOT / "data" / "pr_watches.json"
+
+
+def pr_watch() -> dict:
+    """他所の repo に出した PR の生死 (merge されたか).
+
+    gh の認証が通る場所だけが使える導線。2026-10-11 に awesome-open-data へ
+    PR #57 を出した (昨日も merge されている活性リストだと確認してから)。
+    merge されれば人間が辿れる場所に常設の被リンクが残る。
+    """
+    if not PR_WATCH.exists():
+        return {}
+    res = {}
+    for it in json.loads(PR_WATCH.read_text(encoding="utf-8")):
+        ref = f"{it['repo']}#{it['number']}"
+        jq = '.state + " " + (.merged_at // "-") + " " + (.comments|tostring)'
+        cmd = ["gh", "api", f"repos/{it['repo']}/pulls/{it['number']}", "--jq", jq]
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True, timeout=40)
+        except Exception as e:
+            res[ref] = {"error": str(e)[:90]}
+            print(f"  PR {ref:40s} 取得失敗 {str(e)[:60]}")
+            continue
+        if r.returncode != 0:
+            res[ref] = {"error": (r.stderr or "").strip()[:90]}
+            print(f"  PR {ref:40s} 取得失敗 {(r.stderr or '').strip()[:56]}")
+            continue
+        parts = (r.stdout.strip().split(" ") + ["-", "-", "-"])[:3]
+        state, merged, comments = parts
+        res[ref] = {"state": state, "merged_at": None if merged == "-" else merged,
+                    "comments": comments, "url": it.get("url", "")}
+        print(f"  PR {ref:40s} {'★★★ MERGED' if merged != '-' else state}"
+              f"  comments={comments}")
+    return res
+
+
 def main() -> int:
     HIST.mkdir(parents=True, exist_ok=True)
     load_urls()
@@ -103,6 +139,10 @@ def main() -> int:
                                       "rate_limited": rate_limited}
     if unverified:
         print(f"\n  検証保留 (rate limited, 死とは別): {unverified}")
+    out["pull_requests"] = pr_watch()
+    merged = [k for k, v in out["pull_requests"].items() if v.get("merged_at")]
+    if merged:
+        print(f"\n  ★★★ PR merged: {merged}")
     (HIST / "latest.json").write_text(json.dumps(out, ensure_ascii=False, indent=1),
                                       encoding="utf-8")
     with open(HIST / f"{time.strftime('%Y-%m-%d-%H%M')}.json", "w", encoding="utf-8") as f:

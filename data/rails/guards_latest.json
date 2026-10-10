@@ -1,7 +1,5 @@
 {
- "checked_at": "2026-10-11T08:28:27+0900",
- "green": false,
- "failed": [
-  "regression"
- ]
+ "checked_at": "2026-10-11T08:34:19+0900",
+ "green": true,
+ "failed": []
 }

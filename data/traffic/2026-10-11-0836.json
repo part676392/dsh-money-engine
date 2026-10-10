@@ -1,28 +1,28 @@
 {
- "checked_at": "2026-10-11T08:36:21+0900",
+ "checked_at": "2026-10-11T08:36:35+0900",
  "counters": {
   "store": {
-   "value": 4,
-   "delta": 0,
+   "value": null,
+   "delta": null,
    "key": "store"
   },
   "home": {
-   "value": 14,
-   "delta": 0,
+   "value": null,
+   "delta": null,
    "key": "home"
   },
   "mini": {
-   "value": 1,
-   "delta": 0,
+   "value": null,
+   "delta": null,
    "key": "mini"
   },
   "license": {
-   "value": 4,
-   "delta": 0,
+   "value": null,
+   "delta": null,
    "key": "license"
   },
   "src-ghrepo": {
-   "value": 1,
+   "value": 0,
    "surface": "GitHub リポジトリ README",
    "target": "index.html",
    "tagged": true

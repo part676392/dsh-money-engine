@@ -1058,3 +1058,9 @@ built: index.html + 491 company pages
   guards: all green
   guards state written: green=True failed=[]
 ===== 2026-10-11 04:09:28 end =====
+===== 2026-10-11 04:19:47 start =====
+  ✓ 受注口 生存 fq23ou7os@maxxspace.com (messages=0)
+  2026-10-29  残り 19日      🆓 アビームコンサルティング             「締切: 2026年10月29日」
+
+saved /Users/moherune/Documents/deepseek-harness/default-workspace/dsh-money-engine/data/es_deadlines_strict.json
+rendered: 12 rows (free 6 / paid 6) via 本文の締切記載を機械検証（根拠文つき）

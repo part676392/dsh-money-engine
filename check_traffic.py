@@ -22,7 +22,7 @@ import time
 ROOT = pathlib.Path(__file__).resolve().parent
 HIST = ROOT / "data" / "traffic"
 BASE = "https://abacus.jasoncameron.dev"
-KEYS = {"store": "store", "home": "home"}
+KEYS = {"store": "store", "home": "home", "mini": "mini", "license": "license"}
 SITE = "https://part676392.github.io/dsh-money-engine"
 
 

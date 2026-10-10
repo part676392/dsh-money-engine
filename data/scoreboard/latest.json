@@ -1,30 +1,8 @@
 {
- "checked_at": "2026-10-11T04:30:48+0900",
+ "checked_at": "2026-10-11T04:43:39+0900",
  "site": "part676392.github.io/dsh-money-engine",
  "queries": {
   "site_query": {
-   "http_ok": true,
-   "organic_count": 10,
-   "domains": [
-    "mabimoba.jp",
-    "mabinogimobile.nexon.co.jp",
-    "pekuo-games.com",
-    "gamerch.com",
-    "mabimoba.jp",
-    "gamewith.jp",
-    "redfreshet.com",
-    "disboard.org",
-    "mabiwiki.com",
-    "x.com"
-   ],
-   "our_hits": [],
-   "our_links_on_page": 0,
-   "parser_alive": true,
-   "reported_total": "76,600",
-   "blocked": false,
-   "query": "site:part676392.github.io/dsh-money-engine"
-  },
-  "brand": {
    "http_ok": true,
    "organic_count": 10,
    "domains": [
@@ -42,7 +20,21 @@
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": "51",
+   "reported_total": "50",
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 2,
+   "domains": [
+    "mail.google.com",
+    "mail.google.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "50",
    "blocked": false,
    "query": "選考対策 目録データベース"
   },
@@ -50,21 +42,21 @@
    "http_ok": true,
    "organic_count": 10,
    "domains": [
-    "travel.rakuten.co.jp",
-    "search.travel.rakuten.co.jp",
-    "travel.rakuten.co.jp",
-    "search.travel.rakuten.co.jp",
-    "hotel.travel.rakuten.co.jp",
-    "hotel.travel.rakuten.co.jp",
-    "web.travel.rakuten.co.jp",
-    "web.travel.rakuten.co.jp",
-    "coupon.travel.rakuten.co.jp",
-    "coupon.travel.rakuten.co.jp"
+    "meaning-difference.com",
+    "chigai-hikaku.com",
+    "doda.jp",
+    "tenshoku.mynavi.jp",
+    "kotobank.jp",
+    "next.rikunabi.com",
+    "求人ボックス.com",
+    "saiyo-doda.jp",
+    "tenshoku.mynavi.jp",
+    "imi-chigai.com"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": "95",
+   "reported_total": "73,000",
    "blocked": false,
    "query": "中途面接対策 企業別 目録"
   }
@@ -96,43 +88,35 @@
    "http_ok": true,
    "organic_count": 10,
    "domains": [
-    "baseball.yahoo.co.jp",
-    "baseball-jp.com",
-    "freefielder.jp",
-    "sanspo.com",
-    "npb.jp",
-    "hochi.news",
-    "yomiuri.co.jp",
-    "news.ntv.co.jp",
-    "npbc.media",
-    "baseball-data.com"
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": "131,000",
+   "reported_total": "50",
    "blocked": false,
    "query": "\"選考ステージ指定\""
   },
   "\"After-Hours Spin Cycle\"": {
    "http_ok": true,
-   "organic_count": 10,
+   "organic_count": 2,
    "domains": [
-    "bing.com",
-    "in.bing.com",
-    "bing.com",
-    "blogs.bing.com",
-    "blogs.bing.com",
-    "bing.com",
-    "blogs.bing.com",
-    "bing.com",
-    "ru.bing.com",
-    "kr.bing.com"
+    "mail.google.com",
+    "mail.google.com"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": null,
+   "reported_total": "50",
    "blocked": false,
    "query": "\"After-Hours Spin Cycle\""
   },

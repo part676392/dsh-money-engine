@@ -38,6 +38,16 @@ def api(path: str) -> dict:
         return {"error": str(e)[:70]}
 
 
+def esc_ref(s: object) -> str:
+    return str(s if s is not None else "")
+
+
+def get_count(key: str):
+    """abacus から 1 鍵読む。取れなければ None (0 と区別する)。"""
+    v = api("/get/dsh-money-engine/" + key).get("value")
+    return v if isinstance(v, int) else None
+
+
 def main() -> int:
     HIST.mkdir(parents=True, exist_ok=True)
     prev_f = HIST / "latest.json"
@@ -93,6 +103,29 @@ def main() -> int:
 
     # JS を実際に走らせて発火先を見る。文字列照合は「有る」までで「叩く」を証明しない。
     # (実測: curl では計上されない = JS を実行するクライアントだけが計上される)
+    # 参照元。?src= を付けない访问 (検索・SNS) の内訳を測る。
+    # abacus に一覧 API は無いので既知 host を-data/traffic_referrers.json-で持つ。
+    # 既知に無い分は ref-any との差で出る = 盲点を数字で持つ。
+    try:
+        reg = json.loads((ROOT / "data" / "traffic_referrers.json").read_text(encoding="utf-8"))
+        cands = [h["key"] for h in reg.get("hosts") or []]
+    except Exception as e:  # noqa: BLE001
+        cands, reg = [], {}
+        print(f"  referrer registry が読めない: {str(e)[:50]}")
+    got = {}
+    for h in cands:
+        v = get_count("ref-" + h)
+        if isinstance(v, int) and v > 0:
+            got[h] = v
+    anyv = get_count("ref-any")
+    tot_any = anyv if isinstance(anyv, int) else 0
+    known = sum(got.values())
+    print(f"  参照元: 既知ヒット {len(got)} host / 計 {known} 件  ref-any={tot_any}  "
+          f"盲点 (未登録 host) = {max(tot_any - known, 0)}")
+    for h, v in sorted(got.items(), key=lambda x: -x[1]):
+        nm = next((z.get("what", "") for z in (reg.get("hosts") or []) if z["key"] == h), "")
+        print(f"      {h:26s} {v:>4}  {esc_ref(nm)}")
+
     import shutil as _sh
     node = _sh.which("node")
     tgt = {"question-lineups.html": "lineup", "store/": "store", "sample.html": "sample"}
@@ -110,7 +143,9 @@ def main() -> int:
             js = m[0][len("<script>"):-len("</script>")]
             probe = "pr32" if "lineup" in key else "ghrepo"
             src = ("globalThis.__h=[];globalThis.fetch=function(u,o){globalThis.__h.push(String(u));"
-                   "return {then(){},catch(){}};};globalThis.location={search:'?src=" + probe + "'};\n"
+                   "return {then(){},catch(){}};};globalThis.location={search:'?src=" + probe
+                   + "',hostname:'part676392.github.io'};"
+                   "globalThis.document={referrer:'https://github.com/part676392/dsh-money-engine'};\n"
                    + js + "\nconsole.log(JSON.stringify(globalThis.__h));\n")
             tmp = pathlib.Path("/tmp/_tracker_check.js")
             tmp.write_text(src, encoding="utf-8")
@@ -119,7 +154,8 @@ def main() -> int:
                 hits = json.loads(rr.stdout.strip().splitlines()[-1])
             except Exception:  # noqa: BLE001
                 hits = []
-            want = [f"/hit/dsh-money-engine/{key}", f"/hit/dsh-money-engine/src-{probe}"]
+            want = [f"/hit/dsh-money-engine/{key}", f"/hit/dsh-money-engine/src-{probe}",
+                    "/hit/dsh-money-engine/ref-github.com", "/hit/dsh-money-engine/ref-any"]
             good = all(any(w in g for g in hits) for w in want)
             ok = ok and good
             print(f"    tracker exec {path:20s} {'発火 OK' if good else '★ 発火せず'}  "

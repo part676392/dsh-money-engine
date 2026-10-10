@@ -1,0 +1,98 @@
+{
+  "_note": "参照元の host は abacus に一覧 API が無い (実測: /get/<counter> は 308 で docs に飛ぶ)。 なので既知 host をここで持ち、ref-any との差分を『盲点』として数字で見る。盲点が増えたら host を足す運用。",
+  "updated": "2026-10-11",
+  "hosts": [
+    {
+      "key": "www.google.com",
+      "what": "Google 検索"
+    },
+    {
+      "key": "google.com",
+      "what": "Google 検索 (裸ドメイン)"
+    },
+    {
+      "key": "www.bing.com",
+      "what": "Bing 検索"
+    },
+    {
+      "key": "duckduckgo.com",
+      "what": "DuckDuckGo 検索"
+    },
+    {
+      "key": "www.baidu.com",
+      "what": "百度"
+    },
+    {
+      "key": "search.yahoo.co.jp",
+      "what": "Yahoo! 検索 (日本)"
+    },
+    {
+      "key": "www.google.co.jp",
+      "what": "Google 日本"
+    },
+    {
+      "key": "github.com",
+      "what": "GitHub (検索・一覧・link unfurl)"
+    },
+    {
+      "key": "news.ycombinator.com",
+      "what": "Hacker News"
+    },
+    {
+      "key": "www.reddit.com",
+      "what": "Reddit"
+    },
+    {
+      "key": "x.com",
+      "what": "X"
+    },
+    {
+      "key": "twitter.com",
+      "what": "X (旧ドメイン)"
+    },
+    {
+      "key": "t.co",
+      "what": "X の短縮リンク"
+    },
+    {
+      "key": "note.com",
+      "what": "note (母記事の側)"
+    },
+    {
+      "key": "qiita.com",
+      "what": "Qiita"
+    },
+    {
+      "key": "zenn.dev",
+      "what": "Zenn"
+    },
+    {
+      "key": "b.hatena.ne.jp",
+      "what": "はてなブックマーク"
+    },
+    {
+      "key": "www.linkedin.com",
+      "what": "LinkedIn"
+    },
+    {
+      "key": "www.facebook.com",
+      "what": "Facebook"
+    },
+    {
+      "key": "rentry.co",
+      "what": "rentry 面"
+    },
+    {
+      "key": "gist.github.com",
+      "what": "Gist 目録"
+    },
+    {
+      "key": "r.jina.ai",
+      "what": "LLM クローラの読み取り"
+    },
+    {
+      "key": "www.googleusercontent.com",
+      "what": "Google 系 (キャッシュ等)"
+    }
+  ]
+}

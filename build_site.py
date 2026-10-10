@@ -108,6 +108,13 @@ def tracker(key: str) -> str:
         + '", {mode:"no-cors",keepalive:true});'
         + "var m=(location.search.match(/[?&]src=([a-z0-9_-]{1,24})/)||[])[1];"
         + "if(m){fetch(b+'src-'+m, {mode:'no-cors',keepalive:true});}"
+        # 参照元: ?src= を付けない访问 (検索・SNS から) はどこから来たか分からないままだった
+        # (実測: home 13 件の内訳が不明)。host ごとに 1 鍵 + 全量の ref-any を叩くので、
+        # 既知の一覧に無い host がどれだけあるかも数字で分かる。
+        + "var r='';try{r=document.referrer||'';}catch(e2){}"
+        + "if(r){try{var h=new URL(r).hostname.toLowerCase().replace(/[^a-z0-9.-]/g,'');"
+        + "if(h&&h!==location.hostname){fetch(b+'ref-'+h,{mode:'no-cors',keepalive:true});"
+        + "fetch(b+'ref-any',{mode:'no-cors',keepalive:true});}}catch(e3){}}"
         + "}catch(e){}})();</script>"
     )
 

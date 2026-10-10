@@ -11,9 +11,14 @@ LOG="logs/daily_$(date +%Y%m%d).log"
 mkdir -p logs
 {
   echo "===== $(date '+%F %T') start ====="
-  # token が空のままだと git がユーザー名/パスワードを聞いて**無限に待つ**。
-  # 無人実行 (launchd) ではこれがハングになる: 2026-10-11 に start だけで
-  # 何も出さない run が2本出た。だから空なら即退出、効かないなら fail fast。
+  # token 必須の理由を測り直した (2026-10-11):
+  #   - 空 token でも pull は通る (repo が public なので無名 read が効く。実測で SHA が返った)
+  #   - 非tty では git は認証を聞いてハングしない (即失敗した)
+  #   - 壊れるのは push だけ。つまり空 token の run は「集めて出版できない」
+  # よってこのガードの意味はハング回避ではなく **出版できない run を最初の1行で止めて
+  # 日志に痕を残す**こと。GIT_TERMINAL_PROMPT=0 は対話環境で聞かれないための保険。
+  # 因みに start だけ書いて何も出さない run の真因は、巡回を `| head` に繋いだ
+  # 側の SIGPIPE (検証手法のミス)。日志を見る時は >/dev/null で回すこと。
   export GIT_TERMINAL_PROMPT=0
   TOK0=$(gh auth token 2>/dev/null)
   if [ -z "$TOK0" ]; then

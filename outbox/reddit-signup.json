@@ -1,0 +1,17 @@
+{
+ "at": "2026-10-10T18:50:36.677Z",
+ "username": "dshlab59z21s",
+ "email": "reddcdg3h2c@maxxspace.com",
+ "verdict": "UNKNOWN",
+ "url": "https://www.reddit.com/register/?solution=fe89959555c6c92efe89959555c6c92e&js_challenge=1&jsc_token=2824be10929bdc604753c70a67a1c33121ea01db56f051527af9fbdb03fb603f&jsc_orig_r=",
+ "body": "Skip to main content Sign Up By continuing, you agree to our User Agreement and acknowledge that you understand the Privacy Policy. Continue with Phone Number  Sign in with Apple OR Email Already a redditor? Log In Continue",
+ "requests": [
+  "200 https://www.reddit.com/register/",
+  "200 https://www.reddit.com/register/?solution=fe89959555c6c92efe89",
+  "200 https://www.reddit.com/svc/events/preload-head?renderId=71d1d0",
+  "200 https://www.reddit.com/svc/events/preload-head?renderId=71d1d0",
+  "200 https://www.reddit.com/svc/shreddit/partial/yNTrTf/register-st",
+  "200 https://www.google.com/recaptcha/enterprise/anchor?ar=1&k=6Lfi",
+  "200 https://www.google.com/recaptcha/enterprise/anchor?ar=1&k=6Lfi"
+ ]
+}

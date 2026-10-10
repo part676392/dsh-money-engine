@@ -80,17 +80,35 @@ def qiita() -> dict:
     return {"email_form": form, "captcha_present": captcha, "open": form and not captcha}
 
 
+def reddit() -> dict:
+    """Reddit は最後に測った実登録の記録を出す.
+
+    2026-10-11 実測: email/username/password は埋まり submit も走るが、
+    `google.com/recaptcha/enterprise/anchor` が読まれ /register に留まる。
+    エラー文も確認メール案内も出ない = captcha で止められている。
+    reCAPTCHA Enterprise は画像解読なので、この環境では越えられない。
+    """
+    f = ROOT / "outbox" / "reddit-signup.json"
+    if not f.exists():
+        return {"error": "outbox/reddit-signup.json が無い (signup_reddit.js を実行)"}
+    d = json.loads(f.read_text(encoding="utf-8"))
+    cap = "recaptcha/enterprise" in json.dumps(d.get("requests", []))
+    return {"attempted_at": d.get("at", ""), "username": d.get("username"),
+            "verdict": d.get("verdict"), "recaptcha_enterprise": cap, "open": False,
+            "blocked_by": "reCAPTCHA Enterprise" if cap else str(d.get("verdict"))}
+
+
 def main() -> int:
     HIST.mkdir(parents=True, exist_ok=True)
     rows = {"checked_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
-            "hn": hn(), "devto": devto(), "qiita": qiita()}
+            "hn": hn(), "devto": devto(), "qiita": qiita(), "reddit": reddit()}
     opened = [k for k, v in rows.items() if isinstance(v, dict) and v.get("open")]
-    for k in ("hn", "devto", "qiita"):
+    for k in ("hn", "devto", "qiita", "reddit"):
         v = rows[k]
         state = "OPEN ★" if v.get("open") else "blocked"
         detail = " ".join(f"{a}={b}" for a, b in v.items())
         print(f"  {k:6s} {state:9s} {detail}")
-    print(f"\n  opened: {opened or 'none — 人間が一度 captcha を押せば開く場所が4つ'}")
+    print(f"\n  opened: {opened or 'none — 人間が一度 captcha を押せば開く場所が5つ'}")
     (HIST / "signup_latest.json").write_text(json.dumps(rows, ensure_ascii=False, indent=1),
                                              encoding="utf-8")
     return 0

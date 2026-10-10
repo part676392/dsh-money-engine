@@ -1,5 +1,5 @@
 {
- "checked_at": "2026-10-11T03:39:01+0900",
+ "checked_at": "2026-10-11T03:51:18+0900",
  "hn": {
   "attempted_as": "dshlaba71655",
   "creation_disabled": false,
@@ -16,5 +16,13 @@
   "email_form": true,
   "captcha_present": true,
   "open": false
+ },
+ "reddit": {
+  "attempted_at": "2026-10-10T18:50:36.677Z",
+  "username": "dshlab59z21s",
+  "verdict": "UNKNOWN",
+  "recaptcha_enterprise": true,
+  "open": false,
+  "blocked_by": "reCAPTCHA Enterprise"
  }
 }

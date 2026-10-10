@@ -1,5 +1,6 @@
 {
- "captured_at": "2026-10-11T07:03:41+09:00",
+ "captured_at": "2026-10-11T07:32:11+09:00",
+ "location": "runner",
  "articles": 600,
  "companies": 491,
  "listed_value_yen": 1205920,
@@ -10,5 +11,30 @@
   "面接想定100選": 258,
   "新卒ES": 29,
   "最終面接": 8
- }
+ },
+ "questions": 1779,
+ "questions_raw": 1873,
+ "companies_with_questions": 472,
+ "flows": 56,
+ "signals": 2780,
+ "lineup_rows": 5494,
+ "lineup_companies": 467,
+ "lineup_modal_pct": 64,
+ "reverse_quotes": 24,
+ "reverse_companies": 8,
+ "deadlines_open": 12,
+ "orders_real": 0,
+ "orders_rehearsal": 1,
+ "delivered": 1,
+ "traffic": {
+  "home": 13,
+  "store": 4,
+  "license": 4,
+  "sample": 1,
+  "mini": 1,
+  "lineup": 3
+ },
+ "traffic_total": 26,
+ "cash_usd": 0,
+ "cash_eth": 0
 }

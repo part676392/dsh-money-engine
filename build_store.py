@@ -82,6 +82,8 @@ def main() -> None:
 
     wallet = json.loads(WALLET.read_text(encoding="utf-8")) if WALLET.exists() else {}
     addr = wallet.get("address", "")
+    mail = ROOT / "outbox" / "mailtm.json"
+    inbox = json.loads(mail.read_text(encoding="utf-8")).get("address", "") if mail.exists() else "no inbox configured"
 
     paras = "".join(
         f"<p>{esc(x.strip())}</p>" for x in re.split(r"\n\s*\n", p["preview"]) if x.strip()
@@ -123,8 +125,11 @@ a{{color:#f0c98a}}
     <li><span class="price">${PRICE_USD}</span> per scene, paid in crypto before delivery.</li>
     <li>One free revision if a stated limit was missed.</li>
   </ul>
-  <p style="font-size:.86rem;margin:10px 0 4px">Send to (Base, Arbitrum, Polygon or ETH — same address):</p>
+  <p style="font-size:.86rem;margin:12px 0 4px"><b>1. Send your specification by email:</b></p>
+  <p><code>{esc(inbox)}</code></p>
+  <p style="font-size:.86rem;margin:12px 0 4px"><b>2. Pay ${PRICE_USD} to (Base, Arbitrum, Polygon or ETH — same address):</b></p>
   <p><code>{esc(addr)}</code></p>
+  <p style="font-size:.8rem;color:#b3a291;margin-top:8px">The finished scene is emailed back to you. Payment first, then delivery — I do not chase invoices.</p>
 </div>
 
 <div class="order">

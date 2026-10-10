@@ -1,0 +1,48 @@
+{
+ "tried_at": "2026-10-10T15:21:09.436Z",
+ "username": "CustomScene08x7",
+ "password": "Sc3ne!5600341",
+ "email": "s8l92v2yf@maxxspace.com",
+ "steps": [
+  {
+   "tag": "initial",
+   "url": "https://www.reddit.com/register/",
+   "fields": [],
+   "buttons": [
+    "Continue",
+    "Continue with SSO",
+    "back",
+    "Resend",
+    "Continue",
+    "back"
+   ]
+  },
+  {
+   "tag": "after-continue1",
+   "url": "https://www.reddit.com/register/",
+   "fields": [],
+   "buttons": [
+    "Continue",
+    "Continue with SSO",
+    "back",
+    "Resend in 0:25",
+    "Continue",
+    "back"
+   ]
+  },
+  {
+   "tag": "final",
+   "url": "https://www.reddit.com/register/",
+   "fields": [],
+   "buttons": [
+    "Continue",
+    "Continue with SSO",
+    "back",
+    "Resend in 0:22",
+    "Continue",
+    "back"
+   ]
+  }
+ ],
+ "finalText": "Skip to main content Sign Up By continuing, you agree to our User Agreement and acknowledge that you understand the Privacy Policy. Continue with Phone Number  Sign in with Apple OR Email Already a redditor? Log In Continue"
+}

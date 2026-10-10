@@ -1,0 +1,18 @@
+{
+ "tried_at": "2026-10-10T15:19:18.153Z",
+ "username": "CustomScene_b3m5u",
+ "password": "Sc3ne!5534069",
+ "email": "s8l92v2yf@maxxspace.com",
+ "first": {
+  "url": "https://www.reddit.com/register/?solution=9d1e5478b25c587c9d1e5478b25c587c&js_challenge=1&jsc_token=2824be10929bdc604753c70a67a1c331e37c0b0392ddc9fc9c2cdddee04c47d0&jsc_orig_r=",
+  "title": "Welcome to Reddit",
+  "inputs": [],
+  "captcha": true,
+  "blocked": false
+ },
+ "after": {
+  "url": "https://www.reddit.com/register/?solution=9d1e5478b25c587c9d1e5478b25c",
+  "text": "Skip to main content Sign Up By continuing, you agree to our User Agreement and acknowledge that you understand the Privacy Policy. Continue with Phone Number  Sign in with Apple OR Email Already a redditor? Log In Continue",
+  "captcha": true
+ }
+}

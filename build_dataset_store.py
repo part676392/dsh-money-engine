@@ -29,6 +29,16 @@ TIER = [(50, 15), (150, 35), (100000, 60)]
 HISTORY_USD = 25
 
 
+def tracker(key: str) -> str:
+    """访问計 (build_store.py と同じ作り方。f-string の JS {} を化けさせない)。"""
+    return (
+        '<script>(function(){try{fetch("'
+        + "https://abacus.jasoncameron.dev/hit/dsh-money-engine/"
+        + key
+        + '", {mode:"no-cors",keepalive:true});}catch(e){}})();</script>'
+    )
+
+
 def esc(s: object) -> str:
     return html.escape(str(s if s is not None else ""), quote=True)
 
@@ -112,6 +122,7 @@ def main() -> int:
 <meta name="description" content="収録記事 {arts} 本から機械抽出した面接質問 {nq} 問・選考フロー {nf} 本を指定企業群で CSV 納品。納品は公開URL。">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="{BASE}/data-license.html">
+{tracker("license")}
 <script type="application/ld+json">
 {ld}
 </script>

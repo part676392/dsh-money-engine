@@ -315,7 +315,8 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
           f"  <url><loc>{base}/</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>"]
     for comp in sorted(by_company):
         from urllib.parse import quote
-        sm.append(f"  <url><loc>{base}/company/{quote(comp)}.html</loc><lastmod>{today}</lastmod><priority>0.7</priority></url>")
+        sm.insert(3, f"  <url><loc>{base}/es-deadlines.html</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq><priority>0.95</priority></url>")
+    sm.append(f"  <url><loc>{base}/company/{quote(comp)}.html</loc><lastmod>{today}</lastmod><priority>0.7</priority></url>")
     sm.append("</urlset>")
     (OUT / "sitemap.xml").write_text("\n".join(sm), encoding="utf-8")
     kfile = ROOT / "indexnow-key.txt"

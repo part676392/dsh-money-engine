@@ -30,3 +30,4 @@ outbox/sweep-*.log
 outbox/login-run*.log
 data/full_bodies.json
 outbox/*-signup.json
+dist/

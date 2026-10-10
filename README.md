@@ -18,6 +18,7 @@ Live: https://part676392.github.io/dsh-money-engine ｜ 日本語のデータセ
 | 選考段階の言及 | 475 社 / 2,780 件（本文 HTML を直接取得して再抽出） |
 | 面接質問の実文 | 472 社 / 1,873 問（質問＋記事が書く面接官の意図） |
 | CSV エクスポート | 面接質問 1,779 / 選考フロー 96 / 選考段階 2,021 行（UTF-8 BOM 付き・列定義つき） |
+| 日付つき保存庫 | GitHub Releases に tag 付き zip（毎自動。本文は非同梱） |
 | 公式選考フロー | 22 社 / 56 本（順序つき・寄せ前の工程名を保持） |
 
 機械可読: [`data/snapshot-latest.json`](data/snapshot-latest.json) ／ 日別履歴: [`data/history/`](data/history/)

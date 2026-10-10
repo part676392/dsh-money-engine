@@ -77,7 +77,8 @@ def main() -> int:
     try:
         r = subprocess.run(["curl", "-s", "--max-time", "20", f"{SITE}/store/"],
                            capture_output=True, text=True, timeout=25)
-        embedded = "abacus.jasoncameron.dev/hit/dsh-money-engine/store" in r.stdout
+        # JS が base と key を連結するので完全な列は page に出ない (2026-10-11)。
+        embedded = ('/hit/dsh-money-engine/"' in r.stdout) and ('fetch(b+"store"' in r.stdout)
         srcjs = "src-" in r.stdout and "location.search.match" in r.stdout
         print(f"  pixel embedded in live store page: {embedded}  流入源の JS: {srcjs}")
         if not srcjs:

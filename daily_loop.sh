@@ -12,6 +12,7 @@ mkdir -p logs
 
   python3 extract_deadlines.py 2>&1 | tail -3
   python3 make_deadlines.py  2>&1 | tail -2
+  python3 make_changes.py       2>&1 | tail -2
   python3 build_site.py       2>&1 | tail -2
 
   git add -A

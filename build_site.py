@@ -285,7 +285,8 @@ code{{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.85em}}
 {chr(10).join(rows)}
 </tbody></table>
 {operator_box}
-<p class="note">出典: <a href="https://note.com/shushoku_career1">note / 転職ナビ・中途キャリアの研究所</a> 公開API。機械可読データは <a href="data/snapshot-latest.json">data/snapshot-latest.json</a>、日次履歴は <code>data/history/</code> に蓄積。変化の履歴そのものが再取得不能な資産になる設計。</p>
+<p class="note">出典: <a href="https://note.com/shushoku_career1">note / 転職ナビ・中途キャリアの研究所</a> 公開API。機械可読データは <a href="data/snapshot-latest.json">data/snapshot-latest.json</a>、日次履歴は <code>data/history/</code> に蓄積。変化の履歴そのものが再取得不能な資産になる設計。 日々の観測の積み上がりは <a href="changes.html">運用履歴</a> に公開しています（後から再現できない実測のみ）。</p>
+
 </main><script>
 function f(){{var v=document.getElementById('q').value.toLowerCase();
 document.querySelectorAll('#t tbody tr').forEach(function(r){{
@@ -384,6 +385,11 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
         sm.append(
             f"  <url><loc>{base}/es-deadlines.html</loc><lastmod>{today}</lastmod>"
             f"<changefreq>daily</changefreq><priority>0.95</priority></url>"
+        )
+    if (OUT / "changes.html").exists():
+        sm.append(
+            f"  <url><loc>{base}/changes.html</loc><lastmod>{today}</lastmod>"
+            f"<changefreq>daily</changefreq><priority>0.85</priority></url>"
         )
     if (OUT / "store" / "index.html").exists():
         sm.append(

@@ -124,6 +124,10 @@ PY
   python3 make_exports.py        2>&1 | tail -6
   python3 build_dataset_store.py 2>&1 | tail -4
   python3 build_sample.py        2>&1 | tail -6
+  # 執筆物の店と mini は巡回に入っておらず、無人では再生成されなかった (2026-10-11 実測:
+  # build_store / build_mini が daily_loop に一行も無い)。価格・受信箱・tracker が枯れる。
+  python3 build_store.py         2>&1 | tail -4
+  python3 build_mini.py          2>&1 | tail -4
   python3 build_rehearsals.py    2>&1 | tail -4
   python3 build_deliveries.py    2>&1 | tail -3
   python3 make_release.py        2>&1 | tail -4

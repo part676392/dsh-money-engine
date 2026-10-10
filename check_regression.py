@@ -159,12 +159,28 @@ def tracker_single_source() -> bool:
     return ok
 
 
+def loop_coverage() -> bool:
+    """builder (build_*/make_*) は必ず巡回から呼ばれていること。
+    実測で build_store と build_mini が daily_loop に無く、店の頁だけ無人再生成されず
+    価格・受信箱・tracker が枯れていた。"""
+    loop = (ROOT / "daily_loop.sh").read_text(encoding="utf-8", errors="replace")
+    builders = [p.name for p in sorted(ROOT.glob("*.py"))
+                if p.name.startswith(("build_", "make_"))]
+    out = [n for n in builders if n not in loop]
+    ok = not out
+    print(f"  loop coverage     : {'OK' if ok else '★ 巡回から呼ばれない builder ' + str(out)}"
+          f"  ({len(builders)} builder 中)")
+    return ok
+
+
 def main() -> int:
     if "--selftest" in sys.argv:
         return run_selftest()
     if not syntax_sweep():
         return 1
     if not tracker_single_source():
+        return 1
+    if not loop_coverage():
         return 1
     cur = current()
     if not STATE.exists():

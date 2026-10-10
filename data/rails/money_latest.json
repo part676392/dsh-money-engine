@@ -1,15 +1,17 @@
 {
- "checked_at": "2026-10-11T02:20:29+0900",
+ "checked_at": "2026-10-11T02:21:31+0900",
  "pages": {
   "store/": {
-   "bytes": 8301,
+   "bytes": 8481,
    "prices": [
-    6
+    3,
+    6,
+    9
    ],
    "inbox": true,
    "wallet": true,
    "how_to_pay": true,
-   "words_stated": false
+   "words_stated": true
   },
   "store/mini.html": {
    "bytes": 7612,

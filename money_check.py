@@ -102,7 +102,7 @@ def issue_form_check() -> bool:
 
 def qcount_check() -> bool:
     """公称の質問数と納品 CSV の行数は同じでなければならない。
-    実測で 1,873 (公称) / 1,779 (CSV) の差が出ていた。asarkan モードでは落ちない。"""
+    実測で 1,873 (公称) / 1,779 (CSV) の差が出ていた。頁に旧値が残っても検査は落ちていなかったので、頁まで含めて総点検する。"""
     import csv as _csv
     j = json.loads((ROOT / "data" / "interview_questions.json").read_text(encoding="utf-8"))
     rows = 0
@@ -124,6 +124,49 @@ def qcount_check() -> bool:
     ok = ok and not stale
     print(f"    question count   : 公称={total} JSON本文={body} CSV={rows} "
           f"{'一致' if not stale else '★ 頁に旧値 ' + str(stale[:3])}")
+    return ok
+
+
+def outreach_check() -> bool:
+    """外に出した文面 (open PR) が、こちらの公開数字とズレていないか。
+    PR の側は自分で再生成できないので、読み直すしかない。
+    実測で両 PR が raw 抽出値 1,873 を公称にし、#57 だけ stage 言及を 2,780 (CSV は 2,021) と書いていた。"""
+    f = ROOT / "data" / "outreach.json"
+    if not f.exists():
+        print("    outreach rails    : 台帳が無いので省略")
+        return True
+    rails = json.loads(f.read_text(encoding="utf-8")).get("rails") or []
+    j = json.loads((ROOT / "data" / "interview_questions.json").read_text(encoding="utf-8"))
+    nq = int(j.get("questions_total") or -1)
+    raw = int(j.get("questions_extracted_raw") or -2)
+    sig = 0
+    sf = ROOT / "exports" / "selection_signals.csv"
+    if sf.exists():
+        with open(sf, encoding="utf_8_sig") as fh:
+            sig = max(sum(1 for _ in fh) - 1, 0)
+    bad = []
+    for r in rails:
+        repo, num = r["repo"], r["pr"]
+        out = subprocess.run(["gh", "api", f"repos/{repo}/pulls/{num}"],
+                             capture_output=True, text=True, timeout=60)
+        try:
+            d = json.loads(out.stdout)
+        except Exception:  # noqa: BLE001
+            bad.append(f"#{num} が読めない")
+            continue
+        body = d.get("body") or ""
+        if d.get("state") != "open":
+            bad.append(f"#{num} state={d.get('state')} (閉結・併合なら台帳を更新)")
+            continue
+        if f"{nq:,}" not in body:
+            bad.append(f"#{num} に公開質問数 {nq:,} が無い")
+        if f"{raw:,} interview questions" in body:
+            bad.append(f"#{num} が raw 抽出値 {raw:,} を質問数として公称")
+        if sig and f"{sig:,}" not in body:
+            bad.append(f"#{num} の stage 言及が CSV 行数 {sig:,} で無い")
+    ok = not bad
+    print(f"    outreach 文面      : {'OK' if ok else '★ ' + '; '.join(bad[:3])}"
+          f"  ({len(rails)} 先 / 質問 {nq:,}・stage {sig:,})")
     return ok
 
 
@@ -335,6 +378,8 @@ def main() -> int:
     if not history_pub_check():
         all_ok = False
     if not issue_form_check():
+        all_ok = False
+    if not outreach_check():
         all_ok = False
     if not not_found_check():
         all_ok = False

@@ -1,0 +1,21 @@
+{
+  "_why": "外部に出した文面 (open PR の title / body) は、こちらの頁と違い自分で再生成できない。数字がずれたまま放置した実例: 両 PR が 1,873 (抽出 raw) を公称にしていた が公開 CSV は 1,779。stage 言及も #57 だけ 2,780 で CSV は 2,021 だった (2026-10-11 実測)。だから巡回で読み直す。",
+  "_how": "gh api で open PR を読み、(1) state (2) 公開質問数 1,779 が本文にある (3) raw 値 1,873 を『questions の数』として書いていない (4) stage 言及は CSV 行数 2,021 — を検査する。",
+  "rails": [
+    {
+      "repo": "taishi-i/awesome-japanese-nlp-resources",
+      "pr": 32,
+      "src_key": "pr32",
+      "opened": "2026-10-09",
+      "note": "1,021 star。日本語 NLP リソースの curated list"
+    },
+    {
+      "repo": "okhosting/awesome-open-data",
+      "pr": 57,
+      "src_key": "pr57",
+      "opened": "2026-10-09",
+      "note": "オープンデータの curated list。Natural language 節に追加"
+    }
+  ],
+  "updated": "2026-10-11"
+}

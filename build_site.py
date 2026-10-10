@@ -255,6 +255,20 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
             encoding="utf-8",
         )
 
+    # ---- sitemap + robots : AEO/クローラーへの最短経路 ----
+    base = "https://part676392.github.io/dsh-money-engine"
+    today = f"{now:%Y-%m-%d}"
+    sm = ['<?xml version="1.0" encoding="UTF-8"?>',
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+          f"  <url><loc>{base}/</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>"]
+    for comp in sorted(by_company):
+        from urllib.parse import quote
+        sm.append(f"  <url><loc>{base}/company/{quote(comp)}.html</loc><lastmod>{today}</lastmod><priority>0.7</priority></url>")
+    sm.append("</urlset>")
+    (OUT / "sitemap.xml").write_text("\n".join(sm), encoding="utf-8")
+    (OUT / "robots.txt").write_text(
+        f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n", encoding="utf-8")
+
     print(f"built: index.html + {len(by_company)} company pages")
     print(f"  articles={len(recs)} companies={len(by_company)} free={sum(1 for r in recs if r['price']==0)} listed=¥{priced:,}")
 

@@ -44,3 +44,15 @@ data/rails/guards_latest.json
 data/rails/published_latest.json
 data/rails/last_release.json
 data/traffic/latest.json
+# 日志は git に追わない (dev と runner が同じ行を append して紛争させる。運用履歴の
+# 素材は data/{history,payments,traffic}/ の日付付き JSON で、日志は読んでいない)
+logs/
+
+# 「最新」派生は全部ローカル専用。日付付きが本体。
+data/demand-latest.json
+data/distribution/latest.json
+data/rails/latest.json
+data/rails/secrets_latest.json
+data/rails/signup_latest.json
+data/scoreboard/latest.json
+data/snapshot-latest.json

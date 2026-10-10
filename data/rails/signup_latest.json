@@ -1,9 +1,9 @@
 {
- "checked_at": "2026-10-11T01:51:52+0900",
+ "checked_at": "2026-10-11T01:55:10+0900",
  "hn": {
   "attempted_as": "dshlaba71655",
-  "creation_disabled": true,
-  "message": "Sorry, account creation disabled.",
+  "creation_disabled": false,
+  "message": "",
   "logged_in": false,
   "open": false
  },

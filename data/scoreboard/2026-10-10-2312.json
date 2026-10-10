@@ -1,0 +1,30 @@
+{
+ "checked_at": "2026-10-10T23:12:36+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "our_links_on_page": 0,
+   "sample": [],
+   "reported_total": "50",
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "our_links_on_page": 0,
+   "sample": [],
+   "reported_total": null,
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "our_links_on_page": 0,
+   "sample": [],
+   "reported_total": "73,000",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ }
+}

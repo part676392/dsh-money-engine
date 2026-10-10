@@ -1,12 +1,12 @@
 {
- "checked_at": "2026-10-10T22:59:02+0900",
+ "checked_at": "2026-10-10T23:13:35+0900",
  "site": "part676392.github.io/dsh-money-engine",
  "queries": {
   "site_query": {
    "http_ok": true,
    "our_links_on_page": 0,
    "sample": [],
-   "reported_total": "107,000",
+   "reported_total": "1,160",
    "blocked": false,
    "query": "site:part676392.github.io/dsh-money-engine"
   },
@@ -14,7 +14,7 @@
    "http_ok": true,
    "our_links_on_page": 0,
    "sample": [],
-   "reported_total": null,
+   "reported_total": "63",
    "blocked": false,
    "query": "選考対策 目録データベース"
   },

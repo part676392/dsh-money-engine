@@ -9,9 +9,11 @@
 """
 from __future__ import annotations
 
+import ast
 import csv
 import json
 import pathlib
+import subprocess
 import sys
 import time
 
@@ -111,9 +113,34 @@ def run_selftest() -> int:
     return 0 if ok else 1
 
 
+def syntax_sweep() -> bool:
+    """全 .py と巡回 script の構文を一括点検。
+    実測で、patch 中の SyntaxError を見落として壊れた file を push した
+    (ast.parse を write の後に入れたせいで、検査される前に commit された)。"""
+    bad = []
+    n = 0
+    for fp in sorted(ROOT.glob("*.py")):
+        n += 1
+        try:
+            ast.parse(fp.read_text(encoding="utf-8"))
+        except SyntaxError as e:
+            bad.append(f"{fp.name}:{e.lineno}")
+    sh = ROOT / "daily_loop.sh"
+    if sh.exists():
+        r = subprocess.run(["bash", "-n", str(sh)], capture_output=True, text=True, timeout=60)
+        if r.returncode != 0:
+            bad.append("daily_loop.sh:" + (r.stderr.strip().split("\n")[0][:40] or "bash -n"))
+    ok = not bad
+    print(f"  syntax sweep      : {'OK' if ok else '★'}  {n} py + 1 sh / 壊れ {len(bad)}"
+          + (f"  {bad[:4]}" if bad else ""))
+    return ok
+
+
 def main() -> int:
     if "--selftest" in sys.argv:
         return run_selftest()
+    if not syntax_sweep():
+        return 1
     cur = current()
     if not STATE.exists():
         STATE.parent.mkdir(parents=True, exist_ok=True)
@@ -144,8 +171,8 @@ def main() -> int:
     # file 名順だと runner (23:47 記法) が dev (07:25) より後ろに来て、照らす対象を間違える
     # (実測: 5 鍵の方を見て ★ になった)。最新観測 = captured_at 最大で見る。
     # index.json は導出した索引であって観測ではない (実測で旧 format と誤表示した)。
-    hs = [str(f) for f in sorted(x for x in _g.glob(str(ROOT / "data" / "history" / "*.json"))
-                                if not str(x).endswith("index.json")),
+    hs = [str(f) for f in sorted((x for x in _g.glob(str(ROOT / "data" / "history" / "*.json"))
+                                 if not str(x).endswith("index.json")),
                                  key=lambda x: str(json.loads(pathlib.Path(x).read_text(encoding="utf-8"))
                                                   .get("captured_at") or ""))]
     need = ("questions", "lineup_rows", "traffic", "traffic_total", "orders_real", "location")

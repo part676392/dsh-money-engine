@@ -3,6 +3,10 @@
 # GitHub Actions の workflow scope 不要。この Mac の launchd から回る。
 set -uo pipefail
 cd "$(dirname "$0")" || exit 1
+# launchd に渡される PATH には gh が無い (~/.lmstudio/bin にいる)。
+# plist 側だけでなくスクリプト自身でも確定させないと、無人実行は
+# push だけ静かに失敗して何も出版されない。2026-10-11 に実証済みの故障。
+export PATH="$HOME/.lmstudio/bin:$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
 LOG="logs/daily_$(date +%Y%m%d).log"
 mkdir -p logs
 {

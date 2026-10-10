@@ -1,0 +1,146 @@
+{
+ "scanned_at": "2026-10-11T01:25:18+0900",
+ "companies": 23,
+ "companies_with_hits": 0,
+ "rule": "title must contain 面接 and one of AI/録画/動画/面接官",
+ "rows": [
+  {
+   "company": "AGC",
+   "query": "AGC AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "INPEX",
+   "query": "INPEX AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "Umios",
+   "query": "Umios AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "アビームコンサルティング",
+   "query": "アビームコンサルティング AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "オムロン",
+   "query": "オムロン AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "キッコーマン",
+   "query": "キッコーマン AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "キユーピー",
+   "query": "キユーピー AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "ニッスイ",
+   "query": "ニッスイ AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "ニップン",
+   "query": "ニップン AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "ファイザー",
+   "query": "ファイザー AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "ミルボン",
+   "query": "ミルボン AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "レゾナック",
+   "query": "レゾナック AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "三菱ＨＣキャピタル",
+   "query": "三菱ＨＣキャピタル AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "不二家",
+   "query": "不二家 AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "丸紅",
+   "query": "丸紅 AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "亀田製菓",
+   "query": "亀田製菓 AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "出光興産",
+   "query": "出光興産 AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "日立ハイテク",
+   "query": "日立ハイテク AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "村田製作所",
+   "query": "村田製作所 AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "東京センチュリー",
+   "query": "東京センチュリー AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "農林中央金庫",
+   "query": "農林中央金庫 AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "野村不動産",
+   "query": "野村不動産 AI面接官 導入",
+   "results": 10,
+   "hits": []
+  },
+  {
+   "company": "野村證券",
+   "query": "野村證券 AI面接官 導入",
+   "results": 10,
+   "hits": []
+  }
+ ]
+}

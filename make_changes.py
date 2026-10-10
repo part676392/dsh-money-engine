@@ -88,6 +88,21 @@ def rows_pay() -> str:
     return "\n".join(out[-12:]) or '<tr><td colspan=3>まだありません</td></tr>'
 
 
+def rows_ai_scan() -> str:
+    """AI 面接の裏取りスキャン結果. 0 件なら 0 件と書くための行."""
+    f = ROOT / "data" / "ai_source_scan.json"
+    if not f.exists():
+        return "まだ走査していません。"
+    try:
+        d = json.loads(f.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        return "ファイルはありますが読めません。"
+    return (f"{d.get('scanned_at','?')} に {d.get('companies','?')} 社を走査、"
+            f"基準を満たす出典が取れたのは <strong>{d.get('companies_with_hits','?')} 社</strong>"
+            f"（基準: {esc(d.get('rule',''))}）。ドメインの立派さだけで通した旧基準なら "
+            f"37 件出ていましたが、中身は商品サイトと株価ページでした。")
+
+
 def main() -> None:
     days = load("data/history/*.json")
     n_days = len(days)
@@ -156,6 +171,9 @@ a{{color:#7a5230}}
 
 <h2>監視している失敗</h2>
 <p style="font-size:.86rem">この頁には成功だけを表示しない。壊れた計器は <a href="{SITE}/changes.html">同じ場所</a> に記録する。これまでに取り除いた誤検出：Bing の <code>site:</code> 総数を索引と誤読（固有表現 4 本すべて ours=0）、DuckDuckGo の 21 mentions が実際はクエリのエコー、<code>Y-R-U.github.io</code> の未展開テンプレート指摘は JS の中で正しく展開されていた、そして Gemini 回線が露骨な執筆を全面拒否していたことを製品公開後に見つけた。</p>
+
+<h2>出典スキャンの実績</h2>
+<p style="font-size:.86rem">{rows_ai_scan()}</p>
 
 <p class="note">更新: {today}（毎晩 06:10 / 19:40 に自動再生成）／ 元データ: <code>data/history/</code>, <code>data/traffic/</code>, <code>data/payments/</code></p>
 </main></body></html>"""

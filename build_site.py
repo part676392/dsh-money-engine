@@ -206,10 +206,17 @@ def build(d: dict) -> None:
     # dev と runner が同じ YYYY-MM-DD.json に追記して衝突した (2026-10-11 実測)。
     # 履歴は堀なので片方を捨てられない。場所ごとに分けて同名衝突を無くす。
     loc = "runner" if "/dsh-runner/" in str(ROOT) else "dev"
+    rec = history_record(snapshot, loc)
     (hist / f"{now:%Y-%m-%d}.{loc}.json").write_text(
-        json.dumps(history_record(snapshot, loc), ensure_ascii=False, indent=1),
+        json.dumps(rec, ensure_ascii=False, indent=1),
         encoding="utf-8",
     )
+    # 日付 file は同じ日の再実行で上書きされる (実測: 4 回走っても file は 3 個のまま)。
+    # 走った分の-series を捨てないために、場所ごとに追記専用の背骨を置く。
+    # data/history/ は merge=generated 対象外 (check-attr で unspecified を確認済み) なので
+    # 両側の行が消えない。
+    with open(hist / f"runs.{loc}.jsonl", "a", encoding="utf-8") as f:
+        f.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
     if dem:
         demand.dump_for_site(dem, by_company, OUT)

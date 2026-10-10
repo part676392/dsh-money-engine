@@ -17,6 +17,7 @@ import time
 ROOT = pathlib.Path(__file__).resolve().parent
 HIST = ROOT / "data" / "history"
 OUT_CSV = ROOT / "exports" / "history_timeseries.csv"
+OUT_RUNS = ROOT / "exports" / "history_runs.csv"
 OUT_JSON = ROOT / "data" / "history" / "index.json"
 
 # 列の並びは「後から取り直せない順」。 acessible な量が後ろ。
@@ -58,16 +59,33 @@ def load() -> list:
     return out
 
 
-def main() -> int:
-    rows = load()
-    if not rows:
-        print("  history がまだ無いので行列表を作らない")
-        return 0
+def load_runs() -> list:
+    """追記専用の背骨 (runs.<loc>.jsonl)。日付 file は同じ日の再実行で上書きするので、
+    走った分はここに残す (実測: 4 回走っても日付 file は 3 個だった)。"""
+    out = []
+    for fp in sorted(HIST.glob("runs.*.jsonl")):
+        loc = fp.stem.replace("runs.", "")
+        for ln in fp.read_text(encoding="utf-8").splitlines():
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                d = json.loads(ln)
+            except Exception:  # noqa: BLE001
+                continue
+            d["_file"] = fp.name
+            d["_loc"] = loc
+            out.append(d)
+    out.sort(key=lambda d: str(d.get("captured_at") or ""))
+    return out
 
-    OUT_CSV.parent.mkdir(exist_ok=True)
-    with open(OUT_CSV, "w", encoding="utf_8_sig", newline="") as f:
+
+def write_rows(rows: list, out: pathlib.Path, extra: str = "") -> int:
+    out.parent.mkdir(exist_ok=True)
+    cols = (["run_of"] if extra else []) + COLS
+    with open(out, "w", encoding="utf_8_sig", newline="") as f:
         w = csv.writer(f)
-        w.writerow(COLS)
+        w.writerow(cols)
         for d in rows:
             tr = d.get("traffic") or {}
             rec = {c: cell(d.get(c)) for c in COLS}
@@ -76,7 +94,23 @@ def main() -> int:
                 if key in COLS:
                     rec[key] = cell(tr.get(k))
             rec["sha256_source"] = d.get("_sha256", "")
-            w.writerow([rec.get(c, "") for c in COLS])
+            if extra:
+                rec["run_of"] = extra
+            w.writerow([rec.get(c, "") for c in cols])
+    return len(rows)
+
+
+def main() -> int:
+    rows = load()
+    if not rows:
+        print("  history がまだ無いので行列表を作らない")
+        return 0
+
+    OUT_CSV.parent.mkdir(exist_ok=True)
+    write_rows(rows, OUT_CSV)
+
+    runs = load_runs()
+    n_runs = write_rows(runs, OUT_RUNS, extra="daily_or_run") if runs else 0
 
     n = len(rows)
     first = rows[0].get("captured_at")
@@ -84,6 +118,10 @@ def main() -> int:
     OUT_JSON.write_text(json.dumps({
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "observations": n, "first_captured_at": first, "last_captured_at": last,
+        "runs_recorded": n_runs,
+        "runs_csv": "exports/history_runs.csv" if n_runs else None,
+        "grain_note": ("observations は 日付×場所 の 1 件 (同じ日の再実行は上書き)。"
+                      "走った回数の-series は runs_csv に別粒度で置く。"),
         "columns": COLS,
         "csv": "exports/history_timeseries.csv",
         "note": ("不明のセルは空欄。0 を入れていない理由は changes.html と同じ "
@@ -93,6 +131,8 @@ def main() -> int:
 
     print(f"  履歴行列表: {n} 観測 / {len(COLS)} 列 → {OUT_CSV.name}")
     print(f"    範囲: {first} → {last}")
+    print(f"    実行背骨: {n_runs} 行 → {OUT_RUNS.name}"
+          + ("" if n_runs else "  (runs.*.jsonl がまだ無い = 次回巡回から積める)"))
     q = [r.get("questions") for r in rows if r.get("questions") is not None]
     print(f"    questions を積んだ観測: {len(q)}/{n} 値: {q}")
     return 0

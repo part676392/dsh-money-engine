@@ -159,6 +159,33 @@ def tracker_single_source() -> bool:
     return ok
 
 
+def run_spine() -> bool:
+    """実行背骨 runs.<loc>.jsonl が読めて、CSV と行数が合うこと。
+    日付 file は同じ日の再実行で上書きされる (実測: 4 回走っても 3 file)。"""
+    files = sorted(ROOT.glob("data/history/runs.*.jsonl"))
+    bad, total = [], 0
+    for fp in files:
+        for i, ln in enumerate(fp.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
+            if not ln.strip():
+                continue
+            total += 1
+            try:
+                d = json.loads(ln)
+                if "captured_at" not in d:
+                    bad.append(f"{fp.name}:{i} captured_at 無し")
+            except Exception:  # noqa: BLE001
+                bad.append(f"{fp.name}:{i} JSON ではない")
+    csvf = ROOT / "exports" / "history_runs.csv"
+    rows = 0
+    if csvf.exists():
+        with open(csvf, encoding="utf_8_sig") as f:
+            rows = max(sum(1 for _ in f) - 1, 0)
+    ok = bool(files) and not bad and rows == total
+    print(f"  run spine         : {'OK' if ok else '★'}  jsonl {total} 行 / CSV {rows} 行"
+          f" / file {len(files)}" + (f"  壊れ {bad[:3]}" if bad else ""))
+    return ok
+
+
 def loop_coverage() -> bool:
     """builder (build_*/make_*) は必ず巡回から呼ばれていること。
     実測で build_store と build_mini が daily_loop に無く、店の頁だけ無人再生成されず
@@ -179,6 +206,8 @@ def main() -> int:
     if not syntax_sweep():
         return 1
     if not tracker_single_source():
+        return 1
+    if not run_spine():
         return 1
     if not loop_coverage():
         return 1

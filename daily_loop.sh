@@ -108,5 +108,30 @@ PY
     fi
     gh api -X POST repos/part676392/dsh-money-engine/pages/builds >/dev/null 2>&1
   fi
+  # 守りの集計。各検査は print するだけで exit を汚さないので、赤が出ても
+  # 無人実行は朝まで黙ったまま通る (2026-10-11 の secret ignore 漏れが実例)。
+  # だから今回の分だけ切り出して赤を1行の警告と状態ファイルにする。
+  RUN=$(awk '/start =====/{buf=""} {buf=buf "\n" $0} END{print buf}' "$LOG")
+  FAIL=""
+  echo "$RUN" | grep -q "no secret in public repo: False" && FAIL="$FAIL secret"
+  echo "$RUN" | grep -q "money pages ready: False" && FAIL="$FAIL money"
+  echo "$RUN" | grep -q "AEO claim holds: False" && FAIL="$FAIL aeo"
+  echo "$RUN" | grep -q "PUSH UNCONFIRMED" && FAIL="$FAIL push"
+  echo "$RUN" | grep -qE "parser self-test: ([0-3])/4" && FAIL="$FAIL parser"
+  if [ -n "$FAIL" ]; then
+    echo "  ★★★ GUARD FAIL:$FAIL  (ログのこの行を目安にすること)"
+  else
+    echo "  guards: all green"
+  fi
+  python3 - "$FAIL" <<'GUARD'
+import json, pathlib, sys, time
+fails = [f for f in sys.argv[1].split() if f]
+p = pathlib.Path("data/rails/guards_latest.json")
+p.parent.mkdir(parents=True, exist_ok=True)
+p.write_text(json.dumps({
+    "checked_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+    "green": not fails, "failed": fails}, ensure_ascii=False, indent=1), encoding="utf-8")
+print(f"  guards state written: green={not fails} failed={fails or '[]'}")
+GUARD
   echo "===== $(date '+%F %T') end ====="
 } >> "$LOG" 2>&1

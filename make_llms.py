@@ -39,6 +39,9 @@ def main() -> int:
     sig = load("data/selection_signals.json", {}) or {}
     q = load("data/interview_questions.json", {}) or {}
     fl = load("data/selection_flows.json", {}) or {}
+    hidx = load("data/history/index.json", {}) or {}
+    n_hist = hidx.get("observations", 0)
+    hist_span = f"{hidx.get('first_captured_at', '')} → {hidx.get('last_captured_at', '')}"
     arts = snap.get("articles", "?")
     comps = snap.get("companies", "?")
     yen = snap.get("listed_value_yen", "?")
@@ -123,6 +126,9 @@ def main() -> int:
   残りは空にしている (推測で文を作らない)。
 - 面接の質問カテゴリの並びは {n_modal} 本 ({modal_pct}%) が完全に同一順。逆質問は中央値第{med_rev}番目＝常に最後。
 - 候補が生記した選考段階の言及: {stage_txt}。書類選考が過半を占める。
+- 無人巡回が積んだ観測は {n_hist} 件 ({hist_span})。`exports/history_timeseries.csv` に無料公開。
+  UTF-8 BOM 付きなので `utf-8-sig` で読む。空欄は「その頃は測っていなかった」で 0 ではない。
+  各行に元 file の SHA-256 を付け、後から数字を差し替えていないことを検証できるようにした。
 
 ## Data
 

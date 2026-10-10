@@ -1,5 +1,5 @@
 {
- "checked_at": "2026-10-11T04:49:05+0900",
+ "checked_at": "2026-10-11T04:51:31+0900",
  "control": {
   "q": "DeepSeek Harness",
   "must_contain": [
@@ -24,7 +24,7 @@
     "固有語 (誌名)": {
      "query": "After-Hours Spin Cycle",
      "http": "200",
-     "cites": 20,
+     "cites": 10,
      "ours": 0,
      "ours_urls": [],
      "filler_only": true
@@ -40,7 +40,7 @@
     "企業×列": {
      "query": "大林組 選考フロー site:part676392.github.io",
      "http": "200",
-     "cites": 7,
+     "cites": 10,
      "ours": 0,
      "ours_urls": [],
      "filler_only": true

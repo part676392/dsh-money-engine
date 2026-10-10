@@ -11,7 +11,16 @@ LOG="logs/daily_$(date +%Y%m%d).log"
 mkdir -p logs
 {
   echo "===== $(date '+%F %T') start ====="
+  # token が空のままだと git がユーザー名/パスワードを聞いて**無限に待つ**。
+  # 無人実行 (launchd) ではこれがハングになる: 2026-10-11 に start だけで
+  # 何も出さない run が2本出た。だから空なら即退出、効かないなら fail fast。
+  export GIT_TERMINAL_PROMPT=0
   TOK0=$(gh auth token 2>/dev/null)
+  if [ -z "$TOK0" ]; then
+    echo "  ★★★ GUARD FAIL: gh token が空 (git pull で固まる前に終了)"
+    echo "===== $(date '+%F %T') abort (no token) =====" >> "$LOG"
+    exit 1
+  fi
   git pull --rebase --autostash --quiet "https://x-access-token:${TOK0}@github.com/part676392/dsh-money-engine.git" main 2>&1 | tail -2
 
   python3 ensure_inbox.py     2>&1 | tail -4

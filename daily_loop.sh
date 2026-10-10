@@ -34,13 +34,22 @@ mkdir -p logs
 
   git add -A
   if ! git diff --cached --quiet; then
+    # 劣化してから push しない。runner を ~/Documents の外に移すと
+    # full_bodies.json の無い環境が現れ、質問頁が 1,779 → 94 行に縮んで
+    # も日志には何も出ない。だから数を見て止める (check_regression.py)。
+    if ! python3 check_regression.py; then
+      echo "  ★★★ GUARD FAIL: regression — published を劣化させる再生成なので push 見送り"
+      git reset -q --hard HEAD
+    else
     git -c user.name="part676392" -c user.email="72697109+part676392@users.noreply.github.com" \
         commit -qm "daily refresh $(date +%F)"
     TOK=$(gh auth token 2>/dev/null)
     git push -q "https://x-access-token:${TOK}@github.com/part676392/dsh-money-engine.git" HEAD:main \
       && echo "  pushed" || echo "  PUSH FAILED"
+    python3 check_regression.py --update 2>&1 | tail -1
     gh api -X POST repos/part676392/dsh-money-engine/pages/builds >/dev/null 2>&1 && echo "  pages build triggered"
     sleep 30
+    fi
   else
     echo "  nothing changed"
   fi
@@ -134,6 +143,7 @@ PY
   echo "$RUN" | grep -q "money pages ready: False" && FAIL="$FAIL money"
   echo "$RUN" | grep -q "AEO claim holds: False" && FAIL="$FAIL aeo"
   echo "$RUN" | grep -q "PUSH UNCONFIRMED" && FAIL="$FAIL push"
+  echo "$RUN" | grep -q "GUARD FAIL: regression" && FAIL="$FAIL regression"
   echo "$RUN" | grep -qE "parser self-test: ([0-3])/4" && FAIL="$FAIL parser"
   if [ -n "$FAIL" ]; then
     echo "  ★★★ GUARD FAIL:$FAIL  (ログのこの行を目安にすること)"

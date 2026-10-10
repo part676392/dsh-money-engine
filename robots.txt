@@ -1,3 +1,7 @@
 User-agent: *
 Allow: /
 Sitemap: https://part676392.github.io/dsh-money-engine/sitemap.xml
+
+# LLM crawlers: measured numbers and their locations, in plain text:
+#   https://part676392.github.io/dsh-money-engine/llms.txt  (index)
+#   https://part676392.github.io/dsh-money-engine/llms-full.txt  (full appendix)

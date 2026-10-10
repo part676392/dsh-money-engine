@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import collections
 import html
+import urllib.parse
 import json
 import pathlib
 import re
@@ -233,6 +234,7 @@ def build(d: dict) -> None:
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>転職・新卒 選考対策 目録データベース｜{len(recs)}本を企業別に横断検索</title>
 <meta name="description" content="{len(recs)}本の面接対策・ES資料を企業別に検索。無料/有料の内訳と公開日を毎日自動更新。">
+<meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://part676392.github.io/dsh-money-engine/">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 <style>
@@ -348,6 +350,8 @@ r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(comp)}の面接対策資料 {len(g)}点（無料{len(free)}/有料{len(paid)}）｜選考DB</title>
 <meta name="description" content="{esc(q)}">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://part676392.github.io/dsh-money-engine/company/{urllib.parse.quote(comp)}.html">
 <script type="application/ld+json">{json.dumps(ltd, ensure_ascii=False)}</script>
 <style>body{{font-family:system-ui,"Hiragino Sans",sans-serif;margin:0;background:#f7f8fa;color:#1b1f24;line-height:1.7}}
 main{{max-width:760px;margin:0 auto;padding:26px 16px 60px}}h1{{font-size:1.25rem}}
@@ -413,7 +417,10 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
         (OUT / (kfile.read_text().strip() + ".txt")).write_bytes(kfile.read_bytes())
 
     (OUT / "robots.txt").write_text(
-        f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n", encoding="utf-8")
+        f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n\n"
+        "# LLM crawlers: measured numbers and their locations, in plain text:\n"
+        f"#   {base}/llms.txt  (index)\n"
+        f"#   {base}/llms-full.txt  (full appendix)\n", encoding="utf-8")
 
     print(f"built: index.html + {len(by_company)} company pages")
     print(f"  articles={len(recs)} companies={len(by_company)} free={sum(1 for r in recs if r['price']==0)} listed=¥{priced:,}")

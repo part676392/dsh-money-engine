@@ -79,6 +79,7 @@ PY
   python3 scoreboard.py 2>&1 | tail -3
   python3 make_ai_gap.py        2>&1 | tail -2
   python3 make_changes.py       2>&1 | tail -2
+  python3 make_llms.py        2>&1 | tail -2
   python3 build_site.py       2>&1 | tail -2
   # 履歴頁と計測値はここで再生成したので、二度目の commit で載せる
   git add -A

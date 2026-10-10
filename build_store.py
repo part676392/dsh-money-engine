@@ -171,7 +171,7 @@ def main() -> None:
 
     doc = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{esc(p['title'])} — Custom explicit scenes, written to your spec</title>
+<title>{esc(p['title'])} — custom explicit fiction</title>
 <meta name="description" content="Paid custom adult short fiction. Read the free preview, then send your specification. ${PRICE_USD} per scene, delivered as a file.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://part676392.github.io/dsh-money-engine/store/">

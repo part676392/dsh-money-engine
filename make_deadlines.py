@@ -102,6 +102,7 @@ def render(rows, passed, method):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>【%(nearest)s締切】28卒 コンサル ES 締切一覧 %(today)s時点｜%(n)d件</title>
 <meta name="description" content="アビーム・DTFA・EY・PwCなど28卒ESの締切を日付順に%(n)d件。無料%(free)d本・有料%(paid)d本を紐付け。各締切は記事本文の記載を機械検証。">
+<meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="%(base)s/es-deadlines.html">
 <script type="application/ld+json">%(ld)s</script>
 <style>body{font-family:system-ui,"Hiragino Sans",sans-serif;margin:0;background:#f7f8fa;color:#1b1f24;line-height:1.6}

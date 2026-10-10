@@ -131,6 +131,22 @@ def main() -> None:
         raise SystemExit("product failed verification; not publishing")
 
     wallet = json.loads(WALLET.read_text(encoding="utf-8")) if WALLET.exists() else {}
+    # 受注実数と、納品までの実測 (届いたことが無いのに "typical" は書かない)
+    ord_path = ROOT / "data" / "orders" / "latest.json"
+    seen = []
+    if ord_path.exists():
+        try:
+            od = json.loads(ord_path.read_text(encoding="utf-8"))
+            seen = od.get("orders") or od.get("messages") or []
+        except Exception:
+            seen = []
+    spans = [o.get("turnaround_min") for o in seen if isinstance(o, dict) and o.get("turnaround_min")]
+    measured = int(sum(spans) / len(spans)) if spans else 0
+    turn_line = (f"<b>{measured} minutes</b> median turnaround, measured over {len(spans)} delivered orders."
+                 if measured else
+                 f"target is <b>{TURNAROUND_MIN} minutes</b> — no order has been delivered yet, "
+                 f"so there is no measured figure to quote. This line updates itself once there is one.")
+
     addr = wallet.get("address", "")
     mail = ROOT / "outbox" / "mailtm.json"
     inbox = json.loads(mail.read_text(encoding="utf-8")).get("address", "") if mail.exists() else "no inbox configured"
@@ -203,7 +219,7 @@ a{{color:#f0c98a}}
   <h2>How it works</h2>
   <ul>
     <li>You send a specification: characters, situation, tone, hard limits.</li>
-    <li>You get a finished scene as a text file. <b>{TURNAROUND_MIN} minutes</b> typical turnaround.</li>
+    <li>You get a finished scene as a text file. {turn_line}</li>
     <li><span class="price">${PRICE_USD}</span> per scene — <b>about 1,500 words</b>, one continuous
         explicit scene. Paid in crypto before delivery.</li>
     <li>Shorter or longer is fine: 700 words 3 USD, 1,500 words 6 USD, 2,500 words 9 USD.</li>

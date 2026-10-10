@@ -176,13 +176,25 @@ def run_spine() -> bool:
             except Exception:  # noqa: BLE001
                 bad.append(f"{fp.name}:{i} JSON ではない")
     csvf = ROOT / "exports" / "history_runs.csv"
-    rows = 0
-    if csvf.exists():
+    def csv_rows() -> int:
+        if not csvf.exists():
+            return 0
         with open(csvf, encoding="utf_8_sig") as f:
-            rows = max(sum(1 for _ in f) - 1, 0)
+            return max(sum(1 for _ in f) - 1, 0)
+
+    rows = csv_rows()
+    note = ""
+    # exports/*.csv は merge=generated。再生成した行列表を pull が他側に戻すので、
+    # pre-flight では jsonl (追記・merge 対象外) と行数が食い違う誤★が出た
+    # (実測 2026-10-11: jsonl 4 / CSV 2 で push 見送り)。derived なので作り直して測る。
+    if rows != total and not bad and files:
+        subprocess.run([sys.executable, str(ROOT / "make_history_series.py")],
+                       capture_output=True, text=True, timeout=120)
+        rows = csv_rows()
+        note = "  (作り直してから一致)" if rows == total else "  (作り直しても不一致)"
     ok = bool(files) and not bad and rows == total
     print(f"  run spine         : {'OK' if ok else '★'}  jsonl {total} 行 / CSV {rows} 行"
-          f" / file {len(files)}" + (f"  壊れ {bad[:3]}" if bad else ""))
+          f" / file {len(files)}" + (f"  壊れ {bad[:3]}" if bad else "") + note)
     return ok
 
 

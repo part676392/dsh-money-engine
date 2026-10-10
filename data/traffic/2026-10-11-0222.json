@@ -1,0 +1,15 @@
+{
+ "checked_at": "2026-10-11T02:22:56+0900",
+ "counters": {
+  "store": {
+   "value": 2,
+   "delta": 0,
+   "key": "store"
+  },
+  "home": {
+   "value": 2,
+   "delta": 0,
+   "key": "home"
+  }
+ }
+}

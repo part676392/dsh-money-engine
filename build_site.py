@@ -271,6 +271,7 @@ code{{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.85em}}
 </style></head><body><main>
 <h1>転職・新卒 選考対策 目録データベース</h1>
 <a class="dead" href="es-deadlines.html">⏰ <b>28卒 コンサル ES 締切一覧</b> — 締切前の案件を日付順に。無料で読める書き方ガイド付き</a>
+<a class="dead" href="data-license.html">💴 <b>データ資産の購入</b> — 必要な企業群だけ切り出した CSV を公開URLで納品。現行 CSV はそのまま無料</a>
 <p class="sub">志望企業の面接対策資料が「あるか無いか」を即答する検索窓。<b>{snapshot['captured_at']}</b> 時点・毎日自動更新</p>
 <div class="cards">
 <div class="c"><b>{len(recs)}</b><span>登録資料</span></div>
@@ -385,6 +386,10 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
           f"  <url><loc>{base}/</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>"]
     from urllib.parse import quote
 
+    if (OUT / "data-license.html").exists():
+        sm.append(
+            f"  <url><loc>{base}/data-license.html</loc><lastmod>{today}</lastmod>"
+            f"<changefreq>daily</changefreq><priority>0.9</priority></url>")
     if (OUT / "es-deadlines.html").exists():
         sm.append(
             f"  <url><loc>{base}/es-deadlines.html</loc><lastmod>{today}</lastmod>"

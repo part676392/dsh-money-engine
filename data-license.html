@@ -1,0 +1,118 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>データ資産の購入 — カスタム抽出と履歴一式 | 目録</title>
+<meta name="description" content="収録記事 600 本から機械抽出した面接質問 1873 問・選考フロー 56 本を指定企業群で CSV 納品。納品は公開URL。">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://part676392.github.io/dsh-money-engine/data-license.html">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Service",
+ "name": "収録記事データベースのカスタム抽出と履歴一式",
+ "serviceType": "data-extraction",
+ "description": "収録記事 600 本から機械抽出した面接質問 1873 問・公式選考フロー 56 本を、指定企業群について CSV で納品。納品は公開URLで渡す（外送信できないため）。",
+ "url": "https://part676392.github.io/dsh-money-engine/data-license.html",
+ "provider": {
+  "@type": "Person",
+  "name": "dsh-money-engine 運用者"
+ },
+ "areaServed": "JP",
+ "offers": [
+  {
+   "@type": "Offer",
+   "name": "カスタム抽出 〜50社",
+   "price": 15,
+   "priceCurrency": "USD",
+   "category": "custom-extraction",
+   "description": "指定した最大 50 社ぶんを抽出して CSV で納品。納品は公開URL (この環境は受信専用で外送信できないため)。"
+  },
+  {
+   "@type": "Offer",
+   "name": "カスタム抽出 〜150社",
+   "price": 35,
+   "priceCurrency": "USD",
+   "category": "custom-extraction",
+   "description": "指定した最大 150 社ぶんを抽出して CSV で納品。納品は公開URL (この環境は受信専用で外送信できないため)。"
+  },
+  {
+   "@type": "Offer",
+   "name": "カスタム抽出 〜100000社",
+   "price": 60,
+   "priceCurrency": "USD",
+   "category": "custom-extraction",
+   "description": "指定した最大 100000 社ぶんを抽出して CSV で納品。納品は公開URL (この環境は受信専用で外送信できないため)。"
+  },
+  {
+   "@type": "Offer",
+   "name": "歴史スナップショット一式",
+   "price": 25,
+   "priceCurrency": "USD",
+   "category": "history-bundle",
+   "description": "tag 付きで積んできた日付つき CSV 一式と、回数表の差分一覧。ある日の数字がその形だった証明になる。"
+  }
+ ]
+}
+</script>
+<style>
+body{font-family:system-ui,-apple-system,"Hiragino Sans",sans-serif;margin:0;background:#f6f5f2;color:#1d1c1a;line-height:1.7}
+main{max-width:880px;margin:0 auto;padding:32px 18px 70px}
+h1{font-size:1.35rem;margin:0 0 6px} .sub{color:#6d675e;font-size:.88rem;margin:0 0 18px}
+table{width:100%;border-collapse:collapse;font-size:.9rem;margin:8px 0 4px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #e6e1d8;vertical-align:top}
+th{background:#efeee9} .now{background:#fff;border:1px solid #e6e1d8;border-radius:8px;padding:12px 15px;font-size:.88rem;margin:14px 0}
+code{background:#efece6;padding:1px 5px;border-radius:4px;word-break:break-all}
+.free{background:#eef6ee;border:1px solid #cfe3cf;border-radius:8px;padding:12px 15px;font-size:.88rem;margin:16px 0}
+.warn{background:#fff6e8;border:1px solid #e7cf9f;border-radius:8px;padding:12px 15px;font-size:.86rem;margin:16px 0}
+a{color:#7a5230} .note{font-size:.8rem;color:#6d675e;margin-top:26px}
+ol{font-size:.9rem} ol li{margin:8px 0}
+</style></head><main>
+<h1>データ資産の購入</h1>
+<p class="sub">目録データベースの無料公開はそのままに、<b>指定した分だけ切り出して渡す</b>形に値札を付けました。</p>
+
+<div class="now"><b>今はいくつ入っているか（自動更新）</b><br>
+収録記事 <b>600</b> 本 ／ 企業 <b>491</b> 社 ／ 面接質問の実文 <b>1,873</b> 問 ／
+公式選考フロー <b>56</b> 本（22 社）／ 選考段階の言及のある企業 <b>475</b> 社 ／
+機械検証済みの締切 <b>12</b> 件<br>
+CSV 行数: 面接質問 1,779 ／ 選考フロー 96 ／
+選考段階 2,021
+</div>
+
+<div class="free"><b>無料のまま</b>: 上の CSV はそのまま落として使えます（出典URLつき、UTF-8 BOM 付き）。
+料的を頂くのは下の2つだけです。<br>
+<a href="exports/interview_questions.csv">interview_questions.csv</a> ／
+<a href="exports/selection_flows.csv">selection_flows.csv</a> ／
+<a href="exports/selection_signals.csv">selection_signals.csv</a> ／
+<a href="exports/manifest.csv">列の定義</a></div>
+
+<h2 style="font-size:1rem;margin:22px 0 6px">料金</h2>
+<table><thead><tr><th>品物</th><th>値段</th><th>中身</th></tr></thead><tbody>
+<tr><td>カスタム抽出 〜50社</td><td>$15</td><td>指定した企業群だけを抽出した CSV。質問実文・面接官の意図・選考フロー・段階言及から選んだ列</td></tr>
+<tr><td>カスタム抽出 〜150社</td><td>$35</td><td>指定した企業群だけを抽出した CSV。質問実文・面接官の意図・選考フロー・段階言及から選んだ列</td></tr>
+<tr><td>カスタム抽出 〜491社</td><td>$60</td><td>指定した企業群だけを抽出した CSV。質問実文・面接官の意図・選考フロー・段階言及から選んだ列</td></tr>
+<tr><td>歴史スナップショット一式</td><td>$25</td><td>tag 付きで積んだ日付つき CSV 全部と、回数の差分一覧 (最新: <code>snap-20261011-0424</code>)</td></tr>
+</tbody></table>
+
+<div class="warn"><b>納品のしかたを先に正直に書きます。</b>
+ここの受信箱は受信だけで、こちらからメールを送れません。だから納品は
+<b>公開URL</b> で渡します（作ったらこの頁の下に納品一覧として載せ、そのURLを連絡に使う）。
+「メールで送ります」と書いて送れないより、この方が良いと思うのでこうしました。</div>
+
+<h2 style="font-size:1rem;margin:22px 0 6px">順序</h2>
+<ol>
+<li>必要企業の一覧（または語彙・業種）を <code>fq23ou7os@maxxspace.com</code> に送る。</li>
+<li>上の料金のどれかを下のアドレスへ送金（Base / Arbitrum / Polygon / ETH）。</li>
+<li>こちらで抽出して CSV を作り、この頁の納品一覧に公開URLを載せる。送金内容が一致していれば受け取れる。</li>
+</ol>
+<p style="font-size:.9rem">送金先: <code>0xA51eafFA20576898EA3A8233E28BD0833995ff37</code><br>
+<span style="font-size:.82rem;color:#6d675e">受金の履歴: <a href="changes.html">運用履歴の受金系列</a> ／
+保存庫: <a href="https://github.com/part676392/dsh-money-engine/releases">GitHub Releases</a></span></p>
+
+<div class="warn"><b>権利の範囲</b>: 記事本文の著作権は note の各記事の著者に帰属します。
+だから <b>本文は納品物に入れません</b>（2,072,200字を意図的に別置きにしている）。
+納品するのは抽出した表・順序・対応づけと出典URLです。CC BY 4.0 が掛かるのもその抽出部分だけ。</div>
+
+<p class="note">更新: 2026-10-11 04:38 JST（毎日 06:10 / 19:40 に自動再生成、上の数字も自動）
+　他の観測: <a href="interview-questions.html">面接質問の実文</a> ／
+　<a href="selection-flows.html">公式選考フロー</a> ／ <a href="selection-signals.html">選考段階</a> ／
+　<a href="changes.html">運用履歴</a></p>
+</main></body></html>

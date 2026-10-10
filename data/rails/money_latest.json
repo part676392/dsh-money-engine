@@ -1,5 +1,22 @@
 {
- "checked_at": "2026-10-11T04:30:46+0900",
+ "checked_at": "2026-10-11T04:38:23+0900",
+ "dataset_page": {
+  "bytes": 9379,
+  "prices_on_page": [],
+  "prices_missing": [
+   15,
+   25,
+   35,
+   60
+  ],
+  "inbox": false,
+  "wallet": false,
+  "ld_service_offers": false,
+  "offers": 0,
+  "delivery_is_url": false,
+  "no_mail_delivery_claim": true,
+  "rights_bodies_excluded": false
+ },
  "pages": {
   "store/": {
    "bytes": 8591,
@@ -32,5 +49,5 @@
   "2500": 9
  },
  "missing_tiers": [],
- "ready": true
+ "ready": false
 }

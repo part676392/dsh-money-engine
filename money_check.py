@@ -31,6 +31,19 @@ def tiers() -> dict:
     return eval(m.group(1)) if m else {}
 
 
+def data_prices() -> dict:
+    """データ資産頁の値札を code 側から読む。頁と突合してズレを赤にする。"""
+    src = (ROOT / "build_dataset_store.py").read_text(encoding="utf-8")
+    m = re.search(r"TIER = \[(.*?)\]\n", src, re.S)
+    tiers = []
+    if m:
+        for nums in re.findall(r"\((\d+),\s*(\d+)\)", m.group(1)):
+            tiers.append(int(nums[1]))
+    h = re.search(r"HISTORY_USD = (\d+)", src)
+    hist = int(h.group(1)) if h else 0
+    return {"prices": sorted(set(tiers + ([hist] if hist else []))), "n_offers": len(tiers) + (1 if hist else 0)}
+
+
 def fetch(p: str) -> str:
     r = subprocess.run(["curl", "-s", "--max-time", "25", f"{BASE}/{p}"],
                        capture_output=True, text=True, timeout=32)
@@ -87,12 +100,56 @@ def main() -> int:
     for p, c in rows:
         print(f"    {p:16s} {c['bytes']:>6,}B  prices={c['prices']} inbox={c['inbox']} "
               f"wallet={c['wallet']} pay_steps={c['how_to_pay']} words={c['words_stated']}")
+    # --- データ資産の販売頁 (値札は code から読んで突合) ---
+    exp = data_prices()
+    raw = fetch("data-license.html")
+    t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", raw))
+    got = sorted({int(x) for x in re.findall(r"\$\s?(\d{1,3})\b", t)})
+    miss = [p_ for p_ in exp["prices"] if p_ not in got]
+    ld_ok, n_off = False, 0
+    for blk in re.findall(r'<script type="application/ld\+json">(.*?)</script>', raw, re.S):
+        try:
+            d = json.loads(blk)
+        except Exception:
+            continue
+        if d.get("@type") == "Service":
+            n_off = len(d.get("offers") or [])
+            ld_ok = bool(d.get("name")) and n_off > 0
+    d_checks = {"bytes": len(raw), "prices_on_page": got, "prices_missing": miss,
+                "inbox": bool(inbox) and inbox in t, "wallet": bool(addr) and addr in t,
+                "ld_service_offers": ld_ok, "offers": n_off,
+                "delivery_is_url": ("公開URL" in t),
+                "no_mail_delivery_claim": ("メールで送ります" not in t),
+                "rights_bodies_excluded": ("本文は納品物に入れません" in t)}
+    print(f"    data-license.html {len(raw):>6,}B  prices={got} offers={n_off} "
+          f"inbox={d_checks['inbox']} wallet={d_checks['wallet']} "
+          f"納品=URL:{d_checks['delivery_is_url']} 権利明記:{d_checks['rights_bodies_excluded']}")
+    if len(raw) < 2000:
+        print(f"  ★ data-license.html: 応答が短い ({len(raw)}B)")
+        all_ok = False
+    if miss:
+        print(f"  ★ 値札が公開頁に無い: {miss} (code 側 {exp['prices']})")
+        all_ok = False
+    if exp["n_offers"] != n_off:
+        print(f"  ★ Offer の数がズレ: code={exp['n_offers']} 頁={n_off}")
+        all_ok = False
+    if not ld_ok:
+        print("  ★ Service 構造化データが name/offers を欠く")
+        all_ok = False
+    if not d_checks["delivery_is_url"] or not d_checks["no_mail_delivery_claim"]:
+        print("  ★ 納品形の記述が嘘つきかけ (外送信できないのにメール送信と書いていないか)")
+        all_ok = False
+    if not d_checks["rights_bodies_excluded"]:
+        print("  ★ 本文を同梱しない旨が頁から消えた")
+        all_ok = False
+
     print(f"  parser tiers: {tr}")
     print(f"  公開価格の突合: {'PASS' if not missing else 'FAIL ' + str(missing)}")
     print(f"\n  money pages ready: {all_ok}")
     out = ROOT / "data" / "rails" / "money_latest.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps({"checked_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                              "dataset_page": d_checks,
                               "pages": dict(rows), "parser_tiers": tr,
                               "missing_tiers": missing, "ready": all_ok},
                              ensure_ascii=False, indent=1), encoding="utf-8")

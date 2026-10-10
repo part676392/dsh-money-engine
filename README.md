@@ -33,6 +33,7 @@ Live: https://part676392.github.io/dsh-money-engine ｜ 日本語のデータセ
 - [注文受付（カスタム執筆・暗号決済）](https://part676392.github.io/dsh-money-engine/store/)
 
 ## 正直な制約
+- **権利の範囲を分けた**：CC BY 4.0 は抽出した表・順序・対応づけにのみ適用。本文の著作権は note の各記事の著者に帰属する。だから記事本文 (2,072,200字) はリポジトリに積まず、公開するのは各件 1 文の引用と出典URLまでに留めている。JSON-LD にも `creditText` と `isBasedOn` で明記した。
 
 **索引されている証拠を、まだ持っていない。**
 

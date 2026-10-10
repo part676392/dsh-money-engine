@@ -165,6 +165,8 @@ def main() -> int:
         "creator": {"@type": "Person", "name": "転職ナビ・中途キャリアの研究所"},
         "url": f"{BASE}/selection-signals.html",
         "license": "https://creativecommons.org/licenses/by/4.0/",
+        "creditText": "CC BY 4.0 は抽出した表・順序・対応づけにだけ適用します。本文の著作権は note の各記事の著者に帰属し、引用は出典URLつきで最小限に留めています。",
+        "isBasedOn": "https://note.com/shushoku_career1",
     }, ensure_ascii=False, indent=1)
 
     doc_html = f"""<!doctype html><html lang="ja"><head><meta charset="utf-8">
@@ -206,7 +208,7 @@ a{{color:#7a5230}} code{{background:#eceae4;padding:1px 5px;border-radius:4px;fo
 {chr(10).join(rows)}
 </tbody></table>
 
-<p class="note">更新: {time.strftime('%Y-%m-%d %H:%M JST')}（毎日 06:10 / 19:40 に自動再生成）　抽出方法: 文単位に分割し、語彙を含む文のみ採用。引用は抽出そのまま。
+<p class="note"><b>権利の範囲:</b> CC BY 4.0 は抽出した表・順序・対応づけにだけ適用します。本文の著作権は note の各記事の著者に帰属し、この頁にあるのは出典URLつきの最小限の引用です。<br>更新: {time.strftime('%Y-%m-%d %H:%M JST')}（毎日 06:10 / 19:40 に自動再生成）　抽出方法: 文単位に分割し、語彙を含む文のみ採用。引用は抽出そのまま。
 　他の観測の積み上がりは <a href="changes.html">運用履歴</a>、検索需要は <a href="ai-interviews.html">AI・録上面接の需要語</a> に公開しています。</p>
 </main></body></html>"""
     OUT_HTML.write_text(doc_html, encoding="utf-8")

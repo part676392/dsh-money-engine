@@ -162,6 +162,8 @@ def main() -> int:
                         f"{n_comp} 社別に整理。各件に出典記事のURLと価格を添付。"),
         "url": f"{BASE}/interview-questions.html",
         "license": "https://creativecommons.org/licenses/by/4.0/",
+        "creditText": "CC BY 4.0 は抽出した表・順序・対応づけにだけ適用します。本文の著作権は note の各記事の著者に帰属し、引用は出典URLつきで最小限に留めています。",
+        "isBasedOn": "https://note.com/shushoku_career1",
     }, ensure_ascii=False, indent=1)
 
     doc_html = f"""<!doctype html><html lang="ja"><head><meta charset="utf-8">
@@ -200,7 +202,7 @@ ol{{font-size:.88rem}} ol li{{margin:7px 0}}
 {chr(10).join(rows)}
 </tbody></table>
 
-<p class="note">更新: {time.strftime('%Y-%m-%d %H:%M JST')}（毎日 06:10 / 19:40 に自動再生成）
+<p class="note"><b>権利の範囲:</b> CC BY 4.0 は抽出した表・順序・対応づけにだけ適用します。本文の著作権は note の各記事の著者に帰属し、この頁にあるのは出典URLつきの最小限の引用です。<br>更新: {time.strftime('%Y-%m-%d %H:%M JST')}（毎日 06:10 / 19:40 に自動再生成）
 　抽出は機械的なので、助言文が混ざることがあります。必ず出典記事を確認してください。
 　他の観測: <a href="selection-signals.html">選考段階の言及</a> ／
 　<a href="es-deadlines.html">締切</a> ／ <a href="changes.html">運用履歴</a></p>

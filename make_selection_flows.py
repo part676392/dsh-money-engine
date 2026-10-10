@@ -186,6 +186,8 @@ def main() -> int:
                         f"出典記事のURLを添付している。"),
         "url": f"{BASE}/selection-flows.html",
         "license": "https://creativecommons.org/licenses/by/4.0/",
+        "creditText": "CC BY 4.0 は抽出した表・順序・対応づけにだけ適用します。本文の著作権は note の各記事の著者に帰属し、引用は出典URLつきで最小限に留めています。",
+        "isBasedOn": "https://note.com/shushoku_career1",
     }, ensure_ascii=False, indent=1)
 
     doc_html = f"""<!doctype html><html lang="ja"><head><meta charset="utf-8">
@@ -235,7 +237,7 @@ th{{background:#efeee9;font-weight:600}} a{{color:#7a5230}}
 {chr(10).join(rows)}
 </tbody></table>
 
-<p class="note">更新: {time.strftime('%Y-%m-%d %H:%M JST')}（毎日 06:10 / 19:40 に自動再生成・取得日時付き）
+<p class="note"><b>権利の範囲:</b> CC BY 4.0 は抽出した表・順序・対応づけにだけ適用します。本文の著作権は note の各記事の著者に帰属し、この頁にあるのは出典URLつきの最小限の引用です。<br>更新: {time.strftime('%Y-%m-%d %H:%M JST')}（毎日 06:10 / 19:40 に自動再生成・取得日時付き）
 　機械抽出なので枠の切れ目がずれることがあります。生データ: <a href="data/selection_flows.json">data/selection_flows.json</a>
 　他の観測: <a href="interview-questions.html">面接質問 {esc('1,873')} 問</a> ／
 　<a href="selection-signals.html">選考段階の言及</a> ／ <a href="changes.html">運用履歴</a></p>

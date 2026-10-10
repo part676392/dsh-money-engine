@@ -126,6 +126,8 @@ def main() -> None:
         "creator": {"@type": "Person", "name": "転職ナビ・中途キャリアの研究所"},
         "url": f"{SITE}/changes.html",
         "license": "https://creativecommons.org/licenses/by/4.0/",
+        "creditText": "CC BY 4.0 は抽出した表・順序・対応づけにだけ適用します。本文の著作権は note の各記事の著者に帰属し、引用は出典URLつきで最小限に留めています。",
+        "isBasedOn": "https://note.com/shushoku_career1",
     }, ensure_ascii=False, indent=1)
 
     doc = f"""<!doctype html><html lang="ja"><head><meta charset="utf-8">

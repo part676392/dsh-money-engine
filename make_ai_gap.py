@@ -172,6 +172,8 @@ def main() -> int:
         "creator": {"@type": "Person", "name": "転職ナビ・中途キャリアの研究所"},
         "url": f"{SITE}/ai-interviews.html",
         "license": "https://creativecommons.org/licenses/by/4.0/",
+        "creditText": "CC BY 4.0 は抽出した表・順序・対応づけにだけ適用します。本文の著作権は note の各記事の著者に帰属し、引用は出典URLつきで最小限に留めています。",
+        "isBasedOn": "https://note.com/shushoku_career1",
     }, ensure_ascii=False, indent=1)
 
     doc = f"""<!doctype html><html lang="ja"><head><meta charset="utf-8">
@@ -222,7 +224,7 @@ a{{color:#7a5230}}
 それは {covered} 社分だけでした（表の「会社ページのAI節」は需要語から自動生成した節の数で、記事本文の記述ではありません。この頁が問題にしているのは本文側の被覆です）。<strong>{n} 社分の需要に対して、受け口が圧倒的に足りない</strong>のが実測です。
 この頁はそこを埋めるために、需要側だけで作りました。</p>
 
-<p class="note">更新: {today}　収集: 主要検索エンジンのキーワード候補を正規化して企業名を含む語のみ抽出。人手の推測は含みません。<br>
+<p class="note"><b>権利の範囲:</b> CC BY 4.0 は抽出した表・順序・対応づけにだけ適用します。本文の著作権は note の各記事の著者に帰属し、この頁にあるのは出典URLつきの最小限の引用です。<br>更新: {today}　収集: 主要検索エンジンのキーワード候補を正規化して企業名を含む語のみ抽出。人手の推測は含みません。<br>
 他の観測の積み上がりは <a href="changes.html">運用履歴</a> に公開しています。</p>
 </main></body></html>"""
 

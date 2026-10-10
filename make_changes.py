@@ -46,18 +46,43 @@ def rows_daily() -> str:
     days = sorted(days, key=lambda nd: str((nd[1] or {}).get("captured_at") or nd[0]))
     out = []
     prev = None
+
+    def dl(now: int, was) -> str:
+        """増減列。前は記事数しか見ておらず、访问や受注の伸びが見えていなかった (2026-10-11)。
+        旧 format の行は鍵が無い = 0 ではなく不明。0 と混ぜると -1,779 の様な嘘の減少が出る。"""
+        if was is None:
+            return "—"
+        w = int(was)
+        if now > w:
+            return f"+{now - w}"
+        if now < w:
+            return f"{now - w}"
+        return "±0"
+
+    def g(d: dict, k: str):
+        v = d.get(k)
+        return None if v is None else int(v)
+
     for name, d in days:
-        art = d.get("articles", 0)
-        comp = d.get("companies", 0)
-        yen = d.get("listed_value_yen", 0)
-        dart = f"+{art - prev[1]}" if prev and art > prev[1] else ("—" if not prev else "±0")
+        art = int(d.get("articles") or 0)
+        comp = int(d.get("companies") or 0)
+        yen = int(d.get("listed_value_yen") or 0)
+        qs, lu, tr = g(d, "questions"), g(d, "lineup_rows"), g(d, "traffic_total")
+        ord_r, ord_h = g(d, "orders_real"), g(d, "orders_rehearsal")
         cells = (f"<tr><td>{esc(d.get('captured_at', name))}</td>"
-                 f"<td>{art}</td><td>{esc(dart)}</td>"
-                 f"<td>{comp}</td><td>{yen:,}</td></tr>")
+                 f"<td>{esc(d.get('location', '?'))}</td>"
+                 f"<td>{art}</td><td>{esc(dl(art, prev and g(prev, 'articles')))}</td>"
+                 f"<td>{comp}</td>"
+                 f"<td>{'—' if qs is None else format(qs, ',')}</td>"
+                 f"<td>{esc(dl(qs if qs is not None else 0, prev and g(prev, 'questions')) if qs is not None else '—')}</td>"
+                 f"<td>{'—' if lu is None else format(lu, ',')}</td>"
+                 f"<td>{'—' if tr is None else tr}</td>"
+                 f"<td>{'—' if ord_r is None else f'{ord_r} / {ord_h}'}</td>"
+                 f"<td>{yen:,}</td></tr>")
         out.append(cells)
-        prev = (name, art)
+        prev = d
     if not out:
-        return "<tr><td colspan=5>まだ履歴がありません</td></tr>"
+        return "<tr><td colspan=11>まだ履歴がありません</td></tr>"
     return "\n".join(out)
 
 
@@ -158,7 +183,7 @@ a{{color:#7a5230}}
 <p class="sub">この目録が何をいつ観測したか。<strong>{n_days} 日分</strong>。数値はすべて再取得可能な実測で、推定と見込みは載せていません。</p>
 
 <h2>収録の推移（note 公開API）</h2>
-<table><thead><tr><th>観測時刻</th><th>記事数</th><th>増減</th><th>対象社数</th><th>掲載金額(円)</th></tr></thead>
+<table><thead><tr><th>観測時刻</th><th>場所</th><th>記事数</th><th>増減</th><th>対象社数</th><th>面接質問</th><th>増減</th><th>並び行数</th><th>访问合計</th><th>受注 実/練習</th><th>掲載金額(円)</th></tr></thead>
 <tbody>
 {rows_daily()}
 </tbody></table>

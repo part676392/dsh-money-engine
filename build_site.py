@@ -17,6 +17,7 @@ import html
 import urllib.parse
 import json
 import pathlib
+import subprocess
 import re
 import datetime as dt
 
@@ -25,6 +26,62 @@ import demand
 ROOT = pathlib.Path(__file__).resolve().parent
 OUT = ROOT
 DATA = ROOT / "data"
+
+
+def _dj(fn: str) -> dict:
+    try:
+        return json.loads((DATA / fn).read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+def abacus_counts() -> dict:
+    """访问計は external。落ちても履歴を止めない (取れなければ鍵ごと省く)。"""
+    out = {}
+    for k in ("home", "store", "license", "sample", "mini", "lineup", "reverse"):
+        try:
+            r = subprocess.run(["curl", "-s", "--max-time", "8",
+                                f"https://abacus.jasoncameron.dev/get/dsh-money-engine/{k}"],
+                               capture_output=True, text=True, timeout=14)
+            v = json.loads(r.stdout).get("value")
+            if isinstance(v, int):
+                out[k] = v
+        except Exception:  # noqa: BLE001
+            pass
+    return out
+
+
+def history_record(snap: dict, loc: str) -> dict:
+    """history が 5 鍵しか積んでいなかった (2026-10-11 実測)。
+    後から取り直せないもの — 访问・受注・抽出量 — を同じ series に積む。"""
+    q, fl, sg = _dj("interview_questions.json"), _dj("selection_flows.json"), _dj("selection_signals.json")
+    ln, rv = _dj("question_lineups.json"), _dj("reverse_questions.json")
+    dl, dv = _dj("es_deadlines_strict.json"), _dj("deliveries.json")
+    # deliveries.json は id 辞書。orders_total の様な集計鍵は無い (実測で null になった)。
+    dvi = list(dv.values()) if isinstance(dv, dict) else (dv or [])
+    n_rehearsal = sum(1 for x in dvi if str(x.get("kind", "")) == "rehearsal")
+    n_delivered = sum(1 for x in dvi if "delivered" in str(x.get("status", "")).lower()
+                      or "納品" in str(x.get("status", "")))
+    cnt = abacus_counts()
+    rows = sum(len(l.get("order") or []) for o in (ln.get("per_company") or {}).values()
+               for l in o.get("lineups") or [])
+    return {
+        "captured_at": snap.get("captured_at"), "location": loc,
+        "articles": snap.get("articles"), "companies": snap.get("companies"),
+        "listed_value_yen": snap.get("listed_value_yen"), "by_kind": snap.get("by_kind"),
+        "questions": q.get("questions_total"), "questions_raw": q.get("questions_extracted_raw"),
+        "companies_with_questions": q.get("companies_with_questions"),
+        "flows": fl.get("flows_total"),
+        "signals": sum((sg.get("stage_totals") or {}).values()),
+        "lineup_rows": rows, "lineup_companies": ln.get("companies"),
+        "lineup_modal_pct": ln.get("modal_exact_pct"),
+        "reverse_quotes": rv.get("quotes"), "reverse_companies": rv.get("companies"),
+        "deadlines_open": len(dl.get("open") or []) if isinstance(dl, dict) else None,
+        "orders_real": len(dvi) - n_rehearsal, "orders_rehearsal": n_rehearsal,
+        "delivered": n_delivered,
+        "traffic": cnt, "traffic_total": sum(cnt.values()),
+        "cash_usd": 0, "cash_eth": 0,
+    }
 
 
 def esc(s: object) -> str:
@@ -159,7 +216,7 @@ def build(d: dict) -> None:
     # 履歴は堀なので片方を捨てられない。場所ごとに分けて同名衝突を無くす。
     loc = "runner" if "/dsh-runner/" in str(ROOT) else "dev"
     (hist / f"{now:%Y-%m-%d}.{loc}.json").write_text(
-        json.dumps({k: snapshot[k] for k in ("captured_at", "articles", "companies", "listed_value_yen", "by_kind")}, ensure_ascii=False, indent=1),
+        json.dumps(history_record(snapshot, loc), ensure_ascii=False, indent=1),
         encoding="utf-8",
     )
 

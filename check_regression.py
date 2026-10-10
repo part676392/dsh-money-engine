@@ -139,6 +139,29 @@ def main() -> int:
             print(f"    ★ {k:20s} {b:,} → {v:,}  ({pct:+.1f}%)")
         print(f"\n  regression: FAIL  基準 {STATE.name} とcompare上、{len(bad)} 鍵が {TOL:.0%} 以上減少")
         return 1
+    # 堀の形。history が 5 鍵へ逆戻りしても無音だった (2026-10-11 実測)。
+    import glob as _g
+    # file 名順だと runner (23:47 記法) が dev (07:25) より後ろに来て、照らす対象を間違える
+    # (実測: 5 鍵の方を見て ★ になった)。最新観測 = captured_at 最大で見る。
+    hs = [str(f) for f in sorted(_g.glob(str(ROOT / "data" / "history" / "*.json")),
+                                 key=lambda x: str(json.loads(pathlib.Path(x).read_text(encoding="utf-8"))
+                                                  .get("captured_at") or ""))]
+    need = ("questions", "lineup_rows", "traffic", "traffic_total", "orders_real", "location")
+    last_keys, missing = [], list(need)
+    if hs:
+        try:
+            d = json.loads(pathlib.Path(hs[-1]).read_text(encoding="utf-8"))
+            last_keys = [k for k in d]
+            missing = [k for k in need if k not in d]
+        except Exception as e:  # noqa: BLE001
+            missing = need + [f"read:{str(e)[:24]}"]
+    if missing:
+        print(f"  history shape     : ★ 鍵が無い {missing}  (最新 file の鍵 {len(last_keys)} 個)")
+        return 1
+    thin = [pathlib.Path(x).name for x in hs
+            if len(json.loads(pathlib.Path(x).read_text(encoding="utf-8"))) < len(need) + 10]
+    print(f"  history shape     : OK  {len(last_keys)} 鍵 (堀の系列を積めている)"
+          + (f"  ※ 旧 format {len(thin)} file: {thin}" if thin else ""))
     print(f"  regression: OK  {len(cur)} 鍵すべて基準内 (許容 {TOL:.0%})")
     return 0
 

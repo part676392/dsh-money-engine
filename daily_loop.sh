@@ -77,6 +77,7 @@ PY
   python3 check_orders.py --selftest 2>&1 | tail -3
   python3 check_payment_rail.py 2>&1 | tail -5
   python3 money_check.py          2>&1 | tail -6
+  python3 secrets_check.py       2>&1 | tail -7
   python3 check_signup_rails.py 2>&1 | tail -6
   python3 scoreboard.py 2>&1 | tail -3
   python3 make_selection_signals.py 2>&1 | tail -3

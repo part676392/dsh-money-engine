@@ -24,3 +24,7 @@ outbox/mailtm-*.json
 outbox/mastodon-signup.json
 outbox/gumroad.json
 outbox/wallet.json
+.reddit-profile/
+.browser-profile*/
+outbox/sweep-*.log
+outbox/login-run*.log

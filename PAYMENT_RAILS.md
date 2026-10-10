@@ -104,3 +104,32 @@ https://part676392.github.io/dsh-money-engine/
 ```
 
 topics: `aeo data-collection japan job-hunting json-ld recruiting seo static-site`
+
+---
+
+# 公開 repo に平文 credential が乗っていた (2026-10-11 発見・修正)
+
+巡回の途中で `git ls-files outbox/` を見たら、**.gitignore に失敗して commit 済み**の物があった：
+
+```
+outbox/mailtm-lemmy.json    password + JWT token   ← 晒れた
+outbox/reddit-attempt.json  reddit の password
+outbox/reddit-attempt2.json reddit の password
+outbox/login-verify.json    セッション cookie 3本
+outbox/mailtm.txt           mail.tm address + password
+```
+
+repo は `public private=false`。**HEAD からは落としたが、history には残っている。**
+
+| 確認 | 結果 |
+|---|---|
+| 注文の受信箱 `outbox/mailtm.json` | **どの commit でも 404 = 一度も晒していない** |
+| `mailtm-lemmy.json` | 古い commit では 200、HEAD では 404 |
+| 回転できるか | **できない**。`PATCH/PUT /accounts/{id}` が両方 `405` を返す |
+
+だから取った手：`git rm --cached` + `.gitignore` 拡張 → push → raw.githubusercontent で 404 を read-back 確認。
+晒れた lemmy 垢は**使わない**（回転不能なので燃え扱い）。以後の媒体登録は使い捨てを新調する。
+
+自分の失敗の内訳：`.gitignore` に `outbox/wallet.json` と `outbox/mailtm.json` だけ書いて、
+**後から増えた `mailtm-*.json` を追記しなかった**。ファイルを増やした時に ignore も足す、という
+手順が抜けていた。`money_check` と同じ形（置いた気でいないか数える）の巡回を credential にも要る。

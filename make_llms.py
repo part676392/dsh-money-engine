@@ -78,6 +78,19 @@ def main() -> int:
         for st, o in (obj or {}).items():
             stg[st] = stg.get(st, 0) + int(o.get("count", 0) or 0)
     top_stage = sorted(stg.items(), key=lambda kv: -kv[1])[:3]
+
+    sig_full = str(sig.get("text_source", "")).startswith("full")
+    src_word = "全文" if sig_full else "本文プレビュー"
+    sig_src = str(sig.get("text_source", "-"))
+    sig_len_note = ("各社の選考工程の全集ではない" if sig_full else
+                    "冒頭 240 字だけのプレビューなので、各社の選考工程の全集ではない")
+    ln = load("data/question_lineups.json", {}) or {}
+    seqs = [tuple(l["order"]) for c, o in (ln.get("per_company") or {}).items()
+            for l in o.get("lineups", [])]
+    n_rows = sum(len(x) for x in seqs)
+    n_modal = ln.get("modal_exact_matches", 0)
+    modal_pct = ln.get("modal_exact_pct", 0)
+    med_rev = ln.get("reverse_question_position_median", 0)
     stage_txt = "、".join(f"{k} {v:,}" for k, v in top_stage)
 
     head = f"""# 中途・転職 面接対策 目録データベース (dsh-money-engine)
@@ -98,15 +111,17 @@ def main() -> int:
 - [納品物見本]({BASE}/sample.html): 有料納品と同じ形の CSV 実物。3社・面接質問105問（意図つき10）と公式選考フロー10本
 - [納品一覧]({BASE}/deliveries.html): 注文ごとの進みと納品URL。受信箱は受信専用なので納品は公開URLで渡す
 - [CSV エクスポート]({BASE}/exports/manifest.csv): 面接質問・選考フロー・選考段階を CSV で。UTF-8 BOM 付き、列定義つき
-- [選考段階の言及 {sig.get("companies_with_mentions", "?")} 社]({BASE}/selection-signals.html): 収録記事の本文プレビューから抽出した選考段階の言及集計。言及ごとに引用文つき。実測値は生成時に JSON から読む
+- [選考段階の言及 {sig.get("companies_with_mentions", "?")} 社]({BASE}/selection-signals.html): 収録記事の{src_word}から抽出した選考段階の言及集計。言及ごとに引用文つき。実測値は生成時に JSON から読む
 - [面接質問 {q.get("questions_total", "?")} 問 / {q.get("companies_with_questions", "?")} 社]({BASE}/interview-questions.html): 収録記事から抽出した質問の実文と、記事が書く面接官の意図。各件に出典URL
-- [公式選考フロー {fl.get("flows_total", "?")} 本 / {fl.get("companies_with_flows", "?")} 社]({BASE}/selection-flows.html): 順序付きの選考工程。寄せた前の工程名も JSON の raw に全件保持
+- [質問カテゴリの並び順]({BASE}/question-lineups.html): 467社の羅列を12カテゴリに正規化し {n_rows:,} 行。並び順そのものを持つデータはここ以外に無い。
+- [逆質問の実文]({BASE}/reverse-questions.html): 本文に現れた文だけを抽出 (24文/8社)。薄さはページに明記。- [公式選考フロー {fl.get("flows_total", "?")} 本 / {fl.get("companies_with_flows", "?")} 社]({BASE}/selection-flows.html): 順序付きの選考工程。寄せた前の工程名も JSON の raw に全件保持
 - [注文受付ページ]({BASE}/store/): カスタム執筆の価格と受け口。Service/Offer 構造化データ
 
 
 ## 実測 (data から毎再生成で計算した値)
 - 面接質問 {n_q:,} 件のうち、面接官の意図が記事に書いてあるのは {n_in:,} 件 ({pct}%)。
   残りは空にしている (推測で文を作らない)。
+- 面接の質問カテゴリの並びは {n_modal} 本 ({modal_pct}%) が完全に同一順。逆質問は中央値第{med_rev}番目＝常に最後。
 - 候補が生記した選考段階の言及: {stage_txt}。書類選考が過半を占める。
 
 ## Data
@@ -120,7 +135,7 @@ def main() -> int:
 - 検索エンジンに索引されている**証拠は未取得**。Bing の phrase probe は固有表現 4 本すべて ours=0。`site:` 総数は 303,000→52→73,000 とふらつき、索引の証拠にならないと実測で分かった。
 - Google の sitemap ping は 404、Bing の /ping は 410 Gone。鍵なしで結果を退回できる計器がこの回線に無い。
 - 访问数は自前の計数器で測っている。現状の访问はほぼ自己監査。
-- 選考段階の言及は {sig.get("articles_scanned", "?")} 本から {sum(sig.get("stage_totals", {}).values())} 件を抽出。ただし本文は note API の返す 240 字プレビューのみで、各社の選考工程の全集ではない (全 600 本の本文長がちょうど 240 字であることを実測)。
+- 選考段階の言及は {sig.get("articles_scanned", "?")} 本から {sum(sig.get("stage_totals", {}).values())} 件を抽出。母体は {sig_src}。{sig_len_note}。
 - AI 面接の出典を {scan.get('companies', n_ai)} 社ぶん機械検索して基準を満たしたのは {scan.get('companies_with_hits', 1)} 社。ドメインの立派さだけで通した旧基準なら 37 件出ていたが中身は無関係なページだった。
 - カード決済: {card}。暗号 (Base/Arbitrum/Polygon/Ethereum の 1 地址) は即金で開いている。
 

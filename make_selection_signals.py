@@ -73,6 +73,15 @@ def main() -> int:
         except Exception:  # noqa: BLE001
             full = {}
     src_mode = "full HTML body" if full else "API preview (240字)"
+    src_word2 = "全文" if full else "本文プレビュー"
+    if full:
+        avg = sum(len(str(v.get("text") or "")) for v in full.values()
+                  if isinstance(v, dict)) // max(len(full), 1)
+        src_line = (f"本文は note の記事ページから取り直した<strong>全文</strong>です"
+                    f"（{len(full)} 本・平均 {avg:,} 字）。")
+    else:
+        src_line = ("本文は note の公開APIが返す <strong>プレビュー 240 字</strong> です"
+                    f"（全 {matched_articles} 本が 240 字）。")
 
     per_company: dict = {}
     stage_total = collections.Counter()
@@ -160,7 +169,7 @@ def main() -> int:
     ld = json.dumps({
         "@context": "https://schema.org", "@type": "Dataset",
         "name": "収録記事に現れた選考段階の言及 企業別集計",
-        "description": (f"{matched_articles} 本の本文プレビューから選考段階の語を含む文を抽出し、"
+        "description": (f"{matched_articles} 本の {src_word2}から選考段階の語を含む文を抽出し、"
                         f"{n_comp} 社別に集計 ({total_mentions} 言及)。各言及に引用文を添付。"),
         "creator": {"@type": "Person", "name": "転職ナビ・中途キャリアの研究所"},
         "url": f"{BASE}/selection-signals.html",
@@ -193,7 +202,7 @@ a{{color:#7a5230}} code{{background:#eceae4;padding:1px 5px;border-radius:4px;fo
 <p class="sub">{matched_articles} 本の本文から、選考段階の語を含む文だけを機械抽出し、企業別に集計しました。各行に引用文を載せています。</p>
 
 <div class="caution"><strong>この頁で言えること。</strong>
-本文は note の公開APIが返す <strong>プレビュー 240 字</strong> です（全 {matched_articles} 本が 240 字）。
+{src_line}
 したがってこれは「収録記事の冒頭に現れた選考段階の言及」であって、<strong>各社の選考工程の全集ではありません</strong>。
 さらにひとつ：<strong>ここに載っているのは「言及」であって「実施」ではありません</strong>。収録記事は企業向けの助言を含むため、
 「書類選考は通るのに」という定型文がその企業の選考を語っているとは限りません。工程の実在を確認するには引用元の記事と各社の採用ページを突き合わせてください。</div>

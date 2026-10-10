@@ -137,6 +137,30 @@ def main() -> int:
         for t, n in broken_links.most_common(5):
             print(f"      ★ {t}  x{n}")
     verdict = not parse_fail and not missing_req and not broken_links and not no_ld
+    # 表現と実測の一致。抽出の母体を誤って書くと、上の全検査が green でも頁が嘘をつく。
+    srcs = {}
+    for f in ("data/selection_signals.json", "data/question_lineups.json",
+              "data/interview_questions.json", "data/reverse_questions.json"):
+        fp = pathlib.Path(f)
+        if fp.exists():
+            try:
+                srcs[f] = str(json.loads(fp.read_text(encoding="utf-8")).get("text_source", ""))
+            except Exception:  # noqa: BLE001
+                srcs[f] = ""
+    full_mode = any(v.startswith("full") for v in srcs.values())
+    lying = []
+    for fp in sorted(pathlib.Path(".").glob("*.html")) + [pathlib.Path("llms.txt")]:
+        if not fp.exists():
+            continue
+        raw = fp.read_text(encoding="utf-8", errors="replace")
+        if full_mode and ("240 字プレビュー" in raw or "プレビュー 240 字" in raw
+                          or "本文プレビュー" in raw):
+            lying.append(str(fp))
+    msg = ("★ 古い母体の記述 " + str(lying[:3])) if lying else "一致"
+    print(f"  claim vs measurement: {msg}  (full={full_mode})")
+    if lying:
+        verdict = False
+
     print(f"\n  AEO claim holds: {verdict}")
     return 0 if verdict else 1
 

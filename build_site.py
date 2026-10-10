@@ -280,6 +280,8 @@ code{{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.85em}}
 <a class="dead" href="es-deadlines.html">⏰ <b>28卒 コンサル ES 締切一覧</b> — 締切前の案件を日付順に。無料で読める書き方ガイド付き</a>
 <a class="dead" href="data-license.html">💴 <b>データ資産の購入</b> — 必要な企業群だけ切り出した CSV を公開URLで納品。現行 CSV はそのまま無料</a>
 <a class="dead" href="deliveries.html">📦 <b>納品一覧</b> — 注文が進んだ分だけを積む記録（今は0件）</a>
+<a class="dead" href="question-lineups.html">🧩 <b>面接の質問カテゴリの並び順</b> — 467社ぶん構造化。64%が完全に同一の10カテゴリ順で、逆質問は常に最後</a>
+<a class="dead" href="reverse-questions.html">🔁 <b>逆質問の実文</b> — 本文に起きた文だけ。24文/8社 (薄いので薄いと書いてある)</a>
 <a class="dead" href="sample.html">📄 <b>納品物見本</b> — 有料で届く CSV の実物を3社ぶん公開（面接質問105問・公式フロー10本）</a>
 <p class="sub">志望企業の面接対策資料が「あるか無いか」を即答する検索窓。<b>{snapshot['captured_at']}</b> 時点・毎日自動更新</p>
 <div class="cards">
@@ -422,6 +424,11 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
             f"  <url><loc>{base}/interview-questions.html</loc><lastmod>{today}</lastmod>"
             f"<changefreq>daily</changefreq><priority>0.88</priority></url>"
         )
+    for extra, prio in (("question-lineups.html", "0.9"), ("reverse-questions.html", "0.8")):
+        if (OUT / extra).exists():
+            sm.append(
+                f"  <url><loc>{base}/{extra}</loc><lastmod>{today}</lastmod>"
+                f"<changefreq>daily</changefreq><priority>{prio}</priority></url>")
     if (OUT / "selection-signals.html").exists():
         sm.append(
             f"  <url><loc>{base}/selection-signals.html</loc><lastmod>{today}</lastmod>"

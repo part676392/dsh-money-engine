@@ -364,7 +364,7 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
 .about h2{{font-size:.95rem;margin:0 0 5px}}.about p{{font-size:.85rem;margin:6px 0}}
 .src{{color:#5a6472;font-size:.79rem}}
 .chips li{{margin:0;background:#f0edfd;color:#4b36a3;font-size:.78rem;padding:3px 9px;border-radius:20px}}</style></head><body><main>
-<p><a href="../">← 目録データベースへ</a></p>
+<p><a href="../">← 目録データベースへ</a> CSV でも置いています: <a href="/dsh-money-engine/exports/interview_questions.csv">面接質問</a> ／ <a href="/dsh-money-engine/exports/selection_flows.csv">選考フロー</a> ／ <a href="/dsh-money-engine/exports/selection_signals.csv">選考段階</a> ／ <a href="/dsh-money-engine/exports/manifest.csv">列の定義</a>（UTF-8 BOM 付きで Excel でも日本語が化けない）</p>
 <h1>{esc(comp)} の選考対策資料 {len(g)}点</h1>
 <p>{esc(q)} 選考種別：{esc('、'.join(kinds_here))}。</p>
 <ul>{chr(10).join(items)}</ul>

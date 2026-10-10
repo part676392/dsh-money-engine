@@ -1053,3 +1053,8 @@ built: index.html + 491 company pages
   internal links     : 533 checked, 0 broken (0 distinct targets)
 
   AEO claim holds: True
+  history push ok (exit)
+  history pushed (SHA 一致 eb15da04f4)
+  guards: all green
+  guards state written: green=True failed=[]
+===== 2026-10-11 04:09:28 end =====

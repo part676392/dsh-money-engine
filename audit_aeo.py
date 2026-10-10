@@ -21,6 +21,7 @@ import urllib.parse
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent
+SITE_BASE = "dsh-money-engine"  # Pages project site の URL prefix
 
 REQUIRED = {
     "ItemPage": ["mainEntity"],
@@ -105,7 +106,16 @@ def main() -> int:
             # href は percent-encode 済み (実測 live 200)。素のパスで見て
             # 「壊れてないのに壊れている」と嘘をついた (22件)。
             href_dec = urllib.parse.unquote(href)
-            target = (f.parent / href_dec).resolve()
+            if href_dec.startswith("/"):
+                # サイト根相対。Pages は /dsh-money-engine/ 配下なので、その
+                # prefix を落としてから repo 根 (= サイト根) に解決する。
+                # prefix を素でfilesystemに当てると「存在するのに壊れている」になる。
+                rest = href_dec.lstrip("/")
+                if rest.startswith(SITE_BASE + "/"):
+                    rest = rest[len(SITE_BASE) + 1:]
+                target = (ROOT / rest).resolve()
+            else:
+                target = (f.parent / href_dec).resolve()
             if href.endswith("/"):
                 target = target / "index.html"
             if not target.exists():

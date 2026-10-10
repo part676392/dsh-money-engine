@@ -1,26 +1,26 @@
 {
- "checked_at": "2026-10-10T23:48:14+0900",
+ "checked_at": "2026-10-11T00:25:29+0900",
  "site": "part676392.github.io/dsh-money-engine",
  "queries": {
   "site_query": {
    "http_ok": true,
    "organic_count": 10,
    "domains": [
-    "urayasu-fighters.jimdofree.com",
-    "urayasu-fighters.jimdofree.com",
-    "urayasu-fighters.jimdofree.com",
-    "urayasu-fighters.jimdofree.com",
-    "urayasu-fighters.jimdofree.com",
-    "urayasu-fighters.jimdofree.com",
-    "instagram.com",
-    "urayasu-fighters.jimdofree.com",
-    "facebook.com",
-    "urayasu-baseball-league.jimdofree.com"
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": "102,000",
+   "reported_total": "50",
    "blocked": false,
    "query": "site:part676392.github.io/dsh-money-engine"
   },
@@ -28,21 +28,21 @@
    "http_ok": true,
    "organic_count": 10,
    "domains": [
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "zhidao.baidu.com",
-    "zhidao.baidu.com",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp"
+    "agacare.clinic",
+    "usuge-lab.com",
+    "usuge-lab.com",
+    "mens-scalp.com",
+    "hairtonic100.hatenablog.com",
+    "crexgroup.com",
+    "note.com",
+    "clarity-seeker.online",
+    "danteras.com",
+    "kusurito.jp"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": "70",
+   "reported_total": "2",
    "blocked": false,
    "query": "選考対策 目録データベース"
   },
@@ -67,6 +67,96 @@
    "reported_total": "73,000",
    "blocked": false,
    "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "weblio.jp",
+    "e-kae-library.com",
+    "x.com",
+    "youtube.com",
+    "youtube.com",
+    "ja.wikipedia.org",
+    "ja.wiktionary.org",
+    "adtechmanagement.com",
+    "kotobank.jp",
+    "meaning-dictionary.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "399,000",
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "homes.co.jp",
+    "homes.co.jp",
+    "shimachu.co.jp",
+    "ja.wikipedia.org",
+    "toushi.homes.co.jp",
+    "toushi.homes.co.jp",
+    "suumo.jp",
+    "ush-homes.co.jp",
+    "homes.panasonic.com",
+    "suumo.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "580,000",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "ejje.weblio.jp",
+    "winners-english.com",
+    "talking-english.net",
+    "e-grammar.info",
+    "saruwakakun.com",
+    "dailyeigo.com",
+    "cooori.com",
+    "ei-navi.jp",
+    "shinuwakaeng.com",
+    "weblio.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "609,000",
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "jp-guide.net",
+    "hansoku-style.jp",
+    "筆耕.com",
+    "exia.co.jp",
+    "目録.jp",
+    "ja.wikipedia.org",
+    "docoic.com",
+    "目録.jp",
+    "mayonez.jp",
+    "hinagata-free.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "45,400",
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
   }
  }
 }

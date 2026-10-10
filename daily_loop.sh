@@ -66,6 +66,7 @@ for ep in ["https://api.indexnow.org/indexnow","https://www.bing.com/indexnow"]:
 PY
 
   python3 check_payment.py 2>&1 | tail -7
+  python3 check_orders.py 2>&1 | tail -6
   python3 scoreboard.py 2>&1 | tail -3
   echo "===== $(date '+%F %T') end ====="
 } >> "$LOG" 2>&1

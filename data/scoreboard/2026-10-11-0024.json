@@ -1,0 +1,72 @@
+{
+ "checked_at": "2026-10-11T00:24:03+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "dji.com",
+    "ja.wikipedia.org",
+    "biccamera.com",
+    "ossportal.dips.mlit.go.jp",
+    "sakidori.co",
+    "mlit.go.jp",
+    "dji.com",
+    "drone.jp",
+    "dronepass.jp",
+    "kakaku.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "303,000",
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "natalie.mu",
+    "ja.wikipedia.org",
+    "natalie.mu",
+    "gamepedia.jp",
+    "x.com",
+    "ja.wikipedia.org",
+    "yorushika.com",
+    "dic.pixiv.net",
+    "dic.pixiv.net",
+    "x.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "5,370",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "meaning-difference.com",
+    "chigai-hikaku.com",
+    "doda.jp",
+    "tenshoku.mynavi.jp",
+    "kotobank.jp",
+    "next.rikunabi.com",
+    "求人ボックス.com",
+    "saiyo-doda.jp",
+    "tenshoku.mynavi.jp",
+    "imi-chigai.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "73,000",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ }
+}

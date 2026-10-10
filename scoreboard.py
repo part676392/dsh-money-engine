@@ -77,6 +77,17 @@ def bing(query: str) -> dict:
         return {"error": str(e)}
 
 
+PROBE_PHRASES = [
+        # 固有表現で当てる。site: の reported_total は Bing が Broad に寄せた総数を
+        # 返すだけで索引の証拠にならない（2026-10-11 00:24 に 303,000 と出て
+        #  誤読しかけた。4 本の固有表現すべて ours=0 だった）。
+        '"この目録を運営している人"',
+        '"選考ステージ指定"',
+        '"After-Hours Spin Cycle"',
+        'site:part676392.github.io intitle:目録',
+    ]
+
+
 def main() -> int:
     HIST.mkdir(parents=True, exist_ok=True)
     queries = {
@@ -91,6 +102,20 @@ def main() -> int:
         print(f"  {name:10s} {res['queries'][name]}", flush=True)
         time.sleep(2)
 
+    res["phrases"] = {}
+    phrase_hits = 0
+    for q in PROBE_PHRASES:
+        r = bing(q)
+        r["query"] = q
+        res["phrases"][q] = r
+        ours = r.get("our_hits") or []
+        phrase_hits += len(ours)
+        mark = "★" if ours else "・"
+        print(f"  {mark} phrase {q[:32]:34s} organic={r.get('organic_count')} ours={len(ours)}", flush=True)
+        for o in ours[:2]:
+            print(f"      FOUND {str(o)[:88]}", flush=True)
+        time.sleep(2)
+
     f = HIST / f"{time.strftime('%Y-%m-%d-%H%M')}.json"
     f.write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
     (HIST / "latest.json").write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -99,6 +124,7 @@ def main() -> int:
     alive = all(v.get("parser_alive") for v in res["queries"].values() if "error" not in v)
     print(f"TOTAL our-links visible on Bing: {total}", flush=True)
     print(f"parser self-check (must be True): {alive}", flush=True)
+    print(f"PHRASE PROBE ours (the only real indexation proof): {phrase_hits}", flush=True)
     return 0
 
 

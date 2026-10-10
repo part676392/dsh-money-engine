@@ -14,3 +14,13 @@ outbox/gumroad.json
 .gumroad-profile/
 outbox/mailtm-devto.json
 outbox/hn-account.txt
+
+# 秘密: 使い捨て mail.tm の password / token / cookie は public repo に置かない
+outbox/*.txt
+outbox/*attempt*.json
+outbox/login-*.json
+outbox/login-*.log
+outbox/mailtm-*.json
+outbox/mastodon-signup.json
+outbox/gumroad.json
+outbox/wallet.json

@@ -82,6 +82,7 @@ def main() -> int:
 - [選考締切一覧]({BASE}/es-deadlines.html): 本文の締切記載を機械検証した {12} 件 (根拠文つき)
 - [データ資産の購入]({BASE}/data-license.html): 指定企業群だけを抽出した CSV を公開URLで納品する有料形。現行 CSV は無料
 - [納品物見本]({BASE}/sample.html): 有料納品と同じ形の CSV 実物。3社・面接質問105問（意図つき10）と公式選考フロー10本
+- [納品一覧]({BASE}/deliveries.html): 注文ごとの進みと納品URL。受信箱は受信専用なので納品は公開URLで渡す
 - [CSV エクスポート]({BASE}/exports/manifest.csv): 面接質問・選考フロー・選考段階を CSV で。UTF-8 BOM 付き、列定義つき
 - [選考段階の言及 {sig.get("companies_with_mentions", "?")} 社]({BASE}/selection-signals.html): 収録記事の本文プレビューから抽出した選考段階の言及集計。言及ごとに引用文つき。実測値は生成時に JSON から読む
 - [面接質問 {q.get("questions_total", "?")} 問 / {q.get("companies_with_questions", "?")} 社]({BASE}/interview-questions.html): 収録記事から抽出した質問の実文と、記事が書く面接官の意図。各件に出典URL

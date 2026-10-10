@@ -56,3 +56,6 @@ data/rails/secrets_latest.json
 data/rails/signup_latest.json
 data/scoreboard/latest.json
 data/snapshot-latest.json
+
+# 納品台帳は dev だけが書く。衝突停の実測2回があるので載せない。
+deliveries/state.json

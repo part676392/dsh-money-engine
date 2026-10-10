@@ -143,6 +143,45 @@ def main() -> int:
         print("  ★ 本文を同梱しない旨が頁から消えた")
         all_ok = False
 
+    # --- 納品一覧 (約束した納品形が実在するか) ---
+    raw = fetch("deliveries.html")
+    t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", raw))
+    n_rows = len(re.findall(r"<tr><td><code>", raw))
+    empty_ok = "受注はまだ 0 件です" in raw
+    ld_ok = False
+    for blk in re.findall(r'<script type="application/ld\+json">(.*?)</script>', raw, re.S):
+        try:
+            d = json.loads(blk)
+        except Exception:
+            continue
+        me = d.get("mainEntity") or {}
+        ld_ok = d.get("@type") == "ItemPage" and me.get("@type") == "ItemList" and \
+                "itemListElement" in me
+    back = ("data-license.html" in raw) and ("store/" in raw) and ("sample.html" in raw)
+    # 反向: 販売頁と目録がここを指しているか (孤児頁を許さない)
+    dl = fetch("data-license.html")
+    idx = fetch("")
+    from_here = ("deliveries.html" in dl, "deliveries.html" in idx)
+    print(f"    deliveries.html {len(raw):>6,}B  行={n_rows} 空状態={empty_ok} "
+          f"JSON-LD={ld_ok} 出口link={back}  seller/index→here={from_here}")
+    d_checks = {"bytes": len(raw), "rows": n_rows, "empty_state": empty_ok,
+                "ld_itemlist": ld_ok, "out_links": back, "linked_from": list(from_here)}
+    if len(raw) < 1200:
+        print(f"  ★ deliveries.html: 応答が短い ({len(raw)}B) — 未 deploy か配信事故")
+        all_ok = False
+    if n_rows == 0 and not empty_ok:
+        print("  ★ deliveries.html: 行も無く空状態の文も無い (何を書いた頁か不明)")
+        all_ok = False
+    if not ld_ok:
+        print("  ★ deliveries.html: ItemPage/ItemList 構造化データが足りない")
+        all_ok = False
+    if not back:
+        print("  ★ deliveries.html: 注文の入口への link が無い (行き止まり)")
+        all_ok = False
+    if not all(from_here):
+        print(f"  ★ deliveries.html: 販売頁/目録から呼べていない {from_here}")
+        all_ok = False
+
     # --- 納品物見本 (買 vật that が品物を見られるか) ---
     raw = fetch("sample.html")
     t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", raw))
@@ -201,6 +240,7 @@ def main() -> int:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps({"checked_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
                               "sample_page": s_checks,
+                              "deliveries_page": d_checks,
                               "dataset_page": d_checks,
                               "pages": dict(rows), "parser_tiers": tr,
                               "missing_tiers": missing, "ready": all_ok},

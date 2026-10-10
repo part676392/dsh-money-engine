@@ -185,7 +185,10 @@ ol{{font-size:.88rem}} ol li{{margin:7px 0}}
 </style></head><main>
 <h1>面接で投げられた質問 {len(all_q)} 件の実文</h1>
 <p class="sub">収録記事 {scanned} 本（うち本文を HTML から取り直したもの {full_used} 本）から、
-「…」で括られて ？ で終わる文だけを質問として抽出しました。助言文 («〜と答えましょう») は数えていません。</p>
+質問の実文 {len(all_q)} 件を抽出しました。助言文 («〜と答えましょう») は数えていません。
+下表は {n_comp} 社に割り当てられた {sum(len(v) for v in per_company.values())} 件で、
+残りの {len(all_q) - sum(len(v) for v in per_company.values())} 件は表題から企業を特定できなかったため
+企業欄を外して <a href="data/interview_questions.json">JSON</a> 側に置いています。</p>
 
 <h2 style="font-size:.98rem;margin:20px 0 8px;border-bottom:1px solid #ddd8cf;padding-bottom:5px">質問が多い順 {min(20, n_comp)} 社</h2>
 <ol>

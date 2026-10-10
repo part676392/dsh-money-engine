@@ -34,7 +34,7 @@ import json,sys,urllib.request,urllib.error
 key,base=sys.argv[1],sys.argv[2]
 import pathlib
 urls=[f"{base}/",f"{base}/es-deadlines.html",f"{base}/changes.html",
-      f"{base}/store/",f"{base}/store/mini.html"]
+      f"{base}/store/",f"{base}/store/mini.html",f"{base}/ai-interviews.html"]
 try:
     dem=json.load(open("data/demand_raw.json"))
     per=dem.get("per_company",{})
@@ -71,6 +71,7 @@ PY
   python3 check_payment.py 2>&1 | tail -7
   python3 check_orders.py 2>&1 | tail -6
   python3 scoreboard.py 2>&1 | tail -3
+  python3 make_ai_gap.py        2>&1 | tail -2
   python3 make_changes.py       2>&1 | tail -2
   python3 build_site.py       2>&1 | tail -2
   # 履歴頁と計測値はここで再生成したので、二度目の commit で載せる

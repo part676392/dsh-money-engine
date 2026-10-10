@@ -15,6 +15,8 @@ import re
 
 ROOT = pathlib.Path(__file__).resolve().parent
 RAW = ROOT / "store" / "samples" / "raw_product2.txt"
+MICRO = ROOT / "store" / "samples" / "product2_micro.md"
+TYPEGRAPHIC = set("\u2014\u2013\u2018\u2019\u201c\u201d\u2026\u00b7")
 OUT = ROOT / "store"
 WALLET = ROOT / "outbox" / "wallet.json"
 
@@ -38,13 +40,18 @@ TRACKER_MINI = tracker("mini")
 
 
 def parse(raw: str) -> dict:
+    labels = ("TITLE", "BODY", "WHAT_YOU_GET")
+
     def grab(label: str) -> str:
-        m = re.search(rf"^{label}\s*[:：]\s*(.*)$", raw, re.M | re.I)
+        # [ \t] 限定: \s にすると改行を跨いで次行を吞む (store 側で実測済み)
+        m = re.search(rf"^{label}[ \t]*[:：][ \t]*(.*)$", raw, re.M | re.I)
         if not m:
             return ""
+        head = m.group(1).strip()
         rest = raw[m.end():]
-        nxt = re.search(r"^(TITLE|BODY|WHAT_YOU_GET)\s*[:：]", rest, re.M | re.I)
-        return (rest[: nxt.start()] if nxt else rest).strip()
+        nxt = re.search(r"^(%s)[ \t]*[:：]" % "|".join(labels), rest, re.M | re.I)
+        tail = (rest[: nxt.start()] if nxt else rest).strip()
+        return head if head else tail
 
     t = re.search(r"^TITLE\s*[:：]\s*(.+)$", raw, re.M | re.I)
     return {"title": (t.group(1).strip() if t else ""),
@@ -67,16 +74,23 @@ def verify(p: dict) -> dict:
     for bad in ("as an ai", "language model", "generated", "prompt"):
         if bad in low:
             problems.append(f"mentions generation: {bad}")
-    kana = len(re.findall(r"[\u3041-\u30ff]", p["body"]))
-    if kana:
-        problems.append(f"japanese leaked ({kana} chars)")
+    bad = sorted({c for c in p["body"] if ord(c) > 127} - TYPEGRAPHIC)
+    if bad:
+        problems.append(f"non-ascii leaked: {bad[:6]}")
+    low = p["body"].lower()
+    lex = [k for k in ("wet", "mouth", "tongue", "thigh", "hard", "fingers",
+                       "inside", "slick", "heat", "breath", "came", "groaned") if k in low]
+    if len(lex) < 6:
+        problems.append(f"not explicit enough ({len(lex)} hits)")
+    if any(e in low for e in ("fade to black", "later that night")):
+        problems.append("fades to black")
     return {"words": words, "ok": not problems, "problems": problems}
 
 
 def main() -> None:
-    if not RAW.exists():
-        raise SystemExit(f"{RAW} がありません")
-    p = parse(RAW.read_text(encoding="utf-8", errors="replace"))
+    src = MICRO if MICRO.exists() else RAW
+    print(f"  source: {src.name}")
+    p = parse(src.read_text(encoding="utf-8", errors="replace"))
     v = verify(p)
     print(f"  title : {p['title']!r}")
     print(f"  body  : {v['words']} words -> {'PASS' if v['ok'] else v['problems']}")

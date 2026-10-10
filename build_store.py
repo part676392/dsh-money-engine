@@ -110,7 +110,8 @@ def verify(p: dict) -> dict:
     fade = [e for e in FADE_PHRASES if e in low]
     if fade:
         problems.append(f"fades to black: {fade}")
-    nonascii = sorted({c for c in p["preview"] if ord(c) > 127})
+    allow = set("\u2014\u2013\u2018\u2019\u201c\u201d\u2026\u00b7")
+    nonascii = sorted({c for c in p["preview"] if ord(c) > 127} - allow)
     if nonascii:
         problems.append(f"non-ascii leaked: {nonascii[:6]}")
     return {"words": words, "ok": not problems, "problems": problems, "lexicon": len(lex)}

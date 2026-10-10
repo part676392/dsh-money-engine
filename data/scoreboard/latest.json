@@ -1,54 +1,41 @@
 {
- "checked_at": "2026-10-11T03:39:38+0900",
+ "checked_at": "2026-10-11T03:53:09+0900",
  "site": "part676392.github.io/dsh-money-engine",
  "queries": {
   "site_query": {
    "http_ok": true,
-   "organic_count": 10,
+   "organic_count": 6,
    "domains": [
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "zhihu.com",
-    "zhihu.com",
-    "zhidao.baidu.com",
-    "zhidao.baidu.com",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp"
+    "proscons.co.jp",
+    "proscons.co.jp",
+    "storage.proscons.co.jp",
+    "proscons.co.jp",
+    "proscons.co.jp",
+    "proscons.co.jp"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": "75",
+   "reported_total": "7",
    "blocked": false,
    "query": "site:part676392.github.io/dsh-money-engine"
   },
   "brand": {
    "http_ok": true,
-   "organic_count": 10,
+   "organic_count": 1,
    "domains": [
-    "keyx0.net",
-    "poptyping.app",
-    "youtube.com",
-    "keyx0.net",
-    "typing.twi1.me",
-    "youtube.com",
-    "game.gagalog.com",
-    "gensakuwomitai.net",
-    "typing.twi1.me",
-    "kids.yahoo.co.jp"
+    "speedtest.gate02.ne.jp"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": "3,430",
+   "reported_total": "50",
    "blocked": false,
    "query": "選考対策 目録データベース"
   },
   "longtail": {
    "http_ok": true,
-   "organic_count": 11,
+   "organic_count": 10,
    "domains": [
     "meaning-difference.com",
     "chigai-hikaku.com",
@@ -59,8 +46,7 @@
     "求人ボックス.com",
     "saiyo-doda.jp",
     "tenshoku.mynavi.jp",
-    "imi-chigai.com",
-    "r-agent.com"
+    "imi-chigai.com"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
@@ -97,21 +83,21 @@
    "http_ok": true,
    "organic_count": 10,
    "domains": [
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp"
+    "youtube.com",
+    "youtube.com",
+    "youtube.com",
+    "youtube.com",
+    "music.youtube.com",
+    "ja.wikipedia.org",
+    "ja.wikipedia.org",
+    "music.youtube.com",
+    "play.google.com",
+    "yutura.net"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": "50",
+   "reported_total": "2,240,000",
    "blocked": false,
    "query": "\"選考ステージ指定\""
   },
@@ -119,21 +105,21 @@
    "http_ok": true,
    "organic_count": 10,
    "domains": [
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "zhihu.com",
-    "zhihu.com",
-    "backpackers.com.tw",
-    "backpackers.com.tw",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp",
-    "detail.chiebukuro.yahoo.co.jp"
+    "mens.musee-pla.com",
+    "mens.musee-pla.com",
+    "mens.musee-pla.com",
+    "mens.musee-pla.com",
+    "mens.musee-pla.com",
+    "mens.musee-pla.com",
+    "mens.musee-pla.com",
+    "mens.musee-pla.com",
+    "mens.musee-pla.com",
+    "mens.musee-pla.com"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": null,
+   "reported_total": "50",
    "blocked": false,
    "query": "\"After-Hours Spin Cycle\""
   },

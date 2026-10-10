@@ -1,5 +1,5 @@
 {
- "checked_at": "2026-10-11T03:43:28+0900",
+ "checked_at": "2026-10-11T03:52:55+0900",
  "control": {
   "q": "DeepSeek Harness",
   "must_contain": [
@@ -16,7 +16,7 @@
     "site 限定": {
      "query": "site:part676392.github.io",
      "http": "200",
-     "cites": 20,
+     "cites": 10,
      "ours": 0,
      "ours_urls": [],
      "filler_only": true

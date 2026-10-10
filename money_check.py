@@ -127,6 +127,28 @@ def qcount_check() -> bool:
     return ok
 
 
+def not_found_check() -> bool:
+    """迷った人を目録と値段に戻せるか。GitHub 既定の 404 だと資産の名前も $5 も消える。
+    ステータスコードは 404 のままにする (嘘の 200 にしない)。"""
+    bogus = "kesson-page-" + str(int(time.time())) + ".html"
+    r = subprocess.run(["curl", "-s", "--max-time", "25", "-w", "\n@@%{http_code}",
+                        f"{BASE}/{bogus}"], capture_output=True, text=True, timeout=40)
+    out = r.stdout or ""
+    code = out.rsplit("@@", 1)[-1].strip() if "@@" in out else "?"
+    body = out.rsplit("\n@@", 1)[0] if "\n@@" in out else out
+    need = {
+        "自有の404": "その頁は見つかりません" in body,
+        "値段の入口": "1社だけ $5" in body,
+        "目録へのlink": "interview-questions.html" in body,
+        "noindex": 'content="noindex' in body,
+        "访问計": 'fetch(b+"404"' in body,
+    }
+    ok = code == "404" and all(need.values())
+    print(f"  404 の受け皿       : {'OK' if ok else '★'}  HTTP {code}  "
+          + " ".join(f"{k}:{'o' if v else '×'}" for k, v in need.items()))
+    return ok
+
+
 def main() -> int:
     tr = tiers()
     inbox = ""
@@ -313,6 +335,8 @@ def main() -> int:
     if not history_pub_check():
         all_ok = False
     if not issue_form_check():
+        all_ok = False
+    if not not_found_check():
         all_ok = False
     print(f"\n  money pages ready: {all_ok}")
     out = ROOT / "data" / "rails" / "money_latest.json"

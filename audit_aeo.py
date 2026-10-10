@@ -61,6 +61,7 @@ def main() -> int:
     long_title = []
     broken_links = collections.Counter()
     link_total = 0
+    noindex_pages = []
 
     for f in fs:
         try:
@@ -69,8 +70,13 @@ def main() -> int:
             parse_fail.append((str(f), f"read: {e}"))
             continue
         rel = str(f.relative_to(ROOT))
+        # noindex の頁 (404 など) は検索に出ないので canonical も JSON-LD も要らない。
+        # 逆に canonical を付けると「インデックスしない頁に正準URLを宣言」する嘘になる。
+        noindex = 'content="noindex' in html
+        if noindex:
+            noindex_pages.append(rel)
         blocks = ld_blocks(html)
-        if not blocks:
+        if not blocks and not noindex:
             no_ld.append(rel)
         for b in blocks:
             try:
@@ -91,7 +97,7 @@ def main() -> int:
                     miss = [k for k in need if k not in it]
                     if miss:
                         missing_req.append((rel, name, miss))
-        if 'rel="canonical"' not in html:
+        if 'rel="canonical"' not in html and not noindex:
             no_canonical.append(rel)
         if 'name="robots"' not in html:
             no_robots.append(rel)
@@ -131,6 +137,8 @@ def main() -> int:
     print(f"  types              : " + ", ".join(f"{k}={v}" for k, v in types.most_common(8)))
     print(f"  JSON-LD parse fail : {len(parse_fail)}" + (f"  ★ {parse_fail[:3]}" if parse_fail else ""))
     print(f"  files w/o JSON-LD  : {len(no_ld)}" + (f"  {no_ld[:4]}" if no_ld else ""))
+    print(f"  noindex 免除       : {len(noindex_pages)}"
+          + (f"  {noindex_pages[:4]} (canonical / JSON-LD を要求しない)" if noindex_pages else ""))
     print(f"  missing required   : {len(missing_req)}" + (f"  ★ {missing_req[:2]}" if missing_req else ""))
     print(f"  missing canonical  : {len(no_canonical)}" + (f"  {no_canonical[:4]}" if no_canonical else ""))
     print(f"  missing meta robots: {len(no_robots)}" + (f"  {no_robots[:4]}" if no_robots else ""))

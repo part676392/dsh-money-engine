@@ -372,6 +372,54 @@ r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
 </script>{TRACKER_HOME}</body></html>"""
     (OUT / "index.html").write_text(html_doc, encoding="utf-8")
 
+    # ---- 404 : 見失った人を目録に戻す (GitHub 既定の 404 だと資産の名前も値段も消える) ----
+    q4 = _dj("interview_questions.json")
+    f4 = _dj("selection_flows.json")
+    l4 = _dj("question_lineups.json")
+    h4 = _dj("history/index.json")
+    n_q4 = f"{int(q4.get('questions_total') or 0):,}"
+    n_f4 = f"{int(f4.get('flows_total') or 0)}"
+    # rows と言う鍵は無い (実測で KeyError 回避のフォールバックが 467 = 社数を返していた)。
+    # 行数は history_record と同じ数え方を用いる (exports の CSV と一致する)。
+    n_l4 = f"{sum(len(l.get('order') or []) for o in (l4.get('per_company') or {}).values() for l in o.get('lineups') or []):,}"
+    n_h4 = f"{int(h4.get('observations') or 0)}"
+    c4 = int(snapshot.get("companies") or 0)
+    nav404 = [("index.html", f"企業別の目録トップ ({c4} 社)"),
+              ("interview-questions.html", f"面接質問の実文 {n_q4} 問"),
+              ("question-lineups.html", f"質問カテゴリの並び順 {n_l4}"),
+              ("selection-flows.html", f"公式選考フロー {n_f4} 本"),
+              ("sample.html", "納品物見本（3社ぶんの実物）"),
+              ("data-license.html", "データ資産の購入（1社だけ $5 から）"),
+              ("exports/manifest.csv", "CSV 一覧と列の定義"),
+              ("changes.html", f"運用履歴（観測 {n_h4} 件）"),
+              ("store/", "執筆物の注文")]
+    err_doc = f"""<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>その頁は見つかりません｜転職・新卒 選考対策 目録データベース</title>
+<meta name="description" content="アドレスが古いか打ち間違いです。{c4} 社の目録、面接質問の実文 {n_q4} 問、CSV 一式はここから入れます。">
+<meta name="robots" content="noindex,follow">
+{tracker("404")}
+<style>
+body{{font-family:system-ui,-apple-system,"Hiragino Sans",sans-serif;margin:0;background:#f7f8fa;color:#1b1f24}}
+main{{max-width:760px;margin:0 auto;padding:44px 20px 80px}}
+h1{{font-size:1.3rem;margin:0 0 8px}} p.why{{color:#5d6570;font-size:.92rem;margin:0 0 22px}}
+ul{{list-style:none;padding:0;margin:0;border-top:1px solid #e3e6ea}}
+li{{border-bottom:1px solid #e3e6ea}}
+a{{display:block;padding:13px 4px;color:#2547c9;text-decoration:none;font-size:.97rem}}
+a:hover{{text-decoration:underline}}
+small{{display:block;color:#5d6570;margin-top:26px;font-size:.8rem;line-height:1.7}}
+</style></head><body><main>
+<h1>その頁は見つかりません</h1>
+<p class="why">アドレスが古いか、打ち間違いです。中身は消えていません — 下のどれかから入ってください。</p>
+<ul>
+{chr(10).join(f'<li><a href="{p}">{t}</a></li>' for p, t in nav404)}
+</ul>
+<small>この頁は検索に出しません (noindex)。巡回は毎日 06:10 / 19:40 JST に自動で走り、
+上の数字はそのときに取り直した実測です。</small>
+</main></body></html>"""
+    (OUT / "404.html").write_text(err_doc, encoding="utf-8")
+
     # ---- 企業別ページ : AI Overview に引用される「独立した回答単位」 ----
     cdir = OUT / "company"
     cdir.mkdir(exist_ok=True)

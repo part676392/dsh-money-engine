@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
 """検索需要 (Google autocomplete) をサイトに出すための部品.
 
- сайтыの既存 block には手を入れず、需要レイヤだけを後付けする。
+ Websites の既存 block には手を入れず、需要レイヤだけを後付けする。
  力が要る箇所は「人々が実際に何と検索しているか」を FAQPage 構造化データに
  変換するところで、これにより AI Overview / Google が実質問を引用できる。
 """
 from __future__ import annotations
 
+import html as _html
 import json
 import pathlib
 import re
 from urllib.parse import quote
 
 DATA = pathlib.Path(__file__).resolve().parent / "data"
+
+
+def esc(s) -> str:
+    return _html.escape(str(s if s is not None else ""), quote=True)
 
 # 検索されている語を話題ごとに束ねる。求職者の実際の不安軸で分ける。
 THEME_AXES = [
@@ -172,3 +177,43 @@ def dump_for_site(demand: dict, by_company: dict, out_dir: pathlib.Path) -> None
     (out_dir / "data" / "demand-latest.json").write_text(
         json.dumps(slim, ensure_ascii=False, indent=1), encoding="utf-8"
     )
+
+
+AI_TERMS = ("ai", "録画", "動画")
+
+
+def ai_demand(comp: str, demand: dict):
+    """この企業を AI・録上面接で搜いている実検索語を返す.
+
+    実施有無をこちらで断定しない。観測された検索行動だけを根拠に出す。
+    """
+    per = demand.get("per_company", {}) if demand else {}
+    out = []
+    for k, v in per.items():
+        kk = k.lower()
+        ck = comp.lower()
+        if not (kk == ck or kk in ck or ck in kk):
+            continue
+        for var in v.get("variants", []):
+            t = var.lower()
+            if any(a in t for a in AI_TERMS):
+                out.append(var)
+    return sorted(set(out))
+
+
+def ai_block(comp: str, demand: dict) -> str:
+    terms = ai_demand(comp, demand)
+    if not terms:
+        return ""
+    chips = "".join(f"<li>{esc(t)}</li>" for t in terms[:6])
+    return (
+        "<div class='aigap'><h2>AI・録上面接で探す人もいます</h2>"
+        "<p class='lead'>この企業について、実際に入力されている検索語です（Google 自動補完から観測）。</p>"
+        "<ul class='chips'>" + chips + "</ul>"
+        "<p>ただし <b>その企業が本当に AI・録上面接を実施するかは、このデータからは確定できません</b>。"
+        "検索されているという事実までです。実施有無と形式は各社の採用ページ・マイページの案内を確認してください。</p>"
+        "<p>録画型・AI 型の一次で聞かれやすいのは、志望理由より <b>自己紹介・経験の要約・条件確認への即答</b> です。"
+        "人の面接用に書いた長文はそのままでは使いにくいため、90 秒版と 30 秒版を用意しておくと安全です。</p>"
+        "</div>"
+    )
+

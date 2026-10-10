@@ -275,6 +275,8 @@ r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
                 f"<span class='d'>{esc(x['published'])}</span></li>"
             )
         cdem = demand.company_block(comp, dem) if dem else ""
+        cai = demand.ai_block(comp, dem) if dem else ""
+        ai_terms = demand.ai_demand(comp, dem) if dem else []
 
         q = f"{comp}の中途面接対策資料は現在{len(g)}点あります。うち{len(free)}点は無料、{len(paid)}点は有料です。"
         ltd = {
@@ -290,6 +292,22 @@ r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
         }
         if dem:
             ltd = demand.company_ld(comp, dem, ltd)
+        if ai_terms:
+            # AEO: 「AI面接ある?」と搜く人の問いに、観測事実と未確定事項を分けて答える
+            ltd["mainEntity"].append(
+                {
+                    "@type": "Question",
+                    "name": f"{comp}はAI面接・録上面接を実施していますか？",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": (
+                            f"『{ai_terms[0]}』など AI・録上面接に関する検索が観測されています。"
+                            "ただし実施するかどうかは各社の採用ページ・マイページの案内確認が必要です。"
+                            "録画型では志望理由より、自己紹介・経験の要約・条件確認への即答が求められます。"
+                        ),
+                    },
+                }
+            )
 
         (cdir / f"{comp}.html").write_text(
             f"""<!doctype html><html lang="ja"><head><meta charset="utf-8">
@@ -300,12 +318,17 @@ r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
 <style>body{{font-family:system-ui,"Hiragino Sans",sans-serif;margin:0;background:#f7f8fa;color:#1b1f24;line-height:1.7}}
 main{{max-width:760px;margin:0 auto;padding:26px 16px 60px}}h1{{font-size:1.25rem}}
 li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:1px 7px;border-radius:20px;margin-left:6px}}
-.d{{font-size:.75rem;color:#6b7480;margin-left:6px}}a{{color:#1a5fd6}}</style></head><body><main>
+.d{{font-size:.75rem;color:#6b7480;margin-left:6px}}a{{color:#1a5fd6}}
+.aigap{{background:#fff;border:1px solid #e3e7ed;border-left:4px solid #6b4fd6;border-radius:9px;padding:14px 16px;margin:20px 0}}
+.aigap h2{{font-size:1rem;margin:0 0 6px}}.aigap p{{font-size:.86rem;margin:8px 0}}
+.chips{{list-style:none;display:flex;flex-wrap:wrap;gap:6px;padding:0;margin:8px 0}}
+.chips li{{margin:0;background:#f0edfd;color:#4b36a3;font-size:.78rem;padding:3px 9px;border-radius:20px}}</style></head><body><main>
 <p><a href="../">← 目録データベースへ</a></p>
 <h1>{esc(comp)} の選考対策資料 {len(g)}点</h1>
 <p>{esc(q)} 選考種別：{esc('、'.join(kinds_here))}。</p>
 <ul>{chr(10).join(items)}</ul>
 {cdem}
+{cai}
 </main></body></html>""",
             encoding="utf-8",
         )

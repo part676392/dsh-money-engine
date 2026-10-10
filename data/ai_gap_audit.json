@@ -1,0 +1,301 @@
+{
+ "companies_with_ai_demand": [
+  "AGC",
+  "INPEX",
+  "Umios",
+  "アビームコンサルティング",
+  "オムロン",
+  "キッコーマン",
+  "キユーピー",
+  "ニッスイ",
+  "ニップン",
+  "ファイザー",
+  "ミルボン",
+  "レゾナック",
+  "三菱ＨＣキャピタル",
+  "不二家",
+  "丸紅",
+  "亀田製菓",
+  "出光興産",
+  "日立ハイテク",
+  "村田製作所",
+  "東京センチュリー",
+  "農林中央金庫",
+  "野村不動産",
+  "野村證券"
+ ],
+ "checked_articles": [
+  {
+   "firm": "東京センチュリー",
+   "title": "【中途・転職】グッと内定が近づく！東京センチュリー〈事務職〉　面接想定PDF質問集100選",
+   "price": 2680,
+   "url": "https://note.com/shushoku_career1/n/ne4f39aea3676",
+   "mentions": [],
+   "chars": 5046
+  },
+  {
+   "firm": "三菱ＨＣキャピタル",
+   "title": "【中途・転職】グッと内定が近づく！三菱ＨＣキャピタル〈事務職〉　面接想定PDF質問集100選",
+   "price": 2680,
+   "url": "https://note.com/shushoku_career1/n/n467740308718",
+   "mentions": [],
+   "chars": 5287
+  },
+  {
+   "firm": "ニップン",
+   "title": "ニップンの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n306cc9146069",
+   "mentions": [],
+   "chars": 4719
+  },
+  {
+   "firm": "農林中央金庫",
+   "title": "農林中央金庫の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n6e9a253dabfb",
+   "mentions": [],
+   "chars": 4910
+  },
+  {
+   "firm": "アビームコンサルティング",
+   "title": "アビームコンサルティング P&O職のES、何を書く？秋ターム締切と書き方【28卒】",
+   "price": 0,
+   "url": "https://note.com/shushoku_career1/n/n75badbfdc7ab",
+   "mentions": [
+    "ai面接"
+   ],
+   "chars": 5307
+  },
+  {
+   "firm": "ニッスイ",
+   "title": "ニッスイの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n3086c03099d7",
+   "mentions": [],
+   "chars": 4809
+  },
+  {
+   "firm": "不二家",
+   "title": "不二家の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n23469e4adc77",
+   "mentions": [],
+   "chars": 4632
+  },
+  {
+   "firm": "亀田製菓",
+   "title": "亀田製菓の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n0b5d915bdcaf",
+   "mentions": [],
+   "chars": 4635
+  },
+  {
+   "firm": "キッコーマン",
+   "title": "キッコーマンの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/na671aa22f67f",
+   "mentions": [],
+   "chars": 4644
+  },
+  {
+   "firm": "Umios",
+   "title": "Umios（ウミオス・旧マルハニチロ）の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n4ad82dce6f50",
+   "mentions": [],
+   "chars": 5002
+  },
+  {
+   "firm": "アビームコンサルティング",
+   "title": "アビームコンサルティングのESは何を書く？ビジネスコンサルタントコースの書き方と締切",
+   "price": 0,
+   "url": "https://note.com/shushoku_career1/n/ncebf5eb6363c",
+   "mentions": [
+    "ai面接"
+   ],
+   "chars": 5024
+  },
+  {
+   "firm": "出光興産",
+   "title": "【中途・転職】グッと内定が近づく！出光興産株式会社〈事務職〉　面接想定PDF質問集100選",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n96dd5685ee18",
+   "mentions": [],
+   "chars": 4893
+  },
+  {
+   "firm": "オムロン",
+   "title": "オムロン ヘルスケアの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/na502534e7712",
+   "mentions": [],
+   "chars": 5000
+  },
+  {
+   "firm": "野村證券",
+   "title": "【中途・転職】グッと内定が近づく！野村證券 最終面接（役員面接）想定PDF質問集100選",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/ndcc155901e47",
+   "mentions": [],
+   "chars": 5601
+  },
+  {
+   "firm": "ファイザー",
+   "title": "ファイザーの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n499144c2f7ee",
+   "mentions": [],
+   "chars": 4800
+  },
+  {
+   "firm": "INPEX",
+   "title": "INPEX（インペックス）の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n773c326efd3f",
+   "mentions": [],
+   "chars": 5061
+  },
+  {
+   "firm": "ミルボン",
+   "title": "ミルボンの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n72a9e4d01e21",
+   "mentions": [],
+   "chars": 4691
+  },
+  {
+   "firm": "アビームコンサルティング",
+   "title": "アビームコンサルティングのES例文と書き方｜ビジネスコンサルタントコースの架空例文9選と空欄テンプレ",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n79adb8b4a7d5",
+   "mentions": [],
+   "chars": 2821
+  },
+  {
+   "firm": "アビームコンサルティング",
+   "title": "アビームコンサルティングのインターンES例文と書き方｜P&O職秋ターム選考の例文8選と空欄テンプレ",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n91395221d8ab",
+   "mentions": [
+    "ai面接"
+   ],
+   "chars": 3213
+  },
+  {
+   "firm": "アビームコンサルティング",
+   "title": "アビームコンサルティングのインターンES例文と書き方｜戦略コンサルタントコース秋ターム選考の例文8選と空欄テンプレ",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n398fadd48662",
+   "mentions": [
+    "ai面接"
+   ],
+   "chars": 3248
+  },
+  {
+   "firm": "アビームコンサルティング",
+   "title": "アビームコンサルティングのインターンES例文と書き方｜公共経営コンサルタントコースの例文9選と空欄テンプレ",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n494fa9e88ece",
+   "mentions": [
+    "ai面接"
+   ],
+   "chars": 3596
+  },
+  {
+   "firm": "アビームコンサルティング",
+   "title": "アビームコンサルティングのインターンES例文と書き方｜デジタルコンサルタントコースの例文9選と空欄テンプレ",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/nbdb178302507",
+   "mentions": [
+    "ai面接"
+   ],
+   "chars": 3457
+  },
+  {
+   "firm": "レゾナック",
+   "title": "レゾナック（旧昭和電工）の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/ne37f3f58ae45",
+   "mentions": [],
+   "chars": 5009
+  },
+  {
+   "firm": "丸紅",
+   "title": "【中途・転職】グッと内定が近づく！丸紅株式会社〈事務職〉　面接想定PDF質問集100選",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/nc08799ddaaa7",
+   "mentions": [],
+   "chars": 5365
+  },
+  {
+   "firm": "野村不動産",
+   "title": "【中途・転職】グッと内定が近づく！野村不動産〈事務職〉　面接想定PDF質問集100選",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/ne4b95b98277c",
+   "mentions": [],
+   "chars": 4257
+  },
+  {
+   "firm": "オムロン",
+   "title": "【中途・転職】グッと内定が近づく！オムロン株式会社〈事務職〉　面接想定PDF質問集100選",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n5aacbca230ba",
+   "mentions": [],
+   "chars": 4568
+  },
+  {
+   "firm": "村田製作所",
+   "title": "【中途・転職】グッと内定が近づく！株式会社村田製作所〈事務職〉　面接想定PDF質問集100選",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n1664e9dafc5a",
+   "mentions": [],
+   "chars": 3693
+  },
+  {
+   "firm": "日立ハイテク",
+   "title": "日立ハイテクの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/nba75ca4d0187",
+   "mentions": [],
+   "chars": 4374
+  },
+  {
+   "firm": "キユーピー",
+   "title": "【中途・転職】グッと内定が近づく！キユーピー株式会社〈事務職〉　面接想定PDF質問集100選",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n4e4d605cf37a",
+   "mentions": [],
+   "chars": 4761
+  },
+  {
+   "firm": "AGC",
+   "title": "AGC（エージーシー）の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/ne6b61f5a7114",
+   "mentions": [],
+   "chars": 4599
+  },
+  {
+   "firm": "東京センチュリー",
+   "title": "【中途・転職】グッと内定が近づく！東京センチュリー　面接想定PDF質問集100選",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/na81bba3fb0b1",
+   "mentions": [],
+   "chars": 4396
+  },
+  {
+   "firm": "出光興産",
+   "title": "【中途・転職】グッと内定が近づく！出光興産　面接想定PDF質問集100選",
+   "price": 1980,
+   "url": "https://note.com/shushoku_career1/n/n3a4a5031e6f2",
+   "mentions": [],
+   "chars": 5138
+  }
+ ],
+ "articles_mentioning": 6,
+ "companies_covered": [
+  "アビームコンサルティング"
+ ]
+}

@@ -76,6 +76,7 @@ def pick(q: dict, fl: dict, sg: dict) -> list:
 
 def main() -> int:
     q, fl, sg = load("interview_questions.json"), load("selection_flows.json"), load("selection_signals.json")
+    lnp = load("question_lineups.json")
     picks = pick(q, fl, sg)
     if not picks:
         print("  企業が無い: 見本を作れない")
@@ -98,6 +99,11 @@ def main() -> int:
             for si, st in enumerate(f.get("steps", []), 1):
                 w.writerow([c, f"flow#{fi}", si, st.get("raw", ""), "", st.get("canon", ""),
                             f.get("url", ""), f.get("price", "")])
+                rows += 1
+        o = lnp.get("per_company", {}).get(c) or {}
+        for li, entry in enumerate(o.get("lineups") or [], 1):
+            for pi, cat in enumerate(entry.get("order") or [], 1):
+                w.writerow([c, f"lineup#{li}", pi, cat, "", "", o.get("url", ""), o.get("price", "")])
                 rows += 1
         for stage, obj in (sg.get("per_company", {}).get(c) or {}).items():
             for quote in (obj.get("quotes") or []):
@@ -125,6 +131,11 @@ def main() -> int:
             frow.append(f"<p><b>{esc(f.get('track','') or '本流')}</b>: {steps}</p>"
                         f"<p class='raw'>元の表記: {raw}</p>")
         flows = "\n".join(frow) or "<p>フローの記載なし</p>"
+        o = lnp.get("per_company", {}).get(c) or {}
+        lu = (o.get("lineups") or [{}])[0].get("order") or []
+        lineup = ('<ol>' + "".join(f"<li>{esc(x)}</li>" for x in lu) + "</ol>"
+                  if lu else "<p>目次の記載なし</p>")
+        n_lu = len(o.get("lineups") or [])
         sig = "\n".join(
             f"<li><b>{esc(stage)}</b> ×{obj.get('count',0)}: "
             f"「{esc((obj.get('quotes') or ['—'])[0][:150])}」</li>"
@@ -133,10 +144,12 @@ def main() -> int:
 <section class="co">
 <h2>{esc(c)}</h2>
 <p class="met">質問 {d['q']} 問 (意図つき {d['intent']}) ／ 公式フロー {d['flow']} 本 ／ 段階の言及 {d['sig']} 箇所</p>
+<p class="ord">質問カテゴリの並び: {esc(" → ".join((lnp.get("per_company", {}).get(d['company'], {}) or {}).get("lineups", [{}])[0].get("order", [])[:10])) if ((lnp.get("per_company", {}).get(d['company'], {}) or {}).get("lineups")) else "記載なし"}</p>
 <h3>面接で投げられた質問の実文</h3>
 <table><thead><tr><th>#</th><th>質問</th><th>面接官の意図（記事が書いた分だけ）</th><th>出典</th></tr></thead>
 <tbody>{qs}</tbody></table>
 <h3>公式の選考フロー</h3>{flows}
+<h3>質問カテゴリの並び (記事の目次から)</h3>{lineup}
 <h3>選考段階の言及（1文引用）</h3><ul>{sig}</ul>
 </section>""")
 

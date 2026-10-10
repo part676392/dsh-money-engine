@@ -83,7 +83,8 @@ def main() -> int:
     nfc = fl.get("companies_with_flows", 0)
     ns = sg.get("companies_with_mentions", 0)
     rows = {k: csv_rows(k) for k in ("interview_questions.csv", "selection_flows.csv",
-                                     "selection_signals.csv", "manifest.csv")}
+                                     "selection_signals.csv", "question_lineups.csv",
+                                     "reverse_questions.csv", "manifest.csv")}
     # es_deadlines_strict.json は {generated, method, open[], all[]} の形。
     # list だと思って len すると 0 を誤読する (実測でなった)。
     n_dead = len(dl.get("open") or []) if isinstance(dl, dict) else (len(dl) if dl else 0)
@@ -151,14 +152,17 @@ ol{{font-size:.9rem}} ol li{{margin:8px 0}}
 公式選考フロー <b>{nf}</b> 本（{nfc} 社）／ 選考段階の言及のある企業 <b>{ns}</b> 社 ／
 機械検証済みの締切 <b>{n_dead}</b> 件<br>
 CSV 行数: 面接質問 {rows['interview_questions.csv']:,} ／ 選考フロー {rows['selection_flows.csv']:,} ／
-選考段階 {rows['selection_signals.csv']:,}
+選考段階 {rows['selection_signals.csv']:,} ／ <b>質問カテゴリの並び {rows['question_lineups.csv']:,} 行</b> ／
+逆質問の実文 {rows['reverse_questions.csv']} 文
 </div>
 
 <div class="free"><b>無料のまま</b>: 上の CSV はそのまま落として使えます（出典URLつき、UTF-8 BOM 付き）。
-料的を頂くのは下の2つだけです。<br>
+有料を頂くのは下の2つだけです。<br>
 <a href="exports/interview_questions.csv">interview_questions.csv</a> ／
 <a href="exports/selection_flows.csv">selection_flows.csv</a> ／
 <a href="exports/selection_signals.csv">selection_signals.csv</a> ／
+<a href="exports/question_lineups.csv">question_lineups.csv</a> ／
+<a href="exports/reverse_questions.csv">reverse_questions.csv</a> ／
 <a href="exports/manifest.csv">列の定義</a><br>
 <b>中を見たい方へ</b>: <a href="sample.html">納品物見本（3社ぶん実物）</a> — paid 版と同じ CSV をそのまま載せています。<br>
 <b>注文後</b>: 進みと納品URLは <a href="deliveries.html">納品一覧</a> に積みます。 — paid 版と同じ CSV をそのまま載せています。</div>

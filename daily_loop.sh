@@ -113,6 +113,8 @@ PY
   python3 check_signup_rails.py 2>&1 | tail -6
   python3 scoreboard.py 2>&1 | tail -3
   python3 harvest_full.py 200   2>&1 | tail -3
+  python3 make_question_lineups.py 2>&1 | tail -3
+  python3 make_reverse_questions.py 2>&1 | tail -3
   python3 make_interview_questions.py 2>&1 | tail -6
   python3 make_selection_flows.py 2>&1 | tail -7
   python3 make_selection_signals.py 2>&1 | tail -3

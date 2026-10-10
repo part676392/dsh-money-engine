@@ -55,6 +55,14 @@ def main() -> int:
             rows.append([comp, it.get("question", ""), it.get("intent", ""),
                          it.get("article_title", ""), it.get("url", ""),
                          it.get("price", 0), it.get("chars_of_source_text", 0)])
+    # 別の builder が書く CSV も manifest には載せる (行数だけ数える)。
+    for extra, what in (("question_lineups.csv", "質問カテゴリの並び順 (企業・位置・カテゴリ)"),
+                        ("reverse_questions.csv", "逆質問にふれる本文の実文 (出典URLつき)")):
+        fp = EXP / extra
+        if fp.exists():
+            with open(fp, encoding="utf_8_sig", newline="") as f:
+                manifest.append([extra, max(sum(1 for _ in f) - 1, 0), what])
+
     n = write_csv(EXP / "interview_questions.csv",
                   ["company", "question", "interviewer_intent", "article_title",
                    "source_url", "article_price_yen", "source_text_chars"], rows)

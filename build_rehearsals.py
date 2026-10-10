@@ -101,7 +101,7 @@ a{{color:#7a5230}}
 <h1>{esc(title)}</h1>
 <p class="spec"><b>Spec</b>: {esc(spec or "—")} ／ <b>{words} words</b> ／ delivered as a public URL (this mailbox receives only)</p>
 {body}
-<p class="met">これは <b>練習の納品</b> (rehearsal) です — 実際にこの管線が物を-create できることを示すため、
+<p class="met">これは <b>練習の納品</b> (rehearsal) です — この道が本当に物を作り出せるかを確かめるため、
 自分の受付番号で通したもの。誰かの注文をよそおってはありません。
 　測定: {words} words（code が数えた値）／ 露出語 {lex} 語彙ヒット（基準 6 以上）
 　文は自作なので CC BY 4.0 で公開します。

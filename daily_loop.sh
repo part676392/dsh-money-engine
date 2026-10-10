@@ -38,7 +38,12 @@ mkdir -p logs
     # 劣化してから push しない。runner を ~/Documents の外に移すと
     # full_bodies.json の無い環境が現れ、質問頁が 1,779 → 94 行に縮んで
     # も日志には何も出ない。だから数を見て止める (check_regression.py)。
-    if ! python3 check_regression.py; then
+    # 言葉の護り: 「管線が物を-create できる」のような混入が live に出た実測がある。
+    # 目視は通りすがるので、混入が見つかったら push を止める。
+    if ! python3 lint_prose.py; then
+      echo "  ★★★ GUARD FAIL: prose — 日本語の文中に英語の動詞が混ざった頁がある。push 見送り"
+      git reset -q --hard HEAD
+    elif ! python3 check_regression.py; then
       echo "  ★★★ GUARD FAIL: regression — published を劣化させる再生成なので push 見送り"
       git reset -q --hard HEAD
     else
@@ -148,6 +153,7 @@ PY
   echo "$RUN" | grep -q "AEO claim holds: False" && FAIL="$FAIL aeo"
   echo "$RUN" | grep -q "PUSH UNCONFIRMED" && FAIL="$FAIL push"
   echo "$RUN" | grep -q "GUARD FAIL: regression" && FAIL="$FAIL regression"
+  echo "$RUN" | grep -q "GUARD FAIL: prose" && FAIL="$FAIL prose"
   echo "$RUN" | grep -qE "parser self-test: ([0-3])/4" && FAIL="$FAIL parser"
   if [ -n "$FAIL" ]; then
     echo "  ★★★ GUARD FAIL:$FAIL  (ログのこの行を目安にすること)"

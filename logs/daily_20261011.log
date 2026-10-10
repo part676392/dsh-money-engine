@@ -402,3 +402,72 @@ built: index.html + 491 company pages
 
 saved /Users/moherune/Documents/deepseek-harness/default-workspace/dsh-money-engine/data/es_deadlines_strict.json
 rendered: 12 rows (free 6 / paid 6) via 本文の締切記載を機械検証（根拠文つき）
+  pushed
+  pages build triggered
+  indexnow api.indexnow.org/indexnow  200 (47 urls)
+  indexnow www.bing.com/indexnow      200 (47 urls)
+      https://rentry.co/4n73c73h
+  ✓ rentry_v3  bytes= 14034 http=200 ok=True
+      https://rentry.co/x4piimss
+  ✓ dpaste     bytes= 27994 http=200 ok=True
+      https://dpaste.com/EQKXKAGQW
+
+  all surfaces live: True
+  store  hits=2
+  home   hits=2
+
+  site: https://part676392.github.io/dsh-money-engine/store/  (pixel は実在する img)
+  pixel embedded in live store page: True
+  base      0.000000 ETH
+  arbitrum  0.000000 ETH
+  polygon   0.000000 ETH
+  optimism  0.000000 ETH
+
+  no incoming movement. rpc ok=4/4 total=0.000000 ETH
+  inbox: 0 message(s), unseen: 0
+  no new orders yet.
+    ✓ 質問だけで注文ではない            order=False words=None price=None spec=- pay=False
+    ✓ スパム (暗号通貨の便乗)          order=False words=None price=None spec=limits pay=False
+  parser self-test: 4/4 PASS
+  crypto  : 3/4 rpc  total=0.0 ETH  no movement
+  gumroad : http=200 price=¥950  CLOSED — payout not connected
+      https://gumroad.com/l/bopcg
+    store/            8,481B  prices=[3, 6, 9] inbox=True wallet=True pay_steps=True words=True
+    store/mini.html   7,612B  prices=[3, 6, 9] inbox=True wallet=True pay_steps=True words=True
+  parser tiers: {700: 3, 1500: 6, 2500: 9}
+  公開価格の突合: PASS
+
+  money pages ready: True
+  scanned tracked files: 452 / 943
+  secret-like hits     : 0
+  outbox files         : 19  gitignore 未覆: 0 (公開決めてる原稿 5 は除外して数える)
+
+  no secret in public repo: True
+  hn     blocked   attempted_as=dshlaba71655 creation_disabled=False message=That username is taken. Please choose another. logged_in=False open=False
+  devto  blocked   email_form=True captcha_present=True open=False
+  qiita  blocked   email_form=True captcha_present=True open=False
+
+  opened: none — 人間が一度 captcha を押せば開く場所が4つ
+TOTAL our-links visible on Bing: 0
+parser self-check (must be True): True
+PHRASE PROBE ours (the only real indexation proof): 0
+  articles=600 companies=350 mentions=403 quotes=389
+  top stages: 書類選考=365, 最終面接=23, 一次面接=8, 二次面接=5, 人事面接=1
+  body 長分布: {240: 600}
+  wrote ai-interviews.html (14,378 bytes)
+  companies=23 terms=34 目録内にAI項を持つ社=22 断言検査=PASS
+  wrote changes.html (4,847 bytes)  days=2  traffic keys=['store', 'home']
+  wrote llms.txt (1,886 bytes)  llms-full.txt (9,267 bytes)
+  numbers: articles=600 companies=491 ai_companies=23 terms=34 card=created, product $6 live, blocked on payout connection
+built: index.html + 491 company pages
+  articles=600 companies=491 free=11 listed=¥1,205,920
+  types              : FAQPage=492, Dataset=4, ItemList=2, Service=2
+  JSON-LD parse fail : 0
+  files w/o JSON-LD  : 0
+  missing required   : 0
+  missing canonical  : 0
+  missing meta robots: 0
+  titles over 70   : 0
+  internal links     : 522 checked, 0 broken (0 distinct targets)
+
+  AEO claim holds: True

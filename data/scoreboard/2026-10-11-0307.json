@@ -1,0 +1,156 @@
+{
+ "checked_at": "2026-10-11T03:07:22+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 4,
+   "domains": [
+    "typingx0.net",
+    "typingx0.net",
+    "typingx0.net",
+    "typingx0.net"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "10",
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "ranma-pr.com",
+    "ja.wikipedia.org",
+    "aniplex.co.jp",
+    "x.com",
+    "ranma-pr.com",
+    "ja.wikipedia.org",
+    "dic.pixiv.net",
+    "youtube.com",
+    "news.yahoo.co.jp",
+    "netflix.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "81,800",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "meaning-difference.com",
+    "chigai-hikaku.com",
+    "doda.jp",
+    "tenshoku.mynavi.jp",
+    "kotobank.jp",
+    "next.rikunabi.com",
+    "求人ボックス.com",
+    "saiyo-doda.jp",
+    "tenshoku.mynavi.jp",
+    "imi-chigai.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "73,000",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "weblio.jp",
+    "nicovideo.jp",
+    "iikae-note.com",
+    "e-kae-library.com",
+    "x.com",
+    "meaning-dictionary.com",
+    "nihongo-appliedlinguistics.net",
+    "ja.wiktionary.org",
+    "aiueo.cc",
+    "bunpro.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "400,000",
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "support.google.com",
+    "support.google.com",
+    "zhihu.com",
+    "zhihu.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "62",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "nipponbudokan.or.jp",
+    "nipponbudokan.or.jp",
+    "nipponbudokan.or.jp",
+    "nipponbudokan.or.jp",
+    "nipponbudokan.or.jp",
+    "nipponbudokan.or.jp",
+    "nipponbudokan.or.jp",
+    "nipponbudokan.or.jp",
+    "nipponbudokan.or.jp",
+    "nipponbudokan.or.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "50",
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "jp-guide.net",
+    "hansoku-style.jp",
+    "筆耕.com",
+    "exia.co.jp",
+    "目録.jp",
+    "ja.wikipedia.org",
+    "docoic.com",
+    "目録.jp",
+    "mayonez.jp",
+    "hinagata-free.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "45,400",
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

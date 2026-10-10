@@ -25,7 +25,7 @@
       "where": "rentry ページ本文",
       "updated": "2026-10-11",
       "tagged": false,
-      "note": "rentry の編集資格 (random code + csrf) を持って所以要対応"
+      "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す"
     },
     {
       "key": "rentry2",
@@ -34,7 +34,7 @@
       "where": "rentry ページ本文",
       "updated": "2026-10-11",
       "tagged": false,
-      "note": "rentry の編集資格 (random code + csrf) を持って所以要対応"
+      "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す"
     },
     {
       "key": "rentry3",
@@ -43,7 +43,7 @@
       "where": "rentry ページ本文",
       "updated": "2026-10-11",
       "tagged": false,
-      "note": "rentry の編集資格 (random code + csrf) を持って所以要対応"
+      "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す"
     },
     {
       "key": "release",
@@ -75,6 +75,38 @@
       "target": "index.html",
       "where": "Show HN は showlim + story-toofast。comment は 302 だが作られない (未確認mail)",
       "tagged": false,
+      "updated": "2026-10-11"
+    },
+    {
+      "key": "rentry-fic",
+      "surface": "rentry.co b8zgbuyv",
+      "target": "store/",
+      "where": "rentry.co/b8zgbuyv (edit_code 所有)",
+      "tagged": true,
+      "updated": "2026-10-11"
+    },
+    {
+      "key": "rentry-data",
+      "surface": "rentry.co zd3s2wkt",
+      "target": "data-license.html",
+      "where": "rentry.co/zd3s2wkt (edit_code 所有)",
+      "tagged": true,
+      "updated": "2026-10-11"
+    },
+    {
+      "key": "rentry-lineup",
+      "surface": "rentry.co xnvrgn8g",
+      "target": "question-lineups.html",
+      "where": "rentry.co/xnvrgn8g (edit_code 所有)",
+      "tagged": true,
+      "updated": "2026-10-11"
+    },
+    {
+      "key": "rentry-index",
+      "surface": "rentry.co q4aiokt7",
+      "target": "index.html",
+      "where": "rentry.co/q4aiokt7 (edit_code 所有)",
+      "tagged": true,
       "updated": "2026-10-11"
     }
   ]

@@ -95,7 +95,15 @@ PY
         commit -qm "history refresh $(date +%F)"
     TOK2=$(gh auth token 2>/dev/null)
     git push -q "https://x-access-token:${TOK2}@github.com/part676392/dsh-money-engine.git" HEAD:main \
-      && echo "  history pushed" || echo "  HISTORY PUSH FAILED"
+      && echo "  history push ok (exit)" || echo "  HISTORY PUSH FAILED"
+    # exit=0 は証じゃない (自分がそう習った)。local と remote の full SHA を突き合わせる。
+    LOCAL=$(git rev-parse HEAD)
+    REMOTE=$(git ls-remote "https://x-access-token:${TOK2}@github.com/part676392/dsh-money-engine.git" HEAD | cut -f1)
+    if [ -n "$REMOTE" ] && [ "$LOCAL" = "$REMOTE" ]; then
+      echo "  history pushed (SHA 一致 ${LOCAL:0:10})"
+    else
+      echo "  ★ PUSH UNCONFIRMED local=${LOCAL:0:10} remote=${REMOTE:0:10}"
+    fi
     gh api -X POST repos/part676392/dsh-money-engine/pages/builds >/dev/null 2>&1
   fi
   echo "===== $(date '+%F %T') end ====="

@@ -1,26 +1,26 @@
 {
- "checked_at": "2026-10-10T23:23:36+0900",
+ "checked_at": "2026-10-10T23:25:33+0900",
  "site": "part676392.github.io/dsh-money-engine",
  "queries": {
   "site_query": {
    "http_ok": true,
    "organic_count": 10,
    "domains": [
-    "chuo-bus.co.jp",
-    "busmap.jp",
-    "chuo-bus.co.jp",
-    "buste.in",
-    "busmap.jp",
-    "navitime.co.jp",
-    "city.iwamizawa.hokkaido.jp",
-    "city.iwamizawa.hokkaido.jp",
-    "mb.jorudan.co.jp",
-    "busmap.info"
+    "mizkan.co.jp",
+    "kurashiru.com",
+    "oishi-kenko.com",
+    "cookpad.com",
+    "delishkitchen.tv",
+    "recipe-time.com",
+    "cookpad.com",
+    "kyounoryouri.jp",
+    "mizkan.co.jp",
+    "recipe.rakuten.co.jp"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": "9,480",
+   "reported_total": "27,900",
    "blocked": false,
    "query": "site:part676392.github.io/dsh-money-engine"
   },
@@ -48,7 +48,7 @@
   },
   "longtail": {
    "http_ok": true,
-   "organic_count": 11,
+   "organic_count": 10,
    "domains": [
     "meaning-difference.com",
     "chigai-hikaku.com",
@@ -59,8 +59,7 @@
     "求人ボックス.com",
     "saiyo-doda.jp",
     "tenshoku.mynavi.jp",
-    "imi-chigai.com",
-    "r-agent.com"
+    "imi-chigai.com"
    ],
    "our_hits": [],
    "our_links_on_page": 0,

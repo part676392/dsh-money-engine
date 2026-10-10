@@ -7,7 +7,8 @@ LOG="logs/daily_$(date +%Y%m%d).log"
 mkdir -p logs
 {
   echo "===== $(date '+%F %T') start ====="
-  git pull --rebase --quiet origin main 2>&1 | tail -2
+  TOK0=$(gh auth token 2>/dev/null)
+  git pull --rebase --quiet "https://x-access-token:${TOK0}@github.com/part676392/dsh-money-engine.git" main 2>&1 | tail -2
 
   python3 extract_deadlines.py 2>&1 | tail -3
   python3 make_deadlines.py  2>&1 | tail -2
@@ -36,11 +37,24 @@ urls=[f"{base}/",f"{base}/es-deadlines.html"]
 try:
     dem=json.load(open("data/demand_raw.json"))
     per=dem.get("per_company",{})
-    top=sorted(((k,v.get("count",0)) for k,v in per.items() if v.get("count",0)>0),key=lambda x:-x[1])[:25]
+    top=sorted(((k,v.get("count",0)) for k,v in per.items() if v.get("count",0)>0),key=lambda x:-x[1])[:40]
+    import urllib.parse,os
+    files=[f for f in os.listdir("company") if f.endswith(".html")]
+    stems={f[:-5]: f for f in files}
+    def resolve(k):
+        # サイトと同じ緩い照合。AGC -> AGC（エージーシー）.html を引く。
+        if k in stems: return stems[k]
+        kl=k.lower()
+        for stem,f in stems.items():
+            sl=stem.lower()
+            if kl in sl or sl in kl: return f
+        return None
+    misses=[]
     for k,_ in top:
-        import urllib.parse,os
-        f=f"company/{urllib.parse.quote(k)}.html"
-        if os.path.exists(f): urls.append(f"{base}/{f}")
+        f=resolve(k)
+        if f: urls.append(f"{base}/company/{urllib.parse.quote(f)}")
+        else: misses.append(k)
+    if misses: print(f"  (no page for {len(misses)} demand-top companies: {misses[:6]})")
 except Exception as e:
     print("  demand urls skipped",e)
 pl={"host":"part676392.github.io","key":key,"keyLocation":f"{base}/{key}.txt","urlList":urls}

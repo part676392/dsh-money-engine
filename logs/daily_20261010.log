@@ -7,3 +7,20 @@ saved /Users/moherune/Documents/deepseek-harness/default-workspace/dsh-money-eng
 rendered: 12 rows (free 6 / paid 6) via 本文の締切記載を機械検証（根拠文つき）
 built: index.html + 491 company pages
   articles=600 companies=491 free=11 listed=¥1,205,920
+  pushed
+  pages build triggered
+  indexnow api.indexnow.org/indexnow  200 (5 urls)
+  indexnow www.bing.com/indexnow      200 (5 urls)
+saved /Users/moherune/Documents/deepseek-harness/default-workspace/dsh-money-engine/data/scoreboard/2026-10-10-2325.json
+TOTAL our-links visible on Bing: 0
+parser self-check (must be True): True
+===== 2026-10-10 23:25:39 end =====
+===== 2026-10-10 23:26:18 start =====
+error: cannot pull with rebase: You have unstaged changes.
+error: Please commit or stash them.
+  2026-10-29  残り 19日      🆓 アビームコンサルティング             「締切: 2026年10月29日」
+
+saved /Users/moherune/Documents/deepseek-harness/default-workspace/dsh-money-engine/data/es_deadlines_strict.json
+rendered: 12 rows (free 6 / paid 6) via 本文の締切記載を機械検証（根拠文つき）
+built: index.html + 491 company pages
+  articles=600 companies=491 free=11 listed=¥1,205,920

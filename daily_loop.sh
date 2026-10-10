@@ -81,6 +81,7 @@ PY
   python3 make_changes.py       2>&1 | tail -2
   python3 make_llms.py        2>&1 | tail -2
   python3 build_site.py       2>&1 | tail -2
+  python3 audit_aeo.py        2>&1 | tail -10
   # 履歴頁と計測値はここで再生成したので、二度目の commit で載せる
   git add -A
   if ! git diff --cached --quiet; then

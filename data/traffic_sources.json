@@ -68,6 +68,14 @@
       "where": "PR 本文",
       "updated": "2026-10-11",
       "tagged": true
+    },
+    {
+      "key": "hn",
+      "surface": "Hacker News (垢 dshlaba71655)",
+      "target": "index.html",
+      "where": "Show HN は showlim + story-toofast。comment は 302 だが作られない (未確認mail)",
+      "tagged": false,
+      "updated": "2026-10-11"
     }
   ]
 }

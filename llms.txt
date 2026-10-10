@@ -3,12 +3,12 @@
 > 日本の転職・中途市場で「面接の情報」を実測して積む静的データ資産。
 > 収録 600 本 / 対象 491 社 / 掲載金額合計 ¥1,205,920。毎日 06:10 と 19:40 (JST) に自動更新。
 
-生成: 2026-10-11 06:22 JST
+生成: 2026-10-11 06:36 JST
 この文書にある数値はすべて再取得可能な実測です。推定値と将来見通しは本文に書いていません。
 
 ## Pages
 
-- [トップ (企業別索引](https://part676392.github.io/dsh-money-engine/)): 491 社の企業ページへの入口。各社ページに FAQPage 構造化データ
+- [トップ (企業別索引) (https://part676392.github.io/dsh-money-engine/)): 491 社の企業ページへの入口。各社ページに FAQPage 構造化データ
 - [運用履歴](https://part676392.github.io/dsh-money-engine/changes.html): 日ごとに積んだ観測系列 (収録数・访问・受金・失敗記録)。Dataset 構造化データ
 - [AI・録上面接の検索需要 23 社](https://part676392.github.io/dsh-money-engine/ai-interviews.html): 企業名込みの検索語 34 件の機械収集一覧。実施有無の断定なし
 - [選考締切一覧](https://part676392.github.io/dsh-money-engine/es-deadlines.html): 本文の締切記載を機械検証した 12 件 (根拠文つき)
@@ -20,6 +20,12 @@
 - [面接質問 1873 問 / 472 社](https://part676392.github.io/dsh-money-engine/interview-questions.html): 収録記事から抽出した質問の実文と、記事が書く面接官の意図。各件に出典URL
 - [公式選考フロー 56 本 / 22 社](https://part676392.github.io/dsh-money-engine/selection-flows.html): 順序付きの選考工程。寄せた前の工程名も JSON の raw に全件保持
 - [注文受付ページ](https://part676392.github.io/dsh-money-engine/store/): カスタム執筆の価格と受け口。Service/Offer 構造化データ
+
+
+## 実測 (data から毎再生成で計算した値)
+- 面接質問 1,779 件のうち、面接官の意図が記事に書いてあるのは 370 件 (21%)。
+  残りは空にしている (推測で文を作らない)。
+- 候補が生記した選考段階の言及: 書類選考 1,268、最終面接 635、一次面接 284。書類選考が過半を占める。
 
 ## Data
 

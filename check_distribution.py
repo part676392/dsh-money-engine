@@ -123,7 +123,7 @@ def main() -> int:
         rate_limited = code in (429,) or code >= 500
         good = len(present) == len(s["needs"]) and len(h) > 800
         if rate_limited and not good:
-            # 消えたのかнялかを区別できないので ✗ にしない。☆ で出す。
+            # 消えたのか元から無いのかを区別できないので ✗ にしない。☆ で出す。
             mark = "☆"
             unverified.append(s["name"])
             print(f"  {mark} {s['name']:10s} bytes={len(h):6d} http={code} "

@@ -9,6 +9,7 @@ from __future__ import annotations
 import html
 import pathlib
 import re
+ROOTS = pathlib.Path(".")
 
 # 助詞の直後に ASCII 語が来て、そのまま活用している形を拾う。
 PARTICLE = "(を|が|は|に|で|と|も|まで|らを)"
@@ -36,6 +37,19 @@ def scan(path: pathlib.Path) -> list:
     return hits
 
 
+FOREIGN = re.compile(r"[\u0400-\u04ff\u0600-\u06ff\u0370-\u03ff\u0e00-\u0e7f\uac00-\ud7af]")
+
+
+def scan_scripts(path: pathlib.Path) -> list:
+    """日本語の code/頁に异国文字が紛れ込んだ実測を2件、ここで拾う。"""
+    raw = path.read_text(encoding="utf-8", errors="replace")
+    hits = []
+    for i, line in enumerate(raw.split("\n"), 1):
+        for m in FOREIGN.finditer(line):
+            hits.append((i, m.group(0), line.strip()[:66]))
+    return hits
+
+
 def main() -> int:
     root = pathlib.Path(".")
     files = (sorted(root.glob("*.html")) + sorted((root / "store").glob("*.html"))
@@ -43,6 +57,11 @@ def main() -> int:
              + sorted(root.glob("company/*.html")))[:600]
     total = 0
     bad_files = 0
+    scripts = [p for p in sorted(ROOTS.glob("*.py"))]
+    for f in scripts:
+        for ln, ch, txt in scan_scripts(f)[:2]:
+            print(f"  ★ {f.name}:{ln} 异国文字 '{ch}' → {txt}")
+            total += 1
     for f in files:
         hits = scan(f)
         if hits:

@@ -66,6 +66,20 @@ def main() -> int:
                      "email_confirmed": gr.get("email_confirmed")}},
         ensure_ascii=False, indent=1), encoding="utf-8")
 
+    # 意図の記載率を実データから測る。この数字が「抽出しただけ」との差になる。
+    iq = load("data/interview_questions.json", {}) or {}
+    per = iq.get("per_company") or {}
+    n_q = sum(len(v) for v in per.values())
+    n_in = sum(1 for v in per.values() for it in v if (it.get("intent") or "").strip())
+    pct = round(n_in * 100 / n_q) if n_q else 0
+    sig = load("data/selection_signals.json", {}) or {}
+    stg = {}
+    for c, obj in (sig.get("per_company") or {}).items():
+        for st, o in (obj or {}).items():
+            stg[st] = stg.get(st, 0) + int(o.get("count", 0) or 0)
+    top_stage = sorted(stg.items(), key=lambda kv: -kv[1])[:3]
+    stage_txt = "、".join(f"{k} {v:,}" for k, v in top_stage)
+
     head = f"""# 中途・転職 面接対策 目録データベース (dsh-money-engine)
 
 > 日本の転職・中途市場で「面接の情報」を実測して積む静的データ資産。
@@ -76,7 +90,7 @@ def main() -> int:
 
 ## Pages
 
-- [トップ (企業別索引]({BASE}/)): {comps} 社の企業ページへの入口。各社ページに FAQPage 構造化データ
+- [トップ (企業別索引) ({BASE}/)): {comps} 社の企業ページへの入口。各社ページに FAQPage 構造化データ
 - [運用履歴]({BASE}/changes.html): 日ごとに積んだ観測系列 (収録数・访问・受金・失敗記録)。Dataset 構造化データ
 - [AI・録上面接の検索需要 {n_ai} 社]({BASE}/ai-interviews.html): 企業名込みの検索語 {n_terms} 件の機械収集一覧。実施有無の断定なし
 - [選考締切一覧]({BASE}/es-deadlines.html): 本文の締切記載を機械検証した {12} 件 (根拠文つき)
@@ -88,6 +102,12 @@ def main() -> int:
 - [面接質問 {q.get("questions_total", "?")} 問 / {q.get("companies_with_questions", "?")} 社]({BASE}/interview-questions.html): 収録記事から抽出した質問の実文と、記事が書く面接官の意図。各件に出典URL
 - [公式選考フロー {fl.get("flows_total", "?")} 本 / {fl.get("companies_with_flows", "?")} 社]({BASE}/selection-flows.html): 順序付きの選考工程。寄せた前の工程名も JSON の raw に全件保持
 - [注文受付ページ]({BASE}/store/): カスタム執筆の価格と受け口。Service/Offer 構造化データ
+
+
+## 実測 (data から毎再生成で計算した値)
+- 面接質問 {n_q:,} 件のうち、面接官の意図が記事に書いてあるのは {n_in:,} 件 ({pct}%)。
+  残りは空にしている (推測で文を作らない)。
+- 候補が生記した選考段階の言及: {stage_txt}。書類選考が過半を占める。
 
 ## Data
 

@@ -12,3 +12,5 @@ outbox/mailtm.json
 outbox/mailtm-gumroad.json
 outbox/gumroad.json
 .gumroad-profile/
+outbox/mailtm-devto.json
+outbox/hn-account.txt

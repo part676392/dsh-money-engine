@@ -1,0 +1,20 @@
+{
+ "checked_at": "2026-10-11T01:51:52+0900",
+ "hn": {
+  "attempted_as": "dshlaba71655",
+  "creation_disabled": true,
+  "message": "Sorry, account creation disabled.",
+  "logged_in": false,
+  "open": false
+ },
+ "devto": {
+  "email_form": true,
+  "captcha_present": true,
+  "open": false
+ },
+ "qiita": {
+  "email_form": true,
+  "captcha_present": true,
+  "open": false
+ }
+}

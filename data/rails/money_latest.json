@@ -1,7 +1,7 @@
 {
- "checked_at": "2026-10-11T04:40:10+0900",
+ "checked_at": "2026-10-11T04:41:47+0900",
  "dataset_page": {
-  "bytes": 5208,
+  "bytes": 5204,
   "prices_on_page": [
    15,
    25,
@@ -14,7 +14,7 @@
   "ld_service_offers": true,
   "offers": 4,
   "delivery_is_url": true,
-  "no_mail_delivery_claim": false,
+  "no_mail_delivery_claim": true,
   "rights_bodies_excluded": true
  },
  "pages": {
@@ -49,5 +49,5 @@
   "2500": 9
  },
  "missing_tiers": [],
- "ready": false
+ "ready": true
 }

@@ -54,6 +54,12 @@ def main(force: bool = False) -> int:
     if not any(c.values()):
         print("  counts が全部 0: 抽出がまだ。release 見送り")
         return 1
+    # 一部分だけ 0 もダメ。rebase の途中で読んだ瞬間に articles=0 が立って
+    # 「記事 0 / 質問 1,873」という嘘の tag が実在した (2026-10-11 05:26)。
+    zeros = [k for k in ("articles", "questions", "flows") if not c.get(k)]
+    if zeros:
+        print(f"  ★ counts が欠けている: {zeros} → release 見送り (嘘の tag を積まない)")
+        return 1
     missing = [f for f in NEED if not (EXPORTS / f).exists()]
     if missing:
         print(f"  exports 不足: {missing} (make_exports.py を先に)")

@@ -351,7 +351,9 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
 {cdem}
 {cai}
 <section class="about"><h2>この目録を運営している人</h2><p><b>{esc(OPERATOR["name"])}</b> — {esc(OPERATOR["credential"])}</p><p class="src">データは {esc(snapshot.get("captured_at",""))} 時点。<a href=\'{OPERATOR['note']}\'>note</a> で本文を買えます。</p></section>
-</main></body></html>""",
+</main>
+<img src="https://abacus.jasoncameron.dev/hit/dsh-money-engine/home" width="1" height="1" alt="" aria-hidden="true" style="position:absolute;left:-9999px">
+</body></html>""",
             encoding="utf-8",
         )
 

@@ -82,7 +82,7 @@ PY
   python3 scoreboard.py 2>&1 | tail -3
   python3 harvest_full.py 200   2>&1 | tail -3
   python3 make_interview_questions.py 2>&1 | tail -6
-  python3 make_selection_flows.py 2>&1 | tail -4
+  python3 make_selection_flows.py 2>&1 | tail -7
   python3 make_selection_signals.py 2>&1 | tail -3
   python3 make_ai_gap.py        2>&1 | tail -2
   python3 make_changes.py       2>&1 | tail -2

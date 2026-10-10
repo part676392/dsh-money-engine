@@ -126,6 +126,15 @@ def build(d: dict) -> None:
             by_company[r["company"]].append(r)
 
     dem = demand.load()
+    # 企業頁に載せる追加資産 (question_lineups / reverse_questions)。data を読むだけで手書きしない。
+    def _loadj(fn):
+        fp = DATA / fn
+        try:
+            return json.loads(fp.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            return {}
+    LNU = _loadj("question_lineups.json").get("per_company") or {}
+    RVQ = _loadj("reverse_questions.json").get("per_company") or {}
 
     kind_stat = collections.Counter(r["kind"] for r in recs)
     priced = sum(r["price"] for r in recs)
@@ -322,6 +331,23 @@ r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
                 f"<span class='p'>{price_badge(x['price'])}</span>"
                 f"<span class='d'>{esc(x['published'])}</span></li>"
             )
+        o = LNU.get(comp) or {}
+        lu = (o.get("lineups") or [{}])[0].get("order") or []
+        if lu:
+            seq = " \u2192 ".join(esc(x) for x in lu)
+            cln = (f"<div class='cd'><h3>質問カテゴリの並び (記事の目次から構造化)</h3>"
+                   f"<p style='font-size:.88rem'>{seq}</p>"
+                   f"<p class='raw'>この会社で構造化した羅列 {len(o.get('lineups') or [])} 本 ／ "
+                   f"全社の一覧: <a href='/dsh-money-engine/question-lineups.html'>質問カテゴリの並び順</a> ／ "
+                   f"自社の行: <a href='/dsh-money-engine/exports/question_lineups.csv'>question_lineups.csv</a></p></div>")
+        else:
+            cln = ""
+        rv = (RVQ.get(comp) or [])
+        if rv:
+            cln += (f"<div class='cd'><h3>逆質問にふれる本文の実文</h3><ul>"
+                    + "".join(f"<li>「{esc(it['quote'][:180])}」 <a href='{esc(it['url'])}'>出典</a></li>"
+                              for it in rv[:3])
+                    + f"</ul><p class='raw'>全社: <a href='/dsh-money-engine/reverse-questions.html'>逆質問の実文</a></p></div>")
         cdem = demand.company_block(comp, dem) if dem else ""
         cai = demand.ai_block(comp, dem) if dem else ""
         ai_terms = demand.ai_demand(comp, dem) if dem else []
@@ -357,6 +383,16 @@ r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
                 }
             )
 
+        if lu:
+                ltd["mainEntity"].append({
+                    "@type": "Question",
+                    "name": f"{comp}の面接はどの順番で聞かれますか？",
+                    "acceptedAnswer": {"@type": "Answer", "text": (
+                        f"収録記事の目次からは次の並びが読めます: {' → '.join(lu)}。"
+                        f"これは記事が並べた順であって選考の全集ではありません。"
+                        f"ただし収録 {LNU and 467} 社ぶんの中で同じ並びが最多です。")},
+                })
+
         (cdir / f"{comp}.html").write_text(
             f"""<!doctype html><html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -382,6 +418,7 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
 <ul>{chr(10).join(items)}</ul>
 {cdem}
 {cai}
+{cln}
 <section class="about"><h2>この目録を運営している人</h2><p><b>{esc(OPERATOR["name"])}</b> — {esc(OPERATOR["credential"])}</p><p class="src">データは {esc(snapshot.get("captured_at",""))} 時点。<a href=\'{OPERATOR['note']}\'>note</a> で本文を買えます。</p></section>
 </main>
 {TRACKER_COMPANY}

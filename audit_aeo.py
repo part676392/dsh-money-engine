@@ -14,6 +14,7 @@
 from __future__ import annotations
 
 import collections
+import html as _html
 import json
 import pathlib
 import re
@@ -99,13 +100,16 @@ def main() -> int:
             long_title.append((rel, "no title", 0))
         elif len(m.group(1).strip()) > BAD_TITLE:
             long_title.append((rel, "long", len(m.group(1).strip())))
-        for href in re.findall(r'href="([^"#?]+)"', html):
+        # 単一引用の href を拾っていない穴があった (実測: company 頁の新 link が検査外だった)。
+        for _q, href in re.findall(r"""href=(["\'])([^"\'#?]+)\1""", html):
             if href.startswith(("http://", "https://", "mailto:", "//")):
                 continue
             link_total += 1
             # href は percent-encode 済み (実測 live 200)。素のパスで見て
             # 「壊れてないのに壊れている」と嘘をついた (22件)。
-            href_dec = urllib.parse.unquote(href)
+            # & を含む社名がある (実測: アビームコンサルティング P&O職)。
+            # href は HTML entity で &amp; になるので unescape が先。やらないと壊れ誤検出。
+            href_dec = urllib.parse.unquote(_html.unescape(href))
             if href_dec.startswith("/"):
                 # サイト根相対。Pages は /dsh-money-engine/ 配下なので、その
                 # prefix を落としてから repo 根 (= サイト根) に解決する。
@@ -137,6 +141,14 @@ def main() -> int:
         for t, n in broken_links.most_common(5):
             print(f"      ★ {t}  x{n}")
     verdict = not parse_fail and not missing_req and not broken_links and not no_ld
+    # 堀の入口: 企業頁から新資産へ内部 link が刺さっているか。本数が落ちたら頁生成が壊れた合図。
+    n_lu = sum(1 for fp in (pathlib.Path("company").glob("*.html"))
+               if "question-lineups.html" in fp.read_text(encoding="utf-8", errors="replace"))
+    ok_lu = n_lu >= 400
+    print(f"  company→lineup links: {n_lu} 頁" + ("" if ok_lu else "  ★ 400 頁を割った"))
+    if not ok_lu:
+        verdict = False
+
     # 表現と実測の一致。抽出の母体を誤って書くと、上の全検査が green でも頁が嘘をつく。
     srcs = {}
     for f in ("data/selection_signals.json", "data/question_lineups.json",

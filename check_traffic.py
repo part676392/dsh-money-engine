@@ -106,11 +106,13 @@ def main() -> int:
     # 参照元。?src= を付けない访问 (検索・SNS) の内訳を測る。
     # abacus に一覧 API は無いので既知 host を-data/traffic_referrers.json-で持つ。
     # 既知に無い分は ref-any との差で出る = 盲点を数字で持つ。
+    # 台帳の変数を div 名で分ける。ここで reg を差し替えたせいで後段の topic 検査が
+    # 違う dict を読んで黙って走らなかった (2026-10-11 実測: 検査行が出力に出ない)。
     try:
-        reg = json.loads((ROOT / "data" / "traffic_referrers.json").read_text(encoding="utf-8"))
-        cands = [h["key"] for h in reg.get("hosts") or []]
+        rreg = json.loads((ROOT / "data" / "traffic_referrers.json").read_text(encoding="utf-8"))
+        cands = [h["key"] for h in rreg.get("hosts") or []]
     except Exception as e:  # noqa: BLE001
-        cands, reg = [], {}
+        cands, rreg = [], {}
         print(f"  referrer registry が読めない: {str(e)[:50]}")
     got = {}
     for h in cands:
@@ -123,8 +125,27 @@ def main() -> int:
     print(f"  参照元: 既知ヒット {len(got)} host / 計 {known} 件  ref-any={tot_any}  "
           f"盲点 (未登録 host) = {max(tot_any - known, 0)}")
     for h, v in sorted(got.items(), key=lambda x: -x[1]):
-        nm = next((z.get("what", "") for z in (reg.get("hosts") or []) if z["key"] == h), "")
+        nm = next((z.get("what", "") for z in (rreg.get("hosts") or []) if z["key"] == h), "")
         print(f"      {h:26s} {v:>4}  {esc_ref(nm)}")
+
+    # ?src= を付けられない面 (GitHub topic 一覧) の検査。順位は star 依存で測れないので
+    # 「連携が生きているか」だけを見る (topic を消された事故に気づくため)。
+    disc = reg.get("discovery") or {}
+    spots = disc.get("spot_check") or []
+    if spots:
+        miss = []
+        for t in spots:
+            r = subprocess.run(["gh", "api", "-X", "GET", "search/repositories",
+                                "-f", f"q=topic:{t} user:part676392"],
+                               capture_output=True, text=True, timeout=45)
+            try:
+                n = json.loads(r.stdout).get("total_count", 0)
+            except Exception:  # noqa: BLE001
+                n = -1
+            if n < 1:
+                miss.append(f"{t}={n}")
+        print(f"  GitHub topic 連携 : {'OK' if not miss else '★ 検索に出ない ' + str(miss)}"
+              f"  ({len(spots)}/{len(disc.get('github_topics') or [])} を抜き取り)")
 
     import shutil as _sh
     node = _sh.which("node")

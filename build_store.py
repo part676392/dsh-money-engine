@@ -32,10 +32,14 @@ def tracker(key: str) -> str:
     """访问計. f-string の中で JS の {} を書くと置換フィールドに化けるので,
     文字列はここで組み立てて field 1 個として埋める."""
     return (
-        '<script>(function(){try{fetch("'
+        '<script>(function(){try{var b="'
         + "https://abacus.jasoncameron.dev/hit/dsh-money-engine/"
+        + '";fetch(b+"'
         + key
-        + '", {mode:"no-cors",keepalive:true});}catch(e){}})();</script>'
+        + '", {mode:"no-cors",keepalive:true});'
+        + "var m=(location.search.match(/[?&]src=([a-z0-9_-]{1,24})/)||[])[1];"
+        + "if(m){fetch(b+'src-'+m, {mode:'no-cors',keepalive:true});}"
+        + "}catch(e){}})();</script>"
     )
 
 

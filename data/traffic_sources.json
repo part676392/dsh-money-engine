@@ -1,0 +1,22 @@
+{
+  "_why": "访问計は合計しか数えない。だから『どの面から human が来たか』を unknown にしていた (2026-10-11 実測: home=4 store=3 license=4 sample=1 で源が不明)。公開済みの面に ?src=<key> 付きURLを打ち直し、src-<key> を別 counter にする。",
+  "_how": "外に出す URL は必ず https://part676392.github.io/dsh-money-engine/<頁>?src=<key> の形。頁側の JS が param を見て src-<key> にも hit を置く (check_traffic.py がここを読む。",
+  "sources": [
+    {"key": "ghrepo", "surface": "GitHub リポジトリ README", "target": "index.html",
+     "where": "README.md の先頭リンク", "updated": "2026-10-11"},
+    {"key": "gist", "surface": "Gist 目録", "target": "exports/questions_catalog.csv",
+     "where": "gist 8f51111c9ac743c672cf3a04ed863fcf の本文", "updated": "2026-10-11"},
+    {"key": "rentry1", "surface": "rentry.co x4piimss", "target": "index.html",
+     "where": "rentry ページ本文", "updated": "2026-10-11"},
+    {"key": "rentry2", "surface": "rentry.co 4n73c73h", "target": "data-license.html",
+     "where": "rentry ページ本文", "updated": "2026-10-11"},
+    {"key": "rentry3", "surface": "rentry.co mpw4i6zu", "target": "store/",
+     "where": "rentry ページ本文", "updated": "2026-10-11"},
+    {"key": "release", "surface": "GitHub release notes", "target": "sample.html",
+     "where": "snap-* release の本文", "updated": "2026-10-11"},
+    {"key": "pr57", "surface": "PR okhosting/awesome-open-data#57", "target": "index.html",
+     "where": "PR 本文", "updated": "2026-10-11"},
+    {"key": "pr32", "surface": "PR taishi-i/awesome-japanese-nlp-resources#32", "target": "index.html",
+     "where": "PR 本文", "updated": "2026-10-11"}
+  ]
+}

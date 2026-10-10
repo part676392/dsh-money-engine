@@ -50,6 +50,24 @@ def main() -> int:
         arrow = "" if not delta else f"  ↑ +{delta}"
         print(f"  {label:6s} hits={v}{arrow}", flush=True)
 
+    # 流入源: 外に出した URL に ?src=<key> を付けた。頁の JS が param を見て
+    # src-<key> にも hit を置くので、どの面から human が来たかが分離できる。
+    # 台帳は data/traffic_sources.json (そこに無い key は数えない)。
+    try:
+        reg = json.loads((ROOT / "data" / "traffic_sources.json").read_text(encoding="utf-8"))
+    except Exception as e:  # noqa: BLE001
+        reg = {"sources": []}
+        print(f"  ★ 台帳が読めない: {str(e)[:60]}")
+    src_total = 0
+    for s in reg.get("sources", []):
+        v = api(f"/get/dsh-money-engine/src-{s['key']}").get("value")
+        v = 0 if v is None else v
+        src_total += v
+        out["counters"]["src-" + s["key"]] = {"value": v, "surface": s["surface"],
+                                              "target": s.get("target")}
+        print(f"  流入 {s['key']:9s} hits={v}  ({s['surface']})", flush=True)
+    print(f"  流入源つき合計: {src_total}", flush=True)
+
     print(f"\n  site: {SITE}/store/  (pixel は実在する img)")
     (HIST / "latest.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     with open(HIST / f"{time.strftime('%Y-%m-%d-%H%M')}.json", "w", encoding="utf-8") as f:
@@ -60,7 +78,10 @@ def main() -> int:
         r = subprocess.run(["curl", "-s", "--max-time", "20", f"{SITE}/store/"],
                            capture_output=True, text=True, timeout=25)
         embedded = "abacus.jasoncameron.dev/hit/dsh-money-engine/store" in r.stdout
-        print(f"  pixel embedded in live store page: {embedded}")
+        srcjs = "src-" in r.stdout and "location.search.match" in r.stdout
+        print(f"  pixel embedded in live store page: {embedded}  流入源の JS: {srcjs}")
+        if not srcjs:
+            print("  ★ live の頁に ?src= を読む JS が無い (流入源が測れない)")
     except Exception as e:  # noqa: BLE001
         print(f"  pixel check failed: {str(e)[:60]}")
     return 0

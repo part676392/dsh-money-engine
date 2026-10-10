@@ -43,7 +43,7 @@ push は runner も開発側も行う。開発側は push 前に必ず `git pull
 
 ## 公開している頁
 
-- [トップ（企業別ページの入口）](https://part676392.github.io/dsh-money-engine/)
+- [Live site — 目録データベース](https://part676392.github.io/dsh-money-engine/index.html?src=ghrepo)
 - [運用履歴 — 観測系列の公開ログ](https://part676392.github.io/dsh-money-engine/changes.html)
 - [AI・録上面接で検索されている企業 23 社](https://part676392.github.io/dsh-money-engine/ai-interviews.html)
 - [選考締切一覧](https://part676392.github.io/dsh-money-engine/es-deadlines.html)

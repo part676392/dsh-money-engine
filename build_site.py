@@ -275,7 +275,7 @@ code{{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.85em}}
 function f(){{var v=document.getElementById('q').value.toLowerCase();
 document.querySelectorAll('#t tbody tr').forEach(function(r){{
 r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
-</script></body></html>"""
+</script><img src="https://abacus.jasoncameron.dev/hit/dsh-money-engine/home" width="1" height="1" alt="" aria-hidden="true" style="position:absolute;left:-9999px"></body></html>"""
     (OUT / "index.html").write_text(html_doc, encoding="utf-8")
 
     # ---- 企業別ページ : AI Overview に引用される「独立した回答単位」 ----

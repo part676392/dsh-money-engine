@@ -85,6 +85,35 @@ def main() -> None:
     mail = ROOT / "outbox" / "mailtm.json"
     inbox = json.loads(mail.read_text(encoding="utf-8")).get("address", "") if mail.exists() else "no inbox configured"
 
+    ld = json.dumps({
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": p["title"],
+        "serviceType": "Custom adult short fiction writing",
+        "description": ("Written explicit short fiction to a buyer specification. "
+                        "Adults 18+, all characters 25+, hard limits respected."),
+        "provider": {"@type": "Person", "name": "Custom Scene service"},
+        "areaServed": "Worldwide",
+        "availableChannel": {
+            "@type": "ServiceChannel",
+            "serviceUrl": "mailto:" + inbox,
+            "name": "Order by email",
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": str(PRICE_USD),
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "acceptedPaymentMethod": ["Crypto", "Cryptocurrency"],
+            "url": "https://part676392.github.io/dsh-money-engine/store/",
+        },
+        "audit": {
+            "@type": "MediaReview",
+            "reviewAspect": "adult content",
+            "contentRating": "Adults only",
+        },
+    }, ensure_ascii=False, indent=1)
+
     paras = "".join(
         f"<p>{esc(x.strip())}</p>" for x in re.split(r"\n\s*\n", p["preview"]) if x.strip()
     )
@@ -97,6 +126,9 @@ def main() -> None:
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://part676392.github.io/dsh-money-engine/store/">
 <meta name="rating" content="adult">
+<script type="application/ld+json">
+{ld}
+</script>
 <style>
 body{{font-family:ui-serif,Georgia,"Times New Roman",serif;margin:0;background:#12100f;color:#e8e2d9;line-height:1.72}}
 main{{max-width:680px;margin:0 auto;padding:34px 20px 70px}}

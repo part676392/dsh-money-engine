@@ -1,0 +1,79 @@
+{
+ "checked_at": "2026-10-11T07:03:00+0900",
+ "counters": {
+  "store": {
+   "value": 4,
+   "delta": 0,
+   "key": "store"
+  },
+  "home": {
+   "value": 8,
+   "delta": 2,
+   "key": "home"
+  },
+  "mini": {
+   "value": 1,
+   "delta": 0,
+   "key": "mini"
+  },
+  "license": {
+   "value": 4,
+   "delta": 0,
+   "key": "license"
+  },
+  "src-ghrepo": {
+   "value": 1,
+   "surface": "GitHub リポジトリ README",
+   "target": "index.html",
+   "tagged": true
+  },
+  "src-gist": {
+   "value": 0,
+   "surface": "Gist 目録",
+   "target": "exports/questions_catalog.csv",
+   "tagged": true
+  },
+  "src-rentry1": {
+   "value": 0,
+   "surface": "rentry.co x4piimss",
+   "target": "index.html",
+   "tagged": false
+  },
+  "src-rentry2": {
+   "value": 0,
+   "surface": "rentry.co 4n73c73h",
+   "target": "data-license.html",
+   "tagged": false
+  },
+  "src-rentry3": {
+   "value": 0,
+   "surface": "rentry.co mpw4i6zu",
+   "target": "store/",
+   "tagged": false
+  },
+  "src-release": {
+   "value": 0,
+   "surface": "GitHub release notes",
+   "target": "sample.html",
+   "tagged": true
+  },
+  "src-pr57": {
+   "value": 1,
+   "surface": "PR okhosting/awesome-open-data#57",
+   "target": "index.html",
+   "tagged": true
+  },
+  "src-pr32": {
+   "value": 2,
+   "surface": "PR taishi-i/awesome-japanese-nlp-resources#32",
+   "target": "index.html",
+   "tagged": true
+  },
+  "src-hn": {
+   "value": 0,
+   "surface": "Hacker News (垢 dshlaba71655)",
+   "target": "index.html",
+   "tagged": false
+  }
+ }
+}

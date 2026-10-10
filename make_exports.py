@@ -57,7 +57,8 @@ def main() -> int:
                          it.get("price", 0), it.get("chars_of_source_text", 0)])
     # 別の builder が書く CSV も manifest には載せる (行数だけ数える)。
     for extra, what in (("question_lineups.csv", "質問カテゴリの並び順 (企業・位置・カテゴリ)"),
-                        ("reverse_questions.csv", "逆質問にふれる本文の実文 (出典URLつき)")):
+                        ("reverse_questions.csv", "逆質問にふれる本文の実文 (出典URLつき)"),
+                        ("history_timeseries.csv", "無人巡回が積んだ観測の履歴行列表 (SHA-256 付)")):
         fp = EXP / extra
         if fp.exists():
             with open(fp, encoding="utf_8_sig", newline="") as f:

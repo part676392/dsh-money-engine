@@ -143,7 +143,9 @@ def main() -> int:
     import glob as _g
     # file 名順だと runner (23:47 記法) が dev (07:25) より後ろに来て、照らす対象を間違える
     # (実測: 5 鍵の方を見て ★ になった)。最新観測 = captured_at 最大で見る。
-    hs = [str(f) for f in sorted(_g.glob(str(ROOT / "data" / "history" / "*.json")),
+    # index.json は導出した索引であって観測ではない (実測で旧 format と誤表示した)。
+    hs = [str(f) for f in sorted(x for x in _g.glob(str(ROOT / "data" / "history" / "*.json"))
+                                if not str(x).endswith("index.json")),
                                  key=lambda x: str(json.loads(pathlib.Path(x).read_text(encoding="utf-8"))
                                                   .get("captured_at") or ""))]
     need = ("questions", "lineup_rows", "traffic", "traffic_total", "orders_real", "location")

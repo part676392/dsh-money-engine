@@ -54,6 +54,25 @@ def has_price(text: str, usd: int) -> bool:
     return bool(re.search(rf"\$\s?{usd}\b", text) or re.search(rf"\b{usd}\s*(?:USD|usd|ドル)", text))
 
 
+def history_pub_check() -> bool:
+    """頁に書いた「観測 N 件」と CSV 行数と history file 数は一致していなければならない。
+    1,873/1,779 の失敗と同じ形 (公称と納品がズレる) を历史でも許さない。"""
+    import re as _re
+    files = [f for f in (ROOT / "data" / "history").glob("*.json") if f.name != "index.json"]
+    fp = ROOT / "exports" / "history_timeseries.csv"
+    csv_rows = 0
+    if fp.exists():
+        with open(fp, encoding="utf_8_sig") as f:
+            csv_rows = max(sum(1 for _ in f) - 1, 0)
+    page = (ROOT / "data-license.html").read_text(encoding="utf-8", errors="replace")
+    m = _re.search(r"今積んでいる観測\s*<b>([0-9,]+)</b>", page)
+    claimed = int(m.group(1).replace(",", "")) if m else -1
+    ok = claimed == csv_rows == len(files) and claimed > 0
+    print(f"    history publish: 頁={claimed} CSV={csv_rows} file={len(files)} "
+          f"{'一致' if ok else '★ 不一致'}")
+    return ok
+
+
 def issue_form_check() -> bool:
     """GitHub の注文フォーム (.github/ISSUE_TEMPLATE/order.yml) の契約検査。
     YAML lib が無い環境なので、issue form に必要な形だけを構文として見る
@@ -290,6 +309,8 @@ def main() -> int:
     print(f"  parser tiers: {tr}")
     print(f"  公開価格の突合: {'PASS' if not missing else 'FAIL ' + str(missing)}")
     if not qcount_check():
+        all_ok = False
+    if not history_pub_check():
         all_ok = False
     if not issue_form_check():
         all_ok = False

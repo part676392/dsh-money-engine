@@ -97,6 +97,21 @@ def main() -> int:
     # list だと思って len すると 0 を誤読する (実測でなった)。
     n_dead = len(dl.get("open") or []) if isinstance(dl, dict) else (len(dl) if dl else 0)
 
+    # 履歴の個数と範囲は頁に書くので、データから読む (直書きは枯れる)。
+    hist_rows = []
+    for hp in sorted((DATA / "history").glob("*.json")):
+        if hp.name == "index.json":
+            continue
+        try:
+            hist_rows.append(json.loads(hp.read_text(encoding="utf-8")))
+        except Exception:  # noqa: BLE001
+            pass
+    hist_rows.sort(key=lambda d: str(d.get("captured_at") or ""))
+    n_hist = len(hist_rows)
+    hist_span = ""
+    if hist_rows:
+        hist_span = f"{hist_rows[0].get('captured_at')} → {hist_rows[-1].get('captured_at')}"
+
     offers = [{"@type": "Offer", "name": f"カスタム抽出 〜{t}社", "price": p,
                "priceCurrency": "USD", "category": "custom-extraction",
                "description": (f"指定した最大 {t} 社ぶんを抽出して CSV で納品。"
@@ -118,6 +133,29 @@ def main() -> int:
         "provider": {"@type": "Person", "name": "dsh-money-engine 運用者"},
         "areaServed": "JP",
         "offers": offers,
+        # 品物の中身を機械が読める形に。歴史一式 ($25) には preview ファイルが無かった (実測)。
+        "serviceOutput": {
+            "@type": "Dataset",
+            "name": "転職・面接 目録データの時系列",
+            "description": ("無人巡回で毎日積んだ観測値の行列表。不明のセルは空欄 (0 を入れない)。"
+                            "各行に元 file の SHA-256 を付ける。"),
+            "temporalCoverage": hist_span,
+            "measurementTechnique": "automatic daily extraction",
+            "distribution": [
+                {"@type": "DataDownload", "encodingFormat": "CSV",
+                 "name": "履歴の時系列 (無料 preview)",
+                 "contentUrl": f"{BASE}/exports/history_timeseries.csv"},
+                {"@type": "DataDownload", "encodingFormat": "application/json",
+                 "name": "履歴 index と SHA-256",
+                 "contentUrl": f"{BASE}/data/history/index.json"},
+                {"@type": "DataDownload", "encodingFormat": "CSV",
+                 "name": "面接質問の実文",
+                 "contentUrl": f"{BASE}/exports/interview_questions.csv"},
+                {"@type": "DataDownload", "encodingFormat": "CSV",
+                 "name": "質問カテゴリの並び順",
+                 "contentUrl": f"{BASE}/exports/question_lineups.csv"},
+            ],
+        },
     }, ensure_ascii=False, indent=1)
 
     tier_rows = "\n".join(
@@ -127,7 +165,10 @@ def main() -> int:
         for t, p in TIER) + (
         f"\n<tr><td>歴史スナップショット一式</td><td>${HISTORY_USD}</td>"
         f"<td>tag 付きで積んだ日付つき CSV 全部と、回数の差分一覧 "
-        f"(最新: <code>{esc(rel.get('tag', '—'))}</code>)</td></tr>")
+        f"(最新: <code>{esc(rel.get('tag', '—'))}</code>)。<br>"
+        f"今積んでいる観測 <b>{n_hist}</b> 件・範囲 {esc(hist_span) or '—'}。"
+        f"形を見る: <a href='exports/history_timeseries.csv'>履歴の時系列 CSV</a> ／ "
+        f"<a href='data/history/index.json'>index (SHA-256 付)</a></td></tr>")
 
     doc = f"""<!doctype html><html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">

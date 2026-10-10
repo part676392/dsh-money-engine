@@ -119,6 +119,8 @@ PY
   python3 make_interview_questions.py 2>&1 | tail -6
   python3 make_selection_flows.py 2>&1 | tail -7
   python3 make_selection_signals.py 2>&1 | tail -3
+  # 履歴の行列表は页より先に作る (manifest と $25 の preview が読む)。build_site の後でもう一度。
+  python3 make_history_series.py 2>&1 | tail -3
   python3 make_exports.py        2>&1 | tail -6
   python3 build_dataset_store.py 2>&1 | tail -4
   python3 build_sample.py        2>&1 | tail -6
@@ -129,6 +131,7 @@ PY
   python3 make_changes.py       2>&1 | tail -2
   python3 make_llms.py        2>&1 | tail -2
   python3 build_site.py       2>&1 | tail -2
+  python3 make_history_series.py 2>&1 | tail -3
   python3 audit_aeo.py        2>&1 | tail -10
   # 履歴頁と計測値はここで再生成したので、二度目の commit で載せる
   git add -A

@@ -1,0 +1,407 @@
+[
+ {
+  "url": "https://Y-R-U.github.io/",
+  "http": 200,
+  "jp": true,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 6,
+  "broken_assets": [
+   [
+    404,
+    "https://Y-R-U.github.io/assets/screenshots/${project.screenshot}.jpg"
+   ]
+  ],
+  "score": 3
+ },
+ {
+  "url": "https://jwwhitsitt.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 2,
+  "broken_assets": [
+   [
+    404,
+    "https://jwwhitsitt.github.io/mnt/user-data/uploads/jeff01.png"
+   ]
+  ],
+  "score": 3
+ },
+ {
+  "url": "https://dan-quirky.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 2,
+  "broken_assets": [
+   [
+    404,
+    "https://dan-quirky.github.io/index.js"
+   ]
+  ],
+  "score": 3
+ },
+ {
+  "url": "https://kiwi6974.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": true,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 0,
+  "broken_assets": [],
+  "score": 3
+ },
+ {
+  "url": "https://prog815.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 0,
+  "broken_assets": [],
+  "score": 2
+ },
+ {
+  "url": "https://mintyskywalker.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 0,
+  "broken_assets": [],
+  "score": 2
+ },
+ {
+  "url": "https://lamkyo.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 0,
+  "broken_assets": [],
+  "score": 2
+ },
+ {
+  "url": "https://paqresearch.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 0,
+  "broken_assets": [],
+  "score": 2
+ },
+ {
+  "url": "https://cdmitch.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 0,
+  "broken_assets": [],
+  "score": 2
+ },
+ {
+  "url": "https://tavaius.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 4,
+  "broken_assets": [],
+  "score": 2
+ },
+ {
+  "url": "https://jbruner23-spec.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 0,
+  "broken_assets": [],
+  "score": 2
+ },
+ {
+  "url": "https://Proyecto-org.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 0,
+  "broken_assets": [],
+  "score": 2
+ },
+ {
+  "url": "https://AxelSHacker.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 6,
+  "broken_assets": [],
+  "score": 2
+ },
+ {
+  "url": "https://LabRatty.github.io/labratty.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 0,
+  "broken_assets": [],
+  "score": 2
+ },
+ {
+  "url": "https://frnkptrln.github.io/",
+  "http": 200,
+  "jp": true,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": true,
+  "no_alt": false,
+  "assets_checked": 0,
+  "broken_assets": [],
+  "score": 1
+ },
+ {
+  "url": "https://Yoossshhhhiiiii.github.io/YoossshhhhiiiiiMade.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": true,
+  "no_alt": true,
+  "assets_checked": 6,
+  "broken_assets": [],
+  "score": 1
+ },
+ {
+  "url": "https://gbetx2-cell.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": true,
+  "no_alt": true,
+  "assets_checked": 0,
+  "broken_assets": [],
+  "score": 1
+ },
+ {
+  "url": "https://TheRoundtableNick.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": false,
+  "no_alt": true,
+  "assets_checked": 6,
+  "broken_assets": [
+   [
+    404,
+    "https://TheRoundtableNick.github.io/facts.js"
+   ],
+   [
+    404,
+    "https://TheRoundtableNick.github.io/s/search.js"
+   ],
+   [
+    404,
+    "https://TheRoundtableNick.github.io/hero-replay.js"
+   ]
+  ],
+  "score": 1
+ },
+ {
+  "url": "https://tvedu-boop.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": true,
+  "no_og": false,
+  "no_alt": false,
+  "assets_checked": 1,
+  "broken_assets": [],
+  "score": 1
+ },
+ {
+  "url": "https://flekiii.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": false,
+  "no_alt": false,
+  "assets_checked": 1,
+  "broken_assets": [],
+  "score": 0
+ },
+ {
+  "url": "https://devrangadi-h.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": false,
+  "no_alt": true,
+  "assets_checked": 6,
+  "broken_assets": [],
+  "score": 0
+ },
+ {
+  "url": "https://power-relations.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": false,
+  "no_alt": false,
+  "assets_checked": 1,
+  "broken_assets": [],
+  "score": 0
+ },
+ {
+  "url": "https://steveramm.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": false,
+  "no_alt": true,
+  "assets_checked": 5,
+  "broken_assets": [],
+  "score": 0
+ },
+ {
+  "url": "https://tejas-191.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": false,
+  "no_alt": false,
+  "assets_checked": 5,
+  "broken_assets": [],
+  "score": 0
+ },
+ {
+  "url": "https://ourliberty.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": false,
+  "no_alt": true,
+  "assets_checked": 6,
+  "broken_assets": [],
+  "score": 0
+ },
+ {
+  "url": "https://VCIQ.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": false,
+  "no_alt": false,
+  "assets_checked": 6,
+  "broken_assets": [],
+  "score": 0
+ },
+ {
+  "url": "https://dhnugroho.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": false,
+  "no_alt": true,
+  "assets_checked": 6,
+  "broken_assets": [],
+  "score": 0
+ },
+ {
+  "url": "https://JianLoong.github.io/jianloong.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": false,
+  "no_alt": false,
+  "assets_checked": 4,
+  "broken_assets": [],
+  "score": 0
+ },
+ {
+  "url": "https://gillesfevry.github.io/",
+  "http": 200,
+  "jp": false,
+  "no_viewport": false,
+  "no_lang": false,
+  "no_desc": false,
+  "no_og": false,
+  "no_alt": false,
+  "assets_checked": 6,
+  "broken_assets": [],
+  "score": 0
+ }
+]

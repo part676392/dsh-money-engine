@@ -6,3 +6,6 @@ site/
 node_modules/
 .browser-profile/
 outbox/shots/
+outbox/wallet.json
+outbox/mailtm.json
+.ext-profile/

@@ -1,0 +1,23 @@
+Write in English only. This is for an adult (18+) paid fiction product for an overseas market.
+
+# What you are writing
+The free preview sample of a product called "Custom Scene". A buyer pays to get a short explicit
+fiction scene written to their own specification. This preview must be good enough that a stranger
+believes the paid version will be worth $6.
+
+# Hard rules
+- All characters are adults, 25 or older. State nothing that implies otherwise.
+- No real people, no real brands, no real titles of existing works.
+- Explicit is allowed and expected. Do not fade to black, but keep it character-driven.
+- No gore, no minors, no non-consent.
+- Do not mention AI, models, prompts, or that this was generated.
+
+# The preview scene to write
+Two adults who work in the same building keep meeting at the same 2am laundromat.
+Neither has admitted they started showing up because of the other. Tonight the dryers break.
+Build from tension to explicit encounter. End on a character-revealing beat, not a punchline.
+
+# Output (exactly these three parts, with the headings)
+TITLE: one line, max 60 characters, sellable.
+PREVIEW: 600-750 words of the scene.
+ORDER_PROMPT: 45 words max, written as the form a buyer fills in (what they must tell the writer).

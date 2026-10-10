@@ -368,6 +368,11 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
             f"  <url><loc>{base}/es-deadlines.html</loc><lastmod>{today}</lastmod>"
             f"<changefreq>daily</changefreq><priority>0.95</priority></url>"
         )
+    if (OUT / "store" / "index.html").exists():
+        sm.append(
+            f"  <url><loc>{base}/store/</loc><lastmod>{today}</lastmod>"
+            f"<changefreq>weekly</changefreq><priority>0.8</priority></url>"
+        )
     for comp in sorted(by_company):
         sm.append(
             f"  <url><loc>{base}/company/{quote(comp)}.html</loc>"

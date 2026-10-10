@@ -45,10 +45,33 @@ def norm_slug(s: str) -> str:
     return s[5:] if s.startswith("slug-") else s
 
 
+Q_LINE = re.compile(r"(?:^|[\s。])Q[.:：]\s*(.+?)(?=【|$)", re.S)
+INTENT = re.compile(r"【[^】]*意図[^】]*】\s*([^【]{8,220})")
+QUES_END = re.compile(r"(ますか|ですか|でしょうか|と思いますか|できますか|ご存じですか)")
+
+
 def extract(text: str) -> list:
-    """(質問実文, 引用元文) の組を返す。 advice は弾く。"""
+    """(質問, 面接官の意図, 出典文) を返す。
+
+    三段で拾う:
+      1. «Q. …» で始まる明示の質問 (大半の目标是これ。【面接官の意図】が隣に付く)
+      2. 「…」で括られ ？ で終わる断片
+      3. 面接語を含む ますか/ですか。で閉じる文
+    助言文 («〜と答えましょう») は質問として数えない。
+    """
     out = []
-    for sent in SENT.split(text or ""):
+    t = text or ""
+    for m in Q_LINE.finditer(t):
+        q = re.sub(r"\s+", " ", m.group(1)).strip(" 、。")
+        if len(q) < 6:
+            continue
+        tail = t[m.end():m.end() + 260]
+        im = INTENT.search(tail)
+        intent = re.sub(r"\s+", " ", im.group(1)).strip(" 、。") if im else ""
+        if ADVICE.search(q) and not q.endswith(("か。", "か？", "か")):
+            continue
+        out.append((q[:200], intent[:220], m.group(0).strip()[:300]))
+    for sent in SENT.split(t):
         s = sent.strip()
         if len(s) < 8:
             continue
@@ -56,19 +79,18 @@ def extract(text: str) -> list:
             q = re.sub(r"\s+", " ", q).strip()
             if ADVICE.search(q):
                 continue
-            out.append((q, s))
-        if not QUOTED.search(s) and (s.endswith("？") or s.endswith("?")):
-            if ADVICE.search(s):
-                continue
-            out.append((s, s))
-    # 同じ文の中で重複したら最初のだけ
+            out.append((q[:200], "", s[:300]))
+        if not QUOTED.search(s) and not Q_LINE.search(s):
+            ends_q = s.endswith("？") or s.endswith("?") or (QUES_END.search(s) and s.endswith("。"))
+            if ends_q and not ADVICE.search(s):
+                out.append((s[:200], "", s[:300]))
     seen, ded = set(), []
-    for q, src in out:
-        k = q[:40]
+    for q, intent, src in out:
+        k = re.sub(r"\s+", "", q)[:34]
         if k in seen:
             continue
         seen.add(k)
-        ded.append((q, src))
+        ded.append((q, intent, src))
     return ded
 
 
@@ -99,10 +121,11 @@ def main() -> int:
             full_used += 1
         scanned += 1
         comp = (r.get("company") or "").strip()
-        for q, src in extract(text):
-            if not INTERVIEW_CTX.search(src) and not INTERVIEW_CTX.search(r.get("title", "") or ""):
+        for q, intent, src in extract(text):
+            if not (INTERVIEW_CTX.search(src) or INTERVIEW_CTX.search(r.get("title", "") or "")
+                    or INTERVIEW_CTX.search(q)):
                 continue
-            rec = {"question": q, "source_sentence": src[:300],
+            rec = {"question": q, "intent": intent, "source_sentence": src[:300],
                    "article_title": (r.get("title") or "")[:90],
                    "url": r.get("url", ""), "price": r.get("price", 0),
                    "chars_of_source_text": len(text)}
@@ -125,7 +148,7 @@ def main() -> int:
         for rec in per_company[comp]:
             rows.append(
                 f"<tr><td>{esc(comp)}</td><td>「{esc(rec['question'])}」</td>"
-                f"<td>{esc(rec['article_title'][:44])}</td>"
+                f"<td>{esc(rec['intent'][:110]) if rec['intent'] else '—'}</td>"
                 f"<td>{'¥' + str(rec['price']) if rec['price'] else '無料'}</td></tr>")
     top = []
     for comp in sorted(per_company, key=lambda c: -len(per_company[c]))[:20]:
@@ -170,7 +193,7 @@ ol{{font-size:.88rem}} ol li{{margin:7px 0}}
 </ol>
 
 <h2 style="font-size:.98rem;margin:24px 0 8px;border-bottom:1px solid #ddd8cf;padding-bottom:5px">全件（企業別）</h2>
-<table><thead><tr><th>企業</th><th>質問の実文</th><th>出典記事</th><th>価格</th></tr></thead><tbody>
+<table><thead><tr><th>企業</th><th>質問の実文</th><th>面接官の意図（記事が書く範囲）</th><th>価格</th></tr></thead><tbody>
 {chr(10).join(rows)}
 </tbody></table>
 

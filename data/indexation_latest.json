@@ -1,5 +1,5 @@
 {
- "checked_at": "2026-10-11T05:08:44+0900",
+ "checked_at": "2026-10-11T05:10:24+0900",
  "control": {
   "q": "DeepSeek Harness",
   "must_contain": [
@@ -16,7 +16,7 @@
     "site 限定": {
      "query": "site:part676392.github.io",
      "http": "200",
-     "cites": 10,
+     "cites": 20,
      "ours": 0,
      "ours_urls": [],
      "filler_only": true
@@ -24,7 +24,7 @@
     "固有語 (誌名)": {
      "query": "After-Hours Spin Cycle",
      "http": "200",
-     "cites": 10,
+     "cites": 1,
      "ours": 0,
      "ours_urls": [],
      "filler_only": true

@@ -23,6 +23,8 @@ STORE_MARK = "part676392.github.io/dsh-money-engine/store"
 SURFACES = [
     {"name": "gist", "url": None, "needs": [STORE_MARK]},
     {"name": "rentry_v2", "url": None, "needs": ["6 USD", STORE_MARK, "18+"]},
+    {"name": "rentry_v3", "url": None, "needs": ["730 words", "Dryers on Carver Street",
+                                                   "3 USD", "6 USD", "9 USD", STORE_MARK]},
 ]
 
 
@@ -47,6 +49,8 @@ def load_urls() -> None:
         for s in SURFACES:
             if s["name"] == "rentry_v2":
                 s["url"] = d.get("v2_url") or d.get("url")
+            if s["name"] == "rentry_v3":
+                s["url"] = d.get("v3_url")
 
 
 def main() -> int:

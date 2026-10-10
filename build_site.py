@@ -36,6 +36,21 @@ OPERATOR = {
     "note": "https://note.com/shushoku_career1",
 }
 
+def tracker(key: str) -> str:
+    """访问計. f-string の中で JS の {} を書くと置換フィールドに化けるので,
+    文字列はここで組み立てて field 1 個として埋める."""
+    return (
+        '<script>(function(){try{fetch("'
+        + "https://abacus.jasoncameron.dev/hit/dsh-money-engine/"
+        + key
+        + '", {mode:"no-cors",keepalive:true});}catch(e){}})();</script>'
+    )
+
+
+TRACKER_HOME = tracker("home")
+TRACKER_COMPANY = tracker("company")
+
+
 def load() -> dict:
     corpus = json.load(open(ROOT / "data" / "corpus_full.json", encoding="utf-8"))
     es = json.load(open(ROOT / "data" / "es_dataset.json", encoding="utf-8"))
@@ -275,7 +290,7 @@ code{{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.85em}}
 function f(){{var v=document.getElementById('q').value.toLowerCase();
 document.querySelectorAll('#t tbody tr').forEach(function(r){{
 r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
-</script><script>(function(){try{fetch("https://abacus.jasoncameron.dev/hit/dsh-money-engine/home",{mode:"no-cors",keepalive:true});}catch(e){}})();</script></body></html>"""
+</script>{TRACKER_HOME}</body></html>"""
     (OUT / "index.html").write_text(html_doc, encoding="utf-8")
 
     # ---- 企業別ページ : AI Overview に引用される「独立した回答単位」 ----
@@ -352,7 +367,7 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
 {cai}
 <section class="about"><h2>この目録を運営している人</h2><p><b>{esc(OPERATOR["name"])}</b> — {esc(OPERATOR["credential"])}</p><p class="src">データは {esc(snapshot.get("captured_at",""))} 時点。<a href=\'{OPERATOR['note']}\'>note</a> で本文を買えます。</p></section>
 </main>
-<script>(function(){try{fetch("https://abacus.jasoncameron.dev/hit/dsh-money-engine/home",{mode:"no-cors",keepalive:true});}catch(e){}})();</script>
+{TRACKER_COMPANY}
 </body></html>""",
             encoding="utf-8",
         )

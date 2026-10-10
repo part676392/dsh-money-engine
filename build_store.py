@@ -27,6 +27,24 @@ PRICE_USD = 6
 TURNAROUND_MIN = 15
 
 
+def tracker(key: str) -> str:
+    """访问計. f-string の中で JS の {} を書くと置換フィールドに化けるので,
+    文字列はここで組み立てて field 1 個として埋める."""
+    return (
+        '<script>(function(){try{fetch("'
+        + "https://abacus.jasoncameron.dev/hit/dsh-money-engine/"
+        + key
+        + '", {mode:"no-cors",keepalive:true});}catch(e){}})();</script>'
+    )
+
+
+TRACKER_HOME = tracker("home")
+TRACKER_COMPANY = tracker("company")
+
+
+TRACKER_STORE = tracker('store')
+
+
 def esc(s: object) -> str:
     return html.escape(str(s if s is not None else ""), quote=True)
 
@@ -177,7 +195,7 @@ a{{color:#f0c98a}}
 <p class="warn">All characters are adults. Fiction for personal use. No minors, no non-consent.
 Page built {today}. No reviews are shown because there are none yet.</p>
 </main>
-<script>(function(){try{fetch("https://abacus.jasoncameron.dev/hit/dsh-money-engine/store",{mode:"no-cors",keepalive:true});}catch(e){}})();</script>
+{TRACKER_STORE}
 </body></html>"""
     (OUT / "index.html").write_text(doc, encoding="utf-8")
     json.dump({"title": p["title"], "words": v["words"], "price_usd": PRICE_USD,

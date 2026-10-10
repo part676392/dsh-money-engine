@@ -17,6 +17,7 @@ import json
 import pathlib
 import time
 import urllib.parse
+from tracker_js import tracker
 
 ROOT = pathlib.Path(__file__).resolve().parent
 BASE = "https://part676392.github.io/dsh-money-engine"
@@ -29,18 +30,6 @@ TIER = [(50, 15), (150, 35), (100000, 60)]
 HISTORY_USD = 25
 
 
-def tracker(key: str) -> str:
-    """访问計 (build_store.py と同じ作り方。f-string の JS {} を化けさせない)。"""
-    return (
-        '<script>(function(){try{var b="'
-        + "https://abacus.jasoncameron.dev/hit/dsh-money-engine/"
-        + '";fetch(b+"'
-        + key
-        + '", {mode:"no-cors",keepalive:true});'
-        + "var m=(location.search.match(/[?&]src=([a-z0-9_-]{1,24})/)||[])[1];"
-        + "if(m){fetch(b+'src-'+m, {mode:'no-cors',keepalive:true});}"
-        + "}catch(e){}})();</script>"
-    )
 
 
 def esc(s: object) -> str:

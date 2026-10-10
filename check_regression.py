@@ -136,10 +136,35 @@ def syntax_sweep() -> bool:
     return ok
 
 
+def tracker_single_source() -> bool:
+    """访问計 JS の実装は tracker_js.py 1個でなければならない。
+    実測で 7 file が手書き複製していて、片方だけ直して live に旧 JS を流した。"""
+    needle = "abacus" + ".jasoncameron.dev/hit"  # 分解しないとこの file 自身が自己一致する
+    owners = [fp.name for fp in sorted(ROOT.glob("*.py"))
+              if needle in fp.read_text(encoding="utf-8", errors="replace")]
+    ok = owners == ["tracker_js.py"]
+    print(f"  tracker source      : {'OK' if ok else '★ 複製がある'}  実装 {owners}")
+    # 頁側にも同じ検査: tracker を持つ頁は例外なく参照元節を持つ
+    pages, nopage = 0, []
+    for p in list(ROOT.glob("*.html")) + list((ROOT / "store").glob("*.html")):
+        h = p.read_text(encoding="utf-8", errors="replace")
+        if "<script>(function(){try{var b=" not in h:
+            continue
+        pages += 1
+        if "document.referrer" not in h:
+            nopage.append(p.name)
+    ok = ok and not nopage
+    print(f"  referrer on pages   : {'OK' if not nopage else '★ 節が無い頁 ' + str(nopage[:4])}"
+          f"  ({pages} 頁中)")
+    return ok
+
+
 def main() -> int:
     if "--selftest" in sys.argv:
         return run_selftest()
     if not syntax_sweep():
+        return 1
+    if not tracker_single_source():
         return 1
     cur = current()
     if not STATE.exists():

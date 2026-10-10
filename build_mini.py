@@ -12,6 +12,7 @@ import html
 import json
 import pathlib
 import re
+from tracker_js import tracker
 
 ROOT = pathlib.Path(__file__).resolve().parent
 RAW = ROOT / "store" / "samples" / "raw_product2.txt"
@@ -27,17 +28,6 @@ def esc(s: object) -> str:
     return html.escape(str(s if s is not None else ""), quote=True)
 
 
-def tracker(key: str) -> str:
-    return (
-        '<script>(function(){try{var b="'
-        "https://abacus.jasoncameron.dev/hit/dsh-money-engine/"
-        + '";fetch(b+"'
-        + key
-        + '", {mode:"no-cors",keepalive:true});'
-        + "var m=(location.search.match(/[?&]src=([a-z0-9_-]{1,24})/)||[])[1];"
-        + "if(m){fetch(b+'src-'+m, {mode:'no-cors',keepalive:true});}"
-        + "}catch(e){}})();</script>"
-    )
 
 
 TRACKER_MINI = tracker("mini")

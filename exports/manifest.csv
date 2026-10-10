@@ -2,10 +2,10 @@
 question_lineups.csv,5494,質問カテゴリの並び順 (企業・位置・カテゴリ)
 reverse_questions.csv,24,逆質問にふれる本文の実文 (出典URLつき)
 history_timeseries.csv,3,無人巡回が積んだ観測の履歴行列表 (SHA-256 付)
-history_runs.csv,1,巡回 1 回ごとの実行背骨 (日付 file は同じ日に上書きされるため別粒度)
+history_runs.csv,2,巡回 1 回ごとの実行背骨 (日付 file は同じ日に上書きされるため別粒度)
 interview_questions.csv,1779,面接で投げられた質問の実文。interviewer_intent は記事が書いた范围のみ
 selection_flows.csv,96,公式選考フローを1行1工程に割った物。step_as_written が本来の表記
 selection_signals.csv,2021,収録記事に現れた選考段階の言及。quote は1文のみ
 license_scope,,CC BY 4.0 はこの表・順序・対応づけにのみ適用。本文の著作権は note の各記事の著者に帰属 (source_url を参照)
-generated_at,,2026-10-11T08:09:46+0900
+generated_at,,2026-10-11T08:10:33+0900
 encoding,,UTF-8 with BOM (utf-8-sig)

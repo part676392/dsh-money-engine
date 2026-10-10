@@ -1776,3 +1776,74 @@ built: index.html + 491 company pages
 
 saved /Users/moherune/dsh-runner/dsh-money-engine/data/es_deadlines_strict.json
 rendered: 12 rows (free 6 / paid 6) via 本文の締切記載を機械検証（根拠文つき）
+  regression: OK  10 鍵すべて基準内 (許容 10%)
+  pushed
+  regression: baseline 更新
+  pages build triggered
+  indexnow api.indexnow.org/indexnow  200 (48 urls)
+  indexnow www.bing.com/indexnow      200 (48 urls)
+      https://rentry.co/x4piimss
+  ✓ dpaste     bytes= 27993 http=200 ok=True
+      https://dpaste.com/EQKXKAGQW
+  PR okhosting/awesome-open-data#57           open  comments=0
+  PR taishi-i/awesome-japanese-nlp-resources#32 open  comments=0
+
+  all surfaces live: True
+  store  hits=3
+  home   hits=3
+  mini   hits=1
+  license hits=3
+
+  site: https://part676392.github.io/dsh-money-engine/store/  (pixel は実在する img)
+  pixel embedded in live store page: True
+        site 限定          cites=10 ours=0  埋め草のみ (該当ゼロ)
+        固有語 (誌名)         cites=10 ours=0  埋め草のみ (該当ゼロ)
+        固有語 (頁見出)        cites=10 ours=0  埋め草のみ (該当ゼロ)
+        企業×列             cites=10 ours=0  埋め草のみ (該当ゼロ)
+      verdict: NOT INDEXED
+    mojeek          HTTP=200 制御 ✗ (cites=8) first=https://mastodon.social/@Mojeek
+      ★ 制御が応答しない → この engine の 0 は測定不能の意味
+    ddg_html        HTTP=202 制御 ✗ (cites=2) first=https://duckduckgo.com/
+      ★ 制御が応答しない → この engine の 0 は測定不能の意味
+    marginalia_lite HTTP=000 制御 ✗ (cites=0) first=—
+      ★ 制御が応答しない → この engine の 0 は測定不能の意味
+
+  engines: {'bing': 'NOT INDEXED', 'mojeek': 'ORACLE DEAD', 'ddg_html': 'ORACLE DEAD', 'marginalia_lite': 'ORACLE DEAD'}
+  索引されてはいないが、計器は生きている (NOT INDEXED が正しい読値)
+  base      0.000000 ETH
+  arbitrum  0.000000 ETH
+  polygon   0.000000 ETH
+  optimism  0.000000 ETH
+
+  no incoming movement. rpc ok=4/4 total=0.000000 ETH
+  inbox: 0 message(s), unseen: 0
+  no new orders yet.
+    ✓ 質問だけで注文ではない            order=False words=None price=None spec=- pay=False
+    ✓ スパム (暗号通貨の便乗)          order=False words=None price=None spec=limits pay=False
+  parser self-test: 4/4 PASS
+  File "/Users/moherune/dsh-runner/dsh-money-engine/check_payment_rail.py", line 113, in <module>
+    raise SystemExit(main())
+  File "/Users/moherune/dsh-runner/dsh-money-engine/check_payment_rail.py", line 97, in main
+    state = "OPEN (buyable)" if g["for_sale"] else (
+KeyError: 'for_sale'
+    store/mini.html   7,612B  prices=[3, 6, 9] inbox=True wallet=True pay_steps=True words=True
+    data-license.html  5,357B  prices=[15, 25, 35, 60] offers=4 inbox=True wallet=True 納品=URL:True 権利明記:True
+  parser tiers: {700: 3, 1500: 6, 2500: 9}
+  公開価格の突合: PASS
+
+  money pages ready: True
+  scanned tracked files: 565 / 1062
+  secret-like hits     : 0
+  outbox files         : 10  gitignore 未覆: 0 (公開決めてる原稿 5 は除外して数える)
+
+  no secret in public repo: True
+  hn     blocked   error=outbox/hn-account.txt が無い
+  devto  blocked   email_form=True captcha_present=True open=False
+  qiita  blocked   email_form=True captcha_present=True open=False
+  reddit blocked   error=outbox/reddit-signup.json が無い (signup_reddit.js を実行)
+
+  opened: none — 人間が一度 captcha を押せば開く場所が5つ
+TOTAL our-links visible on Bing: 0
+parser self-check (must be True): True
+PHRASE PROBE ours (the only real indexation proof): 0
+===== 2026-10-11 05:09:13 start =====

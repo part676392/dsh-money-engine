@@ -108,6 +108,15 @@
    "where": "rentry.co/q4aiokt7 (edit_code 所有)",
    "tagged": true,
    "updated": "2026-10-11"
+  },
+  {
+   "key": "prof",
+   "surface": "GitHub プロフィール頁 README",
+   "target": "index.html / data-license.html / sample.html",
+   "where": "part676392/part676392 README の データ資産 節 (3 link)",
+   "updated": "2026-10-11",
+   "tagged": true,
+   "note": "bio と blog も起きたいが token scope に user が無く PATCH /user が 404 (実測 scopes: gist,read:org,repo)。人間側の再認証待ち"
   }
  ],
  "discovery": {

@@ -73,6 +73,8 @@ def main() -> int:
     BENIGN = {"brief_uncensored.txt", "brief_アビームコンサルティングの.txt",
               "copy_アビームコンサルティングの.json", "rentry-current.md",
               "uncensored_raw.txt"}
+    # data/full_bodies.json は note 有料記事の本文 (). public repo に積んで
+    # 大量再発行しないために意図的に untrack。抽出物と1文引用だけを公開する。
     uncovered = [p.name for p in outbox
                  if p.name not in BENIGN and not ignored(str(p.relative_to(ROOT)))]
     benign_tracked = [p.name for p in outbox if p.name in BENIGN]

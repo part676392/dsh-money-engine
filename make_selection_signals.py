@@ -22,6 +22,7 @@ import time
 
 ROOT = pathlib.Path(__file__).resolve().parent
 CORPUS = ROOT / "data" / "corpus_full.json"
+FULL = ROOT / "data" / "full_bodies.json"   # note の HTML から取り直した太い本文
 SNAP = ROOT / "data" / "snapshot-latest.json"
 OUT_JSON = ROOT / "data" / "selection_signals.json"
 OUT_HTML = ROOT / "selection-signals.html"
@@ -64,6 +65,14 @@ def main() -> int:
     corpus = json.loads(CORPUS.read_text(encoding="utf-8"))
     snap = json.loads(SNAP.read_text(encoding="utf-8"))
     by_slug = {norm_slug(c.get("slug")): c for c in corpus}
+    # 太い本文 (harvest_full.py) が有ればそれを優先。API の 240 字は最後の代替。
+    full = {}
+    if FULL.exists():
+        try:
+            full = json.loads(FULL.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            full = {}
+    src_mode = "full HTML body" if full else "API preview (240字)"
 
     per_company: dict = {}
     stage_total = collections.Counter()
@@ -78,9 +87,11 @@ def main() -> int:
         c = by_slug.get(slug)
         if not c:
             continue
-        body = re.sub(TAG, " ", c.get("body") or "")
+        f = full.get(slug) or {}
+        raw_text = f.get("text") or c.get("body") or ""
+        body = re.sub(TAG, " ", raw_text)
         body = re.sub(r"\s+", " ", body).strip()
-        body_lens[len(c.get("body") or "")] += 1
+        body_lens[len(body)] += 1
         matched_articles += 1
         comp = (r.get("company") or "").strip()
         found_any = False
@@ -110,10 +121,11 @@ def main() -> int:
     n_comp = len(per_company)
     doc = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
-        "method": ("note 公開API が返す本文プレビュー (240字) を文単位に切り、"
+        "text_source": src_mode,
+    "method": ("本文を文単位に切り、"
                    "選考段階の語を含む文だけを採用。引用文は抽出そのまま。"),
-        "caveat": ("本文はプレビューのみ (全記事 240 字)。よってこの頁は「収録記事の冒頭に"
-                   "現れた選考段階の言及」であり、各社の選考工程の全集ではない。"),
+        "caveat": ("採ったのは収録記事の本文から。ただし公開しているのは各言及の引用1文と"
+                   "リンクだけで、本文の再発行はしていない。選考工程の全集でもない。"),
         "articles_scanned": matched_articles,
         "body_length_distribution": {str(k): v for k, v in body_lens.most_common(5)},
         "companies_with_mentions": n_comp,

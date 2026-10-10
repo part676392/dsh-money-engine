@@ -25,6 +25,16 @@ DATA = ROOT / "data"
 N_COMPANIES = 3
 
 
+def tracker(key: str) -> str:
+    """访问計 (build_store.py と同じ作り方)。"""
+    return (
+        '<script>(function(){try{fetch("'
+        + "https://abacus.jasoncameron.dev/hit/dsh-money-engine/"
+        + key
+        + '", {mode:"no-cors",keepalive:true});}catch(e){}})();</script>'
+    )
+
+
 def esc(s: object) -> str:
     return html.escape(str(s if s is not None else ""), quote=True)
 
@@ -153,6 +163,7 @@ def main() -> int:
 <meta name="description" content="カスタム抽出の納品物見本。{len(picks)}社ぶん、面接質問 {total_q} 問（意図つき {total_i}）、公式選考フロー {total_f} 本、出典URLつき。CSV 付き。">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="{BASE}/sample.html">
+{tracker("sample")}
 <script type="application/ld+json">
 {ld}
 </script>

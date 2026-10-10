@@ -143,12 +143,64 @@ def main() -> int:
         print("  ★ 本文を同梱しない旨が頁から消えた")
         all_ok = False
 
+    # --- 納品物見本 (買 vật that が品物を見られるか) ---
+    raw = fetch("sample.html")
+    t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", raw))
+    csv_link = "exports/sample_dossier.csv" in raw
+    cta = "data-license.html" in raw
+    n_q = len(re.findall(r"<tr><td>\d+</td>", raw))
+    ld_ok = False
+    for blk in re.findall(r'<script type="application/ld\+json">(.*?)</script>', raw, re.S):
+        try:
+            d = json.loads(blk)
+        except Exception:
+            continue
+        me = d.get("mainEntity") or {}
+        ld_ok = d.get("@type") == "ItemPage" and me.get("@type") == "Dataset" and \
+                bool(me.get("name")) and bool(me.get("description"))
+    s_checks = {"bytes": len(raw), "question_rows": n_q, "csv_link": csv_link,
+                "cta_to_license": cta, "ld_itempage_dataset": ld_ok}
+    print(f"    sample.html {len(raw):>6,}B  質問行={n_q} CSVlink={csv_link} "
+          f"購入頁link={cta} JSON-LD={ld_ok}")
+    if len(raw) < 3000:
+        print(f"  ★ sample.html: 応答が短い ({len(raw)}B) — 配信事故か未 deploy")
+        all_ok = False
+    if n_q < 20:
+        print(f"  ★ sample.html: 質問行が少なすぎる ({n_q})。見本として成立しない")
+        all_ok = False
+    if not csv_link:
+        print("  ★ sample.html: 納品物 CSV への link が無い")
+        all_ok = False
+    if not cta:
+        print("  ★ sample.html: 購入頁への link が無い (見本で終わって売れない)")
+        all_ok = False
+    if not ld_ok:
+        print("  ★ sample.html: ItemPage/Dataset 構造化データが足りない")
+        all_ok = False
+    # CSV が実際に降るか (link だけあって 404 の古典を塞ぐ)
+    r = subprocess.run(["curl", "-s", "--max-time", "25", f"{BASE}/exports/sample_dossier.csv"],
+                       capture_output=True, text=True, timeout=40)
+    body = r.stdout.lstrip("\ufeff")
+    head = body.split("\n", 1)[0]
+    lines = len([x for x in body.split("\n") if x.strip()])
+    is_csv = head.startswith("company,record_type,")
+    print(f"    sample_dossier.csv: 行数={lines} BOM={r.stdout.startswith(chr(65279))} "
+          f"先頭行={head[:44]!r}")
+    if not is_csv:
+        # 404 の HTML が行数だけ満たして通る古典 (実測: 404 が 74 行だった)
+        print(f"  ★ sample_dossier.csv: CSV として読めない (先頭行が違う) — 404 の可能性")
+        all_ok = False
+    elif lines < 50:
+        print(f"  ★ sample_dossier.csv が小さい ({lines} 行)")
+        all_ok = False
+
     print(f"  parser tiers: {tr}")
     print(f"  公開価格の突合: {'PASS' if not missing else 'FAIL ' + str(missing)}")
     print(f"\n  money pages ready: {all_ok}")
     out = ROOT / "data" / "rails" / "money_latest.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps({"checked_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                              "sample_page": s_checks,
                               "dataset_page": d_checks,
                               "pages": dict(rows), "parser_tiers": tr,
                               "missing_tiers": missing, "ready": all_ok},

@@ -155,7 +155,8 @@ CSV 行数: 面接質問 {rows['interview_questions.csv']:,} ／ 選考フロー
 <a href="exports/interview_questions.csv">interview_questions.csv</a> ／
 <a href="exports/selection_flows.csv">selection_flows.csv</a> ／
 <a href="exports/selection_signals.csv">selection_signals.csv</a> ／
-<a href="exports/manifest.csv">列の定義</a></div>
+<a href="exports/manifest.csv">列の定義</a><br>
+<b>中を見たい方へ</b>: <a href="sample.html">納品物見本（3社ぶん実物）</a> — paid 版と同じ CSV をそのまま載せています。</div>
 
 <h2 style="font-size:1rem;margin:22px 0 6px">料金</h2>
 <table><thead><tr><th>品物</th><th>値段</th><th>中身</th></tr></thead><tbody>

@@ -45,9 +45,26 @@ def main() -> int:
     n_ai = len(ai)
     n_terms = sum(len(v) for v in ai.values()) if isinstance(ai, dict) else "?"
 
-    g_state = (rails.get("gumroad") or {})
-    card = ("created, product $6 live, blocked on payout connection"
-            if g_state.get("blocked_by_payout") else ("open" if g_state.get("for_sale") else "unknown"))
+    # card の状態は hand-made な rails/latest.json に頼らない (あの file は
+    # 誰も再生成しておらず、消えた日に llms.txt が "unknown" に化けた)。
+    # 出典は outbox/gumroad.json。中身は秘密 (password) なので写さない。
+    gr = load("outbox/gumroad.json", {}) or {}
+    payout = str(gr.get("payout", ""))
+    if gr.get("product_url") and "NOT CONNECTED" in payout.upper():
+        card = (f"作成済み (product {gr.get('product_id')}, ${gr.get('price_usd')}) — "
+                "入金先を人間が繋ぐまで購入不可")
+    elif gr.get("product_url"):
+        card = f"開通 (product {gr.get('product_id')}, ${gr.get('price_usd')})"
+    else:
+        card = "未作成"
+    # 依存を切るついでに、誰も書いていなかった latest.json をここで書く
+    (ROOT / "data" / "rails").mkdir(parents=True, exist_ok=True)
+    (ROOT / "data" / "rails" / "latest.json").write_text(json.dumps(
+        {"generated_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+         "gumroad": {"product_id": gr.get("product_id"), "url": gr.get("product_url"),
+                     "price_usd": gr.get("price_usd"), "payout": payout,
+                     "email_confirmed": gr.get("email_confirmed")}},
+        ensure_ascii=False, indent=1), encoding="utf-8")
 
     head = f"""# 中途・転職 面接対策 目録データベース (dsh-money-engine)
 
@@ -64,6 +81,7 @@ def main() -> int:
 - [AI・録上面接の検索需要 {n_ai} 社]({BASE}/ai-interviews.html): 企業名込みの検索語 {n_terms} 件の機械収集一覧。実施有無の断定なし
 - [選考締切一覧]({BASE}/es-deadlines.html): 本文の締切記載を機械検証した {12} 件 (根拠文つき)
 - [データ資産の購入]({BASE}/data-license.html): 指定企業群だけを抽出した CSV を公開URLで納品する有料形。現行 CSV は無料
+- [納品物見本]({BASE}/sample.html): 有料納品と同じ形の CSV 実物。3社・面接質問105問（意図つき10）と公式選考フロー10本
 - [CSV エクスポート]({BASE}/exports/manifest.csv): 面接質問・選考フロー・選考段階を CSV で。UTF-8 BOM 付き、列定義つき
 - [選考段階の言及 {sig.get("companies_with_mentions", "?")} 社]({BASE}/selection-signals.html): 収録記事の本文プレビューから抽出した選考段階の言及集計。言及ごとに引用文つき。実測値は生成時に JSON から読む
 - [面接質問 {q.get("questions_total", "?")} 問 / {q.get("companies_with_questions", "?")} 社]({BASE}/interview-questions.html): 収録記事から抽出した質問の実文と、記事が書く面接官の意図。各件に出典URL

@@ -41,6 +41,9 @@ def load(pattern: str) -> list:
 
 def rows_daily() -> str:
     days = load("data/history/*.json")
+    # dev/runner で分けたので file 名順と時刻順がズレる (実測: 05:55 の次に 05:44)。
+    # 増減列は前行と比較するので時刻順に直さないと符号が嘘になる。
+    days = sorted(days, key=lambda nd: str((nd[1] or {}).get("captured_at") or nd[0]))
     out = []
     prev = None
     for name, d in days:

@@ -7,3 +7,6 @@
   ▶ ウィンドウを開きました。note にログインしてください。
     ログインを検出したら自動でセッションを保存します（最大 12 分）。
 
+    probe https://note.com/settings/profile -> http=200 url=https://note.com/settings/profile
+  ✓ ログイン確認
+  FAILED: page.screenshot: Timeout 30000ms exceeded.

@@ -1,0 +1,23 @@
+Write in English only. Adult (18+) product for an overseas market.
+
+# What you are writing
+The full text of a low-priced product called "Micro Scene": 700 words, one continuous
+explicit scene, delivered as a text file. This sample will be published as the free
+example so a stranger can judge the writing before paying.
+
+# Hard rules
+- All characters are adults, 25 or older
+- No real people, no real brands, no existing titles
+- Explicit, written all the way through. No fade to black.
+- No minors, no non-consent, no gore
+- Never mention AI, models, generation, or prompts
+
+# The scene
+A person keeps receiving wrong-number text messages from a stranger for three weeks.
+Tonight they finally reply. The stranger comes to the same building, same floor, wrong door.
+Build from the phone exchange into an explicit encounter. End on a line of dialogue.
+
+# Output exactly these parts with headings
+TITLE: one line, 60 characters max.
+BODY: about 700 words.
+WHAT_YOU_GET: 35 words max, describing the deliverable for the buyer.

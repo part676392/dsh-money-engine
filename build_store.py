@@ -20,6 +20,7 @@ import re
 
 ROOT = pathlib.Path(__file__).resolve().parent
 RAW = ROOT / "store" / "samples" / "raw_product1.txt"
+EXPLICIT = ROOT / "store" / "samples" / "product1_explicit.md"
 OUT = ROOT / "store"
 WALLET = ROOT / "outbox" / "wallet.json"
 
@@ -49,21 +50,35 @@ def esc(s: object) -> str:
     return html.escape(str(s if s is not None else ""), quote=True)
 
 
-def parse(raw: str) -> dict:
-    def grab(label: str) -> str:
-        m = re.search(rf"^{label}\s*[:：]\s*(.*)$", raw, re.M | re.I)
-        if not m:
-            return ""
-        rest = raw[m.end():]
-        nxt = re.search(r"^(TITLE|PREVIEW|ORDER_PROMPT)\s*[:：]", rest, re.M | re.I)
-        return (rest[: nxt.start()] if nxt else rest).strip()
+EXPLICIT_LEXICON = ("wet", "mouth", "tongue", "thigh", "hard", "thrust", "came",
+                    "come", "panties", "belt", "jeans", "blouse", "inside her",
+                    "fingers", "slick", "heat")
+FADE_PHRASES = ("fade to black", "hours later", "later that night", "the rest is left")
 
-    # TITLE may sit on the same line as the heading
+
+def parse(raw: str) -> dict:
+    """TITLE/PREVIEW/ORDER_PROMPT と TITLE/BODY/WHAT_YOU_GET の両形式を受ける.
+
+     Gemini 版は PREVIEW, 俺が書いた露骨版は BODY を使う。形式が揺れて
+     公開が止まるより、受けた方がいい。
+     """
+    labels = ("TITLE", "PREVIEW", "BODY", "ORDER_PROMPT", "WHAT_YOU_GET")
+
+    def grab(*names: str) -> str:
+        for name in names:
+            m = re.search(rf"^{name}\s*[:：]\s*(.*)$", raw, re.M | re.I)
+            if not m:
+                continue
+            rest = raw[m.end():]
+            nxt = re.search(r"^(%s)\s*[:：]" % "|".join(labels), rest, re.M | re.I)
+            return (rest[: nxt.start()] if nxt else rest).strip()
+        return ""
+
     t = re.search(r"^TITLE\s*[:：]\s*(.+)$", raw, re.M | re.I)
     return {
         "title": (t.group(1).strip() if t else ""),
-        "preview": grab("PREVIEW"),
-        "order_prompt": grab("ORDER_PROMPT"),
+        "preview": grab("PREVIEW", "BODY"),
+        "order_prompt": grab("ORDER_PROMPT", "WHAT_YOU_GET"),
     }
 
 
@@ -84,17 +99,29 @@ def verify(p: dict) -> dict:
             problems.append(f"mentions generation: {bad}")
     if not re.search(r"\b(18|adult)\b", (p["preview"] + p["order_prompt"]).lower()):
         pass  # disclaimer lives on the page, not required inside the prose
-    return {"words": words, "ok": not problems, "problems": problems}
+    low = p["preview"].lower()
+    lex = [k for k in EXPLICIT_LEXICON if k in low]
+    if len(lex) < 6:
+        problems.append(f"not explicit enough ({len(lex)} lexicon hits, need 6)")
+    fade = [e for e in FADE_PHRASES if e in low]
+    if fade:
+        problems.append(f"fades to black: {fade}")
+    nonascii = sorted({c for c in p["preview"] if ord(c) > 127})
+    if nonascii:
+        problems.append(f"non-ascii leaked: {nonascii[:6]}")
+    return {"words": words, "ok": not problems, "problems": problems, "lexicon": len(lex)}
 
 
 def main() -> None:
     if not RAW.exists():
         raise SystemExit(f"{RAW} がありません (agy 生成を先に)")
-    raw = RAW.read_text(encoding="utf-8", errors="replace")
+    src = EXPLICIT if EXPLICIT.exists() else RAW
+    raw = src.read_text(encoding="utf-8", errors="replace")
+    print(f"  source: {src.name}")
     p = parse(raw)
     v = verify(p)
     print(f"  title   : {p['title']!r}")
-    print(f"  preview : {v['words']} words  -> {'PASS' if v['ok'] else v['problems']}")
+    print(f"  preview : {v['words']} words  lexicon={v.get('lexicon')}  -> {'PASS' if v['ok'] else v['problems']}")
     if not v["ok"]:
         raise SystemExit("product failed verification; not publishing")
 

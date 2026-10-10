@@ -120,10 +120,13 @@ def main() -> int:
         if isinstance(v, int) and v > 0:
             got[h] = v
     anyv = get_count("ref-any")
-    tot_any = anyv if isinstance(anyv, int) else 0
+    # 「まだ誰も叩いていない (key が無い)」と「0 件」を混ぜない。
+    # ref-any は今日入れたばかりなので、まだ key 自体が存在しない (HTTP 404)。
+    tot_any = anyv if isinstance(anyv, int) else None
     known = sum(got.values())
-    print(f"  参照元: 既知ヒット {len(got)} host / 計 {known} 件  ref-any={tot_any}  "
-          f"盲点 (未登録 host) = {max(tot_any - known, 0)}")
+    print(f"  参照元: 既知ヒット {len(got)} host / 計 {known} 件  "
+          f"ref-any={'未取得 (まだ叩かれていない)' if tot_any is None else tot_any}  "
+          f"盲点 (未登録 host) = {'—' if tot_any is None else max(tot_any - known, 0)}")
     for h, v in sorted(got.items(), key=lambda x: -x[1]):
         nm = next((z.get("what", "") for z in (rreg.get("hosts") or []) if z["key"] == h), "")
         print(f"      {h:26s} {v:>4}  {esc_ref(nm)}")

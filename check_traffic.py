@@ -71,8 +71,12 @@ def main() -> int:
     except Exception as e:  # noqa: BLE001
         reg = {"sources": []}
         print(f"  ★ 台帳が読めない: {str(e)[:60]}")
+    retired = []
     src_total = 0
     for s in reg.get("sources", []):
+        if s.get("retired"):          # 置き換えた面は数えない (雑音をやめる)
+            retired.append(s["key"])
+            continue
         v = api(f"/get/dsh-money-engine/src-{s['key']}").get("value")
         v = 0 if v is None else v
         src_total += v
@@ -82,6 +86,8 @@ def main() -> int:
         out["counters"]["src-" + s["key"]]["tagged"] = bool(s.get("tagged", True))
         print(f"  流入 {s['key']:9s} hits={v}  ({s['surface']}){flag}", flush=True)
     print(f"  流入源つき合計: {src_total}", flush=True)
+    if retired:
+        print(f"  退役済み (数えない): {retired}", flush=True)
 
     print(f"\n  site: {SITE}/store/  (pixel は実在する img)")
     (HIST / "latest.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")

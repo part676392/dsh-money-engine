@@ -25,7 +25,9 @@
    "where": "rentry ページ本文",
    "updated": "2026-10-11",
    "tagged": false,
-   "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す"
+   "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す",
+   "retired": true,
+   "retire_note": "旧 rentry 面。rentry-fic / rentry-data / rentry-lineup / rentry-index に置き換えた (未打直のまま残すと雑音)"
   },
   {
    "key": "rentry2",
@@ -34,7 +36,9 @@
    "where": "rentry ページ本文",
    "updated": "2026-10-11",
    "tagged": false,
-   "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す"
+   "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す",
+   "retired": true,
+   "retire_note": "旧 rentry 面。rentry-fic / rentry-data / rentry-lineup / rentry-index に置き換えた (未打直のまま残すと雑音)"
   },
   {
    "key": "rentry3",
@@ -43,7 +47,9 @@
    "where": "rentry ページ本文",
    "updated": "2026-10-11",
    "tagged": false,
-   "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す"
+   "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す",
+   "retired": true,
+   "retire_note": "旧 rentry 面。rentry-fic / rentry-data / rentry-lineup / rentry-index に置き換えた (未打直のまま残すと雑音)"
   },
   {
    "key": "release",

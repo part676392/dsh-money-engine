@@ -65,6 +65,7 @@ for ep in ["https://api.indexnow.org/indexnow","https://www.bing.com/indexnow"]:
     except urllib.error.HTTPError as e: print(f"  indexnow {ep.split('//')[1]:26s} {e.code}")
 PY
 
+  python3 check_payment.py 2>&1 | tail -7
   python3 scoreboard.py 2>&1 | tail -3
   echo "===== $(date '+%F %T') end ====="
 } >> "$LOG" 2>&1

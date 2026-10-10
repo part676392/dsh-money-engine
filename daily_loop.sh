@@ -11,6 +11,7 @@ LOG="logs/daily_$(date +%Y%m%d).log"
 mkdir -p logs
 {
   echo "===== $(date '+%F %T') start ====="
+  python3 log_run.py start
   # token 必須の理由を測り直した (2026-10-11):
   #   - 空 token でも pull は通る (repo が public なので無名 read が効く。実測で SHA が返った)
   #   - 非tty では git は認証を聞いてハングしない (即失敗した)
@@ -160,5 +161,6 @@ p.write_text(json.dumps({
     "green": not fails, "failed": fails}, ensure_ascii=False, indent=1), encoding="utf-8")
 print(f"  guards state written: green={not fails} failed={fails or '[]'}")
 GUARD
+  python3 log_run.py end guards="${FAIL:-green}"
   echo "===== $(date '+%F %T') end ====="
 } >> "$LOG" 2>&1

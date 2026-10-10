@@ -31,3 +31,6 @@ outbox/login-run*.log
 data/full_bodies.json
 outbox/*-signup.json
 dist/
+
+# git に書き戻されない目撃者 (run の開始/終了)
+logs/runs.jsonl

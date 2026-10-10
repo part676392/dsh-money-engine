@@ -1,9 +1,11 @@
 {
- "generated_at": "2026-10-11T07:03:40+0900",
+ "generated_at": "2026-10-11T07:09:23+0900",
  "text_source": "note の記事 HTML から採った本文",
  "articles_scanned": 600,
  "articles_with_full_body": 591,
- "questions_total": 1873,
+ "questions_total": 1779,
+ "questions_extracted_raw": 1873,
+ "questions_unattributed": 94,
  "companies_with_questions": 472,
  "per_company": {
   "ADKホールディングス": [

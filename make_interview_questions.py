@@ -138,7 +138,12 @@ def main() -> int:
            "text_source": ("note の記事 HTML から採った本文" if full_used > scanned * 0.5
                            else "API プレビュー混在"),
            "articles_scanned": scanned, "articles_with_full_body": full_used,
-           "questions_total": len(all_q), "companies_with_questions": n_comp,
+           # 総数に raw を載せていて納品と食い違った (実測: 公称 1,873 / CSV 1,779 行)。
+           # 差は企業に紐づかなかった 94 問。買い手に渡るのは紐づいた方なので、それを総数にする。
+           "questions_total": sum(len(v) for v in per_company.values()),
+           "questions_extracted_raw": len(all_q),
+           "questions_unattributed": len(all_q) - sum(len(v) for v in per_company.values()),
+           "companies_with_questions": n_comp,
            "per_company": {k: v for k, v in sorted(per_company.items())},
            "all": all_q}
     OUT_JSON.write_text(json.dumps(doc, ensure_ascii=False, indent=1), encoding="utf-8")

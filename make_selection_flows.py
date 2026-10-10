@@ -113,7 +113,16 @@ def flows_from(text: str) -> list:
     return out
 
 
+# 他頁への相互リンクに載せる数字は data から読む。直書きは枯れる (実測: 1,873 が旧値で残った)。
+try:
+    _j = json.loads((ROOT / "data" / "interview_questions.json").read_text(encoding="utf-8"))
+    NQ = f"{int(_j.get('questions_total', 0)):,}"
+except Exception:  # noqa: BLE001
+    NQ = "?"
+
+
 def main() -> int:
+
     if not FULL.exists():
         print("  full_bodies.json が無い (harvest_full.py を先に)")
         return 1
@@ -239,7 +248,7 @@ th{{background:#efeee9;font-weight:600}} a{{color:#7a5230}}
 
 <p class="note"><b>権利の範囲:</b> CC BY 4.0 は抽出した表・順序・対応づけにだけ適用します。本文の著作権は note の各記事の著者に帰属し、この頁にあるのは出典URLつきの最小限の引用です。<br>更新: {time.strftime('%Y-%m-%d %H:%M JST')}（毎日 06:10 / 19:40 に自動再生成・取得日時付き）
 　機械抽出なので枠の切れ目がずれることがあります。生データ: <a href="data/selection_flows.json">data/selection_flows.json</a>
-　他の観測: <a href="interview-questions.html">面接質問 {esc('1,873')} 問</a> ／
+　他の観測: <a href="interview-questions.html">面接質問 {NQ} 問</a> ／
 　<a href="selection-signals.html">選考段階の言及</a> ／ <a href="changes.html">運用履歴</a></p>
 </main></body></html>"""
     OUT_HTML.write_text(doc_html, encoding="utf-8")

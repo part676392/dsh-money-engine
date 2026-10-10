@@ -54,6 +54,33 @@ def has_price(text: str, usd: int) -> bool:
     return bool(re.search(rf"\$\s?{usd}\b", text) or re.search(rf"\b{usd}\s*(?:USD|usd|ドル)", text))
 
 
+def qcount_check() -> bool:
+    """公称の質問数と納品 CSV の行数は同じでなければならない。
+    実測で 1,873 (公称) / 1,779 (CSV) の差が出ていた。asarkan モードでは落ちない。"""
+    import csv as _csv
+    j = json.loads((ROOT / "data" / "interview_questions.json").read_text(encoding="utf-8"))
+    rows = 0
+    fp = ROOT / "exports" / "interview_questions.csv"
+    if fp.exists():
+        with open(fp, encoding="utf_8_sig") as f:
+            rows = max(sum(1 for _ in f) - 1, 0)
+    body = sum(len(v) for v in (j.get("per_company") or {}).values())
+    total = int(j.get("questions_total", -1))
+    ok = total == body == rows
+    # 同じ数を頁に写している箇所を総点検。1 か所でも旧値が残ると買い手に嘘を見せる。
+    stale = []
+    for fp in sorted(list(ROOT.glob("*.html")) + list(ROOT.glob("*.txt"))):
+        raw = fp.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(r"面接質問\s*([0-9][0-9,]*)\s*問", raw):
+            v = int(m.group(1).replace(",", ""))
+            if v not in (total, 105):  # 105 は見本の3社ぶん (別個体)
+                stale.append(f"{fp.name}:{v}")
+    ok = ok and not stale
+    print(f"    question count   : 公称={total} JSON本文={body} CSV={rows} "
+          f"{'一致' if not stale else '★ 頁に旧値 ' + str(stale[:3])}")
+    return ok
+
+
 def main() -> int:
     tr = tiers()
     inbox = ""
@@ -235,6 +262,8 @@ def main() -> int:
 
     print(f"  parser tiers: {tr}")
     print(f"  公開価格の突合: {'PASS' if not missing else 'FAIL ' + str(missing)}")
+    if not qcount_check():
+        bad.append("question count")
     print(f"\n  money pages ready: {all_ok}")
     out = ROOT / "data" / "rails" / "money_latest.json"
     out.parent.mkdir(parents=True, exist_ok=True)

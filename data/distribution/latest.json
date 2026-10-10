@@ -1,9 +1,9 @@
 {
- "checked_at": "2026-10-11T04:08:39+0900",
+ "checked_at": "2026-10-11T04:19:25+0900",
  "surfaces": {
   "gist": {
    "url": "https://gist.github.com/part676392/8f51111c9ac743c672cf3a04ed863fcf",
-   "bytes": 109176,
+   "bytes": 109171,
    "http": 200,
    "ok": true,
    "missing": [],
@@ -27,7 +27,7 @@
   },
   "dpaste": {
    "url": "https://dpaste.com/EQKXKAGQW",
-   "bytes": 27992,
+   "bytes": 27994,
    "http": 200,
    "ok": true,
    "missing": [],
@@ -40,6 +40,12 @@
    "merged_at": null,
    "comments": "0",
    "url": "https://github.com/okhosting/awesome-open-data/pull/57"
+  },
+  "taishi-i/awesome-japanese-nlp-resources#32": {
+   "state": "open",
+   "merged_at": null,
+   "comments": "0",
+   "url": "https://github.com/taishi-i/awesome-japanese-nlp-resources/pull/32"
   }
  }
 }

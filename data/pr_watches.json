@@ -6,5 +6,13 @@
   "url": "https://github.com/okhosting/awesome-open-data/pull/57",
   "opened_at": "2026-10-11T04:07:19+0900",
   "why": "認証済みで captcha のない導線。昨日も PR が merge されている活性リスト"
+ },
+ {
+  "repo": "taishi-i/awesome-japanese-nlp-resources",
+  "number": 32,
+  "title": "Add job-hunting-interview-corpus-jp (1,873 interview questions, CSV/JSON)",
+  "url": "https://github.com/taishi-i/awesome-japanese-nlp-resources/pull/32",
+  "opened_at": "2026-10-11T04:19:25+0900",
+  "why": "1,021★ / 5日前 push / Corpus>Others で分野コーパスの merge 実績 (#24,#23)"
  }
 ]

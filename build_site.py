@@ -19,6 +19,8 @@ import pathlib
 import re
 import datetime as dt
 
+import demand
+
 ROOT = pathlib.Path(__file__).resolve().parent
 OUT = ROOT
 DATA = ROOT / "data"
@@ -97,6 +99,8 @@ def build(d: dict) -> None:
         if r["company"]:
             by_company[r["company"]].append(r)
 
+    dem = demand.load()
+
     kind_stat = collections.Counter(r["kind"] for r in recs)
     priced = sum(r["price"] for r in recs)
     now = dt.datetime.now(dt.timezone(dt.timedelta(hours=9)))
@@ -121,6 +125,9 @@ def build(d: dict) -> None:
         encoding="utf-8",
     )
 
+    if dem:
+        demand.dump_for_site(dem, by_company, OUT)
+
     # ---- index.html : answer unit として独立して意味を持たせる ----
     rows = []
     for comp in sorted(by_company, key=lambda c: -len(by_company[c])):
@@ -136,6 +143,8 @@ def build(d: dict) -> None:
             f"<td>{esc('、'.join(sorted({x['kind'] for x in g})))}</td><td>{links}</td></tr>"
         )
 
+
+    demand_html = demand.themes_block(dem, by_company) if dem else ""
 
     free_recs = [r for r in recs if r["price"] == 0]
     free_recs.sort(key=lambda r: (-r["likes"], r["published"]), reverse=False)
@@ -214,7 +223,15 @@ a{{color:#1a5fd6;text-decoration:none}}a:hover{{text-decoration:underline}}
 input{{width:100%;padding:10px;border:1px solid #cfd6df;border-radius:8px;font-size:.95rem;margin:16px 0 4px;box-sizing:border-box}}
 .note{{font-size:.78rem;color:#6b7480;margin-top:22px;border-top:1px solid #e3e7ed;padding-top:12px}}
 code{{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.85em}}
-.free{{background:#fff;border:1px solid #cfe3c8;border-left:4px solid #3f9d3f;border-radius:9px;padding:14px 16px;margin:18px 0}}.free h2{{font-size:1rem;margin:0 0 8px}}.free h2 small{{font-weight:400;color:#5a6472;font-size:.78rem}}.free ul{{margin:0;padding-left:18px;font-size:.85rem}}.free li{{margin:6px 0}}.lk{{font-size:.74rem;background:#e8f5e6;color:#256b25;padding:1px 6px;border-radius:20px;margin-left:6px}}.d{{font-size:.74rem;color:#6b7480;margin-left:6px}}
+.free{{background:#fff;border:1px solid #cfe3c8;border-left:4px solid #3f9d3f;border-radius:9px;padding:14px 16px;margin:18px 0}}.free h2{{font-size:1rem;margin:0 0 8px}}.free h2 small{{font-weight:400;color:#5a6472;font-size:.78rem}}.free ul{{margin:0;padding-left:18px;font-size:.85rem}}.free li{{margin:6px 0}}.demand{{background:#fff;border:1px solid #cdd9ea;border-left:4px solid #2f6fbf;border-radius:9px;padding:14px 16px;margin:18px 0}}
+.demand h2{{font-size:1rem;margin:0 0 8px}}.demand h2 small{{font-weight:400;color:#5a6472;font-size:.78rem}}
+.demand ul{{margin:0;padding-left:18px;font-size:.85rem;column-count:2;column-gap:22px}}
+.demand li{{margin:5px 0;break-inside:avoid}}
+.pc{{font-size:.73rem;background:#e6eff9;color:#1c4f8a;padding:1px 6px;border-radius:20px;margin-left:6px}}
+.ax{{font-size:.72rem;color:#6b7480;margin-left:6px}}.ex{{display:block;font-size:.74rem;color:#6b7480}}
+.gap{{font-size:.82rem;background:#fff8e6;border-radius:6px;padding:9px 11px;margin:10px 0 0}}
+.nod{{background:#f2f7f2;border-left:4px solid #7aa87a;border-radius:6px;padding:11px 13px;font-size:.85rem;margin:16px 0}}
+.lk{{font-size:.74rem;background:#e8f5e6;color:#256b25;padding:1px 6px;border-radius:20px;margin-left:6px}}.d{{font-size:.74rem;color:#6b7480;margin-left:6px}}
 </style></head><body><main>
 <h1>転職・新卒 選考対策 目録データベース</h1>
 <p class="sub">志望企業の面接対策資料が「あるか無いか」を即答する検索窓。<b>{snapshot['captured_at']}</b> 時点・毎日自動更新</p>
@@ -226,6 +243,7 @@ code{{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.85em}}
 </div>
 <p class="sub">{kinds}</p>
 {free_block}
+{demand_html}
 <input id="q" placeholder="企業名を入力（例: イオン銀行 / アビーム / NTT東日本）" oninput="f()">
 <table id="t"><thead><tr><th>企業</th><th>資料数</th><th>無料</th><th>有料</th><th>選考種別</th><th>最新</th></tr></thead>
 <tbody>
@@ -253,6 +271,8 @@ r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
                 f"<span class='p'>{price_badge(x['price'])}</span>"
                 f"<span class='d'>{esc(x['published'])}</span></li>"
             )
+        cdem = demand.company_block(comp, dem) if dem else ""
+
         q = f"{comp}の中途面接対策資料は現在{len(g)}点あります。うち{len(free)}点は無料、{len(paid)}点は有料です。"
         ltd = {
             "@context": "https://schema.org",
@@ -265,6 +285,9 @@ r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
                 }
             ],
         }
+        if dem:
+            ltd = demand.company_ld(comp, dem, ltd)
+
         (cdir / f"{comp}.html").write_text(
             f"""<!doctype html><html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -279,6 +302,7 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
 <h1>{esc(comp)} の選考対策資料 {len(g)}点</h1>
 <p>{esc(q)} 選考種別：{esc('、'.join(kinds_here))}。</p>
 <ul>{chr(10).join(items)}</ul>
+{cdem}
 </main></body></html>""",
             encoding="utf-8",
         )

@@ -1,0 +1,10 @@
+# 生成物は dev と runner が同じ名前を書き続けて pull --rebase が止まる (実測 2 回:
+# data/orders/latest.json と sample.html)。衝突で無人ループが止まるのが一番痛いので、
+# 取り合いをやめて片方を自動採用する。次の run で必ず再生成される。
+*.html merge=generated
+exports/*.csv merge=generated
+llms.txt merge=generated
+llms-full.txt merge=generated
+sitemap.xml merge=generated
+robots.txt merge=generated
+data/*.json merge=generated

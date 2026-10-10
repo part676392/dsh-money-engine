@@ -169,6 +169,56 @@ def selftest() -> int:
     return 0 if ok == len(FIXTURES) else 1
 
 
+def issue_orders() -> dict:
+    """GitHub issue 受注口。受信箱は受信専用で外送信できないので、
+    注文を公開の issue で受けて、納品URLをそこに返す (実装: .github/ISSUE_TEMPLATE/order.yml)。
+    ラベル 注文 を開いている間だけ注文として数える。rehearsal 付きは練習で除外。"""
+    q = "repos/part676392/dsh-money-engine/issues?state=open&labels=%E6%B3%A8%E6%96%87&per_page=50"
+    out, err = curl(["-H", "Accept: application/vnd.github+json", q]) if False else ("", "")
+    try:
+        r = subprocess.run(["gh", "api", q], capture_output=True, text=True, timeout=45)
+        arr = json.loads(r.stdout) if r.returncode == 0 else []
+    except Exception as e:  # noqa: BLE001
+        print(f"  issue orders: 取得失敗 {str(e)[:50]}")
+        return {"open": 0, "real": 0, "rehearsal": 0, "items": []}
+    items = []
+    for it in arr:
+        if it.get("pull_request"):
+            continue
+        labs = [l.get("name", "") for l in (it.get("labels") or [])]
+        items.append({"number": it.get("number"), "title": (it.get("title") or "")[:80],
+                      "url": it.get("html_url"), "rehearsal": "rehearsal" in labs,
+                      "created": (it.get("created_at") or "")[:10]})
+    real = [x for x in items if not x["rehearsal"]]
+    print(f"  issue orders      : open {len(items)}  実注文 {len(real)}  練習 {len(items)-len(real)}"
+          + ("  " + ", ".join("#" + str(x["number"]) for x in real[:4]) if real else ""))
+    # 台帳に上げる (同じ issue を二重に積まない)
+    dpath = ROOT / "data" / "deliveries.json"
+    led = {}
+    if dpath.exists():
+        try:
+            led = json.loads(dpath.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            led = {}
+    # 閉結したまま受領中が台帳に残ると実注文が水増しされる (実測: closed 直後も
+    # labels 付き query が #2 を返し続けた = GitHub の index 遅延が数秒)。次の巡回で落ちる。
+    open_keys = {f"GH-{x['number']}" for x in real}
+    for k, v in led.items():
+        if k.startswith("GH-") and k not in open_keys and "納品" not in str(v.get("status", "")):
+            v["status"] = "閉結 (送金なし)"
+            print(f"  台帳 {k}: 閉結として落とした")
+    for x in real:
+        k = f"GH-{x['number']}"
+        if k not in led:
+            led[k] = {"kind": "issue", "status": "受領 (送金待ち)", "url": x["url"],
+                      "title": x["title"], "received_at": x["created"]}
+            print(f"  ★ 受領 #{x['number']} を台帳に追加 (実数は送金確認後)")
+    if led:
+        dpath.write_text(json.dumps(led, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    return {"open": len(items), "real": len(real), "rehearsal": len(items) - len(real),
+            "items": items}
+
+
 def main() -> int:
     if "--selftest" in sys.argv:
         return selftest()
@@ -229,7 +279,11 @@ def main() -> int:
     (HIST / "latest.json").write_text(json.dumps(
         {"checked_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "total": len(msgs),
          "unseen": len(fresh), "orders": orders}, ensure_ascii=False, indent=1), encoding="utf-8")
-    if not fresh:
+    iss = issue_orders()
+    d = json.loads((HIST / "latest.json").read_text(encoding="utf-8"))
+    d["github_issues"] = iss
+    (HIST / "latest.json").write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
+    if not fresh and not iss["real"]:
         print("  no new orders yet.")
     return 0
 

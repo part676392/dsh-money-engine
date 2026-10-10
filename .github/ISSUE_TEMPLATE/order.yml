@@ -1,0 +1,50 @@
+name: データ購入の注文 (Order)
+description: 抽出プランを指定して注文する。送金は別送 (Base / Arbitrum / Polygon / ETH)。
+labels:
+  - 注文
+body:
+  - type: markdown
+    attributes:
+      value: |
+        本文は公開されます。個人情報 (氏名・メール) は書かなくていいです。
+        納品はこの issue のコメントに公開URLとして載せます。
+  - type: dropdown
+    id: plan
+    attributes:
+      label: プラン
+      options:
+        - カスタム抽出 〜50社 ($15)
+        - カスタム抽出 〜150社 ($35)
+        - カスタム抽出 〜491社 ($60)
+        - 歴史スナップショット一式 ($25)
+    validations:
+      required: true
+  - type: textarea
+    id: companies
+    attributes:
+      label: 必要な企業の一覧 (または語彙・業種)
+      description: 1行1社。業種や語彙の指定でも可。
+      placeholder: |
+        株式会社ディスコ
+        インテグレース・ヤーニン・ボズウェン
+        業種: 証券
+    validations:
+      required: true
+  - type: dropdown
+    id: chain
+    attributes:
+      label: 送金のチェーン
+      options:
+        - Base
+        - Arbitrum
+        - Polygon
+        - Ethereum
+    validations:
+      required: true
+  - type: input
+    id: contact
+    attributes:
+      label: 連絡先 (任意 / 空欄ならこの issue で連絡)
+      placeholder: "name@example.com"
+    validations:
+      required: false

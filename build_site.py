@@ -60,6 +60,8 @@ def history_record(snap: dict, loc: str) -> dict:
     # deliveries.json は id 辞書。orders_total の様な集計鍵は無い (実測で null になった)。
     dvi = list(dv.values()) if isinstance(dv, dict) else (dv or [])
     n_rehearsal = sum(1 for x in dvi if str(x.get("kind", "")) == "rehearsal")
+    # 閉結 (送金なし) は注文として数えない (gh issue を消すと実注文が永久に残っていた)。
+    n_closed = sum(1 for x in dvi if "閉結" in str(x.get("status", "")))
     n_delivered = sum(1 for x in dvi if "delivered" in str(x.get("status", "")).lower()
                       or "納品" in str(x.get("status", "")))
     cnt = abacus_counts()
@@ -77,7 +79,8 @@ def history_record(snap: dict, loc: str) -> dict:
         "lineup_modal_pct": ln.get("modal_exact_pct"),
         "reverse_quotes": rv.get("quotes"), "reverse_companies": rv.get("companies"),
         "deadlines_open": len(dl.get("open") or []) if isinstance(dl, dict) else None,
-        "orders_real": len(dvi) - n_rehearsal, "orders_rehearsal": n_rehearsal,
+        "orders_real": len(dvi) - n_rehearsal - n_closed, "orders_rehearsal": n_rehearsal,
+        "orders_closed": n_closed,
         "delivered": n_delivered,
         "traffic": cnt, "traffic_total": sum(cnt.values()),
         "cash_usd": 0, "cash_eth": 0,

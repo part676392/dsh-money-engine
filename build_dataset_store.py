@@ -82,6 +82,14 @@ def main() -> int:
     nf = fl.get("flows_total", 0)
     nfc = fl.get("companies_with_flows", 0)
     ns = sg.get("companies_with_mentions", 0)
+    # 注文を実際に押せる導線にする (実測: アドレスが平文で mailto も issue も無かった)。
+    _subj = "データ購入の注文"
+    _body = ("プラン: \n企業一覧または語彙・業種:\n\n---\n"
+             "https://part676392.github.io/dsh-money-engine/data-license.html")
+    order_mail = ("mailto:" + inbox + "?subject=" + urllib.parse.quote(_subj)
+                  + "&body=" + urllib.parse.quote(_body)) if inbox else ""
+    order_issue = ("https://github.com/part676392/dsh-money-engine/issues/new?template=order.yml"
+                   "&labels=" + urllib.parse.quote("注文"))
     rows = {k: csv_rows(k) for k in ("interview_questions.csv", "selection_flows.csv",
                                      "selection_signals.csv", "question_lineups.csv",
                                      "reverse_questions.csv", "manifest.csv")}
@@ -179,7 +187,9 @@ CSV 行数: 面接質問 {rows['interview_questions.csv']:,} ／ 選考フロー
 
 <h2 style="font-size:1rem;margin:22px 0 6px">順序</h2>
 <ol>
-<li>必要企業の一覧（または語彙・業種）を <code>{esc(inbox) or '（受信箱の準備中）'}</code> に送る。</li>
+<li>必要企業の一覧（または語彙・業種）を送る —
+  <a href="{order_mail}">メールで送る ({esc(inbox) or '受信箱の準備中'})</a> ／
+  <a href="{order_issue}"><b>GitHub の注文フォームで送る</b></a>（公開・個人の連絡先は要りません。納品はこの issue のコメントに出します）。</li>
 <li>上の料金のどれかを下のアドレスへ送金（Base / Arbitrum / Polygon / ETH）。</li>
 <li>こちらで抽出して CSV を作り、この頁の納品一覧に公開URLを載せる。送金内容が一致していれば受け取れる。</li>
 </ol>

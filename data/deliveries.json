@@ -9,5 +9,12 @@
   "received": "self",
   "delivered_at": "2026-10-11T06:01:38+09:00",
   "requested_words": 700
+ },
+ "GH-2": {
+  "kind": "issue",
+  "status": "閉結 (送金なし)",
+  "url": "https://github.com/part676392/dsh-money-engine/issues/2",
+  "title": "カスタム抽出 〜50社 (5)",
+  "received_at": "2026-10-10"
  }
 }

@@ -1765,3 +1765,14 @@ built: index.html + 491 company pages
   internal links     : 2507 checked, 0 broken (0 distinct targets)
 
   AEO claim holds: True
+  history push ok (exit)
+  history pushed (SHA 一致 4f9862c330)
+  guards: all green
+  guards state written: green=True failed=[]
+===== 2026-10-11 05:06:19 end =====
+===== 2026-10-11 05:07:35 start =====
+  ✓ 受注口 生存 fq23ou7os@maxxspace.com (messages=0)
+  2026-10-29  残り 19日      🆓 アビームコンサルティング             「締切: 2026年10月29日」
+
+saved /Users/moherune/dsh-runner/dsh-money-engine/data/es_deadlines_strict.json
+rendered: 12 rows (free 6 / paid 6) via 本文の締切記載を機械検証（根拠文つき）

@@ -69,9 +69,12 @@ def parse(raw: str) -> dict:
             m = re.search(rf"^{name}\s*[:：]\s*(.*)$", raw, re.M | re.I)
             if not m:
                 continue
+            head = m.group(1).strip()
             rest = raw[m.end():]
             nxt = re.search(r"^(%s)\s*[:：]" % "|".join(labels), rest, re.M | re.I)
-            return (rest[: nxt.start()] if nxt else rest).strip()
+            tail = (rest[: nxt.start()] if nxt else rest).strip()
+            # 一行形式なら head に本体があり、複数行形式なら tail にある。
+            return (head if head else tail)
         return ""
 
     t = re.search(r"^TITLE\s*[:：]\s*(.+)$", raw, re.M | re.I)

@@ -1,14 +1,14 @@
 {
- "checked_at": "2026-10-11T01:02:08+0900",
+ "checked_at": "2026-10-11T01:06:28+0900",
  "counters": {
   "store": {
    "value": 2,
-   "delta": 1,
+   "delta": 0,
    "key": "store"
   },
   "home": {
    "value": 2,
-   "delta": null,
+   "delta": 0,
    "key": "home"
   }
  }

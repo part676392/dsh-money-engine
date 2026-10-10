@@ -38,6 +38,7 @@ def main() -> int:
     scan = load("data/ai_source_scan.json", {}) or {}
     sig = load("data/selection_signals.json", {}) or {}
     q = load("data/interview_questions.json", {}) or {}
+    fl = load("data/selection_flows.json", {}) or {}
     arts = snap.get("articles", "?")
     comps = snap.get("companies", "?")
     yen = snap.get("listed_value_yen", "?")
@@ -64,6 +65,7 @@ def main() -> int:
 - [選考締切一覧]({BASE}/es-deadlines.html): 本文の締切記載を機械検証した {12} 件 (根拠文つき)
 - [選考段階の言及 {sig.get("companies_with_mentions", "?")} 社]({BASE}/selection-signals.html): 収録記事の本文プレビューから抽出した選考段階の言及集計。言及ごとに引用文つき。実測値は生成時に JSON から読む
 - [面接質問 {q.get("questions_total", "?")} 問 / {q.get("companies_with_questions", "?")} 社]({BASE}/interview-questions.html): 収録記事から抽出した質問の実文と、記事が書く面接官の意図。各件に出典URL
+- [公式選考フロー {fl.get("flows_total", "?")} 本 / {fl.get("companies_with_flows", "?")} 社]({BASE}/selection-flows.html): 順序付きの選考工程。寄せた前の工程名も JSON の raw に全件保持
 - [注文受付ページ]({BASE}/store/): カスタム執筆の価格と受け口。Service/Offer 構造化データ
 
 ## Data

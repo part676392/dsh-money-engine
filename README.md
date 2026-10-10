@@ -17,6 +17,7 @@ Live: https://part676392.github.io/dsh-money-engine ｜ 日本語のデータセ
 | AI・録上面接の検索需要 | 23 社 / 34 語（autocomplete 機械収集） |
 | 選考段階の言及 | 475 社 / 2,780 件（本文 HTML を直接取得して再抽出） |
 | 面接質問の実文 | 472 社 / 1,873 問（質問＋記事が書く面接官の意図） |
+| 公式選考フロー | 22 社 / 56 本（順序つき・寄せ前の工程名を保持） |
 
 機械可読: [`data/snapshot-latest.json`](data/snapshot-latest.json) ／ 日別履歴: [`data/history/`](data/history/)
 
@@ -28,6 +29,7 @@ Live: https://part676392.github.io/dsh-money-engine ｜ 日本語のデータセ
 - [選考締切一覧](https://part676392.github.io/dsh-money-engine/es-deadlines.html)
 - [選考段階の言及 350 社・403 件（引用つき）](https://part676392.github.io/dsh-money-engine/selection-signals.html)
 - [面接質問 1,873 問・472 社（面接官の意図つき）](https://part676392.github.io/dsh-money-engine/interview-questions.html)
+- [公式選考フロー 56 本・22 社（順序つき）](https://part676392.github.io/dsh-money-engine/selection-flows.html)
 - [注文受付（カスタム執筆・暗号決済）](https://part676392.github.io/dsh-money-engine/store/)
 
 ## 正直な制約

@@ -66,12 +66,13 @@ def parse(raw: str) -> dict:
 
     def grab(*names: str) -> str:
         for name in names:
-            m = re.search(rf"^{name}\s*[:：]\s*(.*)$", raw, re.M | re.I)
+            # [ \t] に限定しないと \s が改行を跨いで次行を本文として吞む
+            m = re.search(rf"^{name}[ \t]*[:：][ \t]*(.*)$", raw, re.M | re.I)
             if not m:
                 continue
             head = m.group(1).strip()
             rest = raw[m.end():]
-            nxt = re.search(r"^(%s)\s*[:：]" % "|".join(labels), rest, re.M | re.I)
+            nxt = re.search(r"^(%s)[ \t]*[:：]" % "|".join(labels), rest, re.M | re.I)
             tail = (rest[: nxt.start()] if nxt else rest).strip()
             # 一行形式なら head に本体があり、複数行形式なら tail にある。
             return (head if head else tail)

@@ -194,7 +194,7 @@ ul{{font-size:.85rem}} li{{margin:5px 0}}
 <div class="cta"><b>この形で届きます</b>: <a href="exports/sample_dossier.csv">sample_dossier.csv</a>
 （UTF-8 BOM 付き／縦長1行1記録／列は <code>company, record_type, index, content, interviewer_intent, step_category, source_url, source_price_yen</code>）<br>
 見積り・注文のしかたは <a href="data-license.html">データ資産の購入</a> に書いてあります。
-今この頁にある {rows} 行ぶんが、paid 版では <b>〜50社で $15</b> です。</div>
+まず1社ぶんだけ試すなら <b>$5</b>、この頁ぶん（3社ぶん・{rows} 行）をまとめた形なら <b>〜50社で $15</b> です。</div>
 
 {''.join(blocks)}
 

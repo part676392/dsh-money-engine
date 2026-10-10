@@ -26,8 +26,15 @@ DATA = ROOT / "data"
 EXPORTS = ROOT / "exports"
 
 # 企業数で決まる料金 (作った実績: 抽出は機械工程なので人数ではなく社数で切る)
-TIER = [(50, 15), (150, 35), (100000, 60)]
+# 1社 $5 を先頭に足した: 冷たい流入にとって $15 は「合うか分からないものへの初回」としては
+# 高い。まず1社ぶん Actual を見てもらう入口 (実測で访问自体が薄いので入口は低い方が有利)。
+TIER = [(1, 5), (50, 15), (150, 35), (100000, 60)]
 HISTORY_USD = 25
+
+
+def tier_label(t: int) -> str:
+    return "1社だけ試す" if t == 1 else (
+        "カスタム抽出 全社ぶん" if t >= 100000 else f"カスタム抽出 〜{t}社")
 
 
 
@@ -101,9 +108,9 @@ def main() -> int:
     if hist_rows:
         hist_span = f"{hist_rows[0].get('captured_at')} → {hist_rows[-1].get('captured_at')}"
 
-    offers = [{"@type": "Offer", "name": f"カスタム抽出 〜{t}社", "price": p,
+    offers = [{"@type": "Offer", "name": tier_label(t), "price": p,
                "priceCurrency": "USD", "category": "custom-extraction",
-               "description": (f"指定した最大 {t} 社ぶんを抽出して CSV で納品。"
+               "description": (f"{'1社だけ' if t == 1 else '指定した最大 ' + str(t) + ' 社ぶん'}を抽出して CSV で納品。"
                                "納品は公開URL (この環境は受信専用で外送信できないため)。")}
               for t, p in TIER]
     offers.append({"@type": "Offer", "name": "歴史スナップショット一式", "price": HISTORY_USD,
@@ -148,9 +155,13 @@ def main() -> int:
     }, ensure_ascii=False, indent=1)
 
     tier_rows = "\n".join(
-        f"<tr><td>カスタム抽出 〜{t if t < 100000 else comps}社</td>"
-        f"<td>${p}</td><td>指定した企業群だけを抽出した CSV。"
-        f"質問実文・面接官の意図・選考フロー・段階言及から選んだ列</td></tr>"
+        f"<tr><td>{esc(tier_label(t))}</td>"
+        f"<td>${p}</td><td>"
+        + ("まずは1社ぶん。質問実文・面接官の意図・選考フロー・段階言及を1社のCSVで。"
+           "合う形かを確認してから上の段に進めます。" if t == 1 else
+           "指定した企業群だけを抽出した CSV。"
+           "質問実文・面接官の意図・選考フロー・段階言及から選んだ列")
+        + "</td></tr>"
         for t, p in TIER) + (
         f"\n<tr><td>歴史スナップショット一式</td><td>${HISTORY_USD}</td>"
         f"<td>tag 付きで積んだ日付つき CSV 全部と、回数の差分一覧 "
@@ -239,7 +250,7 @@ CSV 行数: 面接質問 {rows['interview_questions.csv']:,} ／ 選考フロー
     OUT.write_text(doc, encoding="utf-8")
     print(f"  wrote data-license.html ({len(doc):,} bytes)")
     print(f"  数字: 記事={arts} 企業={comps} 質問={nq} フロー={nf}({nfc}社) 段階={ns}社 締切={n_dead}")
-    print(f"  料金: " + ", ".join(f"〜{t if t<100000 else comps}社=${p}" for t, p in TIER)
+    print(f"  料金: " + ", ".join(f"{tier_label(t) if t != 100000 else str(comps)+'社'}=${p}" for t, p in TIER)
           + f", 履歴一式=${HISTORY_USD}")
     print(f"  納品形: 公開URL (外送信不可) / 受信箱={inbox or 'なし'} / 送金先={'あり' if addr else 'なし'}")
     return 0

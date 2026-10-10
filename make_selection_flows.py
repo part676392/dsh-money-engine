@@ -212,7 +212,10 @@ th{{background:#efeee9;font-weight:600}} a{{color:#7a5230}}
 .note{{font-size:.8rem;color:#6d675e;margin-top:24px}}
 </style></head><main>
 <h1>企業の公式選考フロー {total_flows} 本・{len(per_company)} 社</h1>
-<p class="sub">収録記事 {len(full)} 本の本文から、記事が公式ページに引いた «選考の流れ：… → …» を機械抽出して順序付きに整理しました。</p>
+<p class="sub">収録記事 {len(full)} 本の本文から、記事が公式ページに引いた «選考の流れ：… → …» を機械抽出して順序付きに整理しました。
+うち <b>{sum(len(v) for v in per_company.values())} 本</b>を表に載せています（{len(per_company)} 社に割当）。
+残りの {total_flows - sum(len(v) for v in per_company.values())} 本は表題から企業を特定できなかったもので、
+<a href="data/selection_flows.json">JSON</a> の全 {total_flows} 本側に入っています。</p>
 
 <div class="caution"><strong>この頁の数字の出し方。</strong>
 工程名はこちらで正規カテゴリに寄せています（例 «SPI試験(WEB)» → 適性検査）。寄せた<b>前の表記</b>は

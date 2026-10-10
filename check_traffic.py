@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import json
+import re
 import pathlib
 import subprocess
 import time
@@ -23,6 +24,8 @@ ROOT = pathlib.Path(__file__).resolve().parent
 HIST = ROOT / "data" / "traffic"
 BASE = "https://abacus.jasoncameron.dev"
 KEYS = {"store": "store", "home": "home", "mini": "mini", "license": "license"}
+UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+       "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
 SITE = "https://part676392.github.io/dsh-money-engine"
 
 
@@ -87,6 +90,44 @@ def main() -> int:
             print("  ★ live の頁に ?src= を読む JS が無い (流入源が測れない)")
     except Exception as e:  # noqa: BLE001
         print(f"  pixel check failed: {str(e)[:60]}")
+
+    # JS を実際に走らせて発火先を見る。文字列照合は「有る」までで「叩く」を証明しない。
+    # (実測: curl では計上されない = JS を実行するクライアントだけが計上される)
+    import shutil as _sh
+    node = _sh.which("node")
+    tgt = {"question-lineups.html": "lineup", "store/": "store", "sample.html": "sample"}
+    if node:
+        ok = True
+        for path, key in tgt.items():
+            u = SITE.rstrip("/") + "/" + path
+            r = subprocess.run(["curl", "-s", "--max-time", "30", "-A", UA, u],
+                               capture_output=True, text=True, timeout=45)
+            m = re.findall(r"<script>\(function\(\).*?</script>", r.stdout, re.S)
+            if not m:
+                print(f"    tracker exec {path:20s} ★ script が無い")
+                ok = False
+                continue
+            js = m[0][len("<script>"):-len("</script>")]
+            probe = "pr32" if "lineup" in key else "ghrepo"
+            src = ("globalThis.__h=[];globalThis.fetch=function(u,o){globalThis.__h.push(String(u));"
+                   "return {then(){},catch(){}};};globalThis.location={search:'?src=" + probe + "'};\n"
+                   + js + "\nconsole.log(JSON.stringify(globalThis.__h));\n")
+            tmp = pathlib.Path("/tmp/_tracker_check.js")
+            tmp.write_text(src, encoding="utf-8")
+            rr = subprocess.run([node, str(tmp)], capture_output=True, text=True, timeout=45)
+            try:
+                hits = json.loads(rr.stdout.strip().splitlines()[-1])
+            except Exception:  # noqa: BLE001
+                hits = []
+            want = [f"/hit/dsh-money-engine/{key}", f"/hit/dsh-money-engine/src-{probe}"]
+            good = all(any(w in g for g in hits) for w in want)
+            ok = ok and good
+            print(f"    tracker exec {path:20s} {'発火 OK' if good else '★ 発火せず'}  "
+                  + str([g.split('/hit/dsh-money-engine/')[-1] for g in hits]))
+        if not ok:
+            print("  ★ tracker の発火が証明できない (頁か JS が壊れている)")
+    else:
+        print("    tracker exec        : node が無いので実行検査は省略")
     return 0
 
 

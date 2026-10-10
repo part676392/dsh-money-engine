@@ -34,3 +34,13 @@ dist/
 
 # git に書き戻されない目撃者 (run の開始/終了)
 logs/runs.jsonl
+# 派生の「最新」だけを入れるファイル。dev と runner が同じ行を上書きして
+# pull --rebase を紛争させる (2026-10-11 実測)。日付付きファイルが本体なので追跡を外す。
+data/orders/latest.json
+data/payments/latest.json
+data/indexation_latest.json
+data/rails/money_latest.json
+data/rails/guards_latest.json
+data/rails/published_latest.json
+data/rails/last_release.json
+data/traffic/latest.json

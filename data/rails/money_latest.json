@@ -1,0 +1,34 @@
+{
+ "checked_at": "2026-10-11T02:20:29+0900",
+ "pages": {
+  "store/": {
+   "bytes": 8301,
+   "prices": [
+    6
+   ],
+   "inbox": true,
+   "wallet": true,
+   "how_to_pay": true,
+   "words_stated": false
+  },
+  "store/mini.html": {
+   "bytes": 7612,
+   "prices": [
+    3,
+    6,
+    9
+   ],
+   "inbox": true,
+   "wallet": true,
+   "how_to_pay": true,
+   "words_stated": true
+  }
+ },
+ "parser_tiers": {
+  "700": 3,
+  "1500": 6,
+  "2500": 9
+ },
+ "missing_tiers": [],
+ "ready": true
+}

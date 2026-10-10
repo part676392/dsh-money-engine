@@ -172,7 +172,7 @@ def main() -> None:
     doc = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(p['title'])} — custom explicit fiction</title>
-<meta name="description" content="Paid custom adult short fiction. Read the free preview, then send your specification. ${PRICE_USD} per scene, delivered as a file.">
+<meta name="description" content="Paid custom adult short fiction, about 1,500 words. Read the free preview, then send your specification. ${PRICE_USD} per scene, delivered as a file.">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://part676392.github.io/dsh-money-engine/store/">
 <meta name="rating" content="adult">
@@ -204,7 +204,9 @@ a{{color:#f0c98a}}
   <ul>
     <li>You send a specification: characters, situation, tone, hard limits.</li>
     <li>You get a finished scene as a text file. <b>{TURNAROUND_MIN} minutes</b> typical turnaround.</li>
-    <li><span class="price">${PRICE_USD}</span> per scene, paid in crypto before delivery.</li>
+    <li><span class="price">${PRICE_USD}</span> per scene — <b>about 1,500 words</b>, one continuous
+        explicit scene. Paid in crypto before delivery.</li>
+    <li>Shorter or longer is fine: 700 words 3 USD, 1,500 words 6 USD, 2,500 words 9 USD.</li>
     <li>One free revision if a stated limit was missed.</li>
   </ul>
   <p style="font-size:.86rem;margin:12px 0 4px"><b>1. Send your specification by email:</b></p>

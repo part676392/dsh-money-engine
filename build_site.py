@@ -222,6 +222,8 @@ tr:hover td{{background:#fbfcfd}}
 a{{color:#1a5fd6;text-decoration:none}}a:hover{{text-decoration:underline}}
 input{{width:100%;padding:10px;border:1px solid #cfd6df;border-radius:8px;font-size:.95rem;margin:16px 0 4px;box-sizing:border-box}}
 .note{{font-size:.78rem;color:#6b7480;margin-top:22px;border-top:1px solid #e3e7ed;padding-top:12px}}
+a.dead{{display:block;background:#d0452c;color:#fff;padding:10px 14px;border-radius:8px;margin:14px 0 0;font-size:.9rem;text-decoration:none}}
+a.dead:hover{{background:#b93a24;text-decoration:none}}
 code{{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.85em}}
 .free{{background:#fff;border:1px solid #cfe3c8;border-left:4px solid #3f9d3f;border-radius:9px;padding:14px 16px;margin:18px 0}}.free h2{{font-size:1rem;margin:0 0 8px}}.free h2 small{{font-weight:400;color:#5a6472;font-size:.78rem}}.free ul{{margin:0;padding-left:18px;font-size:.85rem}}.free li{{margin:6px 0}}.demand{{background:#fff;border:1px solid #cdd9ea;border-left:4px solid #2f6fbf;border-radius:9px;padding:14px 16px;margin:18px 0}}
 .demand h2{{font-size:1rem;margin:0 0 8px}}.demand h2 small{{font-weight:400;color:#5a6472;font-size:.78rem}}
@@ -234,6 +236,7 @@ code{{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.85em}}
 .lk{{font-size:.74rem;background:#e8f5e6;color:#256b25;padding:1px 6px;border-radius:20px;margin-left:6px}}.d{{font-size:.74rem;color:#6b7480;margin-left:6px}}
 </style></head><body><main>
 <h1>転職・新卒 選考対策 目録データベース</h1>
+<a class="dead" href="es-deadlines.html">⏰ <b>28卒 コンサル ES 締切一覧</b> — 締切前の案件を日付順に。無料で読める書き方ガイド付き</a>
 <p class="sub">志望企業の面接対策資料が「あるか無いか」を即答する検索窓。<b>{snapshot['captured_at']}</b> 時点・毎日自動更新</p>
 <div class="cards">
 <div class="c"><b>{len(recs)}</b><span>登録資料</span></div>

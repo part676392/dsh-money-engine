@@ -24,6 +24,7 @@ OUT = ROOT / "ai-interviews.html"
 SITE = "https://part676392.github.io/dsh-money-engine"
 DEMAND = ROOT / "data" / "ai_interview_demand.json"
 GAP = ROOT / "data" / "ai_gap_audit.json"
+SRC = ROOT / "data" / "ai_verified_sources.json"
 
 
 def esc(s: object) -> str:
@@ -69,6 +70,46 @@ def assert_check(doc: str) -> list:
             i = m.start()
             bad.append(f"{m.group(0)} «…{doc[max(0,i-18):i+14]}…»")
     return bad
+
+
+H2 = ('<h2 style="font-size:.98rem;margin:26px 0 8px;'
+      'border-bottom:1px solid #ddd8cf;padding-bottom:5px">')
+
+
+def source_block() -> str:
+    """導入を裏取る発表が実際に取れた社だけを出す.
+
+    発表の主体 (企業自身かベンダー側か) を必ず列に書く。
+    「実施しています」の断定を避け、取れた文書そのものを見せる形にする。
+    """
+    if not SRC.exists():
+        return (H2 + "実施を裏取る発表</h2><p style=\"font-size:.88rem\">"
+                "現時点で、この一覧の企業について導入を裏取る発表を取れていません。</p>")
+    raw = json.loads(SRC.read_text(encoding="utf-8"))
+    srcs = raw if isinstance(raw, list) else [raw]
+    if not srcs:
+        return (H2 + "実施を裏取る発表</h2><p style=\"font-size:.88rem\">"
+                "現時点で、この一覧の企業について導入を裏取る発表を取れていません。</p>")
+    rows = []
+    for x in srcs:
+        rows.append(
+            "<tr><td>" + esc(x.get("company")) + "</td>"
+            "<td>" + esc(x.get("title")) + "</td>"
+            "<td>" + esc(x.get("publisher")) + "</td>"
+            "<td>" + esc(x.get("date")) + "</td>"
+            + '<td><a href="' + esc(x.get("url"))
+            + '" rel="nofollow noopener">発表</a></td></tr>'
+        )
+    return (
+        H2 + "実施を裏取る発表</h2>"
+        "<p style=\"font-size:.88rem\">上の表とは別に、<strong>導入を述べる文書が実際に取得できた企業"
+        "</strong>をここに置きます。ここにある社だけは「確定できない」の側ではありません。"
+        "ただし発表の主体（企業自身か、ツールを提供する側か）を列に書いてあるので、"
+        "読む前にそこを確認してください。</p>"
+        "<table><thead><tr><th>企業</th><th>発表タイトル</th><th"
+        ">発表元</th><th>日付</th><th></th></tr></thead><tbody>"
+        + "\n".join(rows) + "</tbody></table>"
+    )
 
 
 def main() -> int:
@@ -174,9 +215,11 @@ a{{color:#7a5230}}
 {chr(10).join(rows)}
 </tbody></table>
 
+{source_block()}
+
 <h2 style="font-size:.98rem;margin:26px 0 8px;border-bottom:1px solid #ddd8cf;padding-bottom:5px">被覆の現実</h2>
 <p style="font-size:.88rem">目録に収めた記事 {checked} 本を機械走査した結果、AI 面接に触れていたのは {mention} 本、
-それは {covered} 社分だけでした（表の「目録内のAI項」は会社ページに付けた節の数で、記事本文の記述ではありません。この頁が問題にしているのは本文側の被覆です）。<strong>{n} 社分の需要に対して、受け口が圧倒的に足りない</strong>のが実測です。
+それは {covered} 社分だけでした（表の「会社ページのAI節」は需要語から自動生成した節の数で、記事本文の記述ではありません。この頁が問題にしているのは本文側の被覆です）。<strong>{n} 社分の需要に対して、受け口が圧倒的に足りない</strong>のが実測です。
 この頁はそこを埋めるために、需要側だけで作りました。</p>
 
 <p class="note">更新: {today}　収集: 主要検索エンジンのキーワード候補を正規化して企業名を含む語のみ抽出。人手の推測は含みません。<br>

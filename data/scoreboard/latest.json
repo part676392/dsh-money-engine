@@ -1,35 +1,41 @@
 {
- "checked_at": "2026-10-11T03:53:09+0900",
+ "checked_at": "2026-10-11T03:58:56+0900",
  "site": "part676392.github.io/dsh-money-engine",
  "queries": {
   "site_query": {
    "http_ok": true,
-   "organic_count": 6,
+   "organic_count": 3,
    "domains": [
-    "proscons.co.jp",
-    "proscons.co.jp",
-    "storage.proscons.co.jp",
-    "proscons.co.jp",
-    "proscons.co.jp",
-    "proscons.co.jp"
+    "kls-jp.com",
+    "kls-jp.com",
+    "kls-jp.com"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": "7",
+   "reported_total": "9",
    "blocked": false,
    "query": "site:part676392.github.io/dsh-money-engine"
   },
   "brand": {
    "http_ok": true,
-   "organic_count": 1,
+   "organic_count": 10,
    "domains": [
-    "speedtest.gate02.ne.jp"
+    "bing.com",
+    "in.bing.com",
+    "bing.com",
+    "bing.com",
+    "blogs.bing.com",
+    "blogs.bing.com",
+    "bing.com",
+    "bing.com",
+    "bing.com",
+    "ru.bing.com"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": "50",
+   "reported_total": null,
    "blocked": false,
    "query": "選考対策 目録データベース"
   },
@@ -84,20 +90,20 @@
    "organic_count": 10,
    "domains": [
     "youtube.com",
+    "ferc.jp",
+    "note.com",
+    "hiyoko-lab.com",
     "youtube.com",
-    "youtube.com",
-    "youtube.com",
-    "music.youtube.com",
-    "ja.wikipedia.org",
-    "ja.wikipedia.org",
-    "music.youtube.com",
-    "play.google.com",
-    "yutura.net"
+    "detail.chiebukuro.yahoo.co.jp",
+    "note.com",
+    "x.com",
+    "w.atwiki.jp",
+    "streetfighter.com"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": "2,240,000",
+   "reported_total": "1,490",
    "blocked": false,
    "query": "\"選考ステージ指定\""
   },
@@ -105,21 +111,21 @@
    "http_ok": true,
    "organic_count": 10,
    "domains": [
-    "mens.musee-pla.com",
-    "mens.musee-pla.com",
-    "mens.musee-pla.com",
-    "mens.musee-pla.com",
-    "mens.musee-pla.com",
-    "mens.musee-pla.com",
-    "mens.musee-pla.com",
-    "mens.musee-pla.com",
-    "mens.musee-pla.com",
-    "mens.musee-pla.com"
+    "support.google.com",
+    "support.google.com",
+    "zhihu.com",
+    "zhihu.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com"
    ],
    "our_hits": [],
    "our_links_on_page": 0,
    "parser_alive": true,
-   "reported_total": "50",
+   "reported_total": "59",
    "blocked": false,
    "query": "\"After-Hours Spin Cycle\""
   },

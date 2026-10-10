@@ -1,5 +1,5 @@
 {
- "checked_at": "2026-10-11T03:52:55+0900",
+ "checked_at": "2026-10-11T03:58:42+0900",
  "control": {
   "q": "DeepSeek Harness",
   "must_contain": [
@@ -40,7 +40,7 @@
     "企業×列": {
      "query": "大林組 選考フロー site:part676392.github.io",
      "http": "200",
-     "cites": 10,
+     "cites": 20,
      "ours": 0,
      "ours_urls": [],
      "filler_only": true

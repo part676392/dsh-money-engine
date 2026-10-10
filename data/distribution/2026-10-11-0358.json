@@ -1,0 +1,37 @@
+{
+ "checked_at": "2026-10-11T03:58:37+0900",
+ "surfaces": {
+  "gist": {
+   "url": "https://gist.github.com/part676392/8f51111c9ac743c672cf3a04ed863fcf",
+   "bytes": 109176,
+   "http": 200,
+   "ok": true,
+   "missing": [],
+   "rate_limited": false
+  },
+  "rentry_v2": {
+   "url": "https://rentry.co/4n73c73h",
+   "bytes": 14224,
+   "http": 200,
+   "ok": true,
+   "missing": [],
+   "rate_limited": false
+  },
+  "rentry_v3": {
+   "url": "https://rentry.co/x4piimss",
+   "bytes": 14034,
+   "http": 200,
+   "ok": true,
+   "missing": [],
+   "rate_limited": false
+  },
+  "dpaste": {
+   "url": "https://dpaste.com/EQKXKAGQW",
+   "bytes": 27993,
+   "http": 200,
+   "ok": true,
+   "missing": [],
+   "rate_limited": false
+  }
+ }
+}

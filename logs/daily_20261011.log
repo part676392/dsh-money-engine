@@ -846,3 +846,101 @@ built: index.html + 491 company pages
 
 saved /Users/moherune/Documents/deepseek-harness/default-workspace/dsh-money-engine/data/es_deadlines_strict.json
 rendered: 12 rows (free 6 / paid 6) via 本文の締切記載を機械検証（根拠文つき）
+  pushed
+  pages build triggered
+  indexnow api.indexnow.org/indexnow  200 (48 urls)
+  indexnow www.bing.com/indexnow      200 (48 urls)
+      https://rentry.co/4n73c73h
+  ✓ rentry_v3  bytes= 14034 http=200 ok=True
+      https://rentry.co/x4piimss
+  ✓ dpaste     bytes= 27993 http=200 ok=True
+      https://dpaste.com/EQKXKAGQW
+
+  all surfaces live: True
+  store  hits=2
+  home   hits=2
+
+  site: https://part676392.github.io/dsh-money-engine/store/  (pixel は実在する img)
+  pixel embedded in live store page: True
+        site 限定          cites=10 ours=0  埋め草のみ (該当ゼロ)
+        固有語 (誌名)         cites=10 ours=0  埋め草のみ (該当ゼロ)
+        固有語 (頁見出)        cites=10 ours=0  埋め草のみ (該当ゼロ)
+        企業×列             cites=20 ours=0  埋め草のみ (該当ゼロ)
+      verdict: NOT INDEXED
+    mojeek          HTTP=200 制御 ✗ (cites=8) first=https://mastodon.social/@Mojeek
+      ★ 制御が応答しない → この engine の 0 は測定不能の意味
+    ddg_html        HTTP=202 制御 ✗ (cites=2) first=https://duckduckgo.com/
+      ★ 制御が応答しない → この engine の 0 は測定不能の意味
+    marginalia_lite HTTP=000 制御 ✗ (cites=0) first=—
+      ★ 制御が応答しない → この engine の 0 は測定不能の意味
+
+  engines: {'bing': 'NOT INDEXED', 'mojeek': 'ORACLE DEAD', 'ddg_html': 'ORACLE DEAD', 'marginalia_lite': 'ORACLE DEAD'}
+  索引されてはいないが、計器は生きている (NOT INDEXED が正しい読値)
+  base      0.000000 ETH
+  arbitrum  0.000000 ETH
+  polygon   0.000000 ETH
+  optimism  0.000000 ETH
+
+  no incoming movement. rpc ok=4/4 total=0.000000 ETH
+  inbox: 0 message(s), unseen: 0
+  no new orders yet.
+    ✓ 質問だけで注文ではない            order=False words=None price=None spec=- pay=False
+    ✓ スパム (暗号通貨の便乗)          order=False words=None price=None spec=limits pay=False
+  parser self-test: 4/4 PASS
+  crypto  : 3/4 rpc  total=0.0 ETH  no movement
+  gumroad : http=200 price=¥950  CLOSED — payout not connected
+      https://gumroad.com/l/bopcg
+    store/            8,481B  prices=[3, 6, 9] inbox=True wallet=True pay_steps=True words=True
+    store/mini.html   7,612B  prices=[3, 6, 9] inbox=True wallet=True pay_steps=True words=True
+  parser tiers: {700: 3, 1500: 6, 2500: 9}
+  公開価格の突合: PASS
+
+  money pages ready: True
+  scanned tracked files: 487 / 982
+  secret-like hits     : 0
+  outbox files         : 21  gitignore 未覆: 0 (公開決めてる原稿 5 は除外して数える)
+
+  no secret in public repo: True
+  hn     blocked   attempted_as=dshlaba71655 creation_disabled=False message=That username is taken. Please choose another. logged_in=False open=False
+  devto  blocked   email_form=True captcha_present=True open=False
+  qiita  blocked   email_form=True captcha_present=True open=False
+  reddit blocked   attempted_at=2026-10-10T18:50:36.677Z username=dshlab59z21s verdict=UNKNOWN recaptcha_enterprise=True open=False blocked_by=reCAPTCHA Enterprise
+
+  opened: none — 人間が一度 captcha を押せば開く場所が5つ
+TOTAL our-links visible on Bing: 0
+parser self-check (must be True): True
+PHRASE PROBE ours (the only real indexation proof): 0
+  本文長: min=243 中央値=3564 p90=3969 max=7509
+  API の 240 字に対して 14.8 倍の本文
+  今回: ok=9 fail=0 (8s)
+  wrote interview-questions.html (208,276 bytes) + interview_questions.json
+  scanned=600 full_body=591 questions=1873 companies=472
+    ★ 株式会社ディスコ: 64問  「ディスコの面接で、志望動機を話し終えた直後にこう返されたら、あなたは何と答えますか。」
+    ★ 東日本旅客鉄道株式会社: 30問  「JR東日本の面接で、志望動機を話し終えた直後にこう返されたら、あなたは何と答えますか。」
+    ★ NTT西日本株式会社: 21問  「光回線や映像サービスを扱う会社は多いなかで、なぜNTT西日本でマーケティングをしたいのですか」
+  wrote selection-flows.html (10,374 bytes) + selection_flows.json
+  scanned=600 flows=56 companies=22 語り残骸=0
+  面接回数分布: <b>0回（フローの文に面接語が無く数えられない）</b>: 6本　<b>1回</b>: 5本　<b>2回</b>: 20本　<b>3回</b>: 1本
+    ★ NTTデータ: 書類選考 → 面接（複数回・予定）＋適性検査
+    ★ オムロン株式会社: 書類選考 → 一次面接 → 二次面接
+    ★ カルビー株式会社: 書類選考 → 面接（複数回）
+  articles=600 companies=475 mentions=2780 quotes=2021
+  top stages: 書類選考=1313, 最終面接=651, 一次面接=299, 適性検査=254, 二次面接=179
+  body 長分布: {3524: 4, 3541: 4, 3856: 3}
+  wrote ai-interviews.html (14,378 bytes)
+  companies=23 terms=34 目録内にAI項を持つ社=22 断言検査=PASS
+  wrote changes.html (4,838 bytes)  days=2  traffic keys=['store', 'home']
+  wrote llms.txt (2,152 bytes)  llms-full.txt (9,533 bytes)
+  numbers: articles=600 companies=491 ai_companies=23 terms=34 card=created, product $6 live, blocked on payout connection
+built: index.html + 491 company pages
+  articles=600 companies=491 free=11 listed=¥1,205,920
+  types              : FAQPage=492, Dataset=6, ItemList=2, Service=2
+  JSON-LD parse fail : 0
+  files w/o JSON-LD  : 0
+  missing required   : 0
+  missing canonical  : 0
+  missing meta robots: 0
+  titles over 70   : 0
+  internal links     : 533 checked, 0 broken (0 distinct targets)
+
+  AEO claim holds: True

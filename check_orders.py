@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import base64
 import json
+import re
+import sys
 import pathlib
 import subprocess
 import time
@@ -67,7 +69,109 @@ def seen_ids() -> set:
     return set()
 
 
+TIERS = {700: 3, 1500: 6, 2500: 9}
+SPEC_KEYS = {
+    "characters": ("character", "characters", "protagonist", "二人", "主人公"),
+    "setting": ("setting", "scene", "place", "laundromat", "office", "舞台"),
+    "tone": ("tone", "mood", "steamy", "romantic", "rough", " tender", "雰囲気"),
+    "limits": ("limit", "hard limit", "no ", "don't", "avoid", "禁止", "苦手"),
+    "length": ("words", "word count", "語", "文字"),
+}
+PAY_WORDS = ("paid", "pay ", "payment", "i pay", "sending", "sent", "tx", "tx hash",
+             "transfer", "usdc", "eth", "base",
+             "送金", "支払った", "支払済み", "振り込み")
+ORDER_WORDS = ("order", "commission", "i want", "i'd like", "please write", "request",
+               "依頼", "注文", "お願い", "頼みたい")
+WRITING_WORDS = ("words", "word count", "scene", "story", "piece", "draft", "fiction",
+                 "manuscript", "writing", "written", "write", "ever", "ering",
+                 "原稿", "執筆", "話", "シーン", "文字")
+
+
+def parse_order(text: str) -> dict:
+    """受注メールらしき本文から取れる物だけ取る.
+
+    取れない欄は空で出す。勝手に埋めないのが約束。
+    """
+    t = " ".join((text or "").split())
+    low = t.lower()
+    words = [int(w) for w in re.findall(r"(\d{3,5})\s*(?:words|word|語|文字)", low)]
+    tier = None
+    # まずasciiな語数指定を厳密に拾う。外れたら一番近い段に寄せるが、
+    # 寄せたことは zone に残す (勝手に確定扱いしない)。
+    tier_zone = "exact"
+    for w in sorted(words, reverse=True):
+        if w in TIERS:
+            tier = w
+            break
+    if tier is None and words:
+        tier = min(TIERS, key=lambda k: abs(k - words[0]))
+        tier_zone = "nearest"
+    price = None
+    pm = re.search(r"(?:usd|\$|ドル)\s*([0-9]+(?:\.[0-9]+)?)", low)
+    if pm:
+        price = float(pm.group(1))
+    elif tier:
+        price = TIERS[tier]
+    spec = {k: True for k, keys in SPEC_KEYS.items() if any(x in low for x in keys)}
+    pay = any(w in low for w in PAY_WORDS)
+    order_word = any(w in low for w in ORDER_WORDS)
+    # 意図語だけだと "buy cheap followers" の様な販促が全部受注になる (self-test で実測)。
+    # 執筆物の気配を重ねて要求する。
+    writing = any(w in low for w in WRITING_WORDS)
+    order = (order_word and writing) or pay or (tier is not None and tier_zone == "exact")
+    tx = re.search(r"\b0x[0-9a-f]{16,}\b", low)
+    return {
+        "looks_like_order": order or pay or bool(tier),
+        "requested_words": tier,
+        "tier_zone": tier_zone,
+        "price_usd": price,
+        "spec_sections": sorted(spec.keys()),
+        "payment_claimed": pay,
+        "tx_hash": (tx.group(0) if tx else None),
+        "chars": len(t),
+    }
+
+
+FIXTURES = [
+    {"name": "本物の受注 (英語)",
+     "text": ("Hi, I'd like to order 1500 words. Characters: two rivals stuck in a "
+              "laundromat. Setting: 2am, rain. Tone: slow burn, steamy. Hard limits: no "
+              "minors, no non-con. I will pay 6 USD to your address."),
+     "expect": {"looks_like_order": True, "requested_words": 1500, "price_usd": 6.0,
+                "payment_claimed": True}},
+    {"name": "支払い報告 (tx あり)",
+     "text": ("Paid. Sent USDC on Base, tx 0x9f2b4c7de1a3f58b0c47e2d16a8593f0b1c7d4e2. "
+              "Looking forward to the 700 words scene."),
+     "expect": {"looks_like_order": True, "requested_words": 700, "payment_claimed": True}},
+    {"name": "質問だけで注文ではない",
+     "text": "Do you take requests? What formats can you deliver in?",
+     "expect": {"looks_like_order": False, "payment_claimed": False}},
+    {"name": "スパム (暗号通貨の便乗)",
+     "text": "HOT: buy cheap followers now, click here limited offer today only",
+     "expect": {"looks_like_order": False}},
+]
+
+
+def selftest() -> int:
+    ok = 0
+    print("  parser self-test (実メール不要の巡回):")
+    for fx in FIXTURES:
+        got = parse_order(fx["text"])
+        bad = {k: (v, got.get(k)) for k, v in fx["expect"].items() if got.get(k) != v}
+        flag = "✓" if not bad else "✗"
+        if not bad:
+            ok += 1
+        line = (f"    {flag} {fx['name']:22s} order={got['looks_like_order']} "
+                f"words={got['requested_words']} price={got['price_usd']} "
+                f"spec={','.join(got['spec_sections']) or '-'} pay={got['payment_claimed']}")
+        print(line + (f"   ★ 不一致 {bad}" if bad else ""))
+    print(f"  parser self-test: {ok}/{len(FIXTURES)} PASS")
+    return 0 if ok == len(FIXTURES) else 1
+
+
 def main() -> int:
+    if "--selftest" in sys.argv:
+        return selftest()
     if not CRED.exists():
         print("  no mailtm.json")
         return 0
@@ -97,16 +201,24 @@ def main() -> int:
                 pass
             import re as _re
             text = _re.sub(r"<[^>]+>", " ", raw)
+        parsed = parse_order(text)
         rec = {
             "id": m.get("id"),
             "from": (m.get("from") or {}).get("address"),
             "subject": m.get("subject"),
             "received": m.get("createdAt"),
             "intro": " ".join(text.split())[:280],
+            **parsed,
         }
-        orders.append(rec)
-        print(f"  ★ ORDER from {rec['from']}  «{rec['subject']}»")
-        print(f"          {rec['intro'][:150]}")
+        # 本文が空 / 受注の気配が無いものは受注として数えない (ダッシュボード汚染防止)。
+        if parsed["looks_like_order"] or text.strip():
+            orders.append(rec)
+        if parsed["looks_like_order"]:
+            print(f"  ★ ORDER from {rec['from']}  «{rec['subject']}»")
+            print(f"          words={parsed['requested_words']} ({parsed['tier_zone']}) "
+                  f"price=${parsed['price_usd']} pay={parsed['payment_claimed']} "
+                  f"spec={','.join(parsed['spec_sections']) or '-'}")
+            print(f"          {rec['intro'][:150]}")
 
     seen |= {m["id"] for m in msgs}
     (HIST / "seen.json").write_text(json.dumps(sorted(seen)), encoding="utf-8")

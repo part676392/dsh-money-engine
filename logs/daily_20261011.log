@@ -33,3 +33,8 @@ TOTAL our-links visible on Bing: 0
 parser self-check (must be True): True
 PHRASE PROBE ours (the only real indexation proof): 0
 ===== 2026-10-11 01:02:29 end =====
+===== 2026-10-11 01:05:20 start =====
+  2026-10-29  残り 19日      🆓 アビームコンサルティング             「締切: 2026年10月29日」
+
+saved /Users/moherune/Documents/deepseek-harness/default-workspace/dsh-money-engine/data/es_deadlines_strict.json
+rendered: 12 rows (free 6 / paid 6) via 本文の締切記載を機械検証（根拠文つき）

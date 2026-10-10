@@ -12,8 +12,6 @@ mkdir -p logs
 
   python3 extract_deadlines.py 2>&1 | tail -3
   python3 make_deadlines.py  2>&1 | tail -2
-  python3 make_changes.py       2>&1 | tail -2
-  python3 build_site.py       2>&1 | tail -2
 
   git add -A
   if ! git diff --cached --quiet; then
@@ -34,7 +32,8 @@ mkdir -p logs
 import json,sys,urllib.request,urllib.error
 key,base=sys.argv[1],sys.argv[2]
 import pathlib
-urls=[f"{base}/",f"{base}/es-deadlines.html"]
+urls=[f"{base}/",f"{base}/es-deadlines.html",f"{base}/changes.html",
+      f"{base}/store/",f"{base}/store/mini.html"]
 try:
     dem=json.load(open("data/demand_raw.json"))
     per=dem.get("per_company",{})
@@ -71,5 +70,17 @@ PY
   python3 check_payment.py 2>&1 | tail -7
   python3 check_orders.py 2>&1 | tail -6
   python3 scoreboard.py 2>&1 | tail -3
+  python3 make_changes.py       2>&1 | tail -2
+  python3 build_site.py       2>&1 | tail -2
+  # 履歴頁と計測値はここで再生成したので、二度目の commit で載せる
+  git add -A
+  if ! git diff --cached --quiet; then
+    git -c user.name="part676392" -c user.email="72697109+part676392@users.noreply.github.com" \
+        commit -qm "history refresh $(date +%F)"
+    TOK2=$(gh auth token 2>/dev/null)
+    git push -q "https://x-access-token:${TOK2}@github.com/part676392/dsh-money-engine.git" HEAD:main \
+      && echo "  history pushed" || echo "  HISTORY PUSH FAILED"
+    gh api -X POST repos/part676392/dsh-money-engine/pages/builds >/dev/null 2>&1
+  fi
   echo "===== $(date '+%F %T') end ====="
 } >> "$LOG" 2>&1

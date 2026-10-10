@@ -1,0 +1,25 @@
+{
+ "checked_at": "2026-10-11T05:25:36+0900",
+ "counters": {
+  "store": {
+   "value": 3,
+   "delta": 0,
+   "key": "store"
+  },
+  "home": {
+   "value": 3,
+   "delta": 0,
+   "key": "home"
+  },
+  "mini": {
+   "value": 1,
+   "delta": 0,
+   "key": "mini"
+  },
+  "license": {
+   "value": 3,
+   "delta": 0,
+   "key": "license"
+  }
+ }
+}

@@ -74,6 +74,7 @@ PY
   python3 check_traffic.py 2>&1 | tail -6
   python3 check_payment.py 2>&1 | tail -7
   python3 check_orders.py 2>&1 | tail -6
+  python3 check_payment_rail.py 2>&1 | tail -5
   python3 scoreboard.py 2>&1 | tail -3
   python3 make_ai_gap.py        2>&1 | tail -2
   python3 make_changes.py       2>&1 | tail -2

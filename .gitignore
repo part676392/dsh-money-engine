@@ -9,3 +9,6 @@ outbox/shots/
 outbox/wallet.json
 outbox/mailtm.json
 .ext-profile/
+outbox/mailtm-gumroad.json
+outbox/gumroad.json
+.gumroad-profile/

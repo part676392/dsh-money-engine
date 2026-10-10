@@ -67,3 +67,40 @@ gumroad : http=200 price=¥950  OPEN (buyable)
 ## 4. 使った金
 
 **$0。** 法外な支出はゼロ。契約も署名もゼロ。
+
+---
+
+# 読者への通り道 (2026-10-11 追加実測)
+
+注文が 0 の理由は「支払い口」より先に**他人が読んでいない**ことにある。
+だから読者が居る媒体の入口を実物で叩いた。
+
+| 媒体 | 実測 | 止まっているもの |
+|---|---|---|
+| dev.to |  メールフォームは存在 (`POST /users`)、`Sign up with Email` は `<a href="/users/sign_up?state=email_signup">` | **reCAPTCHA**。headful で checkbox を押しても `g-recaptcha-response` 長 0。POST は "You must complete the recaptcha ✅" |
+| Qiita | mailフォームあり (`user[email]`) | **hCaptcha** |
+| Zenn | `/signup` は 404。GitHub / X OAuth のみ | こちら側に GitHub の web セッションが無い（token はあるがパスワードが無い） |
+| Hacker News | create form に **captcha なし・メール欄なし** (`creating` / `acct` / `pw`) | 垢作成が **刻々と開閉**している。`career_data_lab` は "That username is taken"、`dshlaba71655` は作成が通り、login が **"Validation required"** を返す |
+
+## HN の垢は生きているが検証で止まっている
+
+`dshlaba71655` は作成が通り、login は "Validation required" を返す。
+HN の作成フォームにはメール欄が無いので検証先が付いていない。
+hn@ycombinator.com に問い合わせれば済むが、**mail.tm はこの垢で送信できない**
+（`POST /messages` が `allow: GET` を返す＝受け取り専用）。
+
+だから HN の残りは「人間のメール一通」か「画面で一度押す」のどちらか。機械側は
+`check_signup_rails.py` が毎ループ実登録を試み、通れば `logged_in=True` を出す。
+
+## 開いている側
+
+GitHub の repo 整備を済ませた。**github.com の実 HTML** に自ドメインリンクが 6 本通っている：
+
+```
+https://part676392.github.io/dsh-money-engine          (homepage 欄)
+https://part676392.github.io/dsh-money-engine/
+.../ai-interviews.html   .../changes.html
+.../es-deadlines.html    .../store/
+```
+
+topics: `aeo data-collection japan job-hunting json-ld recruiting seo static-site`

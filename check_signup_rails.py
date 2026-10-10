@@ -53,10 +53,14 @@ def hn() -> dict:
          "https://news.ycombinator.com/login"],
         capture_output=True, text=True, timeout=30).stdout
     low = body.lower()
+    # 理由を必ず一行で残す。「disabled じゃない＝開いてる」ではない (taken がある)。
     msg = ""
-    m = re.search(r"Sorry[^<]{0,80}", body)
+    m = re.search(r"(Sorry|That username|must be|too many)[^<]{0,80}", body)
     if m:
-        msg = m.group(0)[:80]
+        msg = m.group(0)[:90]
+    else:
+        plain = re.sub(r"<[^>]+>", " ", body)
+        msg = re.sub(r"\s+", " ", plain).strip()[:70]
     logged = "logout" in low
     return {"attempted_as": acct, "creation_disabled": "account creation disabled" in low,
             "message": msg, "logged_in": logged, "open": logged}

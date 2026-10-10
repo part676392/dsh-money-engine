@@ -1,0 +1,72 @@
+{
+ "checked_at": "2026-10-10T23:48:14+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "urayasu-fighters.jimdofree.com",
+    "urayasu-fighters.jimdofree.com",
+    "urayasu-fighters.jimdofree.com",
+    "urayasu-fighters.jimdofree.com",
+    "urayasu-fighters.jimdofree.com",
+    "urayasu-fighters.jimdofree.com",
+    "instagram.com",
+    "urayasu-fighters.jimdofree.com",
+    "facebook.com",
+    "urayasu-baseball-league.jimdofree.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "102,000",
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "zhidao.baidu.com",
+    "zhidao.baidu.com",
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "70",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "meaning-difference.com",
+    "chigai-hikaku.com",
+    "doda.jp",
+    "tenshoku.mynavi.jp",
+    "kotobank.jp",
+    "next.rikunabi.com",
+    "求人ボックス.com",
+    "saiyo-doda.jp",
+    "tenshoku.mynavi.jp",
+    "imi-chigai.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "73,000",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ }
+}

@@ -21,8 +21,8 @@ OUT = ROOT / "outbox"
 MODEL = "gemini-3.8-flash-high"
 
 # 俺が書いた指示文に他の言語が混入していた事故（为何強いか / each 40字）を受けた検査。
-FORBIDDEN_IN_BRIEF = re.compile(r"[A-Za-z]{4,}|[\u4e00-\u9fff](?![぀-ゟ]")
-LANG_LEAK = re.compile(r"[A-Za-z]{3,}|[\u3040-\u30ff]*[\u4e00-\u9fff]{0,}")
+FORBIDDEN_IN_BRIEF = re.compile(r"[A-Za-z]{4,}")
+KANA = re.compile(r"[\u3041-\u30ff]")
 FACT_WORDS = ("通過率", "倍率", "合格基準", "合格水準", "社員", "社風")
 
 
@@ -81,14 +81,15 @@ BRIEF_TMPL = """日本語だけを書いてください。英語と中国語を1
 
 
 def check_brief(t: str) -> list:
-    bad = []
-    for w in re.findall(r"[A-Za-z]{4,}", t):
-        if w.lower() not in {"url", "note"}:
-            bad.append(f"英語混入:{w}")
-    return bad
+    """URL は正当な混入なので落としてから見る。"""
+    t = re.sub(r"https?://\S+", " ", t)
+    return [w for w in re.findall(r"[A-Za-z]{4,}", t) if w.lower() != "google"]
 
 
 def verify_copy(t: str) -> dict:
+    # 【検証】節はモデルの自己申告。検品対象に含めると自分の語彙を自分で拾って
+    # ALL FAIL した（アビーム事例: invented=通過率,倍率,合格基準…全部その節の語）。
+    t = re.split(r"【検証】", t)[0]
     body = "\n".join(l for l in t.splitlines() if not l.strip().startswith("http"))
     nonurl = re.sub(r"https?://\S+", "", body)
     en = [w for w in re.findall(r"[A-Za-z]{3,}", nonurl)]

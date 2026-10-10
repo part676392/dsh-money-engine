@@ -136,6 +136,32 @@ def build(d: dict) -> None:
             f"<td>{esc('、'.join(sorted({x['kind'] for x in g})))}</td><td>{links}</td></tr>"
         )
 
+
+    free_recs = [r for r in recs if r["price"] == 0]
+    free_recs.sort(key=lambda r: (-r["likes"], r["published"]), reverse=False)
+    free_recs.sort(key=lambda r: -r["likes"])
+    fl = []
+    for r in free_recs:
+        fl.append(
+            "<li><a href='%s'>%s</a><span class='lk'>%dスキ</span>"
+            "<span class='d'>%s</span></li>" % (r["url"], esc(r["title"]), r["likes"], esc(r["published"]))
+        )
+    free_block = (
+        "<div class='free'><h2>🆓 無料で読める %d 本"
+        " <small>（全 %d 本の %.1f%% / スキ数は平均 %.1f 倍）</small></h2><ul>%s</ul></div>"
+        % (
+            len(free_recs),
+            len(recs),
+            len(free_recs) / max(len(recs), 1) * 100,
+            (sum(r["likes"] for r in free_recs) / max(len(free_recs), 1))
+            / max(
+                sum(r["likes"] for r in recs if r["price"]) / max(sum(1 for r in recs if r["price"]), 1),
+                0.01,
+            ),
+            "".join(fl),
+        )
+    )
+
     ld = {
         "@context": "https://schema.org",
         "@graph": [
@@ -188,6 +214,7 @@ a{{color:#1a5fd6;text-decoration:none}}a:hover{{text-decoration:underline}}
 input{{width:100%;padding:10px;border:1px solid #cfd6df;border-radius:8px;font-size:.95rem;margin:16px 0 4px;box-sizing:border-box}}
 .note{{font-size:.78rem;color:#6b7480;margin-top:22px;border-top:1px solid #e3e7ed;padding-top:12px}}
 code{{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.85em}}
+.free{{background:#fff;border:1px solid #cfe3c8;border-left:4px solid #3f9d3f;border-radius:9px;padding:14px 16px;margin:18px 0}}.free h2{{font-size:1rem;margin:0 0 8px}}.free h2 small{{font-weight:400;color:#5a6472;font-size:.78rem}}.free ul{{margin:0;padding-left:18px;font-size:.85rem}}.free li{{margin:6px 0}}.lk{{font-size:.74rem;background:#e8f5e6;color:#256b25;padding:1px 6px;border-radius:20px;margin-left:6px}}.d{{font-size:.74rem;color:#6b7480;margin-left:6px}}
 </style></head><body><main>
 <h1>転職・新卒 選考対策 目録データベース</h1>
 <p class="sub">志望企業の面接対策資料が「あるか無いか」を即答する検索窓。<b>{snapshot['captured_at']}</b> 時点・毎日自動更新</p>
@@ -198,6 +225,7 @@ code{{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.85em}}
 <div class="c"><b>¥{priced:,}</b><span>掲載総額</span></div>
 </div>
 <p class="sub">{kinds}</p>
+{free_block}
 <input id="q" placeholder="企業名を入力（例: イオン銀行 / アビーム / NTT東日本）" oninput="f()">
 <table id="t"><thead><tr><th>企業</th><th>資料数</th><th>無料</th><th>有料</th><th>選考種別</th><th>最新</th></tr></thead>
 <tbody>

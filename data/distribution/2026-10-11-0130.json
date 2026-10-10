@@ -1,0 +1,36 @@
+{
+ "checked_at": "2026-10-11T01:30:19+0900",
+ "surfaces": {
+  "gist": {
+   "url": "https://gist.github.com/part676392/8f51111c9ac743c672cf3a04ed863fcf",
+   "bytes": 109175,
+   "ok": true,
+   "missing": []
+  },
+  "rentry_v2": {
+   "url": "https://rentry.co/4n73c73h",
+   "bytes": 14223,
+   "ok": true,
+   "missing": []
+  },
+  "rentry_v3": {
+   "url": "https://rentry.co/x4piimss",
+   "bytes": 14033,
+   "ok": true,
+   "missing": []
+  },
+  "dpaste": {
+   "url": "https://dpaste.com/F88ZB7XFP",
+   "bytes": 11939,
+   "ok": false,
+   "missing": [
+    "Dryers on Carver Street",
+    "3 USD",
+    "6 USD",
+    "9 USD",
+    "part676392.github.io/dsh-money-engine/store",
+    "0xA51eafFA2057"
+   ]
+  }
+ }
+}

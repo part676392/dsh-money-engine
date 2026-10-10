@@ -1,0 +1,24 @@
+{
+  "name": "dsh-money-engine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/part676392/dsh-money-engine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/part676392/dsh-money-engine/issues"
+  },
+  "homepage": "https://github.com/part676392/dsh-money-engine#readme",
+  "dependencies": {
+    "playwright": "^1.64.0"
+  }
+}

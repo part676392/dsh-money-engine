@@ -112,6 +112,7 @@ PY
   python3 make_exports.py        2>&1 | tail -6
   python3 build_dataset_store.py 2>&1 | tail -4
   python3 build_sample.py        2>&1 | tail -6
+  python3 build_rehearsals.py    2>&1 | tail -4
   python3 build_deliveries.py    2>&1 | tail -3
   python3 make_release.py        2>&1 | tail -4
   python3 make_ai_gap.py        2>&1 | tail -2

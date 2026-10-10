@@ -19,7 +19,7 @@ ROOT = pathlib.Path(__file__).resolve().parent
 BASE = "https://part676392.github.io/dsh-money-engine"
 OUT = ROOT / "deliveries.html"
 DATA = ROOT / "data"
-LEDGER = ROOT / "deliveries" / "state.json"
+LEDGER = DATA / "deliveries.json"
 
 
 def esc(s: object) -> str:
@@ -66,6 +66,18 @@ def main(fixture: bool = False) -> int:
                                  "delivered_at": "2026-10-11T06:04:00+09:00",
                                  "words": 1512}}
 
+    # 受信箱が受信専用なので練習の納品は「受注」を通らない。台帳に先に積んだ物を
+    # ここでも同じ表に出す (kind で練習だと分かる表記にする)。
+    seen_ids = {str(o.get("id") or "") for o in orders}
+    for oid, st in ledger.items():
+        if oid in seen_ids:
+            continue
+        orders.append({
+            "id": oid, "from": st.get("kind", "rehearsal"), "subject": st.get("spec", ""),
+            "received": st.get("delivered_at", "—"), "requested_words": st.get("requested_words"),
+            "price_usd": None, "payment_claimed": False, "chars": 0,
+        })
+
     rows = []
     items = []
     for o in orders:
@@ -76,8 +88,10 @@ def main(fixture: bool = False) -> int:
         words = o.get("requested_words") or "指定なし"
         price = o.get("price_usd")
         pay = "報告あり" if o.get("payment_claimed") else "未確認"
+        if st.get("kind") == "rehearsal":
+            pay = "練習 (自分の受付番号で通した)"
         rows.append(
-            f"<tr><td><code>{esc(oid[:10])}</code></td>"
+            f"<tr><td><code>{esc(oid[:16])}</code></td>"
             f"<td>{esc(o.get('received','—'))}</td>"
             f"<td>{esc(words)} 語</td>"
             f"<td>{('$' + esc(price)) if price else '—'}</td>"
@@ -127,7 +141,7 @@ a{{color:#7a5230}} .note{{font-size:.8rem;color:#6d675e;margin-top:22px}}
 <h1>納品一覧</h1>
 <p class="sub">注文ごとに、どこまで進んだかと納品物のURLをここに積みます。</p>
 
-<div class="now"><b>いま</b>: 受注 {len(orders)} 件 ／ 納品済み {sum(1 for v in ledger.values() if v.get('status')=='delivered')} 件</div>
+<div class="now"><b>いま</b>: 受注 {len(orders)} 件 ／ 納品済み {sum(1 for v in ledger.values() if 'delivered' in str(v.get('status','')).lower() or '納品済み' in str(v.get('status','')))} 件</div>
 
 {body}
 
@@ -143,7 +157,7 @@ a{{color:#7a5230}} .note{{font-size:.8rem;color:#6d675e;margin-top:22px}}
     dest = pathlib.Path("/tmp/deliveries_fixture.html") if fixture else OUT
     dest.write_text(doc, encoding="utf-8")
     print(f"  wrote {dest.name} ({len(doc):,} chars)")
-    print(f"  受注={len(orders)} 納品済み={sum(1 for v in ledger.values() if v.get('status')=='delivered')} "
+    print(f"  受注={len(orders)} 納品済み={sum(1 for v in ledger.values() if 'delivered' in str(v.get('status','')).lower() or '納品済み' in str(v.get('status','')))} "
           f"台帳={len(ledger)}")
     return 0
 

@@ -30,6 +30,12 @@ def esc(s: object) -> str:
     return html.escape(str(s if s is not None else ""), quote=True)
 
 
+OPERATOR = {
+    "name": "転職ナビ・中途キャリアの研究所",
+    "credential": "元人事の採用担当。書類選考から最終面接まで、数多くの候補者を評価してきた「選ぶ側」の視点。",
+    "note": "https://note.com/shushoku_career1",
+}
+
 def load() -> dict:
     corpus = json.load(open(ROOT / "data" / "corpus_full.json", encoding="utf-8"))
     es = json.load(open(ROOT / "data" / "es_dataset.json", encoding="utf-8"))
@@ -199,6 +205,14 @@ def build(d: dict) -> None:
     }
 
     kinds = "　".join(f"<b>{esc(k)}</b> {v}本" for k, v in kind_stat.most_common())
+    operator_box = (
+        "<section class='about'><h2>運営者について</h2>"
+        + "<p class='who'><b>" + esc(OPERATOR["name"]) + "</b></p>"
+        + "<p>" + esc(OPERATOR["credential"]) + "</p>"
+        + "<p class='src'>この目録のデータは、note に公開済みの記事と各社の公開情報から自動生成しています。"
+        + "検索需要の語は Google 自動補完で観測された実際の入力です。" + str(snapshot.get("captured_at","")) + " 時点。</p>"
+        + "<p><a href='" + OPERATOR["note"] + "'>note 本体で記事を買う →</a></p></section>"
+    )
     html_doc = f"""<!doctype html>
 <html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -220,6 +234,9 @@ th{{background:#eef1f5;text-align:left;padding:9px;font-weight:600}}
 td{{padding:8px 9px;border-top:1px solid #eceff3;vertical-align:top}}
 tr:hover td{{background:#fbfcfd}}
 a{{color:#1a5fd6;text-decoration:none}}a:hover{{text-decoration:underline}}
+.about{{background:#fff;border:1px solid #e3e7ed;border-left:4px solid #1a5fd6;border-radius:9px;padding:14px 16px;margin:22px 0 10px}}
+.about h2{{font-size:.98rem;margin:0 0 6px}}.about p{{font-size:.87rem;margin:7px 0}}
+.who{{font-size:.95rem;margin-bottom:2px}}.src{{color:#5a6472;font-size:.8rem}}
 input{{width:100%;padding:10px;border:1px solid #cfd6df;border-radius:8px;font-size:.95rem;margin:16px 0 4px;box-sizing:border-box}}
 .note{{font-size:.78rem;color:#6b7480;margin-top:22px;border-top:1px solid #e3e7ed;padding-top:12px}}
 a.dead{{display:block;background:#d0452c;color:#fff;padding:10px 14px;border-radius:8px;margin:14px 0 0;font-size:.9rem;text-decoration:none}}
@@ -252,6 +269,7 @@ code{{background:#eef1f5;padding:1px 5px;border-radius:4px;font-size:.85em}}
 <tbody>
 {chr(10).join(rows)}
 </tbody></table>
+{operator_box}
 <p class="note">出典: <a href="https://note.com/shushoku_career1">note / 転職ナビ・中途キャリアの研究所</a> 公開API。機械可読データは <a href="data/snapshot-latest.json">data/snapshot-latest.json</a>、日次履歴は <code>data/history/</code> に蓄積。変化の履歴そのものが再取得不能な資産になる設計。</p>
 </main><script>
 function f(){{var v=document.getElementById('q').value.toLowerCase();
@@ -322,6 +340,9 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
 .aigap{{background:#fff;border:1px solid #e3e7ed;border-left:4px solid #6b4fd6;border-radius:9px;padding:14px 16px;margin:20px 0}}
 .aigap h2{{font-size:1rem;margin:0 0 6px}}.aigap p{{font-size:.86rem;margin:8px 0}}
 .chips{{list-style:none;display:flex;flex-wrap:wrap;gap:6px;padding:0;margin:8px 0}}
+.about{{background:#fff;border:1px solid #e3e7ed;border-left:4px solid #1a5fd6;border-radius:9px;padding:13px 15px;margin:20px 0}}
+.about h2{{font-size:.95rem;margin:0 0 5px}}.about p{{font-size:.85rem;margin:6px 0}}
+.src{{color:#5a6472;font-size:.79rem}}
 .chips li{{margin:0;background:#f0edfd;color:#4b36a3;font-size:.78rem;padding:3px 9px;border-radius:20px}}</style></head><body><main>
 <p><a href="../">← 目録データベースへ</a></p>
 <h1>{esc(comp)} の選考対策資料 {len(g)}点</h1>
@@ -329,6 +350,7 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
 <ul>{chr(10).join(items)}</ul>
 {cdem}
 {cai}
+<section class="about"><h2>この目録を運営している人</h2><p><b>{esc(OPERATOR["name"])}</b> — {esc(OPERATOR["credential"])}</p><p class="src">データは {esc(snapshot.get("captured_at",""))} 時点。<a href=\'{OPERATOR['note']}\'>note</a> で本文を買えます。</p></section>
 </main></body></html>""",
             encoding="utf-8",
         )

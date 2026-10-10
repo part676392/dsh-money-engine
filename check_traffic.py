@@ -65,7 +65,9 @@ def main() -> int:
         src_total += v
         out["counters"]["src-" + s["key"]] = {"value": v, "surface": s["surface"],
                                               "target": s.get("target")}
-        print(f"  流入 {s['key']:9s} hits={v}  ({s['surface']})", flush=True)
+        flag = "" if s.get("tagged", True) else "  [未打直: URL に ?src= が無い]"
+        out["counters"]["src-" + s["key"]]["tagged"] = bool(s.get("tagged", True))
+        print(f"  流入 {s['key']:9s} hits={v}  ({s['surface']}){flag}", flush=True)
     print(f"  流入源つき合計: {src_total}", flush=True)
 
     print(f"\n  site: {SITE}/store/  (pixel は実在する img)")

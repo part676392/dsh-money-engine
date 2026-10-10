@@ -15,6 +15,7 @@ Live: https://part676392.github.io/dsh-money-engine ｜ 日本語のデータセ
 | 掲載金額の合計 | ¥1,205,920 |
 | 選考ステージ別の締切 | 12 件（うち無料 6）根拠文つき |
 | AI・録上面接の検索需要 | 23 社 / 34 語（autocomplete 機械収集） |
+| 選考段階の言及 | 350 社 / 403 件（600 本の本文プレビューから引用抽出） |
 
 機械可読: [`data/snapshot-latest.json`](data/snapshot-latest.json) ／ 日別履歴: [`data/history/`](data/history/)
 
@@ -24,6 +25,7 @@ Live: https://part676392.github.io/dsh-money-engine ｜ 日本語のデータセ
 - [運用履歴 — 観測系列の公開ログ](https://part676392.github.io/dsh-money-engine/changes.html)
 - [AI・録上面接で検索されている企業 23 社](https://part676392.github.io/dsh-money-engine/ai-interviews.html)
 - [選考締切一覧](https://part676392.github.io/dsh-money-engine/es-deadlines.html)
+- [選考段階の言及 350 社・403 件（引用つき）](https://part676392.github.io/dsh-money-engine/selection-signals.html)
 - [注文受付（カスタム執筆・暗号決済）](https://part676392.github.io/dsh-money-engine/store/)
 
 ## 正直な制約

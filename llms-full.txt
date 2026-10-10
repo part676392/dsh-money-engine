@@ -3,7 +3,7 @@
 > 日本の転職・中途市場で「面接の情報」を実測して積む静的データ資産。
 > 収録 600 本 / 対象 491 社 / 掲載金額合計 ¥1,205,920。毎日 06:10 と 19:40 (JST) に自動更新。
 
-生成: 2026-10-11 02:04 JST
+生成: 2026-10-11 02:10 JST
 この文書にある数値はすべて再取得可能な実測です。推定値と将来見通しは本文に書いていません。
 
 ## Pages
@@ -12,6 +12,7 @@
 - [運用履歴](https://part676392.github.io/dsh-money-engine/changes.html): 日ごとに積んだ観測系列 (収録数・访问・受金・失敗記録)。Dataset 構造化データ
 - [AI・録上面接の検索需要 23 社](https://part676392.github.io/dsh-money-engine/ai-interviews.html): 企業名込みの検索語 34 件の機械収集一覧。実施有無の断定なし
 - [選考締切一覧](https://part676392.github.io/dsh-money-engine/es-deadlines.html): 本文の締切記載を機械検証した 12 件 (根拠文つき)
+- [選考段階の言及 350 社](https://part676392.github.io/dsh-money-engine/selection-signals.html): 収録記事の本文プレビューから抽出した選考段階の言及集計。言及ごとに引用文つき。実測値は生成時に JSON から読む
 - [注文受付ページ](https://part676392.github.io/dsh-money-engine/store/): カスタム執筆の価格と受け口。Service/Offer 構造化データ
 
 ## Data
@@ -25,6 +26,7 @@
 - 検索エンジンに索引されている**証拠は未取得**。Bing の phrase probe は固有表現 4 本すべて ours=0。`site:` 総数は 303,000→52→73,000 とふらつき、索引の証拠にならないと実測で分かった。
 - Google の sitemap ping は 404、Bing の /ping は 410 Gone。鍵なしで結果を退回できる計器がこの回線に無い。
 - 访问数は自前の計数器で測っている。現状の访问はほぼ自己監査。
+- 選考段階の言及は 600 本から 403 件を抽出。ただし本文は note API の返す 240 字プレビューのみで、各社の選考工程の全集ではない (全 600 本の本文長がちょうど 240 字であることを実測)。
 - AI 面接の出典を 23 社ぶん機械検索して基準を満たしたのは 0 社。ドメインの立派さだけで通した旧基準なら 37 件出ていたが中身は無関係なページだった。
 - カード決済: created, product $6 live, blocked on payout connection。暗号 (Base/Arbitrum/Polygon/Ethereum の 1 地址) は即金で開いている。
 

@@ -36,6 +36,7 @@ def main() -> int:
     srcs = load("data/ai_verified_sources.json", []) or []
     rails = load("data/rails/latest.json", {}) or {}
     scan = load("data/ai_source_scan.json", {}) or {}
+    sig = load("data/selection_signals.json", {}) or {}
     arts = snap.get("articles", "?")
     comps = snap.get("companies", "?")
     yen = snap.get("listed_value_yen", "?")
@@ -60,6 +61,7 @@ def main() -> int:
 - [運用履歴]({BASE}/changes.html): 日ごとに積んだ観測系列 (収録数・访问・受金・失敗記録)。Dataset 構造化データ
 - [AI・録上面接の検索需要 {n_ai} 社]({BASE}/ai-interviews.html): 企業名込みの検索語 {n_terms} 件の機械収集一覧。実施有無の断定なし
 - [選考締切一覧]({BASE}/es-deadlines.html): 本文の締切記載を機械検証した {12} 件 (根拠文つき)
+- [選考段階の言及 {sig.get("companies_with_mentions", "?")} 社]({BASE}/selection-signals.html): 収録記事の本文プレビューから抽出した選考段階の言及集計。言及ごとに引用文つき。実測値は生成時に JSON から読む
 - [注文受付ページ]({BASE}/store/): カスタム執筆の価格と受け口。Service/Offer 構造化データ
 
 ## Data
@@ -73,6 +75,7 @@ def main() -> int:
 - 検索エンジンに索引されている**証拠は未取得**。Bing の phrase probe は固有表現 4 本すべて ours=0。`site:` 総数は 303,000→52→73,000 とふらつき、索引の証拠にならないと実測で分かった。
 - Google の sitemap ping は 404、Bing の /ping は 410 Gone。鍵なしで結果を退回できる計器がこの回線に無い。
 - 访问数は自前の計数器で測っている。現状の访问はほぼ自己監査。
+- 選考段階の言及は {sig.get("articles_scanned", "?")} 本から {sum(sig.get("stage_totals", {}).values())} 件を抽出。ただし本文は note API の返す 240 字プレビューのみで、各社の選考工程の全集ではない (全 600 本の本文長がちょうど 240 字であることを実測)。
 - AI 面接の出典を {scan.get('companies', n_ai)} 社ぶん機械検索して基準を満たしたのは {scan.get('companies_with_hits', 1)} 社。ドメインの立派さだけで通した旧基準なら 37 件出ていたが中身は無関係なページだった。
 - カード決済: {card}。暗号 (Base/Arbitrum/Polygon/Ethereum の 1 地址) は即金で開いている。
 

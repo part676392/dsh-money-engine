@@ -266,6 +266,10 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
         sm.append(f"  <url><loc>{base}/company/{quote(comp)}.html</loc><lastmod>{today}</lastmod><priority>0.7</priority></url>")
     sm.append("</urlset>")
     (OUT / "sitemap.xml").write_text("\n".join(sm), encoding="utf-8")
+    kfile = ROOT / "indexnow-key.txt"
+    if kfile.exists():
+        (OUT / (kfile.read_text().strip() + ".txt")).write_bytes(kfile.read_bytes())
+
     (OUT / "robots.txt").write_text(
         f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n", encoding="utf-8")
 

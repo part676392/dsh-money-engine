@@ -1,0 +1,74 @@
+{
+ "checked_at": "2026-10-11T03:43:28+0900",
+ "control": {
+  "q": "DeepSeek Harness",
+  "must_contain": [
+   "deepseek"
+  ]
+ },
+ "engines": {
+  "bing": {
+   "control": true,
+   "http": "200",
+   "blocked": true,
+   "verdict": "NOT INDEXED",
+   "queries": {
+    "site 限定": {
+     "query": "site:part676392.github.io",
+     "http": "200",
+     "cites": 20,
+     "ours": 0,
+     "ours_urls": [],
+     "filler_only": true
+    },
+    "固有語 (誌名)": {
+     "query": "After-Hours Spin Cycle",
+     "http": "200",
+     "cites": 10,
+     "ours": 0,
+     "ours_urls": [],
+     "filler_only": true
+    },
+    "固有語 (頁見出)": {
+     "query": "中途・転職 面接対策 目録データベース",
+     "http": "200",
+     "cites": 10,
+     "ours": 0,
+     "ours_urls": [],
+     "filler_only": true
+    },
+    "企業×列": {
+     "query": "大林組 選考フロー site:part676392.github.io",
+     "http": "200",
+     "cites": 10,
+     "ours": 0,
+     "ours_urls": [],
+     "filler_only": true
+    }
+   }
+  },
+  "mojeek": {
+   "control": false,
+   "http": "200",
+   "blocked": true,
+   "verdict": "ORACLE DEAD",
+   "queries": {}
+  },
+  "ddg_html": {
+   "control": false,
+   "http": "202",
+   "blocked": true,
+   "verdict": "ORACLE DEAD",
+   "queries": {}
+  },
+  "marginalia_lite": {
+   "control": false,
+   "http": "000",
+   "blocked": false,
+   "verdict": "ORACLE DEAD",
+   "queries": {}
+  }
+ },
+ "indexed_anywhere": false,
+ "oracle_alive": true
+}

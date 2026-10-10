@@ -24,3 +24,11 @@ saved /Users/moherune/Documents/deepseek-harness/default-workspace/dsh-money-eng
 rendered: 12 rows (free 6 / paid 6) via 本文の締切記載を機械検証（根拠文つき）
 built: index.html + 491 company pages
   articles=600 companies=491 free=11 listed=¥1,205,920
+  pushed
+  pages build triggered
+  indexnow api.indexnow.org/indexnow  200 (42 urls)
+  indexnow www.bing.com/indexnow      200 (42 urls)
+saved /Users/moherune/Documents/deepseek-harness/default-workspace/dsh-money-engine/data/scoreboard/2026-10-10-2327.json
+TOTAL our-links visible on Bing: 0
+parser self-check (must be True): True
+===== 2026-10-10 23:27:26 end =====

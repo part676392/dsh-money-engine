@@ -20,7 +20,7 @@ import re
 import datetime as dt
 
 ROOT = pathlib.Path(__file__).resolve().parent
-OUT = ROOT / "site"
+OUT = ROOT / "docs"
 DATA = ROOT / "data"
 
 

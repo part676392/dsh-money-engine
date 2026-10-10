@@ -339,10 +339,18 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
     sm = ['<?xml version="1.0" encoding="UTF-8"?>',
           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
           f"  <url><loc>{base}/</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>"]
+    from urllib.parse import quote
+
+    if (OUT / "es-deadlines.html").exists():
+        sm.append(
+            f"  <url><loc>{base}/es-deadlines.html</loc><lastmod>{today}</lastmod>"
+            f"<changefreq>daily</changefreq><priority>0.95</priority></url>"
+        )
     for comp in sorted(by_company):
-        from urllib.parse import quote
-        sm.insert(3, f"  <url><loc>{base}/es-deadlines.html</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq><priority>0.95</priority></url>")
-    sm.append(f"  <url><loc>{base}/company/{quote(comp)}.html</loc><lastmod>{today}</lastmod><priority>0.7</priority></url>")
+        sm.append(
+            f"  <url><loc>{base}/company/{quote(comp)}.html</loc>"
+            f"<lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>"
+        )
     sm.append("</urlset>")
     (OUT / "sitemap.xml").write_text("\n".join(sm), encoding="utf-8")
     kfile = ROOT / "indexnow-key.txt"

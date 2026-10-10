@@ -6,6 +6,24 @@
 
 Live: https://part676392.github.io/dsh-money-engine ｜ 日本語のデータセットを AEO 向け（JSON-LD / FAQ / ItemList）に出しています。
 
+## 二重配置 (2026-10-11 に必須と判明)
+
+- 開発: この repo (`~/Documents/deepseek-harness/default-workspace/dsh-money-engine`)
+- 無人 runner: `~/dsh-runner/dsh-money-engine` (launchd が Aqui を回す)
+
+理由: macOS の TCC が `~/Documents` 以内を launchd 経由の `/bin/bash` に読ませず、
+`Operation not permitted` で弾かれる (実測 exit 126、43回の run は全部手動だった)。
+home 直下は保護対象ではないので runner は dortにある。
+
+確認のしかた:
+```
+launchctl kickstart -k gui/$(id -u)/com.dsh.money-engine
+tail -f ~/dsh-runner/dsh-money-engine/logs/daily_$(date +%Y%m%d).log   # guards: all green まで
+wc -c ~/dsh-runner/dsh-money-engine/logs/launchd.err                  # 増加しなければ clean
+```
+push は runner も開発側も行う。開発側は push 前に必ず `git pull --rebase` すること
+(runner が先に出版しているため)。劣化は `check_regression.py` が push 前に止める。
+
 ## 入っているもの
 
 | 内容 | 実測値 (2026-10-11) |

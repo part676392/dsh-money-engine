@@ -184,7 +184,7 @@ def main() -> int:
   {reach}。
   「西日本旅客鉄道」と「JR西日本」のように名前ゆれで分裂していた {n_redir} 枚は機械に束ね、
   旧名の URL は消さずに noindex の連絡頁にして正規の頁へ飛ぶようにした。
-  機械向けの道しるべ: [exports/company_pages.csv]({BASE}/exports/company_pages.csv) (会社 -> 頁URL -> 束ね先)
+  機械向けの道しるべ: [exports/company_pages.csv]({BASE}/exports/company_pages.csv) (会社 -> 頁URL -> 束ね先。質問実文が 0 の会社も signal_rows / flow_rows で 選考段階の言及だけの頁だと分かる。公開中の企業頁は全部この表に有る)
 - [質問カテゴリの並び順]({BASE}/question-lineups.html): {n_lu_comp} 社の羅列を12カテゴリに正規化し {n_rows:,} 行。並び順そのものを持つデータはここ以外に無い。
 - [逆質問の実文]({BASE}/reverse-questions.html): 本文に現れた文だけを抽出 (24文/8社)。薄さはページに明記。- [公式選考フロー {fl.get("flows_total", "?")} 本 / {fl.get("companies_with_flows", "?")} 社]({BASE}/selection-flows.html): 順序付きの選考工程。寄せた前の工程名も JSON の raw に全件保持
 - [注文受付ページ]({BASE}/store/): カスタム執筆の価格と受け口。Service/Offer 構造化データ

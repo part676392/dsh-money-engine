@@ -1,0 +1,162 @@
+{
+ "checked_at": "2026-10-12T00:39:26+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "maps.google.co.jp",
+    "maps.google.co.jp",
+    "maps.google.co.jp",
+    "maps.google.co.jp",
+    "maps.google.co.jp",
+    "maps.google.co.jp",
+    "maps.google.co.jp",
+    "maps.google.co.jp",
+    "maps.google.co.jp",
+    "maps.google.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "50",
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "ja.wiktionary.org",
+    "adtechmanagement.com",
+    "chigai-hikaku.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "63,900",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "50",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "weblio.jp",
+    "x.com",
+    "e-kae-library.com",
+    "youtube.com",
+    "nicovideo.jp",
+    "youtube.com",
+    "ja.wikipedia.org",
+    "ja.wiktionary.org",
+    "adtechmanagement.com",
+    "kotobank.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "396,000",
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "ja.wiktionary.org",
+    "adtechmanagement.com",
+    "chigai-hikaku.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "63,900",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "nintendo.com",
+    "nintendo.com",
+    "amazon.co.jp",
+    "amazon.co.jp",
+    "hmv.co.jp",
+    "nintendo.co.jp",
+    "game.watch.impress.co.jp",
+    "premium.gamepedia.jp",
+    "4gamer.net",
+    "store-jp.nintendo.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "14,000",
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "yodobashi.com",
+    "yodobashi.com",
+    "kadenmin.com",
+    "sakidori.co",
+    "kadenmin.com",
+    "search.kakaku.com",
+    "my-best.com",
+    "marushin-magazine.com",
+    "kakaku.com",
+    "kakaku.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "25,600",
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

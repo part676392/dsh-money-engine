@@ -55,6 +55,13 @@ def _cta_text(company: str) -> str:
             else "まず1社ぶんだけ <b>$5</b> で受け取る")
 
 
+def deadline_link(company: str = "") -> str:
+    """締切一覧への直線。実測で link を持つのは 3 頁だけで、473 の企業頁から行けなかった。
+    人が着くのは企業頁の方なので、上の行に置く。"""
+    return ('<a style="' + _BAR_A + '" href="/dsh-money-engine/es-deadlines.html">'
+            '⏰ 締切一覧</a>')
+
+
 def _free_sample(company: str) -> str:
     # 常に絶対道。store/ の頁で href="sample.html" にすると store/sample.html に
     # 解決されて 404 になった (実測: internal links 10 折れ / ★ sample.html x10)。
@@ -81,7 +88,8 @@ def bar(company: str = "") -> str:
     return ("<p style='" + _BAR_WRAP + "'>💴 <a style='" + _BAR_A + "' href='" + u +
             "' onclick=\"" + beacon_js("order-click") + ";return true\">" +
             _cta_text(company) + "</a>　" + PRICE_LINE.replace("**", "") +
-            "　·　" + _free_sample(company) + "　·　" + ACCOUNT_NOTE + "</p>")
+            "　·　" + _free_sample(company) + "　·　" + deadline_link(company)
+            + "　·　" + ACCOUNT_NOTE + "</p>")
 
 
 def inject(path, count_txt: str = "", top: str = "") -> bool:

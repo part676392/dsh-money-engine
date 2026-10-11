@@ -323,6 +323,10 @@ $(date ...) PR 入口 ★"
   if ! python3 check_card_surface.py 2>&1 | tail -5; then
     echo "  ★★★ GUARD FAIL: card-surface — 配られる頁で支払いの口 / プラン語 / \$25 / 出典の性質が壊れている"
   fi
+  if ! python3 check_release.py 2>&1 | tail -3; then
+    # $25 の品物 (履歴一式) が Version として降ろせない / zip の中身がその日の証と違う
+    echo "  ★★★ GUARD FAIL: release — 履歴一式の release が壊れている"
+  fi
   python3 money_check.py          2>&1 | tail -5
   python3 check_regression.py     2>&1 | tail -2
   python3 lint_prose.py           2>&1 | tail -2
@@ -373,6 +377,7 @@ $(date ...) PR 入口 ★"
   echo "$RUN" | grep -q "GUARD FAIL: pages" && FAIL="$FAIL pages"
   echo "$RUN" | grep -q "GUARD FAIL: discovery" && FAIL="$FAIL discovery"
   echo "$RUN" | grep -q "GUARD FAIL: card-surface" && FAIL="$FAIL card-surface"
+  echo "$RUN" | grep -q "GUARD FAIL: release" && FAIL="$FAIL release"
   echo "$RUN" | grep -q "GUARD FAIL: index-probe" && FAIL="$FAIL index-probe"
   echo "$RUN" | grep -q "GUARD FAIL: source-liveness" && FAIL="$FAIL source-liveness"
   echo "$RUN" | grep -q "GUARD FAIL: pr-links" && FAIL="$FAIL pr-links"

@@ -65,3 +65,6 @@ outbox/rentry.json
 # Playwright の永続 profile (Chromium が secret っぽい値を書く: 実測 .note-profile/Default/Preferences に secret=...)
 .note-profile/
 *-profile/
+# release 護りが降ろす zip (毎回上書きする測定物なので repo に積まない)
+outbox/release_probe.zip
+dist/

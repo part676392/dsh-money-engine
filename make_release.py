@@ -26,6 +26,8 @@ STATE = ROOT / "data" / "rails" / "last_release.json"
 REPO = "part676392/dsh-money-engine"
 
 NEED = ["interview_questions.csv", "selection_flows.csv", "selection_signals.csv", "manifest.csv"]
+# 歴史一式は $25 の品物その物。入っていない release が実測で有った (asset が source.zip だけ)。
+HIST = ["es_deadlines_history.csv", "history_timeseries.csv", "source_liveness.csv", "history_runs.csv"]
 JSONS = ["interview_questions.json", "selection_flows.json", "selection_signals.json",
          "snapshot-latest.json", "es_deadlines_strict.json", "ai_interview_demand.json"]
 
@@ -49,6 +51,46 @@ def counts() -> dict:
     }
 
 
+def hist_rows() -> dict:
+    """歴史 CSV の実行数。fingerprint に入れる (歴史は堀なので、積んだ分は tag に残す)。"""
+    out = {}
+    for f in HIST:
+        p = EXPORTS / f
+        out[f] = max(0, sum(1 for _ in open(p, encoding="utf_8_sig")) - 1) if p.exists() else 0
+    return out
+
+
+def readme_text(c: dict, rows: dict, hist: dict, tag: str) -> str:
+    """zip を開いた人が権利と中身を迷わないための 1 枚 (護りが本文を読む)。"""
+    lines = [
+        f"dsh-money-engine スナップショット {tag}",
+        "",
+        "中身 (この zip に入った実行数):",
+    ]
+    lines += [f"  exports/{k}  {v:,} 行" for k, v in rows.items()]
+    lines += [f"  exports/{k}  {v:,} 行   <- 歴史スナップショット一式 ($25) の品物" for k, v in hist.items()]
+    lines += [
+        "",
+        "売っている物: 面接データセットの history を、その日の形で固めた物。",
+        "  締切の観測 (es_deadlines_history.csv) と出典 URL の生存測定 (source_liveness.csv) は",
+        "  毎巡回で積んでいるので、面に出た日がそのまま残ります。Pages の exports/ は上書きされます。",
+        "",
+        "出典と権利:",
+        "  元の記事: https://note.com/shushoku_career1 (行ごとに source_url を入れています)",
+        "  質問は出典が『想定質問』として書いている物で、面接で実際に問われた記録の転載ではありません。",
+        "  CC BY 4.0 は抽出した表・順序・対応づけにのみ適用。本文の著作権は各記事の著者に帰属します。",
+        "  記事本文の全文は意図的に同梱していません。",
+        "",
+        "注文: https://part676392.github.io/dsh-money-engine/data-license.html",
+        "      https://github.com/part676392/dsh-money-engine/issues/new?template=order.yml",
+        "      GitHub の account 不要ならメールでも: fq23ou7os@maxxspace.com",
+        "",
+        f"観測: 記事 {c.get('articles', 0):,} 本 / 質問実文 {c.get('questions', 0):,} 問"
+        f" ({c.get('question_companies', 0)} 社) / 公式フロー {c.get('flows', 0)} 本",
+    ]
+    return "\n".join(lines)
+
+
 def main(force: bool = False) -> int:
     c = counts()
     if not any(c.values()):
@@ -60,12 +102,16 @@ def main(force: bool = False) -> int:
     if zeros:
         print(f"  ★ counts が欠けている: {zeros} → release 見送り (嘘の tag を積まない)")
         return 1
-    missing = [f for f in NEED if not (EXPORTS / f).exists()]
+    missing = [f for f in NEED + HIST if not (EXPORTS / f).exists()]
     if missing:
         print(f"  exports 不足: {missing} (make_exports.py を先に)")
         return 1
 
-    fp = hashlib.sha1(json.dumps(c, sort_keys=True).encode()).hexdigest()[:10]
+    hist = hist_rows()
+    # 歴史は積んだ分が価値なので fingerprint に混ぜる。日にちも入れると 1 日 1 個になる
+    # (実測: 行数だけ入れると 1 巡回 = 1 release で 1 日 3 個増え、archive が読みにくい)。
+    fp = hashlib.sha1(json.dumps({**c, "hist": hist, "day": time.strftime("%Y-%m-%d")},
+                                sort_keys=True).encode()).hexdigest()[:10]
     prev = {}
     if STATE.exists():
         prev = json.loads(STATE.read_text(encoding="utf-8"))
@@ -82,16 +128,22 @@ def main(force: bool = False) -> int:
         for f in NEED:
             z.write(EXPORTS / f, f"exports/{f}")
             rows[f] = sum(1 for _ in open(EXPORTS / f, encoding="utf_8_sig")) - 1
+        # 歴史一式 ($25 の品物) を同梱。実測で過去の release に入っていなかった。
+        for f in HIST:
+            z.write(EXPORTS / f, f"exports/{f}")
+            rows[f] = sum(1 for _ in open(EXPORTS / f, encoding="utf_8_sig")) - 1
         for f in JSONS:
             if (DATA / f).exists():
                 z.write(DATA / f, f"data/{f}")
         info = {"tag": tag, "captured_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
                 "counts": c, "csv_rows": rows, "fingerprint": fp,
+                "history_rows": hist,
                 "source": "https://note.com/shushoku_career1",
                 "license_scope": ("CC BY 4.0 は抽出した表・順序・対応づけにのみ適用。"
                                   "本文の著作権は note の各記事の著者に帰属する。"
                                   "記事本文は意図的に同梱していない。")}
         z.writestr("SNAPSHOT_INFO.json", json.dumps(info, ensure_ascii=False, indent=1))
+        z.writestr("README.txt", readme_text(c, rows, hist, tag))
 
     kb = zpath.stat().st_size / 1024
     notes = (f"スナップショット {stamp}\n\n"
@@ -100,9 +152,12 @@ def main(force: bool = False) -> int:
              f"| 面接質問の実文 | {c['questions']:,} 問 / {c['question_companies']} 社 |\n"
              f"| 公式選考フロー | {c['flows']} 本 / {c['flow_companies']} 社 |\n"
              f"| 選考段階の言及 | 企業 {c['signals']} 社 |\n"
-             f"| CSV 行数 | " + ", ".join(f"{k}={v:,}" for k, v in rows.items()) + " |\n\n"
-             f"同梱: exports/*.csv, data/*.json, SNAPSHOT_INFO.json\n"
+             f"| CSV 行数 | " + ", ".join(f"{k}={v:,}" for k, v in rows.items()) + " |\n"
+             f"| 歴史 (history 一式) | " + ", ".join(f"{k}={v:,}" for k, v in hist.items()) + " |\n\n"
+             f"同梱: exports/*.csv (歴史一式を含む), data/*.json, SNAPSHOT_INFO.json, README.txt\n"
              f"本文 (記事の全文) は意図的に同梱していません。著作権は各記事の著者に帰属します。\n"
+             f"販売元: https://part676392.github.io/dsh-money-engine/?src=release"
+             f" ／ $25 の品物: https://part676392.github.io/dsh-money-engine/data-license.html?src=release\n"
              f"fingerprint={fp}")
 
     cmd = ["gh", "release", "create", tag, str(zpath), "--repo", REPO,

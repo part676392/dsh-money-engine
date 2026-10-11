@@ -46,6 +46,32 @@ def curl(url: str, timeout: int = 30) -> tuple:
     return (int(code) if code.strip().isdigit() else 0), body
 
 
+TOPICS = ("shukatsu", "tenshoku", "saiyou")
+
+
+def topics(quiet: bool = False) -> dict:
+    """GitHub の topic 頁に載っているか (足しっぱなしが消えないかの点検)。
+    実測 2026-10-11: tenshoku / saiyou の頁に出ることを確認。shukatsu は 29 頁中まだ外。"""
+    import subprocess
+    out = {"topics_api": [], "topics_pages": {}}
+    r = subprocess.run(["gh", "api", "repos/part676392/dsh-money-engine/topics",
+                        "--jq", '.names | join(",")'], capture_output=True, text=True, timeout=60)
+    names = [x for x in r.stdout.strip().split(",") if x]
+    out["topics_api"] = names
+    miss = [t for t in TOPICS if t not in names]
+    for t in TOPICS:
+        code, body = curl(f"https://github.com/topics/{t}", timeout=25)
+        out["topics_pages"][t] = (code, "part676392/dsh-money-engine" in body)
+        time.sleep(0.4)
+    out["missing_from_api"] = miss
+    ok = not miss
+    if not quiet:
+        got = [t for t, (c, here) in out["topics_pages"].items() if here]
+        print(f"  topic 頁        : API {'全' + str(len(names)) + '個'}"
+              f" / 頁に出た {got or '無し'}" + (f" / ★ API から落ちた {miss}" if miss else ""))
+    return out
+
+
 def probe(quiet: bool = False) -> dict:
     row = {"seen": dt.date.today().isoformat(), "at": time.strftime("%Y-%m-%dT%H:%M:%S%z")}
     bad = []
@@ -72,6 +98,20 @@ def probe(quiet: bool = False) -> dict:
         if code not in (200, 201):
             bad.append(f"bing {key}: http={code}")
         time.sleep(1.0)
+    # IndexNow の取り込み量 (Bing getstatus)。実測: 404 / 0 B (2026-10-11)
+    # → 送信が 200 でも『何本入ったか』はこの API では分からない。分かっている事を毎回
+    #   探り直さないよう、台帳に http を残す (404 は上流の API が無いだけで測れた内)。
+    key = ""
+    kf = ROOT / "data" / "indexnow.key"
+    if kf.exists():
+        key = kf.read_text(encoding="utf-8").strip()
+    code, body = curl("https://www.bing.com/indexnow/getstatus?key=" + key
+                      + "&match=%22part676392.github.io&format=json")
+    row["indexnow_getstatus_http"] = code
+    row["indexnow_getstatus_bytes"] = len(body)
+    m = re.search(r'"urlCount"\s*:\s*(\d+)', body)
+    row["indexnow_urls"] = int(m.group(1)) if m else None
+    time.sleep(0.5)
     # DuckDuckGo (202 が普通。来たら数える)
     code, body = curl("https://html.duckduckgo.com/html/?q="
                       + urllib.parse.quote("site:" + HOST))
@@ -79,6 +119,11 @@ def probe(quiet: bool = False) -> dict:
     row["ddg_mine"] = len(set(re.findall(re.escape(HOST) + r"/[a-zA-Z0-9%_.-]*", body)))
     if code not in (200, 202):
         bad.append(f"ddg http={code}")
+    tp = topics(quiet=quiet)
+    row["topics_missing"] = tp["missing_from_api"]
+    row["topics_on_page"] = [t for t, (c, here) in tp["topics_pages"].items() if here]
+    if tp["missing_from_api"]:
+        bad.append(f"topic が repo から落ちている {tp['missing_from_api']}")
     row["measure_ok"] = not bad
     row["bad"] = bad
     LEDGER.parent.mkdir(parents=True, exist_ok=True)
@@ -87,7 +132,9 @@ def probe(quiet: bool = False) -> dict:
     if not quiet:
         print(f"  索入室の実測    : bing site: {row['bing_site_mine']} 面 (http {code and row['bing_site_http']})"
               + "".join(f" / {k} {row[f'bing_{k}_mine']}" for k, _ in EXACT)
-              + f" / ddg {row['ddg_mine']} (http {row['ddg_http']})")
+              + f" / ddg {row['ddg_mine']} (http {row['ddg_http']})"
+              + f" / IndexNow getstatus http {row['indexnow_getstatus_http']}"
+              + (f" = {row['indexnow_urls']} 本" if row.get("indexnow_urls") is not None else " (本数が取れない)"))
         if bad:
             print(f"    ★ 測れなかった: {bad[:3]}")
     return row

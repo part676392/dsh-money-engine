@@ -152,22 +152,17 @@
  ],
  "discovery": {
   "_note": "?src= を付けられない面 (GitHub topic 一覧) の検査。topic 頁の順位は star 依存で確認できないので、過大に書かない。ここでは『topic 連携が生きているか』だけを見る (search API で hit>=1)。topic を消されても気づけるようにする。",
-  "github_topics": [
-   "aeo",
-   "careers",
-   "data-collection",
-   "dataset",
-   "hiring",
-   "interview-preparation",
-   "interview-questions",
-   "japan",
-   "japanese-nlp",
-   "job-hunting",
-   "json-ld",
-   "recruiting",
-   "seo",
-   "static-site"
-  ],
+  "github_topics": {
+   "updated": "2026-10-11",
+   "added": [
+    "shukatsu",
+    "tenshoku",
+    "saiyou"
+   ],
+   "live": "3 頁とも part676392/dsh-money-engine が載ることを実測 (github.com/topics/<t> を fetch)",
+   "note": "topic 頁は repo link なので click は src-ghrepo 側に落ちる。面の追加ではない",
+   "checked_by": "check_index_probe.topics()"
+  },
   "spot_check": [
    "interview-questions",
    "japanese-nlp",

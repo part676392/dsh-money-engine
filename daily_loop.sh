@@ -332,6 +332,10 @@ $(date ...) PR 入口 ★"
   python3 lint_prose.py           2>&1 | tail -2
   # 検索の所有権検証: 未取得は ★ にしない (人間のログインが要る扉で、事故ではないから)。
   # ファイルが現たら配れているか中身まで測る。
+  # AI が読む索引から値段と権利が消えたら、注記が届かないまま一人歩きする
+  if ! python3 check_llms_rights.py 2>&1 | tail -3; then
+    echo "  ★★★ GUARD FAIL: llms-rights — llms.txt から料金か権利が消えている"
+  fi
   if ! python3 check_seo_verification.py 2>&1 | tail -4; then
     echo "  ★★★ GUARD FAIL: seo-verify — 検証ファイルが有るのに配られていない"
   fi
@@ -384,6 +388,7 @@ $(date ...) PR 入口 ★"
   echo "$RUN" | grep -q "GUARD FAIL: card-surface" && FAIL="$FAIL card-surface"
   echo "$RUN" | grep -q "GUARD FAIL: release" && FAIL="$FAIL release"
   echo "$RUN" | grep -q "GUARD FAIL: seo-verify" && FAIL="$FAIL seo-verify"
+  echo "$RUN" | grep -q "GUARD FAIL: llms-rights" && FAIL="$FAIL llms-rights"
   echo "$RUN" | grep -q "GUARD FAIL: index-probe" && FAIL="$FAIL index-probe"
   echo "$RUN" | grep -q "GUARD FAIL: source-liveness" && FAIL="$FAIL source-liveness"
   echo "$RUN" | grep -q "GUARD FAIL: pr-links" && FAIL="$FAIL pr-links"

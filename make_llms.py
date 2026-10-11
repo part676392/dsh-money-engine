@@ -29,6 +29,48 @@ def load(p: str, default=None):
         return default
 
 
+def price_section() -> str:
+    """値段・買い方・権利を、AI がそのまま引用できる平文で置く。
+    実測 (2026-10-11): llms.txt / llms-full.txt の中に 料金語・『想定質問』・CC BY が
+    1 個も無かった (grep 0 件)。AI が『無料で使える実録の面接質問集』として
+    引用してしまうと、こちらが正直に書いていても伝染しない。"""
+    import csv
+    import buy_block
+    bodies = load("data/full_bodies.json", {}) or {}
+    n_all = len(bodies)
+    n_sh = sum(1 for v in bodies.values()
+               if "想定質問" in ((v.get("title") or "") + (v.get("text") or "")))
+    rows = {}
+    mf = ROOT / "exports" / "manifest.csv"
+    if mf.exists():
+        with mf.open(encoding="utf_8_sig", newline="") as fh:
+            for r in csv.DictReader(fh):
+                rows[r.get("file", "")] = r.get("rows", "")
+    price = buy_block.PRICE_LINE.replace("**", "")
+    return f"""
+## 値段と買い方 (買うと何が降るか)
+
+- 料金: {price}
+- 1社だけ $5 の中身: その社の質問実文・並び・締切観測・出典URLを CSV 1 本に固めて納品。
+  質問実文が 0 文の社にはお金を取らない (締切頁のラベルが正直に出す)。
+- 歴史スナップショット一式 $25 の中身 (実測の行数): `history_timeseries.csv` {rows.get("history_timeseries.csv","?")} 行 /
+  `es_deadlines_history.csv` {rows.get("es_deadlines_history.csv","?")} 行 / `source_liveness.csv` {rows.get("source_liveness.csv","?")} 行。
+  GitHub Release として Version 付きの zip で降ろせる (中の行数がその日の記録と一致するのは
+  `check_release.py` が毎巡回で測る): https://github.com/part676392/dsh-money-engine/releases/latest
+- 注文: {BASE}/data-license.html ／ issue form (https://github.com/part676392/dsh-money-engine/issues/new?template=order.yml) ／
+  GitHub の account 不要ならメール (fq23ou7os@maxxspace.com)。支払いはこちらを参照。
+
+## 出典と権利 (引用する時に必ず付けてほしい事)
+
+- 元の記事: https://note.com/shushoku_career1 ({n_all:,} 本を機械処理)。各行に `source_url` を入れている。
+- 出典 {n_all:,} 本中 **{n_sh:,} 本が本文に『想定質問』と明記している**。面接で実際に問われた記録の
+  転載ではない。中には「実設問は未確認」「例文はすべて架空の学習用例」と自ら書いている記事も有る。
+  引用する時は「想定質問集からの抽出」と出てくれないと、読者に誤解を与える。
+- CC BY 4.0 は、私が作った表・順序・対応づけにのみ適用する。記事本文の著作権は各記事の著者に帰属し、
+  本文の全文はこの資産に同梱していない。
+"""
+
+
 def main() -> int:
     snap = load("data/snapshot-latest.json", {}) or {}
     ai = load("data/ai_interview_demand.json", {}) or {}
@@ -166,6 +208,7 @@ def main() -> int:
 - [sitemap.xml]({BASE}/sitemap.xml): 全 {comps} 社ページを含む URL 一覧
 - [GitHub repository](https://github.com/part676392/dsh-money-engine): 生成スクリプトと日別履歴の本体
 
+{price_section()}
 ## Measured limits (正直な制約)
 
 - 検索エンジンに索引されている**証拠は未取得**。Bing の phrase probe は固有表現 4 本すべて ours=0。`site:` 総数は 303,000→52→73,000 とふらつき、索引の証拠にならないと実測で分かった。

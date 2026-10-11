@@ -99,11 +99,29 @@ try:
             sl=stem.lower()
             if kl in sl or sl in kl: return f
         return None
-    misses=[]
+    import re as _re
+    def canon(f):
+        """別名の連絡頁 (noindex) は検索に渡さない。本体の URL に引き直す。"""
+        h=open("company/"+f,encoding="utf-8",errors="replace").read()
+        # refresh の URL は url= (小文字) で書かれている。大文字 only にすると別名を
+        # そのまま検索に渡す (実測: 付録頁 company/トヨタ自動車.html)。
+        m=_re.search(r'http-equiv="refresh"[^>]*?url=([^"'>]+)',h,_re.I)
+        if not m:
+            m=_re.search(r'<link rel="canonical" href="([^"]+)"',h)
+        if not m: return f,None
+        tgt=urllib.parse.unquote(m.group(1)).rstrip("/").split("/")[-1]
+        return (tgt,f) if tgt and pathlib.Path("company/"+tgt).exists() else (None,f)
+    misses=[]; alias=0
     for k,_ in top:
         f=resolve(k)
-        if f: urls.append(f"{base}/company/{urllib.parse.quote(f)}")
-        else: misses.append(k)
+        if not f:
+            misses.append(k); continue
+        f,was=canon(f)
+        if not f:
+            misses.append(k); continue
+        if was and was!=f: alias+=1   # 本体は canonical が自分自身なので数えない
+        urls.append(f"{base}/company/{urllib.parse.quote(f)}")
+    if alias: print(f"  (別名 {alias} 本は本体 URL に引き直して送信)")
     if misses: print(f"  (no page for {len(misses)} demand-top companies: {misses[:6]})")
 except Exception as e:
     print("  demand urls skipped",e)
@@ -127,9 +145,14 @@ for ep in ["https://api.indexnow.org/indexnow","https://www.bing.com/indexnow"]:
         with urllib.request.urlopen(r,timeout=40) as x: print(f"  indexnow {ep.split('//')[1]:26s} {x.status} ({len(urls)} urls)")
         pathlib.Path("data/rails").mkdir(parents=True,exist_ok=True)
         json.dump({"at":time.strftime("%Y-%m-%dT%H:%M:%S%z"),"endpoint":ep,"submitted":len(urls),
-                   "sitemap":len(sm_urls),"status":x.status},
+                   "sitemap":len(sm_urls),"status":x.status,"urls":urls[:5200]},
                   open("data/rails/indexnow_latest.json","w"),ensure_ascii=False,indent=1)
-    except urllib.error.HTTPError as e: print(f"  indexnow {ep.split('//')[1]:26s} {e.code}")
+    except urllib.error.HTTPError as e:
+        print(f"  indexnow {ep.split('//')[1]:26s} {e.code}")
+        pathlib.Path("data/rails").mkdir(parents=True,exist_ok=True)
+        json.dump({"at":time.strftime("%Y-%m-%dT%H:%M:%S%z"),"endpoint":ep,"submitted":len(urls),
+                   "sitemap":len(sm_urls),"status":e.code,"urls":urls[:5200]},
+                  open("data/rails/indexnow_latest.json","w"),ensure_ascii=False,indent=1)
 PY
 
   python3 check_distribution.py 2>&1 | tail -7

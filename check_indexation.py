@@ -105,6 +105,14 @@ def discovery_rail() -> bool:
     """発見の配管を通しているか。sitemap の全量を送らず一部だけ送っていた実測:
     sitemap 486 本 / IndexNow 送信 48 本 (根 8 + 需要 top 40)。438 枚が黙っていた。"""
     bad = []
+    # 送信記録 (loop が書く) を先に読む。後で読むと (1b) が空で素通りした (制御で実測)。
+    d_sent = {}
+    _rec = ROOT / "data" / "rails" / "indexnow_latest.json"
+    if _rec.exists():
+        try:
+            d_sent = json.loads(_rec.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            d_sent = {}
     smf = ROOT / "sitemap.xml"
     if not smf.exists():
         print("    発見の配管      : ★ sitemap.xml が無い")
@@ -138,6 +146,23 @@ def discovery_rail() -> bool:
             miss.append(f.name[:-5][:16])
     if miss:
         bad.append(f"sitemap に企業頁が {len(miss)} 枚足りない {miss[:2]}")
+    # (1b) 実際に送った URL に別名 (noindex) 頁が混ざっていないか
+    sent = d_sent.get("urls") or []
+    if sent:
+        alias_sent = []
+        for u in sent:
+            if "/company/" not in u:
+                continue
+            name = urllib.parse.unquote(u.rstrip("/").split("/")[-1])
+            f = ROOT / "company" / name
+            if not f.exists():
+                alias_sent.append(name[:18] + "(無い頁)")
+                continue
+            h = f.read_text(encoding="utf-8", errors="replace")
+            if 'http-equiv="refresh"' in h or "noindex" in h:
+                alias_sent.append(name[:18])
+        if alias_sent:
+            bad.append(f"別名頁を検索に送っている {alias_sent[:2]}")
     # (2) robots.txt が sitemap を示しているか
     rob = (ROOT / "robots.txt")
     if not rob.exists() or "sitemap.xml" not in rob.read_text(encoding="utf-8"):
@@ -146,6 +171,7 @@ def discovery_rail() -> bool:
     rec = ROOT / "data" / "rails" / "indexnow_latest.json"
     if rec.exists():
         d = json.loads(rec.read_text(encoding="utf-8"))
+        d_sent = d
         sub, tot = int(d.get("submitted") or 0), max(len(urls), 1)
         sub_line = f"送信 {sub}/{tot} @{d.get('at','')}"
         if sub < tot * 0.9:

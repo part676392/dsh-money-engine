@@ -144,9 +144,10 @@ def _free_sample(company: str) -> str:
             ' onclick="' + beacon_js("cta-sample") + ';return true">' + label + "</a>")
 
 
-def html(company: str = "", count_txt: str = "", hist: bool = False) -> str:
+def html(company: str = "", count_txt: str = "", hist: bool = True) -> str:
     """頁の末尾に置く注文欄。company を渡すと form に会社名を先に入れた状態で開く。
-    hist=True の面 (店) だけ、$25 の履歴一式の中身を manifest の実測で並べる。"""
+    hist は既定 True。実測 (2026-10-11): 面ごとに builder へ引数を渡していたら、巡回では
+    4/7 面にしか出なかった (どの builder が上書きするかで決まる = 運)。既定にして外漏れを無くす。"""
     u = (url(company) if company else url()).replace("&", "&amp;")
     note = ("開いた注文 form には会社名が既に入っています。" if company
             else "開いた注文 form で会社名と個数を選びます。")
@@ -206,7 +207,7 @@ def refresh_mail(path) -> int:
     return n
 
 
-def inject(path, count_txt: str = "", top: str = "", hist: bool = False) -> bool:
+def inject(path, count_txt: str = "", top: str = "", hist: bool = True) -> bool:
     """書き出した html に注文欄を足す。
     %書式や .format の土台は {BUY} が展開されないので、後から差す方を信用する。
     top を渡すと </h1> の直後にも上部欄を差す (実測: 注文欄が 99% 目にしか無かった)。"""

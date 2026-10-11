@@ -21,6 +21,22 @@ mkdir -p logs
   # 因みに start だけ書いて何も出さない run の真因は、巡回を `| head` に繋いだ
   # 側の SIGPIPE (検証手法のミス)。日志を見る時は >/dev/null で回すこと。
   export GIT_TERMINAL_PROMPT=0
+  # push の前に remote を取り込む (実行中に dev 側が push するのが実測)。
+  # pull --rebase だけだと data/history/index.json が揉めて、rebase 中断のまま
+  # 501 file を抱えて次回を迎えた (2026-10-11 09:47 実測)。
+  # 取りに行く順: fetch -> merge (-X theirs) -> 揉めたら remote を正に reset。
+  # 落とすのは巡回が作った頁だけなので、作り直せば戻る (手作業の資産は無い)。
+  sync_push() {
+    _O="$1"
+    if ! git fetch -q "$_O" main; then
+      echo "  sync: fetch 失敗 (ネットワーク?) -> push だけ試す"
+    elif ! git merge --no-edit -X theirs FETCH_HEAD >/dev/null 2>&1; then
+      echo "  sync: merge が揉めたので remote を正に戻す (作り直せるものだけ)"
+      git rebase --abort 2>/dev/null
+      git reset -q --hard FETCH_HEAD
+    fi
+    git push -q "$_O" HEAD:main
+  }
   TOK0=$(gh auth token 2>/dev/null)
   if [ -z "$TOK0" ]; then
     echo "  ★★★ GUARD FAIL: gh token が空 (git pull で固まる前に終了)"
@@ -50,7 +66,7 @@ mkdir -p logs
     git -c user.name="part676392" -c user.email="72697109+part676392@users.noreply.github.com" \
         commit -qm "daily refresh $(date +%F)"
     TOK=$(gh auth token 2>/dev/null)
-    git push -q "https://x-access-token:${TOK}@github.com/part676392/dsh-money-engine.git" HEAD:main \
+    sync_push "https://x-access-token:${TOK}@github.com/part676392/dsh-money-engine.git" \
       && echo "  pushed" || echo "  PUSH FAILED"
     python3 check_regression.py --update 2>&1 | tail -1
     gh api -X POST repos/part676392/dsh-money-engine/pages/builds >/dev/null 2>&1 && echo "  pages build triggered"
@@ -150,10 +166,8 @@ PY
         commit -qm "history refresh $(date +%F)"
     TOK2=$(gh auth token 2>/dev/null)
     # 実行中にこちら側が push されることが実測である (run 中に HISTORY PUSH FAILED になった)。
-    # だから push の前に pull --rebase して、自分の commit を remote の後ろへ乗せ直す。
-    git pull --rebase --autostash -q "https://x-access-token:${TOK2}@github.com/part676392/dsh-money-engine.git" main \
-      || echo "  history pull failed (そのまま push を試す)"
-    git push -q "https://x-access-token:${TOK2}@github.com/part676392/dsh-money-engine.git" HEAD:main \
+    # sync_push が remote を取り込んでから push する (rebase 中断で止まらない)。
+    sync_push "https://x-access-token:${TOK2}@github.com/part676392/dsh-money-engine.git" \
       && echo "  history push ok (exit)" || echo "  HISTORY PUSH FAILED"
     # exit=0 は証じゃない (自分がそう習った)。local と remote の full SHA を突き合わせる。
     LOCAL=$(git rev-parse HEAD)

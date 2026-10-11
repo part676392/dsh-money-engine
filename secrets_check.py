@@ -55,7 +55,8 @@ def main() -> int:
             # 説明文 (rails 表・この巡回自身の docstring・README) は許す: 値が同じ行に無い
             for m in re.finditer(rf"[\"']?{k}[\"']?\s*[:=]\s*[\"']([^\"'\s]{{4,}})", low):
                 val = m.group(1)
-                if val in ("", "none", "null", "***", "…"):
+                if val in ("", "none", "null", "***", "…", "bearer", "basic", "token",
+                           "true", "false", "string", "true,"):
                     continue
                 if "example" in val or "your" in val or "$" in val or "{" in val:
                     continue
@@ -74,7 +75,10 @@ def main() -> int:
               "copy_アビームコンサルティングの.json", "rentry-current.md",
               "uncensored_raw.txt",
               # 人間に渡す手順書と、Discussion に貼る原稿。中身を見て公開すると決めた物。
-              "handoff-search.md", "discussion-first-post.md"}
+              "handoff-search.md", "discussion-first-post.md",
+              # Bing 用の account を agent で作る驱动 script。credential は読みにいくだけで
+              # 自身に鍵を書いていない (grep で確認済み)。検証可能にしておきたいので公開側。
+              "ms_finish.js", "ms_auto.js", "ms_signin.js"}
     # data/full_bodies.json は note 有料記事の本文 (). public repo に積んで
     # 大量再発行しないために意図的に untrack。抽出物と1文引用だけを公開する。
     uncovered = [p.name for p in outbox

@@ -452,12 +452,22 @@ def tracker_single_source() -> bool:
         # tracker_js が今吐く JS と 1 文字でも違えば複製。定数だけを共有して本文を
         # 手書きコピーした頁 (question-lineups / sample) が旧 JS で live に出た実測がある。
         for m in re.finditer(r"<script>\(function\(\)\{.*?</script>", h, re.S):
-            # 頁には URL が変数 b に入っていて、鍵は fetch(b+"home" の形にしか現れない。
-            mm = re.search(r'fetch\(b\+"([a-z0-9-]+)"', m.group(0))
-            if not mm:
+            # 頁には URL が変数 b に入っていて、鍵は fetch(b+"home" の形 (旧) か
+            # fetch(b+(sl?'self-home':'home' の形 (自苑分離入り, 2026-10-11) でしか現れない。
+            old = re.search(r'fetch\(b\+"([a-z0-9-]+)"', m.group(0))
+            new = re.search(r"fetch\(b\+\(sl\?'([a-z0-9-]+)':'([a-z0-9-]+)'\)", m.group(0))
+            if new:
+                key, selfkey = new.group(2), new.group(1)
+                if selfkey != "self-" + key:
+                    drift.append(f"{p.name}(selfkey:{selfkey})")
+                    continue
+            elif old:
+                key = old.group(1)
+            else:
                 drift.append(p.name + ":key?")
-            elif m.group(0) != _tr(mm.group(1)):
-                drift.append(f"{p.name}({mm.group(1)})")
+                continue
+            if m.group(0) != _tr(key):
+                drift.append(f"{p.name}({key})")
     ok = ok and not nopage
     print(f"  referrer on pages   : {'OK' if not nopage else '★ 節が無い頁 ' + str(nopage[:4])}"
           f"  ({pages} 頁中)")

@@ -148,6 +148,12 @@
    "where": "gist cdaf690435b566d729893d12a69d9670 の本文 (question-lineups.md)",
    "tagged": true,
    "updated": "2026-10-11"
+  },
+  {
+   "key": "selftest",
+   "surface": "自分の護り・点検で開いた访问",
+   "target": "self-<key> に回る (部外者_COUNT から除外)",
+   "tagged": true
   }
  ],
  "discovery": {
@@ -203,5 +209,6 @@
   ],
   "why": "実測で締切頁 32 load に対して注文 link しか計数が無く、どの link を踏んだか分からなかった (上部欄 4 本中 beacon 1 本)",
   "checked_by": "check_regression.strip_beacons()"
- }
+ },
+ "updated": "2026-10-11"
 }

@@ -127,6 +127,7 @@ def main() -> int:
     prev = json.loads(prev_f.read_text(encoding="utf-8")) if prev_f.exists() else {}
 
     out = {"checked_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "counters": {}}
+    self_total = 0
     for label, key in KEYS.items():
         g = api(f"/get/dsh-money-engine/{key}")
         v = g.get("value")
@@ -134,9 +135,20 @@ def main() -> int:
         delta = (v - old) if (isinstance(v, int) and isinstance(old, int)) else None
         out["counters"][label] = {"value": v, "delta": delta, "key": key,
                                   "read_error": g.get("error")}
+        # 部外者だけ: 頁計数は ?src=selftest の訪問を数えなくなったので、これ単体で読める。
+        # 自苑 (護り・点検で開いた物) は self-<key> に落ちる。
+        sg = api(f"/get/dsh-money-engine/self-{key}")
+        sv = sg.get("value")
+        out["counters"]["self-" + label] = {"value": sv, "key": "self-" + key,
+                                            "read_error": sg.get("error")}
+        if isinstance(sv, int):
+            self_total += sv
+        time.sleep(1.1)     # 連打で相手が黙る (実測: quota 1 分あたり)。間隔あけ
         arrow = "" if not delta else f"  ↑ +{delta}"
         shown = v if isinstance(v, int) else "未取得"
-        print(f"  {label:6s} hits={shown}{arrow}", flush=True)
+        print(f"  {label:6s} hits={shown}{arrow}  (自苑 {sv if isinstance(sv, int) else '未取得'})",
+              flush=True)
+    print(f"  自苑訪問の合計: {self_total}  (これ以外が部外者)", flush=True)
 
     # 流入源: 外に出した URL に ?src=<key> を付けた。頁の JS が param を見て
     # src-<key> にも hit を置くので、どの面から human が来たかが分離できる。

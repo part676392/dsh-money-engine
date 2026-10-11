@@ -40,26 +40,30 @@ def tracker(key: str) -> str:
     """頁に1個入れる <script>。
     - 鍵 `key` を叩く (頁別の計数)
     - `?src=<token>` があれば `src-<token>` も叩く (流入源)
+    - `?src=selftest` (自分の護り・点検で開いた訪問) は頁計数を汚さず `self-<key>` へ。
+      実測 2026-10-11: home 32 / lineup 7 という读数に自分の計測が何件混じるか読めず、
+      「部外者が来たか」に答えられなかった。分離すると残りが部外者だけになる。
     - `document.referrer` の host を `ref-<host>` で叩き、全量を `ref-any` に足す。
       自サイト内遷移 (same host) は数えない。
     """
     return (
         '<script>(function(){try{var b="'
         + ABACUS
-        + '";fetch(b+"'
-        + key
-        + '", {mode:"no-cors",keepalive:true});'
+        + '";'
         + "var m=(location.search.match(/[?&]src=([a-z0-9_-]{1,24})/)||[])[1];"
+        + "var ua='';try{ua=(navigator&&navigator.userAgent)||'';}catch(e4){}"
+        # 自苑の合図は 2 通り受け付ける: ?src=selftest か、UA に dsh-selftest を巻いた訪問。
+        + "var sl=(m==='selftest')||(/dsh-selftest/.test(ua));"
+        + "fetch(b+(sl?'self-" + key + "':'" + key + "'), {mode:'no-cors',keepalive:true});"
         + "if(m){fetch(b+'src-'+m, {mode:'no-cors',keepalive:true});}"
         + "var r='';try{r=document.referrer||'';}catch(e2){}"
-        + "if(r){try{var h=new URL(r).hostname.toLowerCase().replace(/[^a-z0-9.-]/g,'');"
+        + "if(r&&!sl){try{var h=new URL(r).hostname.toLowerCase().replace(/[^a-z0-9.-]/g,'');"
         + "if(h&&h!==" + SELF_HOST_MARK + "){"
         + "fetch(b+'ref-'+h,{mode:'no-cors',keepalive:true});"
         + "fetch(b+'ref-any',{mode:'no-cors',keepalive:true});}}catch(e3){}}"
         # クローラ計数: navigator を読めない環境 (node の護りなど) では黙る
-        + "var ua='';try{ua=(navigator&&navigator.userAgent)||'';}catch(e4){}"
-        + "if(ua){var BS=" + _bots_js() + ";"
-        + "for(var i=0;i<BS.length;i++){if(BS[i][0].test(ua)){"
+        + "var BS=(sl?[]:" + _bots_js() + ");"
+        + "if(ua){for(var i=0;i<BS.length;i++){if(BS[i][0].test(ua)){"
         + "fetch(b+BS[i][1],{mode:'no-cors',keepalive:true});"
         + "fetch(b+'bot-any',{mode:'no-cors',keepalive:true});break;}}}"
         + "}catch(e){}})();</script>"

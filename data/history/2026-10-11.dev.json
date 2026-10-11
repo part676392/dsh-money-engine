@@ -1,5 +1,5 @@
 {
- "captured_at": "2026-10-11T23:15:29+09:00",
+ "captured_at": "2026-10-11T23:45:03+09:00",
  "location": "dev",
  "articles": 600,
  "companies": 473,
@@ -25,9 +25,9 @@
  "reverse_quotes": 24,
  "reverse_companies": 8,
  "deadlines_open": 12,
- "orders_real": 1,
+ "orders_real": 0,
  "orders_rehearsal": 1,
- "orders_closed": 1,
+ "orders_closed": 2,
  "delivered": 1,
  "traffic": {
   "home": 32,

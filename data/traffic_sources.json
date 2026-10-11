@@ -175,6 +175,12 @@
    "state": "blocked",
    "evidence": "outbox/note-signup-attempt.txt (reCAPTCHA Enterprise / anchor frame に素の checkbox 無し)",
    "policy": "支出 $0・人の操作を要求しない、で止めた"
+  },
+  "corpus_gap_consulting": {
+   "at": "2026-10-11",
+   "measured": "締切頁の 12 社の内、収録企業と名寄せで一致したのは 2 社 (NTT東日本 / NTT西日本)。コンサル・ファーム (アビーム/PwC/デロイト/EY/三菱UFJリサーチ＆コンサルティング) は 473 社の収録外",
+   "action": "次の採集対象はコンサル・ファーム。締切頁 (人が一番見ている面) が需要を指している",
+   "checked_by": "check_regression.deadline_row_names()"
   }
  },
  "link_counters": {

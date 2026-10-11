@@ -15,6 +15,8 @@ import html
 import json
 import pathlib
 import re
+import urllib.parse
+import csv
 
 ROOT = pathlib.Path(__file__).resolve().parent
 # 締切一覧の日付は実日付で動かす (固定日にしていたと、巡回が積もるほど「時点」が嘘になる)。
@@ -138,6 +140,46 @@ def from_titles():
     return rows, passed, "記事タイトルに明記された日付のみ"
 
 
+_FIRM_IDX = None
+
+
+def firm_index():
+    """収録済みの企業名 (473 社) と質問実文の行数。締切頁の社名は文から拾った物なので
+    『NTT東日本の』のような語尾やコース名が付いている (実測: 12 社中 収録企業と一致したのは
+    2 社だけで、consulting firm は corpus に無い)。嘘で埋めず、無い物は無いと出す。"""
+    global _FIRM_IDX
+    if _FIRM_IDX is not None:
+        return _FIRM_IDX
+    names, nq = set(), {}
+    f = ROOT / "exports" / "interview_questions.csv"
+    if f.exists():
+        with open(f, encoding="utf_8_sig") as fh:
+            for row in csv.DictReader(fh):
+                c = (row.get("company") or "").strip()
+                if c:
+                    names.add(c)
+                    nq[c] = nq.get(c, 0) + 1
+    _FIRM_IDX = (sorted(names, key=len, reverse=True), nq)
+    return _FIRM_IDX
+
+
+def match_firm(firm: str) -> tuple:
+    names, nq = firm_index()
+    base = (firm or "").strip().rstrip("の").strip()
+    if not base:
+        return "", "", 0
+    for c in names:
+        if c == base:
+            return c, "完全", nq.get(c, 0)
+    for c in names:
+        if base.startswith(c):
+            return c, "先一致", nq.get(c, 0)
+    for c in names:
+        if c.startswith(base):
+            return c, "含", nq.get(c, 0)
+    return base, "", 0
+
+
 def render(rows, passed, method):
     nearest = rows[0]["date"][5:].replace("-", "/") if rows else "-"
     n_free = sum(1 for r in rows if not r["price"])
@@ -165,14 +207,30 @@ def render(rows, passed, method):
             seen = "初出 %s%s" % (fs[5:].replace("-", "/"), (" / %d回目" % n) if n > 1 else "")
         else:
             seen = "今日初出"
+        cname, kind, nq = match_firm(r["firm"])
+        # 企業名は文から拾った物なので語尾 (『〜の』) が残る。 cleaning はするが捏造はしない。
+        shown = (cname or r["firm"].rstrip("の")).strip()
+        if kind and nq:
+            cell = ("<a href='/dsh-money-engine/company/" + urllib.parse.quote(cname) + ".html'>"
+                    + esc(shown) + "</a><span class='hs'> 収録 " + str(nq) + " 文 (" + kind + ")</span>")
+            prefill = cname
+        elif kind:
+            cell = ("<a href='/dsh-money-engine/company/" + urllib.parse.quote(cname) + ".html'>"
+                    + esc(shown) + "</a><span class='hs'> 質問実文 未収録</span>")
+            prefill = cname
+        else:
+            cell = esc(shown) + "<span class='hs'> 質問実文 未収録 (473 社の収録外)</span>"
+            prefill = shown
         # 行ごとに $5 の口を置く (実測: 締切頁 34 load で注文 link は画面上部に 1 本だけ。
-        # 必要な物が目の前に有る場所で押せるようにする。計数は cta-row で行数と照合できる)。
-        buy = ("<a href=\"" + esc(buy_block.url(r["firm"])).replace("&", "&amp;") +
+        # 計数は cta-row で行数と照合できる)。
+        # esc() が & を &amp; にするので追加の置換は二重になる (実測: href に &amp;amp; が残り
+        # form の plan 列が壊れていた)
+        buy = ("<a href=\"" + esc(buy_block.url(prefill)) +
                "\" onclick=\"" + buy_block.beacon_js("cta-row") +
                ";return true\">$5</a>")
-        items.append("<tr><td><b>%s</b></td><td>%s</td><td><a href='%s'>%s</a></td><td>%s</td>"
+        items.append("<tr><td><b>%s</b></td><td>%s</td><td>%s</td><td>%s</td>"
                      "<td class='t'>%s%s<span class='hs'>%s</span></td><td>%s</td></tr>" % (
-                         r["date"][5:].replace("-", "/"), urg, esc(r["url"]), esc(r["firm"]),
+                         r["date"][5:].replace("-", "/"), urg, cell,
                          badge, esc(r["title"][:52]), ev, esc(seen), buy))
 
     # 見出しの語は実集合に合わせる。wide でコンサル以外が入るのに「コンサル一覧」と騙さない。

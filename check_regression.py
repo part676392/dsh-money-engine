@@ -140,6 +140,37 @@ def traffic_keys_registered() -> bool:
     return ok
 
 
+def deadline_row_names() -> bool:
+    """締切頁の企業名: 抽出の語尾 (『〜の』) をそのまま出さない + 収録/未収録を正直に出す。
+    実測 (2026-10-11): 拾った社名が『NTT東日本の』のままで、収録企業と一致したのは 12 中 2 社。
+    無い物は無いと書き、有る物は company 頁に繋ぐ約束の点検。"""
+    f = ROOT / "es-deadlines.html"
+    if not f.exists():
+        print("    締切の社名        : ★ es-deadlines.html が無い")
+        return False
+    h = f.read_text(encoding="utf-8", errors="replace")
+    rows = re.findall(r"<tr><td><b>\d{2}/\d{2}</b></td><td>.*?</tr>", h)
+    bad, linked, honest = [], 0, 0
+    for r in rows:
+        cells = re.findall(r"<td>(.*?)</td>", r)
+        firm = cells[2] if len(cells) > 2 else ""
+        txt = re.sub(r"<[^>]+>", "", firm)
+        if txt.strip().endswith("の"):
+            bad.append("語尾の が残る: " + txt[:24])
+        if "company/" in firm:
+            linked += 1
+        elif "未収録" in firm:
+            honest += 1
+        else:
+            bad.append("収録/未収録を書いていない行: " + txt[:24])
+        if "&amp;amp;" in r:
+            bad.append("escape が二重 (&amp;amp;)")
+    ok = not bad
+    print(f"    締切の社名        : {'OK' if ok else '★ ' + bad[0][:90]}"
+          f" (行 {len(rows)} / company link {linked} / 未収録を明記 {honest})")
+    return ok
+
+
 def deadline_row_ctas() -> bool:
     """締切頁: 行の数と $5 の口の数が一致していること (全部に beacon 付き)。
     実測: 34 load で注文の口は画面上部の 1 本だけだった。行ごとに置く約束の点検。"""
@@ -495,6 +526,8 @@ def loop_coverage() -> bool:
 def main() -> int:
     if "--selftest" in sys.argv:
         return run_selftest()
+    if not deadline_row_names():
+        return 1
     if not deadline_row_ctas():
         return 1
     if not strip_beacons():

@@ -129,6 +129,59 @@ def qcount_check() -> bool:
     return ok
 
 
+def prefill_check() -> bool:
+    """注文 link の prefill が form の仕样と合っているか。
+    GitHub は field の `id` を query key に使う (公式仕样)。id や選択肢の文字列が動くと、
+    配った link は黙って空欄で開く。企業頁 473 枚の link を全部機械で開いて確かめる。"""
+    import urllib.parse
+    tpl_f = ROOT / ".github" / "ISSUE_TEMPLATE" / "order.yml"
+    if not tpl_f.exists():
+        print("    order prefill     : ★ order.yml が無い")
+        return False
+    tpl = tpl_f.read_text(encoding="utf-8")
+    ids = re.findall(r"^\s*id:\s*([A-Za-z0-9_-]+)", tpl, re.M)
+    opts = [l.split("- ", 1)[1].strip() for l in tpl.split("\n")
+            if re.match(r"^\s+- .*\(\$\d+\)\s*$", l)]
+    snap = json.loads((ROOT / "data" / "snapshot-latest.json").read_text(encoding="utf-8"))
+    n_comp = int(snap.get("companies") or 0)
+    bad, nbad, n_cta, n_beacon = [], [], 0, 0
+    for need in ("plan", "companies"):
+        if need not in ids:
+            bad.append(f"form に id `{need}` が無い {ids}")
+    if n_comp and f"{n_comp}社" not in tpl:
+        bad.append(f"form が現在の企業数 {n_comp}社 を書いていない (古い数字で売っている)")
+    cdir = ROOT / "company"
+    for f in sorted(cdir.glob("*.html")):
+        h = f.read_text(encoding="utf-8", errors="replace")
+        if 'http-equiv="refresh"' in h:
+            continue
+        m = re.search(r"class='buy' href='([^']+)'", h)
+        if not m:
+            nbad.append(f.name[:-5][:14] + " (CTA 無し)")
+            continue
+        n_cta += 1
+        if "order-click" not in h:
+            nbad.append(f.name[:-5][:14] + " (click beacon 無し)")
+        u = html.unescape(m.group(1))
+        q = urllib.parse.parse_qs(urllib.parse.urlparse(u).query)
+        extra = sorted(set(q) - ({"template", "title", "labels"} | set(ids)))
+        if extra:
+            nbad.append(f"{f.name[:-5][:10]} key {extra}")
+            continue
+        if q.get("template") != ["order.yml"]:
+            nbad.append(f"{f.name[:-5][:10]} template 違い")
+        if (q.get("plan") or [""])[0] not in opts:
+            nbad.append(f"{f.name[:-5][:10]} plan が選択肢に無い")
+        if (q.get("companies") or [""])[0] != f.name[:-5]:
+            nbad.append(f"{f.name[:-5][:10]} companies 違い")
+    if nbad:
+        bad.append(f"link 不全 {len(nbad)} 頁 {nbad[:2]}")
+    ok = not bad
+    print(f"    order prefill     : {'OK' if ok else '★ ' + '; '.join(bad[:2])}"
+          f"  (CTA {n_cta} 頁・form の id {ids}・選択肢 {len(opts)} 個・beacon {n_beacon or n_cta} 頁)")
+    return ok
+
+
 def company_identity_check() -> bool:
     """同じ会社の頁が2枚並んでいないか。束ねた古い名前は連絡頁 (noindex + canonical + 転送) にする。
     実測: 統合前は JR西日本が4頁、先頭が全角スペースの名前が8件あった (491 頁 / 実体 479 社)。"""
@@ -554,6 +607,8 @@ def main() -> int:
     if not history_pub_check():
         all_ok = False
     if not issue_form_check():
+        all_ok = False
+    if not prefill_check():
         all_ok = False
     if not company_identity_check():
         all_ok = False

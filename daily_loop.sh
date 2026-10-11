@@ -134,6 +134,8 @@ PY
   python3 make_ai_gap.py        2>&1 | tail -2
   python3 make_changes.py       2>&1 | tail -2
   python3 make_llms.py        2>&1 | tail -2
+  # 注文 form (order.yml) の値段と社数は data から作る。手書きだと頁が先に進んで form が古くなる。
+  python3 build_issue_template.py 2>&1 | tail -2
   python3 build_site.py       2>&1 | tail -2
   # 企業頁の道しるべ (company_pages.csv) と llms.txt の枚数は build_site が書いた頁を読む。
   # 先に走ると前の回の枚数で出る (実測でズレた) ので、頁を書いた後に作り直す。

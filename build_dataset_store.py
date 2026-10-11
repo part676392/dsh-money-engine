@@ -27,7 +27,7 @@ EXPORTS = ROOT / "exports"
 
 # 企業数で決まる料金 (作った実績: 抽出は機械工程なので人数ではなく社数で切る)
 # 1社 $5 を先頭に足した: 冷たい流入にとって $15 は「合うか分からないものへの初回」としては
-# 高い。まず1社ぶん Actual を見てもらう入口 (実測で访问自体が薄いので入口は低い方が有利)。
+# まず1社ぶんだけ見てもらう入口 (実測で閲覧自体が薄いので、入口の値段は低い方が有利)。
 TIER = [(1, 5), (50, 15), (150, 35), (100000, 60)]
 HISTORY_USD = 25
 
@@ -77,6 +77,10 @@ def main() -> int:
     nq = q.get("questions_total", 0)
     # 行と実文は別の数 (実測: 1,779 行 / 実文 1,173 / 最多の1文が 500 行)
     n_dist = q.get("questions_distinct_text", 0)
+    import order_link
+    buy_url = html.escape(order_link.url(plan=order_link.ENTRY_PLAN), quote=True)
+    from tracker_js import beacon_js as _beacon
+    buy_beacon = _beacon("order-click")
     nf = fl.get("flows_total", 0)
     nfc = fl.get("companies_with_flows", 0)
     ns = sg.get("companies_with_mentions", 0)
@@ -222,6 +226,11 @@ CSV 行数: 面接質問 {rows['interview_questions.csv']:,} ／ 選考フロー
 <table><thead><tr><th>品物</th><th>値段</th><th>中身</th></tr></thead><tbody>
 {tier_rows}
 </tbody></table>
+<p style="margin:14px 0 0"><a href="{buy_url}" style="display:inline-block;background:#7a5230;color:#fff;
+padding:9px 15px;border-radius:8px;text-decoration:none;font-weight:600"
+onclick="{buy_beacon};return true">注文を開く（$5 から）</a>
+<span style="font-size:.8rem;color:#6d675e"> 開いた form は「1社だけ試す ($5)」を選んだ状態になります。
+企業名を書いて送るだけです。</span></p>
 
 <div class="warn"><b>納品のしかたを先に正直に書きます。</b>
 ここの受信箱は受信だけで、こちらからメールを送れません。だから納品は

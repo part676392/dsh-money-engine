@@ -8,27 +8,23 @@ body:
       value: |
         本文は公開されます。個人情報 (氏名・メール) は書かなくていいです。
         納品はこの issue のコメントに公開URLとして載せます。
+        今の収録: 記事 600 本 / 企業 473 社 / 面接質問 1,779 行 (重複を除いた実文 1,173 文)。
   - type: dropdown
     id: plan
     attributes:
       label: プラン
       options:
-        - 1社だけ試す ($5)
-        - カスタム抽出 〜50社 ($15)
-        - カスタム抽出 〜150社 ($35)
-        - カスタム抽出 〜491社 ($60)
-        - 歴史スナップショット一式 ($25)
-    validations:
-      required: true
+          - 1社だけ試す ($5)
+          - カスタム抽出 〜50社 ($15)
+          - カスタム抽出 〜150社 ($35)
+          - カスタム抽出 全社ぶん 473社 ($60)
+          - 歴史スナップショット一式 ($25)
   - type: textarea
     id: companies
     attributes:
       label: 必要な企業の一覧 (または語彙・業種)
       description: 1行1社。業種や語彙の指定でも可。
-      placeholder: |
-        株式会社ディスコ
-        インテグレース・ヤーニン・ボズウェン
-        業種: 証券
+      placeholder: 東日本旅客鉄道株式会社（JR東日本）
     validations:
       required: true
   - type: dropdown
@@ -40,12 +36,12 @@ body:
         - Arbitrum
         - Polygon
         - Ethereum
-    validations:
-      required: true
   - type: input
     id: contact
     attributes:
       label: 連絡先 (任意 / 空欄ならこの issue で連絡)
-      placeholder: "name@example.com"
-    validations:
-      required: false
+  - type: markdown
+    attributes:
+      value: |
+        受信箱は受信専用 (外送信不可) なので、納品は公開URLで渡します。
+        この form を開いた際に企業名が既に埋まっていた場合は、そのまま送金先を選ぶだけで注文になります。

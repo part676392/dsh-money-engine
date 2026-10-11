@@ -22,7 +22,8 @@ import re
 import datetime as dt
 
 import demand
-from tracker_js import tracker
+import order_link
+from tracker_js import beacon_js, tracker
 
 ROOT = pathlib.Path(__file__).resolve().parent
 OUT = ROOT
@@ -522,7 +523,14 @@ small{{display:block;color:#5d6570;margin-top:26px;font-size:.8rem;line-height:1
                     "<p class='raw'>この会社については、質問の実文をまだ収録できていません。"
                     "上の資料リンクの中に出ている可能性はありますが、空欄を埋めるために文は作っていません。"
                     "全社の一覧: <a href='/dsh-money-engine/interview-questions.html'>面接質問の実文</a></p></div>")
-        # demand は収录時の名前で引くので、束ねる前の名前も順に試す (無いものを無いと言わない)。
+        # 金の入口: 企業頁から会社名を書かずに注文できる (prefill の鍵は form の id)。
+        buy_url = esc(order_link.url(comp, order_link.ENTRY_PLAN))
+        n_txt = f"質問実文 {len(uniq):,} 文" if uniq else "この会社の質問実文は未収録"
+        cln += ("<p class='buywrap'><a class='buy' href='" + buy_url + "' onclick=\"" +
+                beacon_js("order-click") + ";return true\">この会社ぶんを <b>$5</b> で受け取る</a>"
+                "<span class='raw'> " + n_txt + "・出典URLつき。開いた注文 form には会社名が既に入っています。</span></p>")
+
+        # demand は収録時の名前で引くので、束ねる前の名前も順に試す (無いものを無いと言わない)。
         names_try = [comp] + list(ALIAS.get(comp) or [])
 
         def _try(fn):
@@ -607,6 +615,10 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
 .qt{{width:100%;border-collapse:collapse;font-size:.84rem;margin-top:8px}}
 .qt th,.qt td{{text-align:left;padding:6px 8px;border-bottom:1px solid #e6e1d8;vertical-align:top}}
 .qt th{{background:#efeee9;font-weight:600;white-space:nowrap}}
+.buywrap{{margin:16px 0 0;padding:12px;background:#fff;border:1px solid #e3e7ed;border-radius:9px}}
+.buy{{display:inline-block;background:#7a5230;color:#fff;padding:8px 13px;border-radius:8px;
+text-decoration:none;font-weight:600}}.buy:hover{{background:#63421f}}
+.buywrap .raw{{display:inline-block;margin-left:9px}}
 .d{{font-size:.75rem;color:#6b7480;margin-left:6px}}a{{color:#1a5fd6}}
 .aigap{{background:#fff;border:1px solid #e3e7ed;border-left:4px solid #6b4fd6;border-radius:9px;padding:14px 16px;margin:20px 0}}
 .aigap h2{{font-size:1rem;margin:0 0 6px}}.aigap p{{font-size:.86rem;margin:8px 0}}

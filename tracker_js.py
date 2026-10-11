@@ -39,5 +39,10 @@ def tracker(key: str) -> str:
     )
 
 
+def beacon_js(key: str) -> str:
+    """onclick 用の beacon。abacus の URL はこの file でしか作らない (単一実装の護りを壊さない)。"""
+    return "fetch('" + ABACUS + key + "',{mode:'no-cors',keepalive:true})"
+
+
 if __name__ == "__main__":
     print(tracker("home"))

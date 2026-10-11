@@ -203,7 +203,7 @@ th{{background:#efeee9;font-weight:600}}
 code{{background:#eceae4;padding:1px 5px;border-radius:4px;font-size:.76rem;margin:0 3px 3px 0;display:inline-block}}
 a{{color:#7a5230}}
 .note{{font-size:.8rem;color:#6d675e;margin-top:24px}}
-</style></head><main>
+</style></head><body><main>
 <h1>AI・録上面接で検索されている企業 {n} 社</h1>
 <p class="sub">企業名と「AI 面接」「録画 面接」「動画 面接」を組み合わせる検索が、実際にいくつ起きているか。機械収集した {total_terms} 件の実一覧です。</p>
 

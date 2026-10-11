@@ -254,9 +254,20 @@ def cta_check() -> bool:
             for plan in q.get("plan", []):
                 if plan not in opts:
                     bad.append(f"{rel} の plan「{plan[:20]}」が form の選択肢に無い")
+    # 位置: 上部の注文欄が有るか。実測で index.html は 145,446 字のうち 99% 目に
+    # 注文欄が在り、20 アクセスで注文ボタンの発火は 0 だった (計器は実ブラウザで発火確認済)。
+    import polish_buy_bars as PB
+    late = []
+    for rel, pos, _n in PB.positions():
+        if pos is None:
+            late.append(f"{rel} に注文欄が無い")
+        elif pos > PB.TOP_LIMIT:
+            late.append(f"{rel} は本文の {pos * 100:.0f}% 目 (上 25% に無し)")
+    if late:
+        bad += late
     ok = not bad
     print(f"    面の注文欄      : {'OK' if ok else '★ ' + '; '.join(bad[:3])}"
-          f"  ({len(pages)} 頁を点検)")
+          f"  ({len(pages)} 頁を点検 / 位置 {len(PB.positions())} 頁)")
     return ok
 
 

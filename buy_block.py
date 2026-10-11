@@ -1,11 +1,14 @@
-"""金の入口 (注文ボタン) を 1 個所にまとめる。
+"""金の入口 (注文欄) を 1 個所にまとめる。
 
-実測: 企業頁には注文ボタンを付けていたのに、人が最初に着く面には何も無かった。
-  index.html  访问 17 件 / 注文 link 0
-  question-lineups.html  5 件 / 0
-  store/  4 件 / 0
-つまり 26 人が「買う場所を探すページ」で買う場所を探していた。
-この module を呼ぶ面を増やし、money_check の cta_check で毎巡回に確かめる。
+企業のページには注文欄を付けていたのに、人が最初に着く面には何も無かった。
+  index.html             访问 17 件 / 注文の導線 0
+  question-lineups.html  访问  5 件 / 0
+  store/                 訪問  4 件 / 0
+導線を全頁へ差した次は、位置が嘘だった。
+  index.html 145,446 字のうち注文欄は 99% 目 (最後の最後) に在った
+  上部に有ったのは『データ資産の購入』の迂回 link だけで、注文 form への直線は無かった
+だから bar() (h1 の直下) と html() (頁末) の 2 種類を出す。
+どちらも money_check.cta_check で毎巡回点検する (位置も含める)。
 """
 from __future__ import annotations
 
@@ -24,42 +27,69 @@ _CSS = ("display:inline-block;background:#0b6b3a;color:#fff;padding:9px 15px;"
 _WRAP = ("margin:20px 0 0;padding:13px 15px;background:#fff;"
          "border:1px solid #e3e7ed;border-radius:6px")
 _RAW = "color:#5b6570;font-size:.82rem;margin-left:10px;line-height:1.65"
+_BAR_WRAP = ("margin:10px 0 0;padding:9px 12px;background:#fff7e8;"
+             "border:1px solid #e8c98a;border-radius:6px;font-size:.92rem;line-height:1.7")
+_BAR_A = "color:#8a4b00;font-weight:700;text-decoration:none"
 
 
 def url(company: str = "", plan: str = order_link.ENTRY_PLAN) -> str:
     return order_link.url(company, plan)
 
 
-def html(company: str = "", count_txt: str = "", cta: str = "") -> str:
-    """面の末尾に置く注文欄。company を渡すとその会社名を form に预先入れる。"""
-    u = url(company) if company else url()
-    if not cta:
-        cta = ("この会社ぶんを <b>$5</b> で受け取る" if company
-               else "まず1社ぶんだけ <b>$5</b> で受け取る")
+def _cta_text(company: str) -> str:
+    return ("この会社ぶんを <b>$5</b> で受け取る" if company
+            else "まず1社ぶんだけ <b>$5</b> で受け取る")
+
+
+def _free_sample(company: str) -> str:
+    # 常に絶対道。store/ の頁で href="sample.html" にすると store/sample.html に
+    # 解決されて 404 になった (実測: internal links 10 折れ / ★ sample.html x10)。
+    label = ("他の会社の無料サンプル" if company else "無料サンプル (実文を先に見る)")
+    return ('<a style="' + _BAR_A + '" href="/dsh-money-engine/sample.html">' + label + "</a>")
+
+
+def html(company: str = "", count_txt: str = "") -> str:
+    """頁の末尾に置く注文欄。company を渡すとその会社名を form に预先入れる。"""
+    u = (url(company) if company else url()).replace("&", "&amp;")
     note = ("開いた注文 form には会社名が既に入っています。" if company
             else "開いた注文 form で会社名と個数を選びます。")
     cnt = (count_txt + "・") if count_txt else ""
-    return ("<p style='" + _WRAP + "'><a href='" + u.replace("&", "&amp;") +
-            "' style='" + _CSS + "' onclick=\"" + beacon_js("order-click") +
-            ";return true\">" + cta + "</a><span style='" + _RAW + "'>" + cnt +
+    return ("<p style='" + _WRAP + "'><a href='" + u + "' style='" + _CSS +
+            "' onclick=\"" + beacon_js("order-click") + ";return true\">" +
+            _cta_text(company) + "</a><span style='" + _RAW + "'>" + cnt +
             PRICE_LINE.replace("**", "") + "・出典URLつき。" + note +
             ACCOUNT_NOTE + "。</span></p>")
 
 
-def inject(path, count_txt: str = "") -> bool:
-    """書き出した html の </main> 直前に注文欄を足す。
-    %書式や .format の template は {BUY} が展開されないので、後から差す方を信用する。"""
+def bar(company: str = "") -> str:
+    """h1 の直下 (最初の1画面) に置く短い注文欄。読まずに買えるようにする。"""
+    u = (url(company) if company else url()).replace("&", "&amp;")
+    return ("<p style='" + _BAR_WRAP + "'>💴 <a style='" + _BAR_A + "' href='" + u +
+            "' onclick=\"" + beacon_js("order-click") + ";return true\">" +
+            _cta_text(company) + "</a>　" + PRICE_LINE.replace("**", "") +
+            "　·　" + _free_sample(company) + "　·　" + ACCOUNT_NOTE + "</p>")
+
+
+def inject(path, count_txt: str = "", top: str = "") -> bool:
+    """書き出した html に注文欄を足す。
+    %書式や .format の土台は {BUY} が展開されないので、後から差す方を信用する。
+    top を渡すと </h1> の直後にも上部欄を差す (実測: 注文欄が 99% 目にしか無かった)。"""
     import pathlib as _p
     fp = _p.Path(path)
     h = fp.read_text(encoding="utf-8")
-    if "template=order.yml" in h:
-        return False
-    block = html(count_txt=count_txt)
-    if "</main>" in h:
-        h = h.replace("</main>", block + "</main>", 1)
-    elif "</body>" in h:
-        h = h.replace("</body>", block + "</body>", 1)
-    else:
-        return False
-    fp.write_text(h, encoding="utf-8")
-    return True
+    changed = False
+    if top and "</h1>" in h and "template=order.yml" not in h.split("</h1>")[0]:
+        h = h.replace("</h1>", "</h1>" + bar(top), 1)
+        changed = True
+    if "template=order.yml" not in h:
+        block = html(count_txt=count_txt)
+        if "</main>" in h:
+            h = h.replace("</main>", block + "</main>", 1)
+        elif "</body>" in h:
+            h = h.replace("</body>", block + "</body>", 1)
+        else:
+            return changed
+        changed = True
+    if changed:
+        fp.write_text(h, encoding="utf-8")
+    return changed

@@ -233,7 +233,7 @@ th,td{{text-align:left;padding:6px 8px;border-bottom:1px solid #e6e1d8;vertical-
 th{{background:#efeee9;font-weight:600}} a{{color:#7a5230}}
 ol{{font-size:.88rem}} ol li{{margin:7px 0}}
 .note{{font-size:.8rem;color:#6d675e;margin-top:24px}}
-</style></head><main>
+</style></head><body><main>
 <h1>面接で投げられた質問 {nq:,} 行（企業に割り当てた実文）</h1>
 <p class="sub">収録記事 {scanned} 本（うち本文を HTML から取り直したもの {full_used} 本）から質問の候補を {len(all_q):,} 件抜き出し、
 そのうち {nq:,} 行を {n_comp} 社に割り当てて下表にしました。残りの {len(all_q) - nq} 件は表題から企業を特定できなかったため、

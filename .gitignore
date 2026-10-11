@@ -3,7 +3,8 @@ __pycache__/
 .DS_Store
 .github/workflows/
 site/
-node_modules   # 追跡しない (runner は dev の link を張るので symlink も拾わせない)
+# 追跡しない。slash 付き (node_modules/) だと symlink を拾うので名前だけで諸切る
+node_modules
 .browser-profile/
 outbox/shots/
 outbox/wallet.json

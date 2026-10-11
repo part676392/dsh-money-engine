@@ -64,7 +64,7 @@
   "@type": "Dataset",
   "name": "転職・面接 目録データの時系列",
   "description": "無人巡回で毎日積んだ観測値の行列表。不明のセルは空欄 (0 を入れない)。各行に元 file の SHA-256 を付ける。",
-  "temporalCoverage": "2026-10-10T23:47:13+09:00 → 2026-10-11T20:03:53+09:00",
+  "temporalCoverage": "2026-10-10T23:47:13+09:00 → 2026-10-11T20:22:19+09:00",
   "measurementTechnique": "automatic daily extraction",
   "distribution": [
    {
@@ -133,7 +133,7 @@ CSV 行数: 面接質問 1,779 ／ 選考フロー 96 ／
 
 <p style='color:#5b6570;font-size:.82rem;margin-left:10px;line-height:1.65'>出典は note.com/shushoku_career1 の記事 600 本。うち 570 本が本文に『想定質問』と明記しています（面接で実際に問われた記録の転載ではありません）。うちはその文を機械抽出して、社名・件数・並び・出典URLを数えた表を売ります。</p>
 
-<div class="free"><b>歴史スナップショット一式 ($25) の中身</b>: <a href="/dsh-money-engine/exports/history_timeseries.csv">history_timeseries.csv</a> (3 行) ／ <a href="/dsh-money-engine/exports/es_deadlines_history.csv">es_deadlines_history.csv</a> (705 行) ／ <a href="/dsh-money-engine/exports/source_liveness.csv">source_liveness.csv</a> (2247 行)<br><span style="font-size:.8rem;color:#6d675e">毎巡回で積んでいるので、面に出た日がそのまま残ります。行の数はこの頁を書いた時点の実測です。</span></div>
+<div class="free"><b>歴史スナップショット一式 ($25) の中身</b>: <a href="/dsh-money-engine/exports/history_timeseries.csv">history_timeseries.csv</a> (3 行) ／ <a href="/dsh-money-engine/exports/es_deadlines_history.csv">es_deadlines_history.csv</a> (720 行) ／ <a href="/dsh-money-engine/exports/source_liveness.csv">source_liveness.csv</a> (2327 行)<br><span style="font-size:.8rem;color:#6d675e">毎巡回で積んでいるので、面に出た日がそのまま残ります。行の数はこの頁を書いた時点の実測です。</span></div>
 
 <h2 style="font-size:1rem;margin:22px 0 6px">料金</h2>
 <table><thead><tr><th>品物</th><th>値段</th><th>中身</th></tr></thead><tbody>
@@ -141,7 +141,7 @@ CSV 行数: 面接質問 1,779 ／ 選考フロー 96 ／
 <tr><td>カスタム抽出 〜50社</td><td>$15</td><td>指定した企業群だけを抽出した CSV。質問実文・面接官の意図・選考フロー・段階言及から選んだ列</td></tr>
 <tr><td>カスタム抽出 〜150社</td><td>$35</td><td>指定した企業群だけを抽出した CSV。質問実文・面接官の意図・選考フロー・段階言及から選んだ列</td></tr>
 <tr><td>カスタム抽出 全社ぶん</td><td>$60</td><td>指定した企業群だけを抽出した CSV。質問実文・面接官の意図・選考フロー・段階言及から選んだ列</td></tr>
-<tr><td>歴史スナップショット一式</td><td>$25</td><td>tag 付きで積んだ日付つき CSV 全部と、回数の差分一覧 (最新: <code>snap-20261011-0732</code>)。<br>今積んでいる観測 <b>3</b> 件・範囲 2026-10-10T23:47:13+09:00 → 2026-10-11T20:03:53+09:00。形を見る: <a href='exports/history_timeseries.csv'>履歴の時系列 CSV</a> ／ <a href='data/history/index.json'>index (SHA-256 付)</a></td></tr>
+<tr><td>歴史スナップショット一式</td><td>$25</td><td>tag 付きで積んだ日付つき CSV 全部と、回数の差分一覧 (最新: <code>snap-20261011-2022</code>)。<br>今積んでいる観測 <b>3</b> 件・範囲 2026-10-10T23:47:13+09:00 → 2026-10-11T20:22:19+09:00。形を見る: <a href='exports/history_timeseries.csv'>履歴の時系列 CSV</a> ／ <a href='data/history/index.json'>index (SHA-256 付)</a></td></tr>
 </tbody></table>
 <p style="margin:14px 0 0"><a href="https://github.com/part676392/dsh-money-engine/issues/new?template=order.yml&amp;plan=1%E7%A4%BE%E3%81%A0%E3%81%91%E8%A9%A6%E3%81%99+%28%245%29" style="display:inline-block;background:#7a5230;color:#fff;
 padding:9px 15px;border-radius:8px;text-decoration:none;font-weight:600"
@@ -171,7 +171,7 @@ onclick="fetch('https://abacus.jasoncameron.dev/hit/dsh-money-engine/order-click
 だから <b>本文は納品物に入れません</b>（2,072,200字を意図的に別置きにしている）。
 納品するのは抽出した表・順序・対応づけと出典URLです。CC BY 4.0 が掛かるのもその抽出部分だけ。</div>
 
-<p class="note">更新: 2026-10-11 20:22 JST（毎日 06:10 / 19:40 に自動再生成、上の数字も自動）
+<p class="note">更新: 2026-10-11 20:40 JST（毎日 06:10 / 19:40 に自動再生成、上の数字も自動）
 　他の観測: <a href="interview-questions.html">面接質問の実文</a> ／
 　<a href="selection-flows.html">公式選考フロー</a> ／ <a href="selection-signals.html">選考段階</a> ／
 　<a href="changes.html">運用履歴</a></p>

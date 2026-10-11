@@ -1,12 +1,17 @@
-"""面の先頭に注文欄を差し込む (最後の最後だけに有った為)。
+"""面の先頭 (h1 の直下) を作る: 収録実文の previews → 注文欄。
 
-実測: 注文欄の有る頁 7 枚すべてで、導線は本文の 77〜99% 目に在った。
-      index.html は 145,446 字のうち 99% 目。上部には迂回 link だけ。
- builders は-pages を再生成する度に下書きし直すので、再生成の後に1回囀す所を別に持つ。
- money_check.cta_check が位置も点検する (上 25% 以内に注文の導線)。
+実測で分かった 2 つの故障:
+  1) 注文欄が頁の一番下にしか無かった (index.html 145,446 字のうち 99% 目)
+  2) 上部欄を差した後も、企業頁は h1 → 値段 → 実文 の順だった
+     = 価値を読む前に \$5 が出た。人は値段より前に「中身が本物か」を見る。
+そこで h1 の直下に [実文 3 例] + [注文欄] を 1 塊 (strip) として差し込む。
+builders は頁を再生成するので、再生成の後に必ずこれを囀す (daily_loop に順序済み)。
+money_check.cta_check が骨格を点検する (実文が注文欄より前に 3 例有るか)。
 """
 from __future__ import annotations
 
+import csv
+import html
 import pathlib
 import re
 import urllib.parse
@@ -14,102 +19,154 @@ import urllib.parse
 import buy_block
 
 ROOT = pathlib.Path(__file__).resolve().parent
-TOP_LIMIT = 0.25          # 上部欄と認める位置 (文書の先からの割合)
+CSV = ROOT / "exports" / "interview_questions.csv"
+
+STRIP_START = "<!--buy-strip-->"
+STRIP_END = "<!--/buy-strip-->"
+
+# 骨格の許容 (割合で測ると <style> や JSON-LD の字数に食われて嘘を出すので距離で測る)
+GAP_LIMIT = 3200          # </h1> から注文欄までの字数
+H1_LIMIT = 1600           # 本文の先頭から h1 までの字数
+REAL_MIN = 3              # 注文欄より前に見せる収録実文の最低数
 
 
 def company_of(rel: str) -> str:
-    """company/<社名>.html から社名を戻す (alias 頁は main で弾く)。"""
+    """company/<社名>.html から社名を戻す (別名連絡頁は main で弾く)。"""
     if not rel.startswith("company/"):
         return ""
-    stem = pathlib.Path(rel).stem
-    return urllib.parse.unquote(stem)
+    return urllib.parse.unquote(pathlib.Path(rel).stem)
+
+
+def rows_by_company() -> dict:
+    """exports/interview_questions.csv を {社名: [(実文, カテゴリ), ...]} に。"""
+    if not CSV.exists():
+        return {}
+    out = {}
+    with CSV.open(encoding="utf_8_sig") as fh:
+        for r in csv.DictReader(fh):
+            comp = (r.get("company") or "").strip()
+            q = (r.get("question") or "").strip()
+            if comp and q:
+                out.setdefault(comp, []).append((q, (r.get("category") or "").strip()))
+    return out
+
+
+def pick_company(rows: list) -> list:
+    """1社から 3 例。カテゴリが被らない行を優先 (同じ質問型が並ぶと価値が伝わらない)。"""
+    out, seen_cat = [], set()
+    for q, cat in rows:
+        if cat and cat in seen_cat:
+            continue
+        seen_cat.add(cat)
+        out.append(q)
+        if len(out) >= REAL_MIN:
+            break
+    if len(out) < REAL_MIN:
+        for q, _c in rows:
+            if q not in out:
+                out.append(q)
+            if len(out) >= REAL_MIN:
+                break
+    return out[:REAL_MIN]
+
+
+def pick_spread(table: dict) -> list:
+    """index など社名を絞らない頁用: 別の会社から 3 例 (並べ方は決定的にして再生成で揺らさない)。"""
+    out, seen_comp = [], set()
+    for comp in sorted(table):
+        if comp in seen_comp or not table[comp]:
+            continue
+        seen_comp.add(comp)
+        out.append((comp, table[comp][0][0]))
+        if len(out) >= REAL_MIN:
+            break
+    return out
+
+
+def shown(company: str, table: dict) -> tuple:
+    """この頁の h1 直下に出す実文の組と同定用のラベル。
+    実文の無い企業頁 (実測 16 頁) は他社 3 例を『よその実例』として見せる。"""
+    rows = table.get(company, []) if company else []
+    if company and rows:
+        return "company", pick_company(rows)
+    return "spread", [q for _c, q in pick_spread(table)]
+
+
+def strip_html(company: str, table: dict) -> str:
+    """h1 の直下に置く塊: 収録実文 → 注文欄。"""
+    if company and table.get(company):
+        qs = pick_company(table[company])
+        head = f"収録実文 {len(qs)} 例（この会社の行から・出典URLつき）"
+        items = "".join("<li>" + html.escape(q) + "</li>" for q in qs)
+        who = ""
+    else:
+        kind, qs = shown(company, table)
+        sp = pick_spread(table)
+        lead = (f"この会社の質問実文はまだ収録していません。よその実例 {len(sp)} 例を置きます。"
+                if company else f"収録実文 {len(sp)} 例（別の会社から・出典URLつき）")
+        head = lead
+        items = "".join("<li>" + html.escape(q) + "　<span style='color:#7a828c'>"
+                        + html.escape(c) + "</span></li>" for c, q in sp)
+        who = ""
+    prev = ("<div style='margin:12px 0 0;padding:11px 13px;background:#f6f8fb;"
+            "border:1px solid #dde3ea;border-radius:6px'>"
+            "<p style='margin:0 0 7px;font-size:.82rem;color:#4b5563'>" + head +
+            "　<a style='color:#2547c9' href='" +
+            ("/dsh-money-engine/company/" + urllib.parse.quote(company) + ".html" if company
+             else "/dsh-money-engine/interview-questions.html") +
+            "'>全量を見る</a></p><ul style='margin:0;padding-left:1.2em;font-size:.95rem;line-height:1.6'>"
+            + items + "</ul></div>")
+    return STRIP_START + prev + buy_block.bar(company) + STRIP_END
 
 
 def polish(quiet: bool = False) -> tuple:
-    """面の html を歩いて、h1 の直後に上部欄の無い頁を直す。"""
-    touched, already, skipped = [], [], []
+    """全頁の h1 直下に strip を (再)設置。既にある物は作り直すので二重に積もらない。"""
+    table = rows_by_company()
+    touched, missing, skipped = [], [], []
     files = list(ROOT.glob("*.html")) + list((ROOT / "store").glob("*.html")) \
         + list((ROOT / "company").glob("*.html"))
     for f in files:
         rel = f.name if f.parent == ROOT else f.relative_to(ROOT).as_posix()
         h = f.read_text(encoding="utf-8", errors="replace")
-        if 'http-equiv="refresh"' in h:          # 別名の連絡頁は本体へ誘導すれば十分
+        if 'http-equiv="refresh"' in h or "</h1>" not in h:
             skipped.append(rel)
-            continue
-        if "</h1>" not in h:
-            skipped.append(rel)
-            continue
-        head = h.split("</h1>", 1)[0]
-        if "template=order.yml" in head:
-            already.append(rel)
-            continue
-        # 二度差しの禁止: h1 の直後に上部欄 (背景 #fff7e8) が有ればそれで足りる。
-        # (実測で index.html の link が 3 -> 4 本に増えた。idempotent でなかった)
-        h1i = h.find("</h1>")
-        if h1i >= 0 and "fff7e8" in h[h1i:h1i + 900]:
-            already.append(rel)
-            continue
-        # 重複した上部欄が残っていたら 1 個に畳む (手動再生成で 3 個積もった実測)
-        n_bar = h.count("fff7e8")
-        if n_bar > 1:
-            first = h.index("fff7e8")
-            cut = h.rindex("<p style=", 0, first)
-            last_end = h.index("</p>", h.rindex("fff7e8")) + 4
-            body_rest = h[last_end:]
-            deduped = h[:cut] + h[cut:last_end].replace("</p></p>", "</p>")
-            # 2 個目以降の <p ...fff7e8...</p> を落とす
-            def drop_extra(txt):
-                out, seen = [], 0
-                i = 0
-                while True:
-                    j = txt.find("<p style=", i)
-                    if j < 0:
-                        out.append(txt[i:]); break
-                    k = txt.find("</p>", j)
-                    if k < 0:
-                        out.append(txt[i:]); break
-                    k += 4
-                    seg = txt[j:k]
-                    if "fff7e8" in seg:
-                        seen += 1
-                        if seen > 1:
-                            i = k
-                            continue
-                    out.append(txt[i:j]); out.append(seg); i = k
-                return "".join(out)
-            h = drop_extra(h)
-            f.write_text(h, encoding="utf-8")
-            touched.append(rel + " (重複畳み)")
             continue
         comp = company_of(rel)
-        new = h.replace("</h1>", "</h1>" + buy_block.bar(comp), 1)
-        f.write_text(new, encoding="utf-8")
-        touched.append(rel)
+        if comp and not table.get(comp) and not quiet:
+            missing.append(rel)
+        new_strip = strip_html(comp, table)
+        i, j = h.find(STRIP_START), h.find(STRIP_END)
+        if i >= 0 and j > i:
+            h2 = h[:i] + new_strip + h[j + len(STRIP_END):]
+        else:
+            h1i = h.find("</h1>")
+            h2 = h[:h1i + 5] + new_strip + h[h1i + 5:]
+        if h2 != h:
+            f.write_text(h2, encoding="utf-8")
+            touched.append(rel)
     if not quiet:
-        print(f"  上部の注文欄      : 差し込み {len(touched)} 頁 / 元から有った {len(already)} 頁"
-              f" / 対象外 {len(skipped)} 頁")
-        if touched[:3]:
-            print(f"    例: {touched[:3]}")
-    return touched, already, skipped
+        print(f"  h1 直下の塊        : 作り直し {len(touched)} 頁 / 対象外 {len(skipped)} 頁"
+              + (f" / 実文の無い企業頁 {len(missing)} 頁" if missing else ""))
+    return touched, skipped, missing
 
 
 def visible_body(h: str) -> str:
-    """CSS・JSON-LD を落とした『人間が読む本文』。文書全体の割合で測ると
-    <style> や schema.org に字数を食われて嘘が出る (実測で es-deadlines が 86% 目扱い)。"""
+    """CSS・JSON-LD を落とした『人間が読む本文』。"""
     b0 = h.find("<body")
     b0 = h.find(">", b0) + 1 if b0 >= 0 else (h.find("</head>") + 1)
     body = h[b0 if b0 > 0 else 0:]
     body = re.sub(r"<script.*?</script>", "", body, flags=re.S)
-    return re.sub(r"<style.*?</style>", "", body, flags=re.S)
+    body = re.sub(r"<style.*?</style>", "", body, flags=re.S)
+    return body
 
 
-# 骨格で測る。実測: 上部欄を差した頁は全て </h1> の 272 字後に注文欄が来た。
-GAP_LIMIT = 400          # </h1> から注文欄までの許容字数
-H1_LIMIT = 1500          # 本文の先頭から h1 までの許容字数
+def plain(body: str) -> str:
+    return html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", body)))
 
 
-def positions() -> list:
-    """各頁で (rel, </h1> からの距離, h1 の本文先頭からの距離, 本文字数) を返す。"""
+def audit(quiet: bool = False) -> list:
+    """骨格を返す: (rel, h1→注文欄の距離, h1 の位置, 前に出ている実文数, 期待数)。"""
+    table = rows_by_company()
     out = []
     files = list(ROOT.glob("*.html")) + list((ROOT / "store").glob("*.html")) \
         + list((ROOT / "company").glob("*.html"))
@@ -123,25 +180,32 @@ def positions() -> list:
         body = visible_body(h)
         h1 = body.find("</h1>")
         oc = body.find("template=order.yml", h1 + 1) if h1 >= 0 else -1
-        head_oc = body.find("template=order.yml")
-        if h1 >= 0 and 0 <= head_oc < h1:        # h1 より上に在れば上出来
-            out.append((rel, 0, h1, len(body)))
-            continue
-        if oc < 0:
-            out.append((rel, None, h1, len(body)))
-            continue
-        out.append((rel, oc - h1, h1, len(body)))
+        gap = (oc - h1) if (h1 >= 0 and oc > h1) else None
+        comp = company_of(rel)
+        before = plain(body[:oc]) if oc > 0 else ""
+        _kind, qs = shown(comp, table)
+        n_real = sum(1 for q in qs if q in before)
+        out.append((rel, gap, h1, n_real, len(qs)))
+    if not quiet:
+        low = [r for r in out if r[3] < r[4] or r[3] < min(REAL_MIN, r[4])]
+        bad_gap = [r for r in out if r[1] is None or r[1] > GAP_LIMIT
+                   or r[2] < 0 or r[2] > H1_LIMIT]
+        print(f"  骨格の点検        : {len(out)} 頁 / 最大 h1+{max((r[1] or 0) for r in out)} 字"
+              f" / 実文が足りない {len(low)} 頁 / 位置が足りない {len(bad_gap)} 頁")
+        if (low + bad_gap)[:3]:
+            print(f"    ★ 例: {[(b[0], b[1], b[3], b[4]) for b in (low + bad_gap)[:3]]}")
     return out
 
 
 if __name__ == "__main__":
     polish()
-    rows = positions()
-    bad = [r for r in rows if r[1] is None or r[1] > GAP_LIMIT] + \
-          [r for r in rows if r[2] < 0 or r[2] > H1_LIMIT]
-    for rel, gap, h1, n in rows[:6]:
-        print(f"    {rel:34s} h1 @{h1:5d} / 注文欄 +{('---' if gap is None else str(gap)):>5s} 字 / 本文 {n:,} 字")
+    rows = audit()
+    bad = [r for r in rows if r[1] is None or r[1] > GAP_LIMIT] \
+        + [r for r in rows if r[2] < 0 or r[2] > H1_LIMIT] \
+        + [r for r in rows if r[3] < min(REAL_MIN, r[4]) or r[3] < r[4]]
+    for rel, gap, h1, n_real, want in rows[:3]:
+        print(f"    {rel:34s} h1 @{h1:5d} / 注文欄 +{str(gap):>5s} 字 / 実文 {n_real}/{want} 例")
     if bad:
-        print(f"  ★ 骨格が足りない {len(bad)} 頁: {[(b[0], b[1], b[2]) for b in bad[:3]]}")
+        print(f"  ★ 骨格が足りない {len(bad)} 頁: {[(b[0], b[1], b[3]) for b in bad[:3]]}")
         raise SystemExit(1)
-    print(f"  上部の注文欄 全頁 OK ({len(rows)} 頁 / h1 から {max((r[1] or 0) for r in rows)} 字以内)")
+    print(f"  h1 直下 全頁 OK ({len(rows)} 頁 / 実文 {REAL_MIN} 例を注文欄より前に)")

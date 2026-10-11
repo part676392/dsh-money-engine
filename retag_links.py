@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """公開済みの面に ?src=<key> 付きURLを打ち直す (流入源の分離).
 
- 実測: 访问 home=4 store=3 license=4 sample=1 で、全部自分の訪問。
+ 実測: 訪問 home=4 store=3 license=4 sample=1 で、全部自分の訪問。
  どの面から人が来たか、ずっと unknown だった。
  頁側の JS は ?src= を読んで src-<key> にも hit を置くようになったので、
  ここでは外に出した URL を打ち直す作業だけをする。

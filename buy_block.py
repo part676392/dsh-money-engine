@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import html as _html
 import pathlib
+import re
 from urllib.parse import quote  # noqa: F401  (builder 側から使うことがあるので出して置く)
 
 import order_link
@@ -87,6 +88,43 @@ def _cta_text(company: str) -> str:
             else "まず1社ぶんだけ <b>$5</b> で受け取る")
 
 
+BLOCK_OPEN = "<!--buy-block-->"
+BLOCK_CLOSE = "<!--/buy-block-->"
+
+MAIL_NOTE = "GitHub 要らずで注文: 会社名と個数をメールで送るだけ (受信箱は毎巡回で読む)"
+
+
+def inbox() -> str:
+    """受信箱の addr。gitignore 下の outbox から読む (公開面に出すのは addresses だけ)。"""
+    import json
+    for rel in ("outbox/mailtm.json", "outbox/mailtm-devto.json"):
+        f = pathlib.Path(__file__).resolve().parent / rel
+        if f.exists():
+            try:
+                a = json.loads(f.read_text(encoding="utf-8")).get("address", "")
+                if a:
+                    return a
+            except Exception:
+                continue
+    return ""
+
+
+def mailto_link(company: str = "", tier: str = "1社ぶん ($5)") -> str:
+    """3 番目の支払い口 (メール)。GitHub のアカウントもカードも要らない。
+    実測: order-click は 3 件で全部こちらの点検。人が click しやすい口を増やす。"""
+    to = inbox()
+    if not to:
+        return ""
+    subj = "注文: " + tier + (" / " + company if company else "")
+    body = ("会社名: " + (company or "(ここに入れます)") + "\n"
+            + "個数: " + tier + "\n"
+            + "支払い: 暗号送金 (Base / Arbitrum / Polygon / ETH)、または送金後にこのメールへ tx を貼ります\n"
+            + "欲しい物: 面接質問の実文と出典URLつきの CSV\n")
+    href = "mailto:" + to + "?subject=" + quote(subj) + "&body=" + quote(body)
+    return ('<a style="' + _BAR_A + '" href="' + href.replace("&", "&amp;") +
+            '" onclick="' + beacon_js("order-mail") + ';return true">📧 メールで注文</a>')
+
+
 def deadline_link(company: str = "") -> str:
     """締切一覧への直線。実測で link を持つのは 3 頁だけで、473 の企業頁から行けなかった。
     人が着くのは企業頁の方なので、上の行に置く。"""
@@ -108,11 +146,13 @@ def html(company: str = "", count_txt: str = "", hist: bool = False) -> str:
     note = ("開いた注文 form には会社名が既に入っています。" if company
             else "開いた注文 form で会社名と個数を選びます。")
     cnt = (count_txt + "・") if count_txt else ""
-    return ("<p style='" + _WRAP + "'><a href='" + u + "' style='" + _CSS +
+    return (BLOCK_OPEN + "<p style='" + _WRAP + "'><a href='" + u + "' style='" + _CSS +
             "' onclick=\"" + beacon_js("order-click") + ";return true\">" +
             _cta_text(company) + "</a><span style='" + _RAW + "'>" + cnt +
             PRICE_LINE.replace("**", "") + "・出典URLつき。" + note +
-            ACCOUNT_NOTE + "。</span></p>" + (history_block() if hist else ""))
+            ACCOUNT_NOTE + "。</span></p>" +
+            "<p style='" + _CARD_WRAP + "'>" + MAIL_NOTE + "　·　" +
+            mailto_link(company) + "</p>" + (history_block() if hist else "") + BLOCK_CLOSE)
 
 
 def bar(company: str = "") -> str:
@@ -135,6 +175,21 @@ def inject(path, count_txt: str = "", top: str = "") -> bool:
     changed = False
     if top and "</h1>" in h and "template=order.yml" not in h.split("</h1>")[0]:
         h = h.replace("</h1>", "</h1>" + bar(top), 1)
+        changed = True
+    # 同じ頁に古い注文欄が有ったら落としてから差し直す (強制更新)。marker 付きと、
+    # marker を入れる前の旧 block (mailto 行が無く、何度再生成しても更新されなかった
+    # 実測: mailto を載せる面が 4 / 487 頁) の両方を掃除する。
+    # 段落 (</p> まで) を単位に落とす。跨いで消すと隣の文まで消える (実測: data-license の
+    # 「今積んでいる観測 3 件」を道連れにして money_check ★ になった)。
+    h2 = re.sub(re.escape(BLOCK_OPEN) + r"[\s\S]*?" + re.escape(BLOCK_CLOSE), "", h)
+    kept = []
+    for para in re.split(r"(</p>)", h2):
+        if "template=order.yml" in para or MAIL_NOTE in para:
+            continue
+        kept.append(para)
+    h2 = "".join(kept)
+    if h2 != h:
+        h = h2
         changed = True
     if "template=order.yml" not in h:
         block = html(count_txt=count_txt)

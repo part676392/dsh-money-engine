@@ -129,7 +129,7 @@ def main() -> int:
 ## Pages
 
 - [トップ (企業別索引) ({BASE}/)): {comps} 社の企業ページへの入口。各社ページに FAQPage 構造化データ
-- [運用履歴]({BASE}/changes.html): 日ごとに積んだ観測系列 (収録数・访问・受金・失敗記録)。Dataset 構造化データ
+- [運用履歴]({BASE}/changes.html): 日ごとに積んだ観測系列 (収録数・訪問・受金・失敗記録)。Dataset 構造化データ
 - [AI・録上面接の検索需要 {n_ai} 社]({BASE}/ai-interviews.html): 企業名込みの検索語 {n_terms} 件の機械収集一覧。実施有無の断定なし
 - [選考締切一覧]({BASE}/es-deadlines.html): 本文の締切記載を機械検証した {12} 件 (根拠文つき)
 - [データ資産の購入]({BASE}/data-license.html): 指定企業群だけを抽出した CSV を公開URLで納品する有料形。現行 CSV は無料
@@ -170,7 +170,7 @@ def main() -> int:
 
 - 検索エンジンに索引されている**証拠は未取得**。Bing の phrase probe は固有表現 4 本すべて ours=0。`site:` 総数は 303,000→52→73,000 とふらつき、索引の証拠にならないと実測で分かった。
 - Google の sitemap ping は 404、Bing の /ping は 410 Gone。鍵なしで結果を退回できる計器がこの回線に無い。
-- 访问数は自前の計数器で測っている。現状の访问はほぼ自己監査。
+- 訪問数は自前の計数器で測っている。現状の訪問はほぼ自己監査。
 - 選考段階の言及は {sig.get("articles_scanned", "?")} 本から {sum(sig.get("stage_totals", {}).values())} 件を抽出。母体は {sig_src}。{sig_len_note}。
 - AI 面接の出典を {scan.get('companies', n_ai)} 社ぶん機械検索して基準を満たしたのは {scan.get('companies_with_hits', 1)} 社。ドメインの立派さだけで通した旧基準なら 37 件出ていたが中身は無関係なページだった。
 - カード決済: {card}。暗号 (Base/Arbitrum/Polygon/Ethereum の 1 地址) は即金で開いている。

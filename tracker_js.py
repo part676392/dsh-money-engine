@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""访问計の JS を1箇所だけの実装に寄せる。
+"""訪問計の JS を1箇所だけの実装に寄せる。
 
 理由: 同じ script を 7 file が手書き複製していた (実測 2026-10-11:
 build_site / build_store / build_mini / build_sample / build_dataset_store /

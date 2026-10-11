@@ -40,7 +40,7 @@ def _dj(fn: str) -> dict:
 
 
 def abacus_counts() -> dict:
-    """访问計は external。落ちても履歴を止めない (取れなければ鍵ごと省く)。"""
+    """訪問計は external。落ちても履歴を止めない (取れなければ鍵ごと省く)。"""
     out = {}
     for k in ("home", "store", "license", "sample", "mini", "lineup", "reverse"):
         try:
@@ -57,7 +57,7 @@ def abacus_counts() -> dict:
 
 def history_record(snap: dict, loc: str) -> dict:
     """history が 5 鍵しか積んでいなかった (2026-10-11 実測)。
-    後から取り直せないもの — 访问・受注・抽出量 — を同じ series に積む。"""
+    後から取り直せないもの — 訪問・受注・抽出量 — を同じ series に積む。"""
     q, fl, sg = _dj("interview_questions.json"), _dj("selection_flows.json"), _dj("selection_signals.json")
     ln, rv = _dj("question_lineups.json"), _dj("reverse_questions.json")
     dl, dv = _dj("es_deadlines_strict.json"), _dj("deliveries.json")
@@ -531,7 +531,9 @@ small{{display:block;color:#5d6570;margin-top:26px;font-size:.8rem;line-height:1
         cln += ("<p class='buywrap'><a class='buy' href='" + buy_url + "' onclick=\"" +
                 beacon_js("order-click") + ";return true\">この会社ぶんを <b>$5</b> で受け取る</a>"
                 "<span class='raw'> " + n_txt + "・出典URLつき。開いた注文 form には会社名が既に入っています。"
-                + "注文には GitHub のアカウントがいります。</span></p>")
+                + "GitHub のアカウントが無ければ下のメールで注文できます。</span></p>"
+                + ("<p class='buywrap'>" + buy_block.mailto_link(comp) + "</p>"
+                   if buy_block.inbox() else ""))
 
         # demand は収録時の名前で引くので、束ねる前の名前も順に試す (無いものを無いと言わない)。
         names_try = [comp] + list(ALIAS.get(comp) or [])

@@ -7,7 +7,7 @@
 
  出典が確定している数値だけを出す:
    - data/history/YYYY-MM-DD.json  記事数・社数・掲載金額 (note 公開API由来)
-   - data/traffic/*.json           访问計のread-back (abacus)
+   - data/traffic/*.json           訪問計のread-back (abacus)
    - data/payments/*.json          暗号残高 (4 chain RPC)
    - data/distribution/*.json      配布面の生存
  推定・見込みは書かない。
@@ -51,7 +51,7 @@ def rows_daily() -> str:
     prev = None
 
     def dl(now: int, was) -> str:
-        """増減列。前は記事数しか見ておらず、访问や受注の伸びが見えていなかった (2026-10-11)。
+        """増減列。前は記事数しか見ておらず、訪問や受注の伸びが見えていなかった (2026-10-11)。
         旧 format の行は鍵が無い = 0 ではなく不明。0 と混ぜると -1,779 の様な嘘の減少が出る。"""
         if was is None:
             return "—"
@@ -151,7 +151,7 @@ def main() -> None:
         "@context": "https://schema.org", "@type": "Dataset",
         "name": "中途・転職 面接対策 目録 — 運用履歴",
         "description": ("日ごとに蓄積した観測系列: 収録記事数、対象社数、掲載金額、"
-                        "访问数、受金残高、配布面の生存。後から再現できない実測のみ。"),
+                        "訪問数、受金残高、配布面の生存。後から再現できない実測のみ。"),
         "temporalCoverage": (f"{days[0][1].get('captured_at','')}/{days[-1][1].get('captured_at','')}"
                             if days else ""),
         "creator": {"@type": "Person", "name": "転職ナビ・中途キャリアの研究所"},
@@ -164,7 +164,7 @@ def main() -> None:
     doc = f"""<!doctype html><html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>運用履歴 — 中途・転職 面接対策 目録</title>
-<meta name="description" content="収録記事数・対象社数・掲載金額・访问・受金を日ごとに積んだ公開ログ。{n_days}日分。">
+<meta name="description" content="収録記事数・対象社数・掲載金額・訪問・受金を日ごとに積んだ公開ログ。{n_days}日分。">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="{SITE}/changes.html">
 <script type="application/ld+json">
@@ -186,12 +186,12 @@ a{{color:#7a5230}}
 <p class="sub">この目録が何をいつ観測したか。<strong>{n_days} 日分</strong>。数値はすべて再取得可能な実測で、推定と見込みは載せていません。</p>
 
 <h2>収録の推移（note 公開API）</h2>
-<table><thead><tr><th>観測時刻</th><th>場所</th><th>記事数</th><th>増減</th><th>対象社数</th><th>面接質問</th><th>増減</th><th>並び行数</th><th>访问合計</th><th>受注 実/練習</th><th>掲載金額(円)</th></tr></thead>
+<table><thead><tr><th>観測時刻</th><th>場所</th><th>記事数</th><th>増減</th><th>対象社数</th><th>面接質問</th><th>増減</th><th>並び行数</th><th>訪問合計</th><th>受注 実/練習</th><th>掲載金額(円)</th></tr></thead>
 <tbody>
 {rows_daily()}
 </tbody></table>
 
-<h2>访问（実ブラウザの計数、read-back 済み）</h2>
+<h2>訪問（実ブラウザの計数、read-back 済み）</h2>
 <table><thead><tr><th>確認時刻</th><th>ページ別</th></tr></thead><tbody>
 {rows_traffic()}
 </tbody></table>

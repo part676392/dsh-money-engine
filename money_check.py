@@ -189,7 +189,7 @@ def _profile_audit(live: str) -> bool:
         if re.search(pat, sec_live):
             bad.append(why)
     # 数字は CSV から組み直して live に要求する。生成物同士の比較は箱の時刻で揺れるが、
-    # CSV は merge 后同じなので「live が古い数を公称していない」を正直に測れる。
+    # CSV は merge 後も同じなので「live が古い数を公称していない」を正直に測れる。
     try:
         import csv as _csv
         import io as _io
@@ -223,7 +223,7 @@ def _profile_audit(live: str) -> bool:
 
 def cta_check() -> bool:
     """人間が着く面に注文欄が在るか。
-    実測: index.html は访问 17 件で注文 link 0 / 羅列 5 件で 0 / store 4 件で 0。
+    実測: index.html は訪問 17 件で注文 link 0 / 羅列 5 件で 0 / store 4 件で 0。
     買う場所を探す人に買う場所が無かった。link・価格・GitHub アカウントの注意を点検する。"""
     import urllib.parse
     tpl_f = ROOT / ".github" / "ISSUE_TEMPLATE" / "order.yml"
@@ -310,7 +310,7 @@ def live_cta_check() -> bool:
 
 def prefill_check() -> bool:
     """注文 link の prefill が form の仕様と合っているか。
-    GitHub は field の `id` を query key に使う (公式仕样)。id や選択肢の文字列が動くと、
+    GitHub は field の `id` を query key に使う (公式仕様)。id や選択肢の文字列が動くと、
     配った link は黙って空欄で開く。企業頁 473 枚の link を全部機械で開いて確かめる。"""
     import urllib.parse
     tpl_f = ROOT / ".github" / "ISSUE_TEMPLATE" / "order.yml"
@@ -633,7 +633,7 @@ def not_found_check() -> bool:
         "値段の入口": "1社だけ $5" in body,
         "目録へのlink": "interview-questions.html" in body,
         "noindex": 'content="noindex' in body,
-        "访问計": 'fetch(b+"404"' in body,
+        "訪問計": 'fetch(b+"404"' in body,
     }
     ok = code == "404" and all(need.values())
     print(f"  404 の受け皿       : {'OK' if ok else '★'}  HTTP {code}  "

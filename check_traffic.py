@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""自分の访问数を、鍵なしで読戻しまでできる計器で測る.
+"""自分の訪問数を、鍵なしで読戻しまでできる計器で測る.
 
  前段の実測で死んだ計器:
    Google /ping   -> 404 (endpoint 廃止)
@@ -8,7 +8,7 @@
    DuckDuckGo html-> challenge (bot壁) を返す。21 mentions は全部 query のエコーだった
    countapi.xyz   -> DNS 解決不能
 
- なので索引の"代理"を測るのはやめて、直接測れる访问を測る。
+ なので索引の"代理"を測るのはやめて、直接測れる訪問を測る。
  pixel は img なので JS 不要。Bot も数える。自分の audit も数える。
  それは減算せず、事実として history に残す。
 """
@@ -28,7 +28,7 @@ BASE = "https://abacus.jasoncameron.dev"
 KEYS = {
     "store": "store", "home": "home", "mini": "mini", "license": "license",
     "lineup": "lineup", "company": "company", "sample": "sample",
-    "order-click": "order-click", "404": "404", "reverse": "reverse", "changes": "changes", "deliveries": "deliveries", "deadlines": "deadlines", "ai": "ai",
+    "order-click": "order-click", "order-mail": "order-mail", "404": "404", "reverse": "reverse", "changes": "changes", "deliveries": "deliveries", "deadlines": "deadlines", "ai": "ai",
 }
 # クローラ計数 (tracker_js.BOTS が単一の実装)。索引の受け取り側が沈んでいても、
 # クローラが到達したかだけ先に測れる。
@@ -218,7 +218,7 @@ def main() -> int:
 
     # JS を実際に走らせて発火先を見る。文字列照合は「有る」までで「叩く」を証明しない。
     # (実測: curl では計上されない = JS を実行するクライアントだけが計上される)
-    # 参照元。?src= を付けない访问 (検索・SNS) の内訳を測る。
+    # 参照元。?src= を付けない訪問 (検索・SNS) の内訳を測る。
     # abacus に一覧 API は無いので既知 host を-data/traffic_referrers.json-で持つ。
     # 既知に無い分は ref-any との差で出る = 盲点を数字で持つ。
     # 台帳の変数を div 名で分ける。ここで reg を差し替えたせいで後段の topic 検査が

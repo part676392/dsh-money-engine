@@ -251,7 +251,7 @@ def main() -> int:
     live = {k: v["verdict"] for k, v in per_engine.items()}
     print(f"\n  engines: {live}")
     if any_indexed:
-        print("  ★★ INDEXED — 外部から发现自己")
+        print("  ★★ INDEXED — 外部から発見され")
     elif any_alive:
         print("  索引されてはいないが、計器は生きている (NOT INDEXED が正しい読値)")
     else:

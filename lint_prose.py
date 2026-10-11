@@ -24,6 +24,27 @@ create work ok err sha token note com org img src href alt span div meta fallbac
 generated publish shelf strike point value image files count input output""".split())
 
 
+# 簡体字専用の字形 (日本語の表記には出ない)。実測で混入していた物を含む:
+#   訪問 (check_traffic ほか 19 所 / changes.html に 4 所), 仕様 (order_link.py 3 所)
+# 0x6CA1 (没) と 0x88CF (裏) は日本語で使うので入れていない (実測: 「裏打ちされた動機」が
+# 誤検知した)。簡体字側にしかない字形だけを code point で固定する。
+SIMPLIFIED = "".join(chr(c) for c in (0x8BBF, 0x95EE, 0x6837, 0x540E, 0x5F55, 0x89C2,
+                     0x8BB0, 0x8FD8, 0x672F, 0x8BA9, 0x8FDE, 0x95E8, 0x53D1, 0x8FD0,
+                     0x5173, 0x8F6C, 0x91CA, 0x6781, 0x663E, 0x5904))
+SIMPL_RE = re.compile("[" + SIMPLIFIED + "]")
+
+
+def scan_simplified(path: pathlib.Path) -> list:
+    """日本語の本文将簡体字が紛れ込んでいないか (自分の log 文も洗う)。"""
+    raw = path.read_text(encoding="utf-8", errors="replace")
+    txt = html.unescape(re.sub(r"<[^>]+>", " ", raw)) if path.suffix == ".html" else raw
+    out = []
+    for m in SIMPL_RE.finditer(txt):
+        ctx = txt[max(0, m.start() - 16):m.start() + 16].replace("\n", " ")
+        out.append((m.group(0), ctx))
+    return out
+
+
 def scan(path: pathlib.Path) -> list:
     raw = path.read_text(encoding="utf-8", errors="replace")
     txt = html.unescape(re.sub(r"<[^>]+>", " ", raw))
@@ -62,6 +83,15 @@ def main() -> int:
         for ln, ch, txt in scan_scripts(f)[:2]:
             print(f"  ★ {f.name}:{ln} 异国文字 '{ch}' → {txt}")
             total += 1
+    # 簡体字は日本語の漢字と区別が付きにくいので別枠で数える (訪問 / 仕様 の実測)
+    simp = 0
+    for f in scripts + files:
+        for ch, ctx in scan_simplified(f)[:2]:
+            print(f"  ★ {f.name}: 簡体字 '{ch}' → …{ctx}…")
+            simp += 1
+        if simp >= 12:
+            break
+    total += simp
     for f in files:
         hits = scan(f)
         if hits:
@@ -71,7 +101,8 @@ def main() -> int:
                 print(f"  ★ {f.name}: '{w}' → …{ctx}…")
         if bad_files >= 8:
             break
-    print(f"  対象 {len(files)} 頁 / 混入 {total} 件 ({bad_files} 頁)")
+    print(f"  対象 {len(files)} 頁 / 混入 {total} 件 ({bad_files} 頁)"
+          + (f" / 簡体字 {simp} 件" if simp else ""))
     return 1 if total else 0
 
 

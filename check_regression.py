@@ -331,7 +331,7 @@ def syntax_sweep() -> bool:
 
 
 def tracker_single_source() -> bool:
-    """访问計 JS の実装は tracker_js.py 1個でなければならない。
+    """訪問計 JS の実装は tracker_js.py 1個でなければならない。
     実測で 7 file が手書き複製していて、片方だけ直して live に旧 JS を流した。"""
     needle = "abacus" + ".jasoncameron.dev/hit"  # 分解しないとこの file 自身が自己一致する
     owners = [fp.name for fp in sorted(ROOT.glob("*.py"))

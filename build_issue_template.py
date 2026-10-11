@@ -5,7 +5,7 @@
 同じ日に会社を束ねて 473 社になった。form だけ前の数を売っていた。
 form は金の入口なので、TIER と snapshot から毎回作り直す。
 
-prefill の鍵は GitHub の仕样で field の `id` (plan / companies / chain / contact)。
+prefill の鍵は GitHub の仕様で field の `id` (plan / companies / chain / contact)。
 id を変えると既に配った link が黙って空欄になるので、id は動かせない。
 """
 from __future__ import annotations

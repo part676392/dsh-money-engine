@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""注文 form への link。prefill の鍵は GitHub の仕样で field の `id`。
+"""注文 form への link。prefill の鍵は GitHub の仕様で field の `id`。
 
 企業頁から飛んだ人に会社名を入力させない (実測: 注文の形が分からず止まる人がいる前提で、
 入口は短いほどいい)。`plan` には form の選択肢そのものを入れる (選択肢と違う文字列は

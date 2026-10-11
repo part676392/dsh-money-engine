@@ -183,6 +183,13 @@
    "measured": "コンサル系の記事本文 273〜314 字 / 普通の企業記事 3,624 字。だから interview_questions.csv の 472 社にコンサルが 0 社",
    "action": "面では『質問実文 未収録 (締切・書き方の記事 N 字は収録)』と実数で正直に出す。100問集を足すなら他の著者の記事が必要 = 出典の権利範囲が広がるので、人の目 (私) が入るまで拡大しない",
    "checked_by": "check_regression.deadline_row_names()"
+  },
+  "blocked_huggingface": {
+   "state": "blocked",
+   "where": "https://huggingface.co/join",
+   "measured_at": "2026-10-11T20:13+09:00",
+   "evidence": "playwright chromium headless -> HTTP 202 / title 'Human Verification' / input 要素 0 個 / captcha マーク有り ('Let's confirm you are human')",
+   "note": "dataset を置けば Google 索引と被linkが期待できたが、note.com と同じく人間確認で止まった。人間が 1 回作れば token で自動化できる。"
   }
  },
  "link_counters": {

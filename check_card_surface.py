@@ -103,6 +103,38 @@ def plan_prefills(quiet: bool = False) -> bool:
     return ok
 
 
+def provenance_shown(quiet: bool = False) -> bool:
+    """出典が『想定質問集』だと面が言っているか + 実測の本数と合っているか。
+    実測 (2026-10-11): この種のことを書いていた面は 0 / 7 だった (『実録』等の語も無し)。
+    買ってから『これ実録じゃないの？』が起きる前に書く。"""
+    import json as _json
+    f = ROOT / "data" / "full_bodies.json"
+    n_all = n_sh = 0
+    if f.exists():
+        d = _json.loads(f.read_text(encoding="utf-8"))
+        n_all, n_sh = len(d), sum(1 for v in d.values()
+                                 if "想定質問" in ((v.get("title") or "") + (v.get("text") or "")))
+    missing, wrong, shown = [], [], 0
+    for rel in PRICED:
+        fp = ROOT / rel
+        h = fp.read_text(encoding="utf-8", errors="replace") if fp.exists() else ""
+        t = re.sub(r"<[^>]+>", " ", h)
+        if "想定質問" not in t or "転載ではありません" not in t:
+            missing.append(rel)
+            continue
+        shown += 1
+        m = re.search(r"記事 ([\d,]+) 本。うち ([\d,]+) 本", t)
+        if not m:
+            wrong.append(f"{rel}: 本数を書いていない")
+        elif (int(m.group(1).replace(",", "")), int(m.group(2).replace(",", ""))) != (n_all, n_sh):
+            wrong.append(f"{rel}: {m.group(1)}/{m.group(2)} / 実測 {n_all}/{n_sh}")
+    ok = not missing and not wrong and n_all > 0
+    first = (missing + wrong)
+    print("    出典の性質        : " + ("OK" if ok else "★ " + (first[0] if first else "実測が取れない")[:76])
+          + f" ({shown}/{len(PRICED)} 面が『想定質問』と明記 / 実測 {n_all} 本中 {n_sh} 本)")
+    return ok
+
+
 def history_honest(quiet: bool = False) -> bool:
     """$25 の中身を実数で出している面と、manifest の実測が一致しているかの点検。
     実測 (2026-10-11): 中身を出していたのは 2 面だけで、質問実文を出す面と同じ数が抜けていた。"""
@@ -192,7 +224,8 @@ def check(quiet: bool = False) -> bool:
             lying.append(rel)
     plans_ok = plan_prefills(quiet)
     hist_ok = history_honest(quiet)
-    ok = not lying and not no_mail and plans_ok and hist_ok
+    prov_ok = provenance_shown(quiet)
+    ok = not lying and not no_mail and plans_ok and hist_ok and prov_ok
     print(f"    カードで買えるか  : "
           + ("OK" if ok else f"★ 支払いを何も書いていない {len(lying)} 面 / メール口の無い {len(no_mail)} 面 (実測)"
              if no_mail else
@@ -208,6 +241,8 @@ def check(quiet: bool = False) -> bool:
         print("      ★ form に無いプラン語か、plan の無い link が有る")
     if not hist_ok:
         print("      ★ $25 の中身を実数で出していない / manifest と違う面が有る")
+    if not prov_ok:
+        print("      ★ 出典が想定質問集であることを書いていない / 本数が実測と違う")
     return ok
 
 

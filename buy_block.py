@@ -43,6 +43,30 @@ def esc(s: object) -> str:
 HISTORY_WORDS = ("台帳", "履歴", "観測")
 
 
+def provenance_note() -> str:
+    """出典が『想定質問集』である面を、実測の数字で出す。
+    実測 (2026-10-11): 本文に『想定質問』と明記する記事は 600 本中 570 本。中には
+    『例文はすべて架空の学習用例です』『実設問は未確認』と書く記事も有る (アビーム 公共経営
+    コースの ES 教材など)。面接で実際に問われた記録の転載ではないと先に言うのは約束だと思う。"""
+    import json as _json
+    import pathlib as _p
+    root = _p.Path(__file__).resolve().parent
+    f = root / "data" / "full_bodies.json"
+    n_all = n_sh = 0
+    if f.exists():
+        d = _json.loads(f.read_text(encoding="utf-8"))
+        n_all = len(d)
+        n_sh = sum(1 for v in d.values()
+                   if "想定質問" in ((v.get("title") or "") + (v.get("text") or "")))
+    if not n_all:
+        return ""
+    return ("<p style='" + _RAW + "'>出典は note.com/shushoku_career1 の記事 "
+            + format(n_all, ",") + " 本。うち " + format(n_sh, ",")
+            + " 本が本文に『想定質問』と明記しています（面接で実際に問われた記録の転載では"
+            "ありません）。うちはその文を機械抽出して、社名・件数・並び・出典URLを数えた表を"
+            "売ります。</p>")
+
+
 def history_block() -> str:
     """$25 の『歴史スナップショット一式』の中身を実測の manifest から書く。
     店に値段だけ置いて中身が読めないのは嘘になるので、行数と link を一緒に出す。"""
@@ -158,7 +182,8 @@ def html(company: str = "", count_txt: str = "", hist: bool = True) -> str:
             PRICE_LINE.replace("**", "") + "・出典URLつき。" + note +
             ACCOUNT_NOTE + "。</span></p>" +
             "<p style='" + _CARD_WRAP + "'>" + MAIL_NOTE + "　·　" +
-            mailto_link(company) + "</p>" + (history_block() if hist else "") + BLOCK_CLOSE)
+            mailto_link(company) + "</p>" + provenance_note()
+            + (history_block() if hist else "") + BLOCK_CLOSE)
 
 
 def bar(company: str = "") -> str:

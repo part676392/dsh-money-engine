@@ -13,7 +13,7 @@
 from __future__ import annotations
 
 import buy_block
-BUY = buy_block.html()
+BUY = buy_block.html(hist=True)
 import datetime as dt
 import html
 import json

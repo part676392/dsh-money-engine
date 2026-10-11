@@ -1,8 +1,8 @@
 """金の入口 (注文欄) を 1 個所にまとめる。
 
 企業のページには注文欄を付けていたのに、人が最初に着く面には何も無かった。
-  index.html             访问 17 件 / 注文の導線 0
-  question-lineups.html  访问  5 件 / 0
+  index.html             訪問 17 件 / 注文の導線 0
+  question-lineups.html  訪問  5 件 / 0
   store/                 訪問  4 件 / 0
 導線を全頁へ差した次は、位置が嘘だった。
   index.html 145,446 字のうち注文欄は 99% 目 (最後の最後) に在った
@@ -12,6 +12,8 @@
 """
 from __future__ import annotations
 
+import html as _html
+import pathlib
 from urllib.parse import quote  # noqa: F401  (builder 側から使うことがあるので出して置く)
 
 import order_link
@@ -31,6 +33,36 @@ CARD_NOTE = ("支払い: 暗号送金 (Base / Arbitrum / Polygon / ETH) か、�
              "送金だけの方でも注文 form を出せばこっちで合わせます。")
 _CARD_WRAP = ("margin:8px 0 0;padding:8px 12px;background:#f2f5f9;border:1px solid #dfe5ec;"
               "border-radius:6px;font-size:.8rem;color:#5b6570;line-height:1.65")
+
+
+def esc(s: object) -> str:
+    return _html.escape(str(s), quote=True)
+
+
+HISTORY_WORDS = ("台帳", "履歴", "観測")
+
+
+def history_block() -> str:
+    """$25 の『歴史スナップショット一式』の中身を実測の manifest から書く。
+    店に値段だけ置いて中身が読めないのは嘘になるので、行数と link を一緒に出す。"""
+    import csv
+    p = pathlib.Path(__file__).resolve().parent / "exports" / "manifest.csv"
+    if not p.exists():
+        return ""
+    rows = []
+    with p.open(encoding="utf_8_sig", newline="") as fh:
+        for r in csv.DictReader(fh):
+            f, n, what = r.get("file"), r.get("rows"), r.get("content") or ""
+            if f and any(w in what for w in HISTORY_WORDS):
+                rows.append((f, n, what))
+    if not rows:
+        return ""
+    links = " ／ ".join(
+        '<a href="/dsh-money-engine/exports/%s">%s</a> (%s 行)' % (esc(f), f, esc(str(n) if str(n).isdigit() else "—"))
+        for f, n, what in rows)
+    return ('<div class="free"><b>歴史スナップショット一式 ($25) の中身</b>: %s<br>'
+            '<span style="font-size:.8rem;color:#6d675e">毎巡回で積んでいるので、面に出た日がそのまま残ります。'
+            '行の数はこの頁を書いた時点の実測です。</span></div>') % links
 
 
 def card_note() -> str:
@@ -69,8 +101,9 @@ def _free_sample(company: str) -> str:
     return ('<a style="' + _BAR_A + '" href="/dsh-money-engine/sample.html">' + label + "</a>")
 
 
-def html(company: str = "", count_txt: str = "") -> str:
-    """頁の末尾に置く注文欄。company を渡すとその会社名を form に预先入れる。"""
+def html(company: str = "", count_txt: str = "", hist: bool = False) -> str:
+    """頁の末尾に置く注文欄。company を渡すと form に会社名を先に入れた状態で開く。
+    hist=True の面 (店) だけ、$25 の履歴一式の中身を manifest の実測で並べる。"""
     u = (url(company) if company else url()).replace("&", "&amp;")
     note = ("開いた注文 form には会社名が既に入っています。" if company
             else "開いた注文 form で会社名と個数を選びます。")
@@ -79,7 +112,7 @@ def html(company: str = "", count_txt: str = "") -> str:
             "' onclick=\"" + beacon_js("order-click") + ";return true\">" +
             _cta_text(company) + "</a><span style='" + _RAW + "'>" + cnt +
             PRICE_LINE.replace("**", "") + "・出典URLつき。" + note +
-            ACCOUNT_NOTE + "。</span></p>")
+            ACCOUNT_NOTE + "。</span></p>" + (history_block() if hist else ""))
 
 
 def bar(company: str = "") -> str:

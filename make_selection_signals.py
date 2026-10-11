@@ -199,7 +199,7 @@ th,td{{text-align:left;padding:6px 8px;border-bottom:1px solid #e6e1d8;vertical-
 th{{background:#efeee9;font-weight:600}}
 a{{color:#7a5230}} code{{background:#eceae4;padding:1px 5px;border-radius:4px;font-size:.76rem}}
 .note{{font-size:.8rem;color:#6d675e;margin-top:24px}}
-</style></head><main>
+</style></head><body><main>
 <h1>収録記事に現れた選考段階 {total_mentions} 言及</h1>
 <p class="sub">{matched_articles} 本の本文から、選考段階の語を含む文だけを機械抽出し、企業別に集計しました。各行に引用文を載せています。</p>
 

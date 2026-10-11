@@ -189,7 +189,7 @@ th{{background:#efeee9}} .met{{font-size:.82rem;color:#6d675e;margin:2px 0 8px}}
 .co{{background:#fff;border:1px solid #ece7de;border-radius:9px;padding:6px 14px 12px;margin:14px 0}}
 ul{{font-size:.85rem}} li{{margin:5px 0}}
 .note{{font-size:.8rem;color:#6d675e;margin-top:24px}} a{{color:#7a5230}}
-</style></head><main>
+</style></head><body><main>
 <h1>納品物見本（実物です）</h1>
 <p class="sub">有料の「カスタム抽出」で届く CSV を、そのままここに載せています。3社ぶんです。</p>
 

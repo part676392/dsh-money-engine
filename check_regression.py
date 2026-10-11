@@ -140,6 +140,29 @@ def traffic_keys_registered() -> bool:
     return ok
 
 
+def markup_shape() -> bool:
+    """頁の骨格。<body> を開かず </body> だけ閉じていた頁が 9 枚有った (実測)。
+    人は浏览器で見るだけだから気づかないが、抽出側が本文の始まりを見失う。"""
+    bad = []
+    n = 0
+    for f in (list(ROOT.glob("*.html")) + list((ROOT / "store").glob("*.html"))
+              + list((ROOT / "company").glob("*.html"))):
+        h = f.read_text(encoding="utf-8", errors="replace")
+        n += 1
+        rel = f.name if f.parent == ROOT else f.relative_to(ROOT).as_posix()
+        if 'http-equiv="refresh"' in h:
+            continue
+        if "<body" not in h:
+            bad.append(f"{rel}: <body> を開いていない")
+        elif h.count("</body>") != 1:
+            bad.append(f"{rel}: </body> が {h.count('</body>')} 個")
+        if h.count("<h1") != 1:
+            bad.append(f"{rel}: <h1> が {h.count('<h1')} 個")
+    ok = not bad
+    print(f"    頁の骨格        : {'OK' if ok else '★ ' + '; '.join(bad[:3])}  ({n} 頁)")
+    return ok
+
+
 def syntax_sweep() -> bool:
     """全 .py と巡回 script の構文を一括点検。
     実測で、patch 中の SyntaxError を見落として壊れた file を push した
@@ -272,6 +295,8 @@ def loop_coverage() -> bool:
 def main() -> int:
     if "--selftest" in sys.argv:
         return run_selftest()
+    if not markup_shape():
+        return 1
     if not syntax_sweep():
         return 1
     if not traffic_keys_registered():

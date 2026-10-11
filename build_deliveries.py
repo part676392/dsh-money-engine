@@ -140,7 +140,7 @@ th{{background:#efeee9}} code{{background:#efece6;padding:1px 5px;border-radius:
 .why{{background:#fff6e8;border:1px solid #e7cf9f;border-radius:8px;padding:12px 15px;font-size:.86rem;margin:16px 0}}
 a{{color:#7a5230}} .note{{font-size:.8rem;color:#6d675e;margin-top:22px}}
 .now{{background:#fff;border:1px solid #e6e1d8;border-radius:8px;padding:11px 14px;font-size:.86rem;margin:14px 0}}
-</style></head><main>
+</style></head><body><main>
 <h1>納品一覧</h1>
 <p class="sub">注文ごとに、どこまで進んだかと納品物のURLをここに積みます。</p>
 

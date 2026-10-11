@@ -198,7 +198,7 @@ code{{background:#efece6;padding:1px 5px;border-radius:4px;word-break:break-all}
 .warn{{background:#fff6e8;border:1px solid #e7cf9f;border-radius:8px;padding:12px 15px;font-size:.86rem;margin:16px 0}}
 a{{color:#7a5230}} .note{{font-size:.8rem;color:#6d675e;margin-top:26px}}
 ol{{font-size:.9rem}} ol li{{margin:8px 0}}
-</style></head><main>
+</style></head><body><main>
 <h1>データ資産の購入</h1>
 <p class="sub">目録データベースの無料公開はそのままに、<b>指定した分だけ切り出して渡す</b>形に値札を付けました。</p>
 

@@ -223,7 +223,7 @@ th{{background:#efeee9;font-weight:600}} a{{color:#7a5230}}
 .s.u{{background:#f0ece4;color:#6d675e}}
 .dist{{background:#fff;border:1px solid #e6e1d8;border-radius:8px;padding:10px 14px;font-size:.85rem;margin:12px 0}}
 .note{{font-size:.8rem;color:#6d675e;margin-top:24px}}
-</style></head><main>
+</style></head><body><main>
 <h1>企業の公式選考フロー {total_flows} 本・{len(per_company)} 社</h1>
 <p class="sub">収録記事 {len(full)} 本の本文から、記事が公式ページに引いた «選考の流れ：… → …» を機械抽出して順序付きに整理しました。
 うち <b>{sum(len(v) for v in per_company.values())} 本</b>を表に載せています（{len(per_company)} 社に割当）。

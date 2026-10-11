@@ -187,7 +187,7 @@ ul{{padding-left:20px;font-size:.87rem}} li{{margin:6px 0}}
 details{{margin:3px 0;font-size:.83rem;color:#4c463e}} summary{{cursor:pointer;color:#6d675e}}
 .cta{{background:#fff;border:1px solid #e0d8ca;border-radius:9px;padding:12px 15px;font-size:.87rem;margin:16px 0}}
 .note{{font-size:.8rem;color:#6d675e;margin-top:22px}} a{{color:#7a5230}}
-</style></head><main>
+</style></head><body><main>
 <h1>逆質問の実文 {total} 文 ／ {len(per)} 社</h1>
 <p class="sub">面接記録の本文から、逆質問にふれる文だけを選んで出す順番に並べました。文は抽出そのままです。</p>
 

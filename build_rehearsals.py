@@ -97,7 +97,7 @@ h1{{font-size:1.35rem;margin:0 0 4px}}
 p{{margin:0 0 15px}}
 .met{{font-size:.79rem;color:#6d675e;border-top:1px solid #e2dccf;padding-top:14px;margin-top:28px}}
 a{{color:#7a5230}}
-</style></head><main>
+</style></head><body><main>
 <h1>{esc(title)}</h1>
 <p class="spec"><b>Spec</b>: {esc(spec or "—")} ／ <b>{words} words</b> ／ delivered as a public URL (this mailbox receives only)</p>
 {body}

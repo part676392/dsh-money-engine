@@ -254,6 +254,9 @@ PY
   python3 make_exports.py        2>&1 | tail -2
   python3 make_llms.py           2>&1 | tail -1
   python3 make_history_series.py 2>&1 | tail -3
+    # 再生成すると h1 直下の注文欄が消えるので、builder の後に必ず囀す
+    # (実測: index.html の注文欄は 99% 目に在り、20 アクセスで注文発火 0)。
+    python3 polish_buy_bars.py     2>&1 | tail -2
   python3 audit_aeo.py        2>&1 | tail -10
   # 履歴頁と計測値はここで再生成したので、二度目の commit で載せる
   git add -A

@@ -225,7 +225,7 @@ ul{{padding-left:20px;font-size:.87rem}} li{{margin:7px 0}}
 table{{border-collapse:collapse;width:100%;font-size:.85rem;background:#fff}}
 th,td{{border-bottom:1px solid #eee6da;padding:6px 8px;text-align:left}}th{{background:#faf7f1}}
 .note{{font-size:.8rem;color:#6d675e;margin-top:22px}} a{{color:#7a5230}}
-</style></head><main>
+</style></head><body><main>
 <h1>面接の質問カテゴリの並び順 ／ {n_rows} 行・{n_comp} 社</h1>
 <p class="sub">記事が目次に並べた質問カテゴリの並び順を、12カテゴリに正規化してそのまま保存した。並び順はこの表にしか無い。</p>
 

@@ -8,6 +8,8 @@ home 28 を上回る量が PR 由来なのに、PR 本体は一度も点検し�
   taishi-i/awesome-japanese-nlp-resources#32   src=pr32
   okhosting/awesome-open-data#57               src=pr57
   japan-opendata/awesome-japan-opendata#30     src=jopendata
+  stereobooster/awesome-hiring-process#5       src=prhiring
+  PyDataOsaka/awesome-japanese-datasets#1      src=prpydata
 """
 from __future__ import annotations
 
@@ -21,6 +23,10 @@ PRS = [
     ("taishi-i/awesome-japanese-nlp-resources", 32, "src=pr32"),
     ("okhosting/awesome-open-data", 57, "src=pr57"),
     ("japan-opendata/awesome-japan-opendata", 30, "src=jopendata"),
+    # 2026-10-11 に開いた 2 先。hire 側は "How to pass the interview?" 節、
+    # PyDataOsaka 側は 「雇用・労働」 節を新設して入れた。
+    ("stereobooster/awesome-hiring-process", 5, "src=prhiring"),
+    ("PyDataOsaka/awesome-japanese-datasets", 1, "src=prpydata"),
 ]
 
 

@@ -361,6 +361,16 @@ def qmeta_check() -> bool:
         bad.append(f"頁に旧行数 {stale_row[:3]}")
     if stale_dist:
         bad.append(f"頁に旧実文数 {stale_dist[:3]}")
+    # README は generated 扱いではない (再生成されない)。ここだけ古い数字が残った実測がある。
+    rd = (ROOT / "README.md").read_text(encoding="utf-8") if (ROOT / "README.md").exists() else ""
+    if rd:
+        raw_r = int(j.get("questions_extracted_raw") or 0)
+        want = f"{total:,} 行（重複を除いた実文 {dist:,} 文）"
+        if want not in rd:
+            bad.append(f"README に 「{want}」 が無い")
+        if raw_r and f"{raw_r:,} 問" in rd:
+            bad.append(f"README が raw 抽出値 {raw_r:,} 問 を公称")
+
     ok = not bad
     print(f"    row / 実文 / 分類   : {'OK' if ok else '★ ' + '; '.join(bad[:3])}"
           f"  (行 {total:,}・実文 {dist:,}・分類被打 {cov:,}・被打率 "
@@ -396,6 +406,15 @@ def outreach_check() -> bool:
             bad.append(f"#{num} が読めない")
             continue
         body = d.get("body") or ""
+        # comment も読む (本文を直しても comment が古い数字を残していた実測がある)。
+        cms = []
+        co = subprocess.run(["gh", "api", f"repos/{repo}/issues/{num}/comments",
+                             "--jq", '[.[] | select(.user.login == "part676392") | .body]'],
+                            capture_output=True, text=True, timeout=60)
+        try:
+            cms = json.loads(co.stdout or "[]")
+        except Exception:  # noqa: BLE001
+            bad.append(f"#{num} comment が読めない")
         if d.get("state") != "open":
             bad.append(f"#{num} state={d.get('state')} (閉結・併合なら台帳を更新)")
             continue
@@ -403,6 +422,16 @@ def outreach_check() -> bool:
             bad.append(f"#{num} に公開質問数 {nq:,} が無い")
         if f"{raw:,} interview questions" in body:
             bad.append(f"#{num} が raw 抽出値 {raw:,} を質問数として公称")
+        # 「N 問」で行数と実文を混ぜない (行 / 実文 を併記した文だけ通す)。
+        qpat = re.compile(r"[0-9,]{3,}\s*問")
+        for i, text in enumerate(cms):
+            if f"{raw:,} interview questions" in text:
+                bad.append(f"#{num} comment{i + 1} が raw 抽出値 {raw:,} を質問数として公称")
+            for m in qpat.finditer(text):
+                span = text[max(0, m.start() - 60):m.end() + 60]
+                if "重複を除いた実文" not in span:
+                    bad.append(f"#{num} comment{i + 1} が「{m.group(0)}」を実文と分けずに公称")
+                    break
         if sig and f"{sig:,}" not in body:
             bad.append(f"#{num} の stage 言及が CSV 行数 {sig:,} で無い")
     ok = not bad

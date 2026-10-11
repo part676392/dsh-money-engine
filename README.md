@@ -29,13 +29,13 @@ push は runner も開発側も行う。開発側は push 前に必ず `git pull
 | 内容 | 実測値 (2026-10-11) |
 |---|---|
 | 収容記事 | 600 本（note 公開API 由来） |
-| 対象企業ページ | 491 ページ |
+| 対象企業ページ | 473 社ぶん（別名で割れていた URLs は 23 本、本体へ誘導） |
 | 掲載金額の合計 | ¥1,205,920 |
 | 選考ステージ別の締切 | 12 件（うち無料 6）根拠文つき |
 | AI・録上面接の検索需要 | 23 社 / 34 語（autocomplete 機械収集） |
-| 選考段階の言及 | 475 社 / 2,780 件（本文 HTML を直接取得して再抽出） |
-| 面接質問の実文 | 472 社 / 1,873 問（質問＋記事が書く面接官の意図） |
-| CSV エクスポート | 面接質問 1,779 / 選考フロー 96 / 選考段階 2,021 行（UTF-8 BOM 付き・列定義つき） |
+| 選考段階の言及 | 475 社 / 2,021 行（本文 HTML を直接取得して再抽出） |
+| 面接質問 | 472 社 / 1,779 行（重複を除いた実文 1,173 文） |
+| CSV エクスポート | 面接質問 1,779 行 / 選考フロー 96 / 選考段階 2,021 行（UTF-8 BOM 付き・列定義つき） |
 | 日付つき保存庫 | GitHub Releases に tag 付き zip（毎自動。本文は非同梱） |
 | 公式選考フロー | 22 社 / 56 本（順序つき・寄せ前の工程名を保持） |
 
@@ -48,7 +48,7 @@ push は runner も開発側も行う。開発側は push 前に必ず `git pull
 - [AI・録上面接で検索されている企業 23 社](https://part676392.github.io/dsh-money-engine/ai-interviews.html)
 - [選考締切一覧](https://part676392.github.io/dsh-money-engine/es-deadlines.html)
 - [選考段階の言及 350 社・403 件（引用つき）](https://part676392.github.io/dsh-money-engine/selection-signals.html)
-- [面接質問 1,873 問・472 社（面接官の意図つき）](https://part676392.github.io/dsh-money-engine/interview-questions.html)
+- [面接質問 1,779 行（重複を除いた実文 1,173 文）・472 社](https://part676392.github.io/dsh-money-engine/interview-questions.html)
 - [公式選考フロー 56 本・22 社（順序つき）](https://part676392.github.io/dsh-money-engine/selection-flows.html)
 
 提出済みの掲載申請: [okhosting/awesome-open-data#57](https://github.com/okhosting/awesome-open-data/pull/57) — `### Natural language` 節に1行。このリストは 2026-10-10 にも PR が merge されている (活性を確認してから出した)。巡回が `data/pr_watches.json` 経由で merge を監視する。

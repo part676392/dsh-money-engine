@@ -233,7 +233,8 @@ PY
   fi
   python3 publish_rentry.py      2>&1 | tail -5
   python3 check_hn.py            2>&1 | tail -3
-  if ! python3 check_traffic.py 2>&1 | tail -12; then
+  # tail -12 だと 自苑/部外者 の内訳がログから消えた (実測: 部外者行だけ出て self が読めない)
+  if ! python3 check_traffic.py 2>&1 | tail -24; then
     # 計数が読めない日は「0 件」ではなく未取得。測れない日を日志に残す。
     echo "  ★★★ GUARD FAIL: traffic — 流入の計数が読めない (未取得)"
   fi   # 4鍵+pixel+見出し。6 だと store/home が消える (実測になった)

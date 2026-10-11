@@ -169,7 +169,13 @@
    "dataset",
    "hiring"
   ],
-  "updated": "2026-10-11"
+  "updated": "2026-10-11",
+  "note_com_signup": {
+   "at": "2026-10-11 17:46",
+   "state": "blocked",
+   "evidence": "outbox/note-signup-attempt.txt (reCAPTCHA Enterprise / anchor frame に素の checkbox 無し)",
+   "policy": "支出 $0・人の操作を要求しない、で止めた"
+  }
  },
  "link_counters": {
   "updated": "2026-10-11",

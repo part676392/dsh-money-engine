@@ -246,6 +246,12 @@ PY
     # 出典が死んだ / 有料化 / 測れない を面の約束の違反として立てる
     echo "  ★★★ GUARD FAIL: source-liveness — 出典URLの生存が変わったか測れていない"
   fi
+  # 唯一 人が辿れている入口 (PR 本文の link) の点検。計数が落ちるまで分からなかった (実測)。
+  if ! python3 check_pr_links.py 2>&1 | tail -4; then
+    RUN="$RUN
+$(date ...) PR 入口 ★"
+    echo "  ★★★ GUARD FAIL: pr-links — 人が辿れている入口の link が消えたか読めない"
+  fi
   python3 check_payment.py 2>&1 | tail -7
   python3 check_orders.py 2>&1 | tail -14
   python3 check_orders.py --selftest 2>&1 | tail -3
@@ -340,6 +346,7 @@ PY
   echo "$RUN" | grep -q "GUARD FAIL: card-surface" && FAIL="$FAIL card-surface"
   echo "$RUN" | grep -q "GUARD FAIL: index-probe" && FAIL="$FAIL index-probe"
   echo "$RUN" | grep -q "GUARD FAIL: source-liveness" && FAIL="$FAIL source-liveness"
+  echo "$RUN" | grep -q "GUARD FAIL: pr-links" && FAIL="$FAIL pr-links"
   echo "$RUN" | grep -q "GUARD FAIL: money-check" && FAIL="$FAIL money-check"
   echo "$RUN" | grep -qE "parser self-test: ([0-3])/4" && FAIL="$FAIL parser"
   if [ -n "$FAIL" ]; then

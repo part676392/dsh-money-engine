@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import collections
+import html
 import json
 import pathlib
 import re
@@ -125,6 +126,103 @@ def qcount_check() -> bool:
     ok = ok and not stale
     print(f"    question count   : 公称={total} JSON本文={body} CSV={rows} "
           f"{'一致' if not stale else '★ 頁に旧値 ' + str(stale[:3])}")
+    return ok
+
+
+def company_identity_check() -> bool:
+    """同じ会社の頁が2枚並んでいないか。束ねた古い名前は連絡頁 (noindex + canonical + 転送) にする。
+    実測: 統合前は JR西日本が4頁、先頭が全角スペースの名前が8件あった (491 頁 / 実体 479 社)。"""
+    from company_names import token_key
+    cdir = ROOT / "data"
+    cdir = ROOT / "company"
+    if not cdir.exists():
+        print("    company identity  : ★ company/ が無い")
+        return False
+    live = []
+    groups = collections.defaultdict(list)
+    redir, bad = 0, []
+    for f in sorted(cdir.glob("*.html")):
+        n = f.name[:-5]
+        h = f.read_text(encoding="utf-8", errors="replace")
+        if 'http-equiv="refresh"' in h:
+            redir += 1
+            if 'content="noindex' not in h:
+                bad.append(f"連絡頁 {n[:14]} に noindex が無い")
+            if 'rel="canonical"' not in h:
+                bad.append(f"連絡頁 {n[:14]} に canonical が無い")
+            continue
+        live.append(n)
+        groups[token_key(n)].append(n)
+        if n != n.strip() or n.startswith("\u3000"):
+            bad.append(f"全角スペース付きの名前が本体頁のまま {n[:16]}")
+    split = {k: v for k, v in groups.items() if len(v) > 1}
+    if split:
+        bad.append(f"同じ会社が分裂 {list(split.values())[:2]}")
+    idx = (ROOT / "index.html").read_text(encoding="utf-8", errors="replace")
+    ok = not bad
+    print(f"    company identity  : {'OK' if ok else '★ ' + '; '.join(bad[:2])}"
+          f"  (本体 {len(live):,} 頁・連絡頁 {redir} 頁・分裂 {len(split)})")
+    return ok
+
+
+def company_q_check() -> bool:
+    """企業頁が質問実文を持っているか。実文の無い会社は空欄を正直に出す。
+    実測: 実文 1,779 行 / 472 社、企業頁 491 頁。 pages に載る期待値を data から計算して突合する。"""
+    j = json.loads((ROOT / "data" / "interview_questions.json").read_text(encoding="utf-8"))
+    per = j.get("per_company") or {}
+    cdir = ROOT / "company"
+    if not cdir.exists():
+        print("    company pages     : ★ company/ が無い")
+        return False
+    files = {f.name: f for f in cdir.glob("*.html")}
+    have, miss, q_miss, empty_ok, empty_bad, faq = [], [], [], 0, [], 0
+    from company_names import canon_map
+    cm, _al = canon_map(list(per) + list(files))
+    # 名前ゆれを束ねたので、頁は canonical ぶん、質問は束ねた後ろぶんが載る。
+    merged = collections.defaultdict(list)
+    for comp, v in per.items():
+        merged[cm.get(comp, comp)].extend(v)
+    for comp, v in merged.items():
+        f = files.get(comp + ".html")
+        if f is None:
+            continue
+        h = f.read_text(encoding="utf-8", errors="replace")
+        if "面接で投げられた質問の実文" not in h:
+            miss.append(comp)
+            continue
+        have.append(comp)
+        # escape の形 (&quot; など) に左右されず、人が読む本文で突合する
+        txt = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", h)))
+        uniq = [re.sub(r"\s+", " ", (r.get("question") or "").strip())[:40] for r in v]
+        uniq = [u for u in dict.fromkeys(uniq) if u]
+        need = min(3, len(uniq))
+        got = sum(1 for u in uniq if u in txt)
+        if got < need:
+            q_miss.append(f"{comp} (頁 {got}/{need})")
+        faq += h.count("と聞かれますか？")
+    for name, f in files.items():
+        comp = name[:-5]
+        h0 = f.read_text(encoding="utf-8", errors="replace")
+        if 'http-equiv="refresh"' in h0:
+            continue      # 束ねた古い名前の連絡頁なので空欄の説明は要らない
+        if cm.get(comp, comp) in merged:
+            continue
+        h = f.read_text(encoding="utf-8", errors="replace")
+        if "まだ収録できていません" in h:
+            empty_ok += 1
+        elif "面接で投げられた質問の実文" not in h:
+            empty_bad.append(name)
+    on_pages = len([c for c in merged if c + ".html" in files])
+    bad = []
+    if len(have) != on_pages:
+        bad.append(f"実文ブロック {len(have)} 頁 / 期待 {on_pages} 頁 欠け {[m[:18] for m in miss[:3]]}")
+    if q_miss:
+        bad.append(f"頁に載った実文が data と違う {len(q_miss)} 頁 {[m[:16] for m in q_miss[:2]]}")
+    if empty_bad:
+        bad.append(f"実文の無い会社で空欄の説明が無い {empty_bad[:3]}")
+    ok = not bad
+    print(f"    company questions : {'OK' if ok else '★ ' + '; '.join(bad[:2])}"
+          f"  ({len(have)}/{on_pages} 頁に実文・空欄の説明 {empty_ok} 頁・FAQ実文Q&A {faq:,} 件)")
     return ok
 
 
@@ -438,6 +536,10 @@ def main() -> int:
     if not history_pub_check():
         all_ok = False
     if not issue_form_check():
+        all_ok = False
+    if not company_identity_check():
+        all_ok = False
+    if not company_q_check():
         all_ok = False
     if not qmeta_check():
         all_ok = False

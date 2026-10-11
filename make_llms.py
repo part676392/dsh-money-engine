@@ -73,6 +73,28 @@ def main() -> int:
     iq = load("data/interview_questions.json", {}) or {}
     per = iq.get("per_company") or {}
     n_q = sum(len(v) for v in per.values())
+    # 企業頁の実数を files から数える (手書きの枚数を嘘にしない)
+    import csv as _csv
+    cdir = ROOT / "company"
+    n_live = n_redir = 0
+    if cdir.exists():
+        for f2 in cdir.glob("*.html"):
+            if 'http-equiv="refresh"' in f2.read_text(encoding="utf-8", errors="replace"):
+                n_redir += 1
+            else:
+                n_live += 1
+    cpc = ROOT / "exports" / "company_pages.csv"
+    n_route = n_with_page = 0
+    if cpc.exists():
+        with open(cpc, encoding="utf_8_sig") as fh:
+            rd = list(_csv.DictReader(fh))
+        n_route = len(rd)
+        n_with_page = sum(1 for r in rd if r.get("page_exists") == "1")
+    n_lu_comp = len((load("data/question_lineups.json", {}) or {}).get("per_company") or {})
+    if n_with_page == n_route:
+        reach = f"質問実文を持つ {n_route} 社ぶんは、すべて頁に到達できる"
+    else:
+        reach = f"質問実文を持つ {n_route} 社ぶんのうち {n_with_page} 社ぶんしか頁に到達できない"
     n_in = sum(1 for v in per.values() for it in v if (it.get("intent") or "").strip())
     pct = round(n_in * 100 / n_q) if n_q else 0
     sig = load("data/selection_signals.json", {}) or {}
@@ -116,7 +138,12 @@ def main() -> int:
 - [CSV エクスポート]({BASE}/exports/manifest.csv): 面接質問・選考フロー・選考段階を CSV で。UTF-8 BOM 付き、列定義つき
 - [選考段階の言及 {sig.get("companies_with_mentions", "?")} 社]({BASE}/selection-signals.html): 収録記事の{src_word}から抽出した選考段階の言及集計。言及ごとに引用文つき。実測値は生成時に JSON から読む
 - [面接質問 {q.get("questions_total", "?")} 行（重複を除いた実文 {q.get("questions_distinct_text", "?")}）/ {q.get("companies_with_questions", "?")} 社]({BASE}/interview-questions.html): 収録記事から抽出した質問の実文と、記事が書く面接官の意図。各件に出典URL
-- [質問カテゴリの並び順]({BASE}/question-lineups.html): 467社の羅列を12カテゴリに正規化し {n_rows:,} 行。並び順そのものを持つデータはここ以外に無い。
+- [企業別の頁 ({n_live} 枚)]({BASE}/): 会社ごとに質問実文・カテゴリ・出典URL・カテゴリの並びを載せる。
+  {reach}。
+  「西日本旅客鉄道」と「JR西日本」のように名前ゆれで分裂していた {n_redir} 枚は機械に束ね、
+  旧名の URL は消さずに noindex の連絡頁にして正規の頁へ飛ぶようにした。
+  機械向けの道しるべ: [exports/company_pages.csv]({BASE}/exports/company_pages.csv) (会社 -> 頁URL -> 束ね先)
+- [質問カテゴリの並び順]({BASE}/question-lineups.html): {n_lu_comp} 社の羅列を12カテゴリに正規化し {n_rows:,} 行。並び順そのものを持つデータはここ以外に無い。
 - [逆質問の実文]({BASE}/reverse-questions.html): 本文に現れた文だけを抽出 (24文/8社)。薄さはページに明記。- [公式選考フロー {fl.get("flows_total", "?")} 本 / {fl.get("companies_with_flows", "?")} 社]({BASE}/selection-flows.html): 順序付きの選考工程。寄せた前の工程名も JSON の raw に全件保持
 - [注文受付ページ]({BASE}/store/): カスタム執筆の価格と受け口。Service/Offer 構造化データ
 

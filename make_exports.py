@@ -10,11 +10,13 @@
 """
 from __future__ import annotations
 
+import collections
 import csv
 import io
 import json
 import pathlib
 import time
+import urllib.parse
 
 ROOT = pathlib.Path(__file__).resolve().parent
 EXP = ROOT / "exports"
@@ -76,6 +78,46 @@ def main() -> int:
                      "category は lineup と同じ12名の機械分類で、未判定を残す。"
                      "category_basis は 見出し断片 / 語彙 / 空 (未判定)。"
                      "interviewer_intent は記事が書いた範囲のみ"])
+
+    # 企業頁の道しるべ。llms.txt を読んだ機械が「この会社の頁はどこ？」で迷うので、
+    # 会社 -> 頁URL -> 行数・実文数・カテゴリ内訳 の表を先に置く。
+    cdir = ROOT / "company"
+    base = "https://part676392.github.io/dsh-money-engine"
+    per = q.get("per_company") or {}
+    # 名前ゆれを束ねたので、頁は canonical の名前でしか無い。旧名の URL は連絡頁に残る。
+    from company_names import canon_map
+    names = [f.name[:-5] for f in cdir.glob("*.html")] if cdir.exists() else []
+    cm, _al = canon_map(list(per) + names)
+    split = collections.Counter()
+    for n in names:
+        split[cm.get(n, n)] += 1
+    prows = []
+    for comp in sorted(per):
+        ck = cm.get(comp, comp)
+        fn = ck + ".html"
+        fp = cdir / fn
+        ex = fp.exists()
+        ts = {(r.get("question") or "").strip() for r in per[comp] if (r.get("question") or "").strip()}
+        cats = {}
+        for r in per[comp]:
+            k = r.get("category") or "未判定"
+            cats[k] = cats.get(k, 0) + 1
+        if comp != ck:
+            redirect_to = ck
+        else:
+            redirect_to = ""
+        prows.append([comp, (base + "/company/" + urllib.parse.quote(fn)) if ex else "",
+                      1 if ex else 0, redirect_to, split[ck] - 1, len(per[comp]), len(ts),
+                      "、".join(f"{k}:{v}" for k, v in sorted(cats.items(), key=lambda x: -x[1]))])
+    n = write_csv(EXP / "company_pages.csv",
+                  ["company", "page_url", "page_exists", "canonical_page_of",
+                   "alias_pages_on_page", "question_rows",
+                   "questions_distinct", "categories"], prows)
+    manifest.append(["company_pages.csv", n,
+                     "企業別の頁への道しるべ。page_url が空の会社は資料の頁をまだ作れていない。"
+                     "canonical_page_of は名前ゆれを束ねた先 (空なら自分が正規)。"
+                     "alias_pages_on_page はその頁に統合した旧名の数。"
+                     "questions_distinct は同じ会社内で同じ文をまとめた数"])
 
     # 2) 選考フロー (1行=1工程 so that it is pivot-able)
     rows = []

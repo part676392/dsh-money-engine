@@ -1,14 +1,14 @@
 # 中途・転職 面接対策 目録データベース (dsh-money-engine)
 
 > 日本の転職・中途市場で「面接の情報」を実測して積む静的データ資産。
-> 収録 600 本 / 対象 491 社 / 掲載金額合計 ¥1,205,920。毎日 06:10 と 19:40 (JST) に自動更新。
+> 収録 600 本 / 対象 473 社 / 掲載金額合計 ¥1,205,920。毎日 06:10 と 19:40 (JST) に自動更新。
 
-生成: 2026-10-11 09:07 JST
+生成: 2026-10-11 09:26 JST
 この文書にある数値はすべて再取得可能な実測です。推定値と将来見通しは本文に書いていません。
 
 ## Pages
 
-- [トップ (企業別索引) (https://part676392.github.io/dsh-money-engine/)): 491 社の企業ページへの入口。各社ページに FAQPage 構造化データ
+- [トップ (企業別索引) (https://part676392.github.io/dsh-money-engine/)): 473 社の企業ページへの入口。各社ページに FAQPage 構造化データ
 - [運用履歴](https://part676392.github.io/dsh-money-engine/changes.html): 日ごとに積んだ観測系列 (収録数・访问・受金・失敗記録)。Dataset 構造化データ
 - [AI・録上面接の検索需要 23 社](https://part676392.github.io/dsh-money-engine/ai-interviews.html): 企業名込みの検索語 34 件の機械収集一覧。実施有無の断定なし
 - [選考締切一覧](https://part676392.github.io/dsh-money-engine/es-deadlines.html): 本文の締切記載を機械検証した 12 件 (根拠文つき)
@@ -18,7 +18,12 @@
 - [CSV エクスポート](https://part676392.github.io/dsh-money-engine/exports/manifest.csv): 面接質問・選考フロー・選考段階を CSV で。UTF-8 BOM 付き、列定義つき
 - [選考段階の言及 475 社](https://part676392.github.io/dsh-money-engine/selection-signals.html): 収録記事の全文から抽出した選考段階の言及集計。言及ごとに引用文つき。実測値は生成時に JSON から読む
 - [面接質問 1779 行（重複を除いた実文 1173）/ 472 社](https://part676392.github.io/dsh-money-engine/interview-questions.html): 収録記事から抽出した質問の実文と、記事が書く面接官の意図。各件に出典URL
-- [質問カテゴリの並び順](https://part676392.github.io/dsh-money-engine/question-lineups.html): 467社の羅列を12カテゴリに正規化し 5,494 行。並び順そのものを持つデータはここ以外に無い。
+- [企業別の頁 (473 枚)](https://part676392.github.io/dsh-money-engine/): 会社ごとに質問実文・カテゴリ・出典URL・カテゴリの並びを載せる。
+  質問実文を持つ 472 社ぶんは、すべて頁に到達できる。
+  「西日本旅客鉄道」と「JR西日本」のように名前ゆれで分裂していた 23 枚は機械に束ね、
+  旧名の URL は消さずに noindex の連絡頁にして正規の頁へ飛ぶようにした。
+  機械向けの道しるべ: [exports/company_pages.csv](https://part676392.github.io/dsh-money-engine/exports/company_pages.csv) (会社 -> 頁URL -> 束ね先)
+- [質問カテゴリの並び順](https://part676392.github.io/dsh-money-engine/question-lineups.html): 467 社の羅列を12カテゴリに正規化し 5,494 行。並び順そのものを持つデータはここ以外に無い。
 - [逆質問の実文](https://part676392.github.io/dsh-money-engine/reverse-questions.html): 本文に現れた文だけを抽出 (24文/8社)。薄さはページに明記。- [公式選考フロー 56 本 / 22 社](https://part676392.github.io/dsh-money-engine/selection-flows.html): 順序付きの選考工程。寄せた前の工程名も JSON の raw に全件保持
 - [注文受付ページ](https://part676392.github.io/dsh-money-engine/store/): カスタム執筆の価格と受け口。Service/Offer 構造化データ
 
@@ -31,14 +36,14 @@
   `exports/interview_questions.csv` の `question` は記事の小見出しを落とした形、`question_raw` が抽出そのまま。
   `category` は選考フロー側と同じ12名の機械分類で、迷った行は `未判定` のまま残す (63.9% を分類)。
 - 本文に現れた選考段階の言及: 書類選考 1,268、最終面接 635、一次面接 284。書類選考が過半を占める。
-- 無人巡回が積んだ観測は 3 件 (2026-10-10T23:47:13+09:00 → 2026-10-11T09:01:28+09:00)。`exports/history_timeseries.csv` に無料公開。
+- 無人巡回が積んだ観測は 3 件 (2026-10-10T23:47:13+09:00 → 2026-10-11T09:07:03+09:00)。`exports/history_timeseries.csv` に無料公開。
   UTF-8 BOM 付きなので `utf-8-sig` で読む。空欄は「その頃は測っていなかった」で 0 ではない。
   各行に元 file の SHA-256 を付け、後から数字を差し替えていないことを検証できるようにした。
 
 ## Data
 
 - [snapshot-latest.json](https://part676392.github.io/dsh-money-engine/data/snapshot-latest.json): 直近のスナップショット (記事数・社数・掲載金額・内訳)
-- [sitemap.xml](https://part676392.github.io/dsh-money-engine/sitemap.xml): 全 491 社ページを含む URL 一覧
+- [sitemap.xml](https://part676392.github.io/dsh-money-engine/sitemap.xml): 全 473 社ページを含む URL 一覧
 - [GitHub repository](https://github.com/part676392/dsh-money-engine): 生成スクリプトと日別履歴の本体
 
 ## Measured limits (正直な制約)
@@ -129,6 +134,6 @@
 
 ## 集計 (2026-10-11)
 - 収録記事: 600
-- 対象企業: 491
+- 対象企業: 473
 - 掲載金額合計: ¥1,205,920
 - AI 面接の被覆: 記事 [{'firm': '東京センチュリー', 'title': '【中途・転職】グッと内定が近づく！東京センチュリー〈事務職〉\u3000面接想定PDF質問集100選', 'price': 2680, 'url': 'https://note.com/shushoku_career1/n/ne4f39aea3676', 'mentions': [], 'chars': 5046}, {'firm': '三菱ＨＣキャピタル', 'title': '【中途・転職】グッと内定が近づく！三菱ＨＣキャピタル〈事務職〉\u3000面接想定PDF質問集100選', 'price': 2680, 'url': 'https://note.com/shushoku_career1/n/n467740308718', 'mentions': [], 'chars': 5287}, {'firm': 'ニップン', 'title': 'ニップンの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n306cc9146069', 'mentions': [], 'chars': 4719}, {'firm': '農林中央金庫', 'title': '農林中央金庫の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n6e9a253dabfb', 'mentions': [], 'chars': 4910}, {'firm': 'アビームコンサルティング', 'title': 'アビームコンサルティング P&O職のES、何を書く？秋ターム締切と書き方【28卒】', 'price': 0, 'url': 'https://note.com/shushoku_career1/n/n75badbfdc7ab', 'mentions': ['ai面接'], 'chars': 5307}, {'firm': 'ニッスイ', 'title': 'ニッスイの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n3086c03099d7', 'mentions': [], 'chars': 4809}, {'firm': '不二家', 'title': '不二家の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n23469e4adc77', 'mentions': [], 'chars': 4632}, {'firm': '亀田製菓', 'title': '亀田製菓の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n0b5d915bdcaf', 'mentions': [], 'chars': 4635}, {'firm': 'キッコーマン', 'title': 'キッコーマンの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/na671aa22f67f', 'mentions': [], 'chars': 4644}, {'firm': 'Umios', 'title': 'Umios（ウミオス・旧マルハニチロ）の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n4ad82dce6f50', 'mentions': [], 'chars': 5002}, {'firm': 'アビームコンサルティング', 'title': 'アビームコンサルティングのESは何を書く？ビジネスコンサルタントコースの書き方と締切', 'price': 0, 'url': 'https://note.com/shushoku_career1/n/ncebf5eb6363c', 'mentions': ['ai面接'], 'chars': 5024}, {'firm': '出光興産', 'title': '【中途・転職】グッと内定が近づく！出光興産株式会社〈事務職〉\u3000面接想定PDF質問集100選', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n96dd5685ee18', 'mentions': [], 'chars': 4893}, {'firm': 'オムロン', 'title': 'オムロン ヘルスケアの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/na502534e7712', 'mentions': [], 'chars': 5000}, {'firm': '野村證券', 'title': '【中途・転職】グッと内定が近づく！野村證券 最終面接（役員面接）想定PDF質問集100選', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/ndcc155901e47', 'mentions': [], 'chars': 5601}, {'firm': 'ファイザー', 'title': 'ファイザーの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n499144c2f7ee', 'mentions': [], 'chars': 4800}, {'firm': 'INPEX', 'title': 'INPEX（インペックス）の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n773c326efd3f', 'mentions': [], 'chars': 5061}, {'firm': 'ミルボン', 'title': 'ミルボンの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n72a9e4d01e21', 'mentions': [], 'chars': 4691}, {'firm': 'アビームコンサルティング', 'title': 'アビームコンサルティングのES例文と書き方｜ビジネスコンサルタントコースの架空例文9選と空欄テンプレ', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n79adb8b4a7d5', 'mentions': [], 'chars': 2821}, {'firm': 'アビームコンサルティング', 'title': 'アビームコンサルティングのインターンES例文と書き方｜P&O職秋ターム選考の例文8選と空欄テンプレ', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n91395221d8ab', 'mentions': ['ai面接'], 'chars': 3213}, {'firm': 'アビームコンサルティング', 'title': 'アビームコンサルティングのインターンES例文と書き方｜戦略コンサルタントコース秋ターム選考の例文8選と空欄テンプレ', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n398fadd48662', 'mentions': ['ai面接'], 'chars': 3248}, {'firm': 'アビームコンサルティング', 'title': 'アビームコンサルティングのインターンES例文と書き方｜公共経営コンサルタントコースの例文9選と空欄テンプレ', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n494fa9e88ece', 'mentions': ['ai面接'], 'chars': 3596}, {'firm': 'アビームコンサルティング', 'title': 'アビームコンサルティングのインターンES例文と書き方｜デジタルコンサルタントコースの例文9選と空欄テンプレ', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/nbdb178302507', 'mentions': ['ai面接'], 'chars': 3457}, {'firm': 'レゾナック', 'title': 'レゾナック（旧昭和電工）の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/ne37f3f58ae45', 'mentions': [], 'chars': 5009}, {'firm': '丸紅', 'title': '【中途・転職】グッと内定が近づく！丸紅株式会社〈事務職〉\u3000面接想定PDF質問集100選', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/nc08799ddaaa7', 'mentions': [], 'chars': 5365}, {'firm': '野村不動産', 'title': '【中途・転職】グッと内定が近づく！野村不動産〈事務職〉\u3000面接想定PDF質問集100選', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/ne4b95b98277c', 'mentions': [], 'chars': 4257}, {'firm': 'オムロン', 'title': '【中途・転職】グッと内定が近づく！オムロン株式会社〈事務職〉\u3000面接想定PDF質問集100選', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n5aacbca230ba', 'mentions': [], 'chars': 4568}, {'firm': '村田製作所', 'title': '【中途・転職】グッと内定が近づく！株式会社村田製作所〈事務職〉\u3000面接想定PDF質問集100選', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n1664e9dafc5a', 'mentions': [], 'chars': 3693}, {'firm': '日立ハイテク', 'title': '日立ハイテクの中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/nba75ca4d0187', 'mentions': [], 'chars': 4374}, {'firm': 'キユーピー', 'title': '【中途・転職】グッと内定が近づく！キユーピー株式会社〈事務職〉\u3000面接想定PDF質問集100選', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n4e4d605cf37a', 'mentions': [], 'chars': 4761}, {'firm': 'AGC', 'title': 'AGC（エージーシー）の中途面接対策｜志望動機・転職理由・逆質問の回答例100問【PDF】', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/ne6b61f5a7114', 'mentions': [], 'chars': 4599}, {'firm': '東京センチュリー', 'title': '【中途・転職】グッと内定が近づく！東京センチュリー\u3000面接想定PDF質問集100選', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/na81bba3fb0b1', 'mentions': [], 'chars': 4396}, {'firm': '出光興産', 'title': '【中途・転職】グッと内定が近づく！出光興産\u3000面接想定PDF質問集100選', 'price': 1980, 'url': 'https://note.com/shushoku_career1/n/n3a4a5031e6f2', 'mentions': [], 'chars': 5138}] 本中 6 本が言及、['アビームコンサルティング'] 社分

@@ -1,14 +1,14 @@
 # 中途・転職 面接対策 目録データベース (dsh-money-engine)
 
 > 日本の転職・中途市場で「面接の情報」を実測して積む静的データ資産。
-> 収録 600 本 / 対象 491 社 / 掲載金額合計 ¥1,205,920。毎日 06:10 と 19:40 (JST) に自動更新。
+> 収録 600 本 / 対象 473 社 / 掲載金額合計 ¥1,205,920。毎日 06:10 と 19:40 (JST) に自動更新。
 
-生成: 2026-10-11 09:07 JST
+生成: 2026-10-11 09:26 JST
 この文書にある数値はすべて再取得可能な実測です。推定値と将来見通しは本文に書いていません。
 
 ## Pages
 
-- [トップ (企業別索引) (https://part676392.github.io/dsh-money-engine/)): 491 社の企業ページへの入口。各社ページに FAQPage 構造化データ
+- [トップ (企業別索引) (https://part676392.github.io/dsh-money-engine/)): 473 社の企業ページへの入口。各社ページに FAQPage 構造化データ
 - [運用履歴](https://part676392.github.io/dsh-money-engine/changes.html): 日ごとに積んだ観測系列 (収録数・访问・受金・失敗記録)。Dataset 構造化データ
 - [AI・録上面接の検索需要 23 社](https://part676392.github.io/dsh-money-engine/ai-interviews.html): 企業名込みの検索語 34 件の機械収集一覧。実施有無の断定なし
 - [選考締切一覧](https://part676392.github.io/dsh-money-engine/es-deadlines.html): 本文の締切記載を機械検証した 12 件 (根拠文つき)
@@ -18,7 +18,12 @@
 - [CSV エクスポート](https://part676392.github.io/dsh-money-engine/exports/manifest.csv): 面接質問・選考フロー・選考段階を CSV で。UTF-8 BOM 付き、列定義つき
 - [選考段階の言及 475 社](https://part676392.github.io/dsh-money-engine/selection-signals.html): 収録記事の全文から抽出した選考段階の言及集計。言及ごとに引用文つき。実測値は生成時に JSON から読む
 - [面接質問 1779 行（重複を除いた実文 1173）/ 472 社](https://part676392.github.io/dsh-money-engine/interview-questions.html): 収録記事から抽出した質問の実文と、記事が書く面接官の意図。各件に出典URL
-- [質問カテゴリの並び順](https://part676392.github.io/dsh-money-engine/question-lineups.html): 467社の羅列を12カテゴリに正規化し 5,494 行。並び順そのものを持つデータはここ以外に無い。
+- [企業別の頁 (473 枚)](https://part676392.github.io/dsh-money-engine/): 会社ごとに質問実文・カテゴリ・出典URL・カテゴリの並びを載せる。
+  質問実文を持つ 472 社ぶんは、すべて頁に到達できる。
+  「西日本旅客鉄道」と「JR西日本」のように名前ゆれで分裂していた 23 枚は機械に束ね、
+  旧名の URL は消さずに noindex の連絡頁にして正規の頁へ飛ぶようにした。
+  機械向けの道しるべ: [exports/company_pages.csv](https://part676392.github.io/dsh-money-engine/exports/company_pages.csv) (会社 -> 頁URL -> 束ね先)
+- [質問カテゴリの並び順](https://part676392.github.io/dsh-money-engine/question-lineups.html): 467 社の羅列を12カテゴリに正規化し 5,494 行。並び順そのものを持つデータはここ以外に無い。
 - [逆質問の実文](https://part676392.github.io/dsh-money-engine/reverse-questions.html): 本文に現れた文だけを抽出 (24文/8社)。薄さはページに明記。- [公式選考フロー 56 本 / 22 社](https://part676392.github.io/dsh-money-engine/selection-flows.html): 順序付きの選考工程。寄せた前の工程名も JSON の raw に全件保持
 - [注文受付ページ](https://part676392.github.io/dsh-money-engine/store/): カスタム執筆の価格と受け口。Service/Offer 構造化データ
 
@@ -31,14 +36,14 @@
   `exports/interview_questions.csv` の `question` は記事の小見出しを落とした形、`question_raw` が抽出そのまま。
   `category` は選考フロー側と同じ12名の機械分類で、迷った行は `未判定` のまま残す (63.9% を分類)。
 - 本文に現れた選考段階の言及: 書類選考 1,268、最終面接 635、一次面接 284。書類選考が過半を占める。
-- 無人巡回が積んだ観測は 3 件 (2026-10-10T23:47:13+09:00 → 2026-10-11T09:01:28+09:00)。`exports/history_timeseries.csv` に無料公開。
+- 無人巡回が積んだ観測は 3 件 (2026-10-10T23:47:13+09:00 → 2026-10-11T09:07:03+09:00)。`exports/history_timeseries.csv` に無料公開。
   UTF-8 BOM 付きなので `utf-8-sig` で読む。空欄は「その頃は測っていなかった」で 0 ではない。
   各行に元 file の SHA-256 を付け、後から数字を差し替えていないことを検証できるようにした。
 
 ## Data
 
 - [snapshot-latest.json](https://part676392.github.io/dsh-money-engine/data/snapshot-latest.json): 直近のスナップショット (記事数・社数・掲載金額・内訳)
-- [sitemap.xml](https://part676392.github.io/dsh-money-engine/sitemap.xml): 全 491 社ページを含む URL 一覧
+- [sitemap.xml](https://part676392.github.io/dsh-money-engine/sitemap.xml): 全 473 社ページを含む URL 一覧
 - [GitHub repository](https://github.com/part676392/dsh-money-engine): 生成スクリプトと日別履歴の本体
 
 ## Measured limits (正直な制約)

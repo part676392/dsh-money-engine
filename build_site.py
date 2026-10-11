@@ -183,6 +183,33 @@ def build(d: dict) -> None:
             return {}
     LNU = _loadj("question_lineups.json").get("per_company") or {}
     RVQ = _loadj("reverse_questions.json").get("per_company") or {}
+    # 質問の実文 (小見出しを落とした形)。企業頁で「社名 面接 質問」の答えにする。
+    IQ = _loadj("interview_questions.json").get("per_company") or {}
+
+    # 名前ゆれで同じ会社の頁が分裂していた (実測: JR西日本が4頁、先頭が全角スペースの名前8件、
+    # 491 頁 -> 束ねると 479 社)。機械で束ね、割っていた名前の URL は canonical への連絡頁に残す。
+    from company_names import canon_map
+    CMAP, ALIAS = canon_map(list(by_company) + list(LNU) + list(RVQ) + list(IQ))
+
+    def _merge_lists(d):
+        out = collections.defaultdict(list)
+        for k, v in d.items():
+            out[CMAP.get(k, k)].extend(v or [])
+        return out
+
+    def _merge_best(d):
+        out = {}
+        for k, v in d.items():
+            ck = CMAP.get(k, k)
+            have = len((out.get(ck) or {}).get("lineups") or [])
+            if ck not in out or len((v or {}).get("lineups") or []) > have:
+                out[ck] = v
+        return out
+
+    by_company = collections.defaultdict(list, _merge_lists(by_company))
+    IQ = _merge_lists(IQ)
+    RVQ = _merge_lists(RVQ)
+    LNU = _merge_best(LNU)
 
     kind_stat = collections.Counter(r["kind"] for r in recs)
     priced = sum(r["price"] for r in recs)
@@ -231,7 +258,9 @@ def build(d: dict) -> None:
             f'<a href="{esc(x["url"])}">{esc(x["published"])} {price_label(x["price"])}</a>' for x in g[:3]
         )
         rows.append(
-            f"<tr><td><a href='company/{esc(comp)}.html'>{esc(comp)}</a></td>"
+            f"<tr><td><a href='company/{urllib.parse.quote(comp)}.html'>{esc(comp)}</a>"
+            + (f"<span style='color:#6b7480;font-size:.78rem'> (別名: {esc('、'.join(ALIAS.get(comp, [])[:2]))}</span>"
+               if ALIAS.get(comp) else "") + "</td>"
             f"<td>{len(g)}</td><td>{len(free)}</td><td>{len(paid)}</td>"
             f"<td>{esc('、'.join(sorted({x['kind'] for x in g})))}</td><td>{links}</td></tr>"
         )
@@ -453,9 +482,59 @@ small{{display:block;color:#5d6570;margin-top:26px;font-size:.8rem;line-height:1
                     + "".join(f"<li>「{esc(it['quote'][:180])}」 <a href='{esc(it['url'])}'>出典</a></li>"
                               for it in rv[:3])
                     + f"</ul><p class='raw'>全社: <a href='/dsh-money-engine/reverse-questions.html'>逆質問の実文</a></p></div>")
-        cdem = demand.company_block(comp, dem) if dem else ""
-        cai = demand.ai_block(comp, dem) if dem else ""
-        ai_terms = demand.ai_demand(comp, dem) if dem else []
+        iqr = IQ.get(comp) or []
+        uniq, seen = [], set()
+        for it in iqr:
+            t = (it.get("question") or "").strip()
+            if t and t not in seen:
+                seen.add(t)
+                uniq.append(it)
+        if uniq:
+            cats = {}
+            for it in uniq:
+                k = it.get("category") or "未判定"
+                cats[k] = cats.get(k, 0) + 1
+            cat_txt = "、".join(f"{k} {v}" for k, v in sorted(cats.items(), key=lambda x: -x[1]))
+            qrows = "".join(
+                "<tr><td>" + esc(it.get("category") or "未判定") + "</td><td>「"
+                + esc((it.get("question") or "")[:150]) + "」</td><td>"
+                + esc((it.get("intent") or "—")[:90]) + "</td><td><a href='"
+                + esc(it.get("url") or "#") + "'>出典</a></td></tr>"
+                for it in uniq[:12])
+            if len(uniq) < len(iqr):
+                dup = ("収録 " + f"{len(iqr):,}" + " 行のうち、この会社で同じ文の行をまとめると "
+                       + f"{len(uniq):,}" + " 文です（" + f"{len(iqr) - len(uniq):,}"
+                       + " 行が同じ文の繰り返し）。")
+            else:
+                dup = ("収録 " + f"{len(iqr):,}" + " 行は、この会社では重複なく " + f"{len(uniq):,}" + " 文です。")
+            cln += ("<div class='cd'><h3>面接で投げられた質問の実文 " + f"{len(uniq):,}"
+                    + " 文（収録 " + f"{len(iqr):,}" + " 行）</h3>"
+                    + "<p class='raw'>" + dup
+                    + "小見出しを落とした形で、カテゴリは機械が振りました (迷った行は 未判定)。全量: "
+                    + "<a href='/dsh-money-engine/exports/interview_questions.csv'>interview_questions.csv</a> ／ "
+                    + "<a href='/dsh-money-engine/interview-questions.html'>全社一覧</a></p>"
+                    + "<table class='qt'><thead><tr><th>カテゴリ</th><th>質問の実文</th>"
+                    + "<th>面接官の意図 (記事に書いた範囲)</th><th>出典</th></tr></thead><tbody>"
+                    + qrows + "</tbody></table></div>")
+        else:
+            uniq = []
+            cln += ("<div class='cd'><h3>面接で投げられた質問の実文</h3>"
+                    "<p class='raw'>この会社については、質問の実文をまだ収録できていません。"
+                    "上の資料リンクの中に出ている可能性はありますが、空欄を埋めるために文は作っていません。"
+                    "全社の一覧: <a href='/dsh-money-engine/interview-questions.html'>面接質問の実文</a></p></div>")
+        # demand は収录時の名前で引くので、束ねる前の名前も順に試す (無いものを無いと言わない)。
+        names_try = [comp] + list(ALIAS.get(comp) or [])
+
+        def _try(fn):
+            for nm in names_try:
+                v = fn(nm)
+                if v:
+                    return v
+            return "" if fn is not demand.ai_demand else []
+
+        cdem = _try(lambda nm: demand.company_block(nm, dem)) if dem else ""
+        cai = _try(lambda nm: demand.ai_block(nm, dem)) if dem else ""
+        ai_terms = _try(lambda nm: demand.ai_demand(nm, dem)) if dem else []
 
         q = f"{comp}の中途面接対策資料は現在{len(g)}点あります。うち{len(free)}点は無料、{len(paid)}点は有料です。"
         ltd = {
@@ -469,6 +548,22 @@ small{{display:block;color:#5d6570;margin-top:26px;font-size:.8rem;line-height:1
                 }
             ],
         }
+        # 実文そのものを FAQ で返す (「{社名} 面接 質問」で搜く人への答え)。
+        for it in uniq[:3]:
+            nm = (it.get("question") or "").strip().rstrip("。」")
+            if not nm:
+                continue
+            intent = (it.get("intent") or "").strip()
+            ans = (intent if intent else
+                   "記事に面接官の意図は書かれていません。実文と出典URLだけを収録しています。")
+            ltd["mainEntity"].append({
+                "@type": "Question",
+                "name": f"{comp}の面接では「{nm[:120]}」と聞かれますか？",
+                "acceptedAnswer": {"@type": "Answer", "text": (
+                    f"収録した記事に「{(it.get('question') or '')[:180]}」という実文があります"
+                    f"（カテゴリ: {it.get('category') or '未判定'}）。意図について: {ans[:200]} "
+                    f"出典: {(it.get('url') or '')}")},
+            })
         if dem:
             ltd = demand.company_ld(comp, dem, ltd)
         if ai_terms:
@@ -495,7 +590,7 @@ small{{display:block;color:#5d6570;margin-top:26px;font-size:.8rem;line-height:1
                     "acceptedAnswer": {"@type": "Answer", "text": (
                         f"収録記事の目次からは次の並びが読めます: {' → '.join(lu)}。"
                         f"これは記事が並べた順であって選考の全集ではありません。"
-                        f"ただし収録 {LNU and 467} 社ぶんの中で同じ並びが最多です。")},
+                        f"ただし収録 {len(LNU):,} 社ぶんの中で同じ並びが最多です。")},
                 })
 
         (cdir / f"{comp}.html").write_text(
@@ -509,6 +604,9 @@ small{{display:block;color:#5d6570;margin-top:26px;font-size:.8rem;line-height:1
 <style>body{{font-family:system-ui,"Hiragino Sans",sans-serif;margin:0;background:#f7f8fa;color:#1b1f24;line-height:1.7}}
 main{{max-width:760px;margin:0 auto;padding:26px 16px 60px}}h1{{font-size:1.25rem}}
 li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:1px 7px;border-radius:20px;margin-left:6px}}
+.qt{{width:100%;border-collapse:collapse;font-size:.84rem;margin-top:8px}}
+.qt th,.qt td{{text-align:left;padding:6px 8px;border-bottom:1px solid #e6e1d8;vertical-align:top}}
+.qt th{{background:#efeee9;font-weight:600;white-space:nowrap}}
 .d{{font-size:.75rem;color:#6b7480;margin-left:6px}}a{{color:#1a5fd6}}
 .aigap{{background:#fff;border:1px solid #e3e7ed;border-left:4px solid #6b4fd6;border-radius:9px;padding:14px 16px;margin:20px 0}}
 .aigap h2{{font-size:1rem;margin:0 0 6px}}.aigap p{{font-size:.86rem;margin:8px 0}}
@@ -530,6 +628,28 @@ li{{margin:9px 0}}.p{{font-size:.75rem;background:#e8f0ff;color:#1a4fa0;padding:
 </body></html>""",
             encoding="utf-8",
         )
+
+    # ---- 束ねた名前の URL を殺さない: canonical への連絡頁 ----
+    n_redir = 0
+    for c, als in sorted(ALIAS.items()):
+        cu = ("https://part676392.github.io/dsh-money-engine/company/"
+              + urllib.parse.quote(c + ".html"))
+        for a in als:
+            (cdir / f"{a}.html").write_text(
+                f"""<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{esc(a)}の面接対策資料は{esc(c)}の頁にまとめました</title>
+<meta name="description" content="{esc(a)} は {esc(c)} と同じ会社なので、面接資料と質問実文は {esc(c)} の頁に統合しました。">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="{cu}">
+<meta http-equiv="refresh" content="0; url={cu}"></head>
+<body style="font-family:system-ui,'Hiragino Sans',sans-serif;margin:42px;line-height:1.8">
+<p><b>{esc(a)}</b> の頁は <a href="{cu}">{esc(c)}</a> にまとめました。同じ会社の名前ゆれを機械に束ねたためです。
+この URL は消さずに残しています。</p>
+{TRACKER_COMPANY}</body></html>""",
+                encoding="utf-8",
+            )
+            n_redir += 1
 
     # ---- sitemap + robots : AEO/クローラーへの最短経路 ----
     base = "https://part676392.github.io/dsh-money-engine"

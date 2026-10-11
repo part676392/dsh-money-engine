@@ -58,6 +58,20 @@ def spine_lines():
     return n
 
 
+def schedule_hours() -> str:
+    """launchd に実際に入っている時刻を読み返す。文を硬く置いて古くなる位なら読む。"""
+    import plistlib
+    f = pathlib.Path.home() / "Library" / "LaunchAgents" / "com.dsh.money-engine.plist"
+    try:
+        d = plistlib.load(open(f, "rb"))
+        got = sorted((int(x["Hour"]), int(x["Minute"])) for x in d.get("StartCalendarInterval", []))
+        if got:
+            return " / ".join("%02d:%02d" % hm for hm in got)
+    except Exception as e:
+        print(f"  ★ schedule が読めない ({type(e).__name__}) ので既定を書く")
+    return "06:10 / 13:20 / 19:40"
+
+
 def section() -> str:
     snap = load("data/snapshot-latest.json", {}) or {}
     q = load("data/interview_questions.json", {}) or {}
@@ -85,6 +99,18 @@ def section() -> str:
         return ""
     obs = int(idx.get("observations") or 0)
     spine = spine_lines()
+    # 締切と history は data と台帳から実測 (written 文を硬化させない)
+    dl = load("data/es_deadlines_page.json", {}) or {}
+    dl_rows = dl.get("open") or []
+    dl_comp = len({r.get("firm") for r in dl_rows})
+    dl_days = sorted({r.get("date") for r in dl_rows if r.get("date")})
+    hist_dl = sum(1 for f in (ROOT / "data" / "history").glob("deadlines.*.jsonl")
+                  for l in f.read_text(encoding="utf-8").splitlines() if l.strip())
+    hist_liv = 0
+    live_f = ROOT / "data" / "history" / "source_liveness.jsonl"
+    if live_f.exists():
+        hist_liv = len([l for l in live_f.read_text(encoding="utf-8").splitlines() if l.strip()])
+    hours = schedule_hours()
 
     def u(path: str) -> str:
         return f"{SITE}{path}?src=prof"
@@ -107,10 +133,14 @@ def section() -> str:
         f"- 質問のカテゴリ分類 **{cov:,} 行（{cov_pct}）**",
         f"- 企業別の頁 **{n_comp} 枚**（別名で割れていた URLs は本体へ誘導） — "
         f"機械が辿る道: {u('/exports/company_pages.csv')}",
-        f"- 巡回は **毎日 06:10 / 19:40 JST** に自動で走り、取得日を `data/history/` に積む"
-        f"（観測 {obs} 件・実行背骨 {spine} 行、各行に SHA-256）",
+        (f"- ES 締切 **{len(dl_rows)} 件**（{dl_comp}社・{dl_days[0]}〜{dl_days[-1]}）— "
+         f"抽出の根拠文つき: {u('/es-deadlines.html')}" if dl_rows else
+         "- ES 締切は現在 0 件（機械抽出で日付が取れていない日は 0 と書く）"),
+        f"- 質問カテゴリの並び順の頁: {u('/question-lineups.html')} ／ 店の頁: {u('/store/')}",
+        f"- 巡回は **毎日 {hours} JST** に自動で走り、取得日を `data/history/` に積む"
+        f"（観測 {obs} 件・実行背骨 {spine} 行 / 締切台帳 {hist_dl:,} 行 / 出典の生存 {hist_liv:,} 行、各行に SHA-256）",
         "",
-        f"機械可読: {u('/exports/manifest.csv')}",
+        f"機械可読: {u('/exports/manifest.csv')} ／ 締切の履歴: {u('/exports/es_deadlines_history.csv')} ／ 出典の生存: {u('/exports/source_liveness.csv')}",
         f"1社だけの抽出 **$5** から: {u('/data-license.html')}",
         f"CSV の中身を見る（3社ぶんの実物）: {u('/sample.html')}",
         f"企業の頁の実物: {u('/company/JR西日本（西日本旅客鉄道株式会社）.html')}",

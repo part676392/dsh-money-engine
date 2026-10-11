@@ -74,7 +74,13 @@ def gumroad() -> dict:
     try:
         d = json.loads(r.stdout)
     except Exception:  # noqa: BLE001
-        return {"configured": True, "error": (r.stderr or r.stdout)[:160]}
+        # 探測が壊れた時 (node  NotFound / network / rate limit) に key が無いと、
+        # 下で KeyError -> 護りが crash -> 巡回全体が money で止まった (2026-10-11 実測)。
+        # だから「不明」を形で返す。
+        return {"configured": True, "probe_failed": True, "for_sale": False,
+                "blocked_by_payout": None, "http": None, "price_shown": "",
+                "buy_buttons": None, "card_field": None, "url": None,
+                "error": (r.stderr or r.stdout or "探測が無何も返さなかった")[:160]}
     return {
         "configured": True,
         "url": d.get("url"),
@@ -94,12 +100,17 @@ def main() -> int:
     print(f"  crypto  : {c['rpc_ok']} rpc  total={c['total_eth']} ETH  "
           f"{'★ PAYMENT' if c['live'] else 'no movement'}")
     if g.get("configured"):
-        state = "OPEN (buyable)" if g["for_sale"] else (
-            "CLOSED — payout not connected" if g["blocked_by_payout"] else f"UNKNOWN http={g['http']}")
-        print(f"  gumroad : http={g['http']} price={g['price_shown']}  {state}")
-        print(f"      {g['url']}")
-        if g["for_sale"]:
-            print("  ★★★ CARD RAIL OPEN — 店の頁にカード導線を載せてよい")
+        if g.get("probe_failed"):
+            # 外部の問い合せ失敗は自分の劣化ではないので止まらない。だが ★ で残す。
+            print(f"  gumroad : ★ 探測失敗 — 購入可否は不明 ({g.get('error','')})")
+        else:
+            state = "OPEN (buyable)" if g["for_sale"] else (
+                "CLOSED — payout not connected" if g["blocked_by_payout"]
+                else f"UNKNOWN http={g.get('http')}")
+            print(f"  gumroad : http={g.get('http')} price={g.get('price_shown')}  {state}")
+            print(f"      {g.get('url')}")
+            if g["for_sale"]:
+                print("  ★★★ CARD RAIL OPEN — 店の頁にカード導線を載せてよい")
     else:
         print("  gumroad : 未設定 (outbox/gumroad.json)")
     out = {"checked_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "crypto": c, "gumroad": g}

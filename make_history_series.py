@@ -24,6 +24,8 @@ OUT_JSON = ROOT / "data" / "history" / "index.json"
 COLS = [
     "captured_at", "location", "articles", "companies", "listed_value_yen",
     "questions", "questions_raw", "companies_with_questions", "flows", "signals",
+    # 2026-10-11 に分けた語 (それ以前の行は空になる)
+    "stage_mentions", "company_stage_pairs",
     "lineup_rows", "lineup_companies", "lineup_modal_pct",
     "reverse_quotes", "reverse_companies",
     "deadlines_open", "orders_real", "orders_rehearsal", "orders_closed", "delivered",

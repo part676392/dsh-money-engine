@@ -81,7 +81,16 @@ def history_record(snap: dict, loc: str) -> dict:
         "questions": q.get("questions_total"), "questions_raw": q.get("questions_extracted_raw"),
         "companies_with_questions": q.get("companies_with_questions"),
         "flows": fl.get("flows_total"),
-        "signals": sum((sg.get("stage_totals") or {}).values()),
+        # 「選考段階の数」を 3 通り別名で持つ (実測 2026-10-11: 同じ語で 2,021 / 2,780 / 1,423 が
+        # 別々に出ていて、買える series と CSV が食い違って見えていた)。
+        #  signals             = selection_signals.csv の行数 (企業×段階×引用文) = 公開している実数
+        #  stage_mentions      = 段階別に数えた言及回数 (1文が複数段階に当たると数える側)
+        #  company_stage_pairs = 企業×段階 の組
+        "signals": sum(len(o.get("quotes") or [])
+                       for stages in (sg.get("per_company") or {}).values()
+                       for o in (stages or {}).values()),
+        "stage_mentions": sum((sg.get("stage_totals") or {}).values()),
+        "company_stage_pairs": sum(len(stages or {}) for stages in (sg.get("per_company") or {}).values()),
         "lineup_rows": rows, "lineup_companies": ln.get("companies"),
         "lineup_modal_pct": ln.get("modal_exact_pct"),
         "reverse_quotes": rv.get("quotes"), "reverse_companies": rv.get("companies"),

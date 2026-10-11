@@ -611,6 +611,38 @@ def main() -> int:
             if len(json.loads(pathlib.Path(x).read_text(encoding="utf-8"))) < len(need) + 10]
     print(f"  history shape     : OK  {len(last_keys)} 鍵 (堀の系列を積めている)"
           + (f"  ※ 旧 format {len(thin)} file: {thin}" if thin else ""))
+    # 買える series と CSV で同じ語が別の数を指していた (実測 2026-10-11: signals が
+    # series 2,780 / CSV 2,021 / per_company 1,423 と三つ巴)。名前を分けたので、ここで見張る。
+    import csv as _csv
+    sp = ROOT / "exports" / "history_timeseries.csv"
+    mp = ROOT / "exports" / "manifest.csv"
+    if sp.exists() and mp.exists():
+        srows = list(_csv.DictReader(sp.read_text(encoding="utf_8_sig").splitlines()))
+        man = {r.get("file"): str(r.get("rows") or "").replace(",", "")
+               for r in _csv.DictReader(mp.read_text(encoding="utf_8_sig").splitlines())}
+        sbad = []
+        if srows:
+            r = srows[-1]
+            want_sig = man.get("selection_signals.csv", "")
+            want_q = man.get("interview_questions.csv", "")
+            if want_sig and str(r.get("signals") or "") != want_sig:
+                sbad.append(f"series.signals {r.get('signals')} / CSV {want_sig}")
+            if want_q and str(r.get("questions") or "") != want_q:
+                sbad.append(f"series.questions {r.get('questions')} / CSV {want_q}")
+            try:
+                sm, cs = int(r.get("stage_mentions") or 0), int(r.get("company_stage_pairs") or 0)
+                if sm and sm < int(want_sig or 0):
+                    sbad.append(f"stage_mentions {sm} < CSV {want_sig}")
+                if cs and cs > int(want_sig or 0):
+                    sbad.append(f"company_stage_pairs {cs} > CSV {want_sig}")
+            except ValueError:
+                sbad.append("stage_mentions / company_stage_pairs が数字では読めない")
+        if sbad:
+            print(f"  series の数         : ★ {'; '.join(sbad[:3])}  (行 {len(srows)})")
+            return 1
+        print(f"  series の数         : OK  signals {srows[-1].get('signals')} = CSV / "
+              f"stage_mentions {srows[-1].get('stage_mentions')} / pairs {srows[-1].get('company_stage_pairs')}"
+              f"  ({len(srows)} 行)")
     print(f"  regression: OK  {len(cur)} 鍵すべて基準内 (許容 {TOL:.0%})")
     return 0
 

@@ -1,14 +1,14 @@
 # 中途・転職 面接対策 目録データベース (dsh-money-engine)
 
 > 日本の転職・中途市場で「面接の情報」を実測して積む静的データ資産。
-> 収録 600 本 / 対象 473 社 / 掲載金額合計 ¥1,205,920。毎日 06:10 と 19:40 (JST) に自動更新。
+> 収録 600 本 / 対象 491 社 / 掲載金額合計 ¥1,205,920。毎日 06:10 と 19:40 (JST) に自動更新。
 
-生成: 2026-10-11 09:26 JST
+生成: 2026-10-11 09:29 JST
 この文書にある数値はすべて再取得可能な実測です。推定値と将来見通しは本文に書いていません。
 
 ## Pages
 
-- [トップ (企業別索引) (https://part676392.github.io/dsh-money-engine/)): 473 社の企業ページへの入口。各社ページに FAQPage 構造化データ
+- [トップ (企業別索引) (https://part676392.github.io/dsh-money-engine/)): 491 社の企業ページへの入口。各社ページに FAQPage 構造化データ
 - [運用履歴](https://part676392.github.io/dsh-money-engine/changes.html): 日ごとに積んだ観測系列 (収録数・访问・受金・失敗記録)。Dataset 構造化データ
 - [AI・録上面接の検索需要 23 社](https://part676392.github.io/dsh-money-engine/ai-interviews.html): 企業名込みの検索語 34 件の機械収集一覧。実施有無の断定なし
 - [選考締切一覧](https://part676392.github.io/dsh-money-engine/es-deadlines.html): 本文の締切記載を機械検証した 12 件 (根拠文つき)
@@ -36,14 +36,14 @@
   `exports/interview_questions.csv` の `question` は記事の小見出しを落とした形、`question_raw` が抽出そのまま。
   `category` は選考フロー側と同じ12名の機械分類で、迷った行は `未判定` のまま残す (63.9% を分類)。
 - 本文に現れた選考段階の言及: 書類選考 1,268、最終面接 635、一次面接 284。書類選考が過半を占める。
-- 無人巡回が積んだ観測は 3 件 (2026-10-10T23:47:13+09:00 → 2026-10-11T09:07:03+09:00)。`exports/history_timeseries.csv` に無料公開。
+- 無人巡回が積んだ観測は 3 件 (2026-10-10T23:47:13+09:00 → 2026-10-11T09:26:50+09:00)。`exports/history_timeseries.csv` に無料公開。
   UTF-8 BOM 付きなので `utf-8-sig` で読む。空欄は「その頃は測っていなかった」で 0 ではない。
   各行に元 file の SHA-256 を付け、後から数字を差し替えていないことを検証できるようにした。
 
 ## Data
 
 - [snapshot-latest.json](https://part676392.github.io/dsh-money-engine/data/snapshot-latest.json): 直近のスナップショット (記事数・社数・掲載金額・内訳)
-- [sitemap.xml](https://part676392.github.io/dsh-money-engine/sitemap.xml): 全 473 社ページを含む URL 一覧
+- [sitemap.xml](https://part676392.github.io/dsh-money-engine/sitemap.xml): 全 491 社ページを含む URL 一覧
 - [GitHub repository](https://github.com/part676392/dsh-money-engine): 生成スクリプトと日別履歴の本体
 
 ## Measured limits (正直な制約)

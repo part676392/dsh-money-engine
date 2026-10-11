@@ -1,0 +1,162 @@
+{
+ "checked_at": "2026-10-12T00:01:31+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "bbs.kakaku.com",
+    "bbs.kakaku.com",
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "56",
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "ja.wiktionary.org",
+    "adtechmanagement.com",
+    "chigai-hikaku.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "63,900",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "forms.office.com",
+    "microsoft.com",
+    "support.microsoft.com",
+    "forms.office.com",
+    "forms.cloud.microsoft",
+    "mobile-master.website",
+    "forms.office.com",
+    "forms.office.com",
+    "itmamalog.com",
+    "learn.microsoft.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "40",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "weblio.jp",
+    "youtube.com",
+    "x.com",
+    "youtube.com",
+    "nicovideo.jp",
+    "e-kae-library.com",
+    "ja.wiktionary.org",
+    "ja.wikipedia.org",
+    "kotobank.jp",
+    "meaning-dictionary.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "396,000",
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "ja.wiktionary.org",
+    "adtechmanagement.com",
+    "chigai-hikaku.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "63,900",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "yahoo.co.jp",
+    "news.yahoo.co.jp",
+    "transit.yahoo.co.jp",
+    "sports.yahoo.co.jp",
+    "weather.yahoo.co.jp",
+    "weather.yahoo.co.jp",
+    "developer.yahoo.co.jp",
+    "finance.yahoo.co.jp",
+    "services.yahoo.co.jp",
+    "search.yahoo.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "support.google.com",
+    "support.google.com",
+    "zhihu.com",
+    "zhihu.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "67",
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

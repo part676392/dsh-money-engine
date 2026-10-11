@@ -1,5 +1,8 @@
 {
- "checked_at": "2026-10-11T19:24:31+0900",
- "green": true,
- "failed": []
+ "checked_at": "2026-10-11T19:35:59+0900",
+ "green": false,
+ "failed": [
+  "money",
+  "card-surface"
+ ]
 }

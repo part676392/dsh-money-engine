@@ -1,5 +1,7 @@
 {
- "checked_at": "2026-10-11T20:41:11+0900",
- "green": true,
- "failed": []
+ "checked_at": "2026-10-11T20:57:12+0900",
+ "green": false,
+ "failed": [
+  "llms-rights"
+ ]
 }

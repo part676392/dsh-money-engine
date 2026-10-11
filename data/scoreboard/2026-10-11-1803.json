@@ -1,0 +1,162 @@
+{
+ "checked_at": "2026-10-11T18:03:10+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "msn.com",
+    "sdin.jp",
+    "playingcards.jp",
+    "solitaires.com",
+    "web-jong.com",
+    "solitaire.net",
+    "p-game.jp",
+    "soritia.jp",
+    "mahjongclubgame.com",
+    "mahjong.yuki-lab.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "6,090",
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "career-ch.com",
+    "reibuncnt.jp",
+    "weblio.jp",
+    "line-next.com",
+    "jinjibu.jp",
+    "career.ntt-east.co.jp",
+    "job.mynavi.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "65,900",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "youtube.com",
+    "youtube.com",
+    "ja.wikipedia.org",
+    "youtube.com",
+    "youtube.com",
+    "youtube.com",
+    "youtube.com",
+    "youtube.com",
+    "music.youtube.com",
+    "play.google.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "2,260,000",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "weblio.jp",
+    "youtube.com",
+    "x.com",
+    "e-kae-library.com",
+    "youtube.com",
+    "nicovideo.jp",
+    "ja.wiktionary.org",
+    "ja.wikipedia.org",
+    "iikae-note.com",
+    "kotobank.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "398,000",
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "career-ch.com",
+    "reibuncnt.jp",
+    "weblio.jp",
+    "line-next.com",
+    "jinjibu.jp",
+    "career.ntt-east.co.jp",
+    "job.mynavi.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "65,900",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "ejje.weblio.jp",
+    "winners-english.com",
+    "talking-english.net",
+    "saruwakakun.com",
+    "e-grammar.info",
+    "dailyeigo.com",
+    "ei-navi.jp",
+    "cooori.com",
+    "shinuwakaeng.com",
+    "weblio.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "601,000",
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "50",
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

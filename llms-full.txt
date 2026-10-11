@@ -3,7 +3,7 @@
 > 日本の転職・中途市場で「面接の情報」を実測して積む静的データ資産。
 > 収録 600 本 / 対象 473 社 / 掲載金額合計 ¥1,205,920。毎日 06:10 と 19:40 (JST) に自動更新。
 
-生成: 2026-10-11 20:48 JST
+生成: 2026-10-11 20:56 JST
 この文書にある数値はすべて再取得可能な実測です。推定値と将来見通しは本文に書いていません。
 
 ## Pages
@@ -53,7 +53,7 @@
 - 1社だけ $5 の中身: その社の質問実文・並び・締切観測・出典URLを CSV 1 本に固めて納品。
   質問実文が 0 文の社にはお金を取らない (締切頁のラベルが正直に出す)。
 - 歴史スナップショット一式 $25 の中身 (実測の行数): `history_timeseries.csv` 3 行 /
-  `es_deadlines_history.csv` 720 行 / `source_liveness.csv` 2327 行。
+  `es_deadlines_history.csv` 735 行 / `source_liveness.csv` 2407 行。
   GitHub Release として Version 付きの zip で降ろせる (中の行数がその日の記録と一致するのは
   `check_release.py` が毎巡回で測る): https://github.com/part676392/dsh-money-engine/releases/latest
 - 注文: https://part676392.github.io/dsh-money-engine/data-license.html ／ issue form (https://github.com/part676392/dsh-money-engine/issues/new?template=order.yml) ／

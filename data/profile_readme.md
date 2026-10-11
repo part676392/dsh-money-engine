@@ -64,7 +64,7 @@ https://part676392.github.io/dsh-money-engine/?src=prof
 - 企業別の頁 **473 枚**（別名で割れていた URLs は本体へ誘導） — 機械が辿る道: https://part676392.github.io/dsh-money-engine/exports/company_pages.csv?src=prof
 - ES 締切 **15 件**（12社・2026-10-15〜2026-11-05）— 抽出の根拠文つき: https://part676392.github.io/dsh-money-engine/es-deadlines.html?src=prof
 - 質問カテゴリの並び順の頁: https://part676392.github.io/dsh-money-engine/question-lineups.html?src=prof ／ 店の頁: https://part676392.github.io/dsh-money-engine/store/?src=prof
-- 巡回は **毎日 06:10 / 13:20 / 19:40 JST** に自動で走り、取得日を `data/history/` に積む（観測 3 件・実行背骨 86 行 / 締切台帳 255 行 / 出典の生存 801 行、各行に SHA-256）
+- 巡回は **毎日 06:10 / 13:20 / 19:40 JST** に自動で走り、取得日を `data/history/` に積む（観測 3 件・実行背骨 92 行 / 締切台帳 270 行 / 出典の生存 881 行、各行に SHA-256）
 
 機械可読: https://part676392.github.io/dsh-money-engine/exports/manifest.csv?src=prof ／ 締切の履歴: https://part676392.github.io/dsh-money-engine/exports/es_deadlines_history.csv?src=prof ／ 出典の生存: https://part676392.github.io/dsh-money-engine/exports/source_liveness.csv?src=prof
 1社だけの抽出 **$5** から: https://part676392.github.io/dsh-money-engine/data-license.html?src=prof

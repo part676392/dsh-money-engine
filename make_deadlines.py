@@ -163,6 +163,22 @@ def firm_index():
     return _FIRM_IDX
 
 
+_BODIES = None
+
+
+def body_chars(url: str) -> int:
+    """出典記事 (同じ著者の note) の本文字数。コンサル系の記事は締切・書き方中心で短い
+    (実測: アビーム各種 273〜314 字 / 普通の企業記事 3,624 字)。だから『質問実文 未収録』の
+    一行で済ませず、収録している物 (記事 N 字) を実数で出す。"""
+    global _BODIES
+    if _BODIES is None:
+        f = ROOT / "data" / "full_bodies.json"
+        _BODIES = json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
+    m = re.search(r"/n/([a-z0-9]+)", url or "")
+    b = _BODIES.get(m.group(1)) if m else None
+    return int((b or {}).get("chars") or 0)
+
+
 def match_firm(firm: str) -> tuple:
     names, nq = firm_index()
     base = (firm or "").strip().rstrip("の").strip()
@@ -216,10 +232,14 @@ def render(rows, passed, method):
             prefill = cname
         elif kind:
             cell = ("<a href='/dsh-money-engine/company/" + urllib.parse.quote(cname) + ".html'>"
-                    + esc(shown) + "</a><span class='hs'> 質問実文 未収録</span>")
+                    + esc(shown) + "</a><span class='hs'> 質問実文 未収録 (記事 "
+                    + str(body_chars(r["url"])) + " 字は収録)</span>")
             prefill = cname
         else:
-            cell = esc(shown) + "<span class='hs'> 質問実文 未収録 (473 社の収録外)</span>"
+            nch = body_chars(r["url"])
+            cell = (esc(shown) + "<span class='hs'> 質問実文 未収録"
+                    + (f" (締切・書き方の記事 {nch} 字は収録)" if nch else " (この社の記事も無し)")
+                    + "</span>")
             prefill = shown
         # 行ごとに $5 の口を置く (実測: 締切頁 34 load で注文 link は画面上部に 1 本だけ。
         # 計数は cta-row で行数と照合できる)。
@@ -302,7 +322,19 @@ def main():
     # 下端の注文欄 (メール口つき) を自分の頁に差し直す。実測 (2026-10-11 17:28 live):
     # 一番読まれている締切頁 (34 load) に mailto が無く、上の strip だけだった。
     n_firms = len({r["firm"] for r in rows})
-    buy_block.inject(ROOT / "es-deadlines.html", count_txt=f"締切 {len(rows)} 件・{n_firms}社")
+    n_q, n_stub = 0, 0
+    for r in rows:
+        c, kind, nq = match_firm(r["firm"])
+        if kind and nq:
+            n_q += 1
+        elif body_chars(r["url"]):
+            n_stub += 1
+    print("    締切の収録内訳 : 質問実文あり %d / 締切・書き方の記事だけ %d / %d 行" % (n_q, n_stub, len(rows)))
+    buy_block.inject(
+        ROOT / "es-deadlines.html",
+        count_txt=(f"締切 {len(rows)} 件・{n_firms}社（収録内訳: 質問実文あり {n_q} 社 / "
+                   f"締切・書き方の記事だけ {n_stub} 社）。質問実文 0 文の社は買わないでください"
+                   "——上の表のラベルが正直に出します。"))
     # 面を出した後に台帳へ積む (面の 初出日 は前の巡回までの台帳からしか引かない)
     DH.append()
     DH.write_csv()

@@ -165,9 +165,20 @@ def deadline_row_names() -> bool:
             bad.append("収録/未収録を書いていない行: " + txt[:24])
         if "&amp;amp;" in r:
             bad.append("escape が二重 (&amp;amp;)")
+        # 未収録の言う行は、代わりに何を収録しているか実数で持つ (数字の無い Empty 宣言を禁じる)
+        if "未収録" in txt and not re.search(r"\d+ ?(字|文)", re.sub(r"<[^>]+>", " ", firm)):
+            bad.append("未収録なのに収録実数が無い: " + txt[:24])
+    block = re.search(r"<!--buy-block-->[\s\S]*?<!--/buy-block-->", h)
+    note = re.sub(r"<[^>]+>", " ", block.group(0)) if block else ""
+    m = re.search(r"質問実文あり (\d+) 社 / 締切・書き方の記事だけ (\d+) 社", note)
+    if not m:
+        bad.append("注文欄に収録内訳の実数が無い")
+    elif int(m.group(1)) + int(m.group(2)) != len(rows):
+        bad.append(f"内訳 {m.group(1)}+{m.group(2)} が行数 {len(rows)} と違う")
     ok = not bad
     print(f"    締切の社名        : {'OK' if ok else '★ ' + bad[0][:90]}"
-          f" (行 {len(rows)} / company link {linked} / 未収録を明記 {honest})")
+          f" (行 {len(rows)} / company link {linked} / 未収録を明記 {honest}"
+          + (f" / 内訳 {m.group(1)}+{m.group(2)}" if m else "") + ")")
     return ok
 
 

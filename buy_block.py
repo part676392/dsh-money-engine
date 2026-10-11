@@ -207,6 +207,45 @@ def refresh_mail(path) -> int:
     return n
 
 
+def refresh_history_counts(path) -> int:
+    """$25 の中身に出した行数を、今の manifest に合わせて書き直す。
+    実測 (2026-10-11): 巡回は manifest / 履歴 CSV を積んだ後に面を再生成しないので、
+    先に走った面は古い行数 (525 行) のまま、manifest は 555 行 -> 護りが毎巡回 ★ になった。
+    護りの直前に sweep で揃える (面に出た実は物を後から古くしない為の既存の型に乗せる)。"""
+    import csv as _csv
+    import pathlib as _p
+    man = {}
+    mf = _p.Path(__file__).resolve().parent / "exports" / "manifest.csv"
+    if not mf.exists():
+        return 0
+    with open(mf, encoding="utf_8_sig") as fh:
+        for r in _csv.DictReader(fh):
+            man[r.get("file", "")] = r.get("rows", "")
+    fp = _p.Path(path)
+    h = fp.read_text(encoding="utf-8")
+    i = h.find("歴史スナップショット一式 ($25) の中身")
+    if i < 0:
+        return 0
+    j = h.find("</div>", i)
+    seg = h[i:j if j > 0 else len(h)]
+    n = 0
+
+    def fix(m):
+        nonlocal n
+        fname, tail, rows = m.group(1), m.group(2) or "", m.group(3)
+        want = man.get(fname)
+        if want is None or want == rows:
+            return m.group(0)
+        n += 1
+        return fname + tail + " (" + want + " 行)"
+
+    # 頁では <a href=…>name.csv</a> (N 行) の形。閉じ tag を跨がないと consる (実測: 0 個 で更新されなかった)。
+    seg2 = re.sub(r"([A-Za-z0-9_]+\.csv)(</a>)?\s*\((\d+) 行\)", fix, seg)
+    if seg2 != seg:
+        fp.write_text(h[:i] + seg2 + h[j if j > 0 else len(h):], encoding="utf-8")
+    return n
+
+
 def inject(path, count_txt: str = "", top: str = "", hist: bool = True) -> bool:
     """書き出した html に注文欄を足す。
     %書式や .format の土台は {BUY} が展開されないので、後から差す方を信用する。

@@ -26,7 +26,7 @@ def dirs():
 
 
 def main() -> int:
-    files, touched, links, stale = 0, 0, 0, []
+    files, touched, links, hcnt, stale = 0, 0, 0, 0, []
     for f in dirs():
         files += 1
         try:
@@ -35,10 +35,12 @@ def main() -> int:
             print(f"  ★ {f.name}: {e}")
             return 1
         links += n
+        hcnt += buy_block.refresh_history_counts(f)
         touched += 1 if n else 0
         if STALE_MARK in f.read_text(encoding="utf-8", errors="replace"):
             stale.append(f.name)
     print(f"  メール口の作り直し : {files:,} 頁を見て {touched} 頁 / href {links} 本を差し替え"
+          f" / 歴史の行数 {hcnt} 個を manifest に更新"
           f" / 古い語の残る {len(stale)} 頁" + (f" {stale[:5]}" if stale else ""))
     if stale:
         print("★★★ GUARD FAIL: mail-copy — 古い料金語のメール口が残っている")

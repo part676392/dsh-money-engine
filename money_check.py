@@ -258,11 +258,15 @@ def cta_check() -> bool:
     # 注文欄が在り、20 アクセスで注文ボタンの発火は 0 だった (計器は実ブラウザで発火確認済)。
     import polish_buy_bars as PB
     late = []
-    for rel, pos, _n in PB.positions():
-        if pos is None:
-            late.append(f"{rel} に注文欄が無い")
-        elif pos > PB.TOP_LIMIT:
-            late.append(f"{rel} は本文の {pos * 100:.0f}% 目 (上 25% に無し)")
+    for rel, gap, h1, _n in PB.positions():
+        if gap is None:
+            late.append(f"{rel} に h1 の後の注文欄が無い")
+        elif gap > PB.GAP_LIMIT:
+            late.append(f"{rel} は h1 から {gap} 字後に注文欄 (許容 {PB.GAP_LIMIT})")
+        if h1 < 0:
+            late.append(f"{rel} に h1 が無い")
+        elif h1 > PB.H1_LIMIT:
+            late.append(f"{rel} は h1 が本文の {h1} 字後 (見出しが埋もれている)")
     if late:
         bad += late
     ok = not bad

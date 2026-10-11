@@ -112,6 +112,22 @@ def discovery_rail() -> bool:
     sm = smf.read_text(encoding="utf-8")
     urls = re.findall(r"<loc>(.*?)</loc>", sm)
     joined = "\n".join(urls)
+    # (0) 実在する頁は全部 sitemap に乗せる (noindex と別名の連絡頁は送らない)。
+    gap = []
+    # sitemap は index を "…/" の形で載せるので、その形も許す (実測で誤検出 2 件)。
+    rels = {urllib.parse.unquote(u.split("/dsh-money-engine/", 1)[-1]) for u in urls}
+    for f in list(ROOT.glob("*.html")) + list((ROOT / "store").glob("*.html")):
+        if f.name == "404.html":
+            continue
+        h = f.read_text(encoding="utf-8", errors="replace")
+        if 'http-equiv="refresh"' in h or "noindex" in h:
+            continue
+        rel = f.name if f.parent == ROOT else f"store/{f.name}"
+        alt = rel.replace("index.html", "")
+        if rel not in rels and alt not in rels:
+            gap.append(rel)
+    if gap:
+        bad.append(f"sitemap に実在頁が足りない {gap[:3]}")
     # (1) canonical な企業頁が全部入っているか
     miss = []
     for f in sorted((ROOT / "company").glob("*.html")):
@@ -147,7 +163,8 @@ def discovery_rail() -> bool:
             bad.append(f"key file が取れない HTTP {code}")
     ok = not bad
     print(f"    発見の配管      : {'OK' if ok else '★ ' + '; '.join(bad[:2])}"
-          f"  (sitemap {len(urls)} 本・{sub_line})")
+          f"  (sitemap {len(urls)} 本・{sub_line}"
+          + (f"・足りない頁 {len(gap)} 件" if gap else "") + ")")
     return ok
 
 

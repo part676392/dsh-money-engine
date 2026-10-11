@@ -676,6 +676,11 @@ text-decoration:none;font-weight:600}}.buy:hover{{background:#63421f}}
         sm.append(
             f"  <url><loc>{base}/deliveries.html</loc><lastmod>{today}</lastmod>"
             f"<changefreq>daily</changefreq><priority>0.7</priority></url>")
+    if (OUT / "store" / "mini.html").exists():
+        # 実在して noindex でもない頁が sitemap に無いと、検索は link を辿るしかない
+        sm.append(
+            f"  <url><loc>{base}/store/mini.html</loc><lastmod>{today}</lastmod>"
+            f"<changefreq>daily</changefreq><priority>0.6</priority></url>")
     if (OUT / "sample.html").exists():
         sm.append(
             f"  <url><loc>{base}/sample.html</loc><lastmod>{today}</lastmod>"

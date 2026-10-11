@@ -8,6 +8,10 @@ llms-full.txt merge=generated
 sitemap.xml merge=generated
 robots.txt merge=generated
 data/*.json merge=generated
+# data/*.json はディレクトリを跨がない (実測: data/orders/latest.json は merge: unspecified)。
+# 衝突して無人ループが止まった物として記録している orders/latest.json が守られていなかった。
+data/*/*.json merge=generated
+data/*/*/*.json merge=generated
 
 # 追記型の台帳は union で両側残す (data/*.json の merge=generated は片側採用なので入らない)。
 # 実測 A/B: 属性 無し で -X theirs の merge をすると本線の追記 1 行が黙って消えた

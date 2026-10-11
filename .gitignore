@@ -3,7 +3,7 @@ __pycache__/
 .DS_Store
 .github/workflows/
 site/
-node_modules/
+node_modules   # 追跡しない (runner は dev の link を張るので symlink も拾わせない)
 .browser-profile/
 outbox/shots/
 outbox/wallet.json

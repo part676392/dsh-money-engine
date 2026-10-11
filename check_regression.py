@@ -164,12 +164,32 @@ def deadline_history() -> bool:
                     bad.append(f"{led.name} {i} 行目に {f} が無い")
                     break
             seen_days.add(str(r.get("seen")))
+    # 台帳は巡回の『後』にも伸びる (面を出した後に追記する設計)。だから CSV と台帳は
+    # いつも同じ数にはならない (実測で CSV 75 / 台帳 90 を ★ にしていた)。
+    # 見るのは 3 個: CSV が有る / CSV の行は台帳に実在する (捏造禁止) / 伸びきっていない。
     if not csvp.exists():
         bad.append("exports/es_deadlines_history.csv が無い")
     else:
-        rows = len(csvp.read_text(encoding="utf_8_sig").strip().split("\n")) - 1
-        if rows != n:
-            bad.append(f"CSV {rows} 行 / 台帳 {n} 行 でズレ")
+        import csv as _csv, time as _t
+        with csvp.open(encoding="utf_8_sig", newline="") as fh:
+            crows = list(_csv.DictReader(fh))
+        keys = set()
+        for led in have:
+            for line in led.open(encoding="utf-8"):
+                try:
+                    r = json.loads(line)
+                except Exception:
+                    continue
+                keys.add((str(r.get("seen")), str(r.get("url")), str(r.get("date"))))
+        ghost = [c for c in crows if (str(c.get("seen")), str(c.get("url")), str(c.get("date"))) not in keys]
+        if ghost:
+            bad.append(f"CSV に台帳へ無い行 {len(ghost)} 件 (例 {ghost[0].get('firm')})")
+        gap = n - len(crows)
+        if gap < 0 or gap > 60:
+            bad.append(f"CSV {len(crows)} 行 / 台帳 {n} 行 で差 {gap} (1 巡回ぶん 60 を超過)")
+        age = (_t.time() - csvp.stat().st_mtime) / 3600.0
+        if age > 26:
+            bad.append(f"CSV が {age:.0f} 時間書き直されていない")
     if page.exists():
         h = page.read_text(encoding="utf-8", errors="replace")
         shown = set(re.findall(r"初出 (\d{2}/\d{2})", h))

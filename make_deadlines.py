@@ -239,6 +239,11 @@ def main():
     # 面を出した後に台帳へ積む (面の 初出日 は前の巡回までの台帳からしか引かない)
     DH.append()
     DH.write_csv()
+    # 面を書き直すと h1 直下の塊 (実文3例 + 注文欄 + 支払いの正直な注記) が消える。
+    # 実測で store 以外の面に注記が無い瞬間が生まれ、card-surface 護りが ★ を撒いた
+    # (正確には護りの走る前に builders が居た為)。ここでは自分の頁を自分で直す。
+    import polish_buy_bars as PB
+    PB.polish(quiet=True)
 
 
 if __name__ == "__main__":

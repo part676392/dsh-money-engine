@@ -79,7 +79,7 @@ mkdir -p logs
   KEY=$(cat data/indexnow.key)
   BASE=https://part676392.github.io/dsh-money-engine
   python3 - "$KEY" "$BASE" <<'PY'
-import json,sys,urllib.request,urllib.error
+import json,sys,time,urllib.request,urllib.error
 key,base=sys.argv[1],sys.argv[2]
 import pathlib
 urls=[f"{base}/",f"{base}/es-deadlines.html",f"{base}/changes.html",
@@ -107,11 +107,28 @@ try:
     if misses: print(f"  (no page for {len(misses)} demand-top companies: {misses[:6]})")
 except Exception as e:
     print("  demand urls skipped",e)
+# sitemap の全 URL を送る。前は根 8 本 + demand top 40 だけで、
+# sitemap 486 本のうち 48 本しか検索に渡していなかった (2026-10-11 実測)。
+sm_urls=[]
+try:
+    import re as _re
+    sm_urls=_re.findall(r"<loc>(.*?)</loc>",pathlib.Path("sitemap.xml").read_text(encoding="utf-8"))
+    n0=len(urls)
+    for u in sm_urls:
+        if u not in urls: urls.append(u)
+    print(f"  sitemap から {len(urls)-n0} 本を追加 (送信 {len(urls)} / sitemap {len(sm_urls)})")
+except Exception as e:
+    print("  sitemap merge skipped",e)
+urls=urls[:5000]
 pl={"host":"part676392.github.io","key":key,"keyLocation":f"{base}/{key}.txt","urlList":urls}
 for ep in ["https://api.indexnow.org/indexnow","https://www.bing.com/indexnow"]:
     r=urllib.request.Request(ep,data=json.dumps(pl).encode(),headers={"Content-Type":"application/json; charset=utf-8"})
     try:
         with urllib.request.urlopen(r,timeout=40) as x: print(f"  indexnow {ep.split('//')[1]:26s} {x.status} ({len(urls)} urls)")
+        pathlib.Path("data/rails").mkdir(parents=True,exist_ok=True)
+        json.dump({"at":time.strftime("%Y-%m-%dT%H:%M:%S%z"),"endpoint":ep,"submitted":len(urls),
+                   "sitemap":len(sm_urls),"status":x.status},
+                  open("data/rails/indexnow_latest.json","w"),ensure_ascii=False,indent=1)
     except urllib.error.HTTPError as e: print(f"  indexnow {ep.split('//')[1]:26s} {e.code}")
 PY
 
@@ -120,7 +137,10 @@ PY
   python3 publish_rentry.py      2>&1 | tail -5
   python3 check_hn.py            2>&1 | tail -3
   python3 check_traffic.py 2>&1 | tail -12   # 4鍵+pixel+見出し。6 だと store/home が消える (実測になった)
-  python3 check_indexation.py    2>&1 | tail -14
+  if ! python3 check_indexation.py 2>&1 | tail -14; then
+    # 発見の配管 (sitemap 全量の IndexNow 送信 / key file / robots) が切れたら日志に ★
+    echo "  ★★★ GUARD FAIL: discovery — 索引に渡す配管が切れている"
+  fi
   python3 check_payment.py 2>&1 | tail -7
   python3 check_orders.py 2>&1 | tail -14
   python3 check_orders.py --selftest 2>&1 | tail -3
@@ -192,6 +212,8 @@ PY
   echo "$RUN" | grep -q "PUSH UNCONFIRMED" && FAIL="$FAIL push"
   echo "$RUN" | grep -q "GUARD FAIL: regression" && FAIL="$FAIL regression"
   echo "$RUN" | grep -q "GUARD FAIL: prose" && FAIL="$FAIL prose"
+  echo "$RUN" | grep -q "GUARD FAIL: discovery" && FAIL="$FAIL discovery"
+  echo "$RUN" | grep -q "GUARD FAIL: money-check" && FAIL="$FAIL money-check"
   echo "$RUN" | grep -qE "parser self-test: ([0-3])/4" && FAIL="$FAIL parser"
   if [ -n "$FAIL" ]; then
     echo "  ★★★ GUARD FAIL:$FAIL  (ログのこの行を目安にすること)"

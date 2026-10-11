@@ -129,12 +129,15 @@ def qcount_check() -> bool:
     return ok
 
 
-def profile_check() -> bool:
+def profile_check(live_text=None) -> bool:
     """GitHub プロフィール頁 (part676392/part676392) の数字がこちら再生成と一致しているか。
     raw.githubusercontent は CDN で 1 分ほど古い値を返す実測があるので API で読む。
     プロフィールは目録の顔。そこに古い数字 (491社 / 1,779 問) が残ると全部の信用が落ちる。"""
     import base64
     import build_profile_readme as BP
+    # 制御試験では live の写しを渡せる (本物の profile を壊さずに ★ を出せる)。
+    if live_text is not None:
+        return _profile_audit(live_text)
     try:
         out = subprocess.run(["gh", "api", f"repos/{BP.OWNER_REPO}/contents/README.md",
                              "--jq", ".content"], capture_output=True, text=True, timeout=90)
@@ -145,6 +148,11 @@ def profile_check() -> bool:
         print("    profile 頁        : 読めない (token scope?) ので省略")
         return True
     live = base64.b64decode(out.stdout.strip()).decode("utf-8", "replace")
+    return _profile_audit(live)
+
+
+def _profile_audit(live: str) -> bool:
+    import build_profile_readme as BP
     # 再生成したものと突合すると、巡回の途中で 実行背骨 の行数が増えるので、
     # 生成の瞬間差で ★ になる (10:24 実測)。 committed した生成物と突合する。
     if BP.LOCAL.exists():
@@ -161,9 +169,16 @@ def profile_check() -> bool:
     if not sec_live:
         bad.append("データ資産 の節が無い")
     else:
+        # 数字だけを # に丸めて比べる。実行背骨の行数と観測件数だけ箱で違う
+        # (runner は push のたびに積む) が、URL・文・価格は一字一句同じでないといけない。
+        dig = lambda t: re.sub(r"[0-9][0-9,.,]*", "#", t)
+        # 行の集合で比べる。部分文字列で当たると link を落としても通ってしまう (制御で実測)。
+        live_lines = {dig(l.strip()) for l in sec_live.splitlines() if len(l.strip()) > 12}
         for line in want.split("\n"):
             ln = line.strip()
-            if len(ln) > 12 and ln not in sec_live:
+            if len(ln) <= 12:
+                continue
+            if dig(ln) not in live_lines:
                 bad.append(f"live に無い行 ({src_name}): {ln[:56]}")
                 break
     n_link = sec_live.count("src=prof")
@@ -172,6 +187,33 @@ def profile_check() -> bool:
     for pat, why in ((r"1,873\s*問", "raw 抽出値を問で公称"), (r"491\s*社", "束ねる前の社数")):
         if re.search(pat, sec_live):
             bad.append(why)
+    # 数字は CSV から組み直して live に要求する。生成物同士の比較は箱の時刻で揺れるが、
+    # CSV は merge 后同じなので「live が古い数を公称していない」を正直に測れる。
+    try:
+        import csv as _csv
+        import io as _io
+
+        def _rows(name):
+            with _io.open(ROOT / "exports" / name, encoding="utf_8_sig") as fh:
+                return list(_csv.DictReader(fh))
+
+        q = _rows("interview_questions.csv")
+        lu = _rows("question_lineups.csv")
+        fl = _rows("selection_flows.csv")
+        sg = _rows("selection_signals.csv")
+        dist = len({(r.get("question") or "").strip() for r in q if (r.get("question") or "").strip()})
+        pages = sum(1 for f in (ROOT / "company").glob("*.html")
+                    if 'http-equiv="refresh"' not in f.read_text(encoding="utf-8", errors="replace"))
+        must = [f"面接質問 **{len(q):,} 行（重複を除いた実文 {dist:,} 文）**",
+                f"質問カテゴリの並び順 **{len(lu):,} 行**",
+                f"公式選考フロー **{len(fl):,} 行**",
+                f"段階への言及 **{len(sg):,} 行**",
+                f"企業別の頁 **{pages:,} 枚**"]
+        for m in must:
+            if m not in sec_live:
+                bad.append(f"live が実dataと違う数を公称: {m} が無い")
+    except Exception as e:  # noqa: BLE001
+        print(f"      (数字の突合は省略: {str(e)[:44]})")
     ok = not bad
     print(f"    profile 頁        : {'OK' if ok else '★ ' + '; '.join(bad[:2])}"
           f"  (live {len(sec_live):,}字・計測 link {n_link} 本)")
@@ -179,7 +221,7 @@ def profile_check() -> bool:
 
 
 def prefill_check() -> bool:
-    """注文 link の prefill が form の仕样と合っているか。
+    """注文 link の prefill が form の仕様と合っているか。
     GitHub は field の `id` を query key に使う (公式仕样)。id や選択肢の文字列が動くと、
     配った link は黙って空欄で開く。企業頁 473 枚の link を全部機械で開いて確かめる。"""
     import urllib.parse

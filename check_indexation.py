@@ -101,8 +101,59 @@ def cites_of(h: str) -> list:
     return out
 
 
+def discovery_rail() -> bool:
+    """発見の配管を通しているか。sitemap の全量を送らず一部だけ送っていた実測:
+    sitemap 486 本 / IndexNow 送信 48 本 (根 8 + 需要 top 40)。438 枚が黙っていた。"""
+    bad = []
+    smf = ROOT / "sitemap.xml"
+    if not smf.exists():
+        print("    発見の配管      : ★ sitemap.xml が無い")
+        return False
+    sm = smf.read_text(encoding="utf-8")
+    urls = re.findall(r"<loc>(.*?)</loc>", sm)
+    joined = "\n".join(urls)
+    # (1) canonical な企業頁が全部入っているか
+    miss = []
+    for f in sorted((ROOT / "company").glob("*.html")):
+        h = f.read_text(encoding="utf-8", errors="replace")
+        if 'http-equiv="refresh"' in h:      # 別名の連絡頁 (noindex) は送らない
+            continue
+        if urllib.parse.quote(f.name) not in joined and f.name not in joined:
+            miss.append(f.name[:-5][:16])
+    if miss:
+        bad.append(f"sitemap に企業頁が {len(miss)} 枚足りない {miss[:2]}")
+    # (2) robots.txt が sitemap を示しているか
+    rob = (ROOT / "robots.txt")
+    if not rob.exists() or "sitemap.xml" not in rob.read_text(encoding="utf-8"):
+        bad.append("robots.txt に Sitemap: 宣言が無い")
+    # (3) 直近の送信実測が sitemap 全量を送ったか
+    rec = ROOT / "data" / "rails" / "indexnow_latest.json"
+    if rec.exists():
+        d = json.loads(rec.read_text(encoding="utf-8"))
+        sub, tot = int(d.get("submitted") or 0), max(len(urls), 1)
+        sub_line = f"送信 {sub}/{tot} @{d.get('at','')}"
+        if sub < tot * 0.9:
+            bad.append(f"IndexNow 送信 {sub} / sitemap {tot} ({d.get('at','')})")
+    else:
+        sub_line = "送信記録 無し"
+        bad.append("IndexNow の送信記録が無い (巡回が送ったか測れない)")
+    # (4) key file が実際に取れるか (IndexNow はこれを取得的証明に使う)
+    keyf = ROOT / "indexnow-key.txt"
+    if keyf.exists():
+        key = keyf.read_text(encoding="utf-8").strip()
+        st, body = fetch(f"{BASE}/{key}.txt", tries=1)
+        code = st.split()[0] if st.split() else "000"
+        if code != "200" or key not in body:
+            bad.append(f"key file が取れない HTTP {code}")
+    ok = not bad
+    print(f"    発見の配管      : {'OK' if ok else '★ ' + '; '.join(bad[:2])}"
+          f"  (sitemap {len(urls)} 本・{sub_line})")
+    return ok
+
+
 def main() -> int:
     print(f"  索引の実測 (制御実験つき) @ {time.strftime('%Y-%m-%d %H:%M:%S')}")
+    rail_ok = discovery_rail()
     per_engine = {}
     any_indexed = False
     any_alive = False
@@ -163,7 +214,7 @@ def main() -> int:
         "control": CONTROL, "engines": per_engine,
         "indexed_anywhere": any_indexed, "oracle_alive": any_alive},
         ensure_ascii=False, indent=1), encoding="utf-8")
-    return 0
+    return 0 if rail_ok else 1
 
 
 if __name__ == "__main__":

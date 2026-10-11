@@ -222,6 +222,10 @@ PY
   python3 check_orders.py 2>&1 | tail -14
   python3 check_orders.py --selftest 2>&1 | tail -3
   python3 check_payment_rail.py 2>&1 | tail -5
+  if ! python3 check_card_surface.py 2>&1 | tail -5; then
+    # 料金を出す面にカード口が無く、しかも『買えない』と書いて無い = 嘘の店
+    echo "  ★★★ GUARD FAIL: card-surface — 料金を出す面がカードで買えず、正直な注記も無い"
+  fi
 # 護りが読むのは disk の頁。再生成の直後に囀す (idempotent)。
 # polish を末尾だけにおいていたら money_check が上部欄の無い頁を見て ★ を撒いた (実測)。
   python3 polish_buy_bars.py     2>&1 | tail -1
@@ -303,6 +307,7 @@ PY
   echo "$RUN" | grep -q "GUARD FAIL: surface-links" && FAIL="$FAIL surface-links"
   echo "$RUN" | grep -q "GUARD FAIL: pages" && FAIL="$FAIL pages"
   echo "$RUN" | grep -q "GUARD FAIL: discovery" && FAIL="$FAIL discovery"
+  echo "$RUN" | grep -q "GUARD FAIL: card-surface" && FAIL="$FAIL card-surface"
   echo "$RUN" | grep -q "GUARD FAIL: money-check" && FAIL="$FAIL money-check"
   echo "$RUN" | grep -qE "parser self-test: ([0-3])/4" && FAIL="$FAIL parser"
   if [ -n "$FAIL" ]; then

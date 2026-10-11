@@ -22,6 +22,20 @@ PRICE_LINE = ("1社だけ **$5** / 〜50社 $15 / 〜150社 $35 / 全社 473社 
               "歴史スナップショット一式 $25")
 ACCOUNT_NOTE = "注文には GitHub のアカウントがいります"
 
+# 支払いの口の実測 (2026-10-11): 料金を出す 7 面にカード link は 0 本。Gumroad の管理画面が
+# 自分の言葉で止まっていた: "You haven't connected a payout method yet, so you won't be able
+# to publish this product for sale." 受取方法 (銀行) の登録は人の仕事なので、嘘を書かない。
+HONEST = "カード決済はまだ用意できていません"
+CARD_NOTE = ("支払い: 暗号送金 (Base / Arbitrum / Polygon / ETH) か、この帳簿への GitHub 注文。"
+             + HONEST + " (受取方法の登録を Gumroad が要求していて、そこだけ人が 1 分やる必要)。"
+             "送金だけの方でも注文 form を出せばこっちで合わせます。")
+_CARD_WRAP = ("margin:8px 0 0;padding:8px 12px;background:#f2f5f9;border:1px solid #dfe5ec;"
+              "border-radius:6px;font-size:.8rem;color:#5b6570;line-height:1.65")
+
+
+def card_note() -> str:
+    return "<p style='" + _CARD_WRAP + "'>" + CARD_NOTE + "</p>"
+
 _CSS = ("display:inline-block;background:#0b6b3a;color:#fff;padding:9px 15px;"
         "border-radius:5px;font-weight:700;text-decoration:none")
 _WRAP = ("margin:20px 0 0;padding:13px 15px;background:#fff;"

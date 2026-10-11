@@ -278,6 +278,12 @@ def cta_check() -> bool:
     return ok
 
 
+def rails_check() -> bool:
+    """カードで買えるか。買えないなら『買えない』と頁に書いてあるかを要求する。"""
+    import check_card_surface
+    return check_card_surface.check()
+
+
 def live_cta_check() -> bool:
     """live の頁に注文欄が在るか (生 HTTP で見る)。
     local と repo が正しくても Pages の build が失敗すると live は古いまま。
@@ -835,6 +841,8 @@ def main() -> int:
     if not outreach_check():
         all_ok = False
     if not not_found_check():
+        all_ok = False
+    if not rails_check():
         all_ok = False
     if not cta_check():
         all_ok = False

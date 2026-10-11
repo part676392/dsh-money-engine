@@ -37,6 +37,13 @@ ENGINES = [
     ("ddg_html", "https://html.duckduckgo.com/html/?{q}"),
     ("marginalia_lite", "https://lite.searx.be/search?{q}&categories=general"),
 ]
+# 実測で応答しなくなった engine は「0 件」と「測れない」を混ぜないため退役させる。
+# (mojeek は 403、lite.searx.be は HTTP 000 / 2026-10-11 10:44 実測)
+RETIRED = {
+    "mojeek": "403 (egress が弾かれている) — endpoint を探すまで数えない",
+    "marginalia_lite": "lite.searx.be HTTP 000 (移転?) — 到達できる物を探す",
+}
+
 # 制御語: _refs が1つでも cite に出なければ、その engine は応答していない扱いにする
 CONTROL = {"q": "DeepSeek Harness", "must_contain": ("deepseek",)}
 MINE = [
@@ -47,27 +54,50 @@ MINE = [
 ]
 
 
-def fetch(url: str) -> tuple:
-    # curl が落ちると -o はファイルを更新しない。前の応答が残って
-    # 「失敗したのに結果があった」ことになる (実測で 000 なのに cites=2)。
-    tmp = pathlib.Path("/tmp/serp.html")
-    if tmp.exists():
-        tmp.unlink()
-    r = subprocess.run(["curl", "-s", "--max-time", "25", "-A", UA,
-                        "-H", "Accept-Language: en-US,en;q=0.9", url,
-                        "-o", str(tmp), "-w", "%{http_code} %{size_download}"],
-                       capture_output=True, text=True, timeout=35)
-    if not tmp.exists():
-        return (r.stdout or "000 0"), ""
-    return r.stdout, tmp.read_text(encoding="utf-8", errors="replace")
+def fetch(url: str, tries: int = 2) -> tuple:
+    """2 回まで引く。理由 2 つ:
+    (a) curl が落ちると -o はファイルを更新しないので、前の応答が残って
+        「失敗したのに結果があった」になる (実測で 000 なのに cites=2)。
+    (b) DuckDuckGo は 202 を返して本文を薄くすることがある (実測 2026-10-11)。
+        薄い応答をそのまま-controls にかけると「計器 dead」の偽計になる。
+    """
+    best = ("000 0", "")
+    for i in range(max(1, tries)):
+        tmp = pathlib.Path("/tmp/serp.html")
+        if tmp.exists():
+            tmp.unlink()
+        r = subprocess.run(["curl", "-s", "--max-time", "25", "-A", UA,
+                            "-H", "Accept-Language: en-US,en;q=0.9", url,
+                            "-o", str(tmp), "-w", "%{http_code} %{size_download}"],
+                           capture_output=True, text=True, timeout=35)
+        body = tmp.read_text(encoding="utf-8", errors="replace") if tmp.exists() else ""
+        st = r.stdout or "000 0"
+        code = st.split()[0] if st.split() else "000"
+        if code == "200" and len(body) > 4000:
+            return st, body
+        if len(body) > len(best[1]):
+            best = (st, body)
+        if i + 1 < tries:
+            time.sleep(3)
+    return best
 
 
 def cites_of(h: str) -> list:
     out = [re.sub(r"<[^>]+>", "", c).strip().replace(" › ", "/")
            for c in re.findall(r"<cite[^>]*>(.*?)</cite>", h, re.S)]
     if not out:  # cite を使わない engine 向け
-        out = [m for m in re.findall(r'href="(https?://[^"]+)"', h)
-               if "ddg" not in m and "searx" not in m][:20]
+        urls = []
+        for u in re.findall(r'href="((?:https?:)?//[^"]+)"', h):
+            if u.startswith("//"):
+                u = "https:" + u
+            # DuckDuckGo は結果を //duckduckgo.com/l/?uddg=<encoded> に包む (実測)。
+            # 包みを剥がさないと engine 自分の link しか数えず、制御が死んだように見えた。
+            m = re.search(r"[?&]uddg=([^&]+)", u)
+            if m:
+                u = urllib.parse.unquote(m.group(1))
+            urls.append(u)
+        skip = ("duckduckgo.com", "searx", "mojeek.", "bing.com/search", "/search?")
+        out = [u for u in urls if not any(x in u for x in skip)][:20]
     return out
 
 
@@ -77,6 +107,10 @@ def main() -> int:
     any_indexed = False
     any_alive = False
     for name, tpl in ENGINES:
+        if name in RETIRED:
+            per_engine[name] = {"verdict": "RETIRED", "reason": RETIRED[name], "retired": True}
+            print(f"    {name:15s} 退役済み (数えない): {RETIRED[name]}")
+            continue
         # --- 1. 制御 ---
         cq = urllib.parse.urlencode({"q": CONTROL["q"]})
         st, h = fetch(tpl.format(q=cq))

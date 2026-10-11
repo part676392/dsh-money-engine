@@ -59,6 +59,43 @@ def get_count(key: str):
     return v if isinstance(v, int) else None
 
 
+SEARCH_HOSTS = ("www.google.com", "google.com", "www.google.co.jp", "www.bing.com", "bing.com",
+                "duckduckgo.com", "lite.duckduckgo.com", "search.yahoo.co.jp", "www.baidu.com",
+                "marginaliasearch.online", "www.marginalia.nu", "www.mojeek.com", "ecosia.org",
+                "www.startpage.com", "search.brave.com", "yandex.com")
+
+
+def index_evidence(counters: dict) -> dict:
+    """索引の証を2系統で出す。 scraper 計器 (check_indexation) が死んでいても这里是能動的に待つ。
+    (a) ref-<検索エンジン> : 索引されていないと referrer が立たない。決定的証。
+    (b) bot-<engine>      : クローラが頁に到達した (索引の前提条件)。先に測れる方。
+    """
+    ref_hits = sorted(k for k, v in counters.items()
+                      if k.startswith("ref-") and any(h in k[4:] for h in SEARCH_HOSTS)
+                      and (v or {}).get("value"))
+    bot_hits = sorted(k for k, v in counters.items()
+                      if k.startswith("bot-") and k != "bot-any" and (v or {}).get("value"))
+    if ref_hits:
+        verdict = "索引された (referrer が証)"
+    elif bot_hits:
+        verdict = "クローラ到達済み (索引はこれから)"
+    else:
+        verdict = "不明 (クローラも検索 referrer も未取得)"
+    return {"indexed_via": ref_hits, "crawler": bot_hits, "verdict": verdict}
+
+
+def index_evidence_selftest() -> bool:
+    """決め打ちの2ケースで verdict が逆転しないこと (計器の計器)。"""
+    a = index_evidence({"ref-www.google.com": {"value": 3}, "bot-google": {"value": 1}})
+    b = index_evidence({"home": {"value": 16}, "bot-google": {"value": 2}})
+    c = index_evidence({"home": {"value": 16}, "bot-google": {"value": 0}})
+    ok = (a["verdict"].startswith("索引された") and a["indexed_via"] == ["ref-www.google.com"]
+          and b["verdict"].startswith("クローラ到達済み")
+          and c["verdict"].startswith("不明"))
+    print(f"    index evidence self-test: {'PASS' if ok else '★ FAIL'}  (3 ケース)")
+    return ok
+
+
 def main() -> int:
     HIST.mkdir(parents=True, exist_ok=True)
     prev_f = HIST / "latest.json"
@@ -141,6 +178,12 @@ def main() -> int:
     # ref-any は今日入れたばかりなので、まだ key 自体が存在しない (HTTP 404)。
     tot_any = anyv if isinstance(anyv, int) else None
     known = sum(got.values())
+    ev = index_evidence(out["counters"])
+    craw = "、".join(ev["crawler"]) if ev["crawler"] else "未取得"
+    refs = "、".join(ev["indexed_via"]) if ev["indexed_via"] else "未取得"
+    print(f"  索引の手がかり : {ev['verdict']}  (クローラ: {craw} / 検索 referrer: {refs})")
+    if not index_evidence_selftest():
+        print("  ★ 索引の判定式が壊れている")
     print(f"  参照元: 既知ヒット {len(got)} host / 計 {known} 件  "
           f"ref-any={'未取得 (まだ叩かれていない)' if tot_any is None else tot_any}  "
           f"盲点 (未登録 host) = {'—' if tot_any is None else max(tot_any - known, 0)}")
@@ -210,7 +253,9 @@ def main() -> int:
             bot_js = ("globalThis.__h=[];globalThis.fetch=function(u,o){globalThis.__h.push(String(u));"
                       "return {then(){},catch(){}};};globalThis.location={search:'',hostname:'x'};"
                       "globalThis.document={referrer:''};"
-                      "globalThis.navigator={userAgent:'" + BOT_UA + "'};\n" + js
+                      # node 26 では navigator が read-only。代入は黙って通らない (実測)。
+                      "Object.defineProperty(globalThis,'navigator',{value:{userAgent:'"
+                      + BOT_UA + "'},configurable:true,writable:true});\n" + js
                       + "\nconsole.log(JSON.stringify(globalThis.__h));\n")
             tmp.write_text(bot_js, encoding="utf-8")
             rb = subprocess.run([node, str(tmp)], capture_output=True, text=True, timeout=45)

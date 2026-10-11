@@ -42,11 +42,10 @@ def _cta_text(company: str) -> str:
 
 
 def _free_sample(company: str) -> str:
-    if company:
-        return ('<a style="' + _BAR_A + '" href="/dsh-money-engine/sample.html">'
-                '他の会社の無料サンプル</a>')
-    return ('<a style="' + _BAR_A + '" href="sample.html">'
-            '無料サンプル (実文を先に見る)</a>')
+    # 常に絶対道。store/ の頁で href="sample.html" にすると store/sample.html に
+    # 解決されて 404 になった (実測: internal links 10 折れ / ★ sample.html x10)。
+    label = ("他の会社の無料サンプル" if company else "無料サンプル (実文を先に見る)")
+    return ('<a style="' + _BAR_A + '" href="/dsh-money-engine/sample.html">' + label + "</a>")
 
 
 def html(company: str = "", count_txt: str = "") -> str:

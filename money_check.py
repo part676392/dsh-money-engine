@@ -212,10 +212,28 @@ def company_q_check() -> bool:
             empty_ok += 1
         elif "面接で投げられた質問の実文" not in h:
             empty_bad.append(name)
+    # 道しるべ CSV が頁の実在とズレていないか (build_site より先に作ると前の回の枚数で出る)。
+    import csv as _csv
+    cpc = ROOT / "exports" / "company_pages.csv"
+    stale = []
+    if not cpc.exists():
+        bad.append("company_pages.csv が無い")
+    else:
+        with open(cpc, encoding="utf_8_sig") as fh:
+            for r in _csv.DictReader(fh):
+                nm = r.get("company") or ""
+                ck = cm.get(nm, nm)
+                want = 1 if (cdir / (ck + ".html")).exists() else 0
+                got = 1 if (r.get("page_exists") or "") == "1" else 0
+                if want != got:
+                    stale.append(nm[:14])
+
     on_pages = len([c for c in merged if c + ".html" in files])
     bad = []
     if len(have) != on_pages:
         bad.append(f"実文ブロック {len(have)} 頁 / 期待 {on_pages} 頁 欠け {[m[:18] for m in miss[:3]]}")
+    if stale:
+        bad.append(f"company_pages.csv が頁の実在と食い違う {len(stale)} 行 {stale[:2]}")
     if q_miss:
         bad.append(f"頁に載った実文が data と違う {len(q_miss)} 頁 {[m[:16] for m in q_miss[:2]]}")
     if empty_bad:

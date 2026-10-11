@@ -135,6 +135,10 @@ PY
   python3 make_changes.py       2>&1 | tail -2
   python3 make_llms.py        2>&1 | tail -2
   python3 build_site.py       2>&1 | tail -2
+  # 企業頁の道しるべ (company_pages.csv) と llms.txt の枚数は build_site が書いた頁を読む。
+  # 先に走ると前の回の枚数で出る (実測でズレた) ので、頁を書いた後に作り直す。
+  python3 make_exports.py        2>&1 | tail -2
+  python3 make_llms.py           2>&1 | tail -1
   python3 make_history_series.py 2>&1 | tail -3
   python3 audit_aeo.py        2>&1 | tail -10
   # 履歴頁と計測値はここで再生成したので、二度目の commit で載せる

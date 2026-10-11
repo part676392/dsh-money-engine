@@ -113,6 +113,26 @@ def run_selftest() -> int:
     return 0 if ok else 1
 
 
+def traffic_keys_registered() -> bool:
+    """頁が撃つ tracking key を check_traffic.KEYS が全部数えているか。
+    abacus に key 一覧の API が無いので、code 側から列挙する (実測: company を
+    KEYS に載せず、live は伸びているのに日报が黙っていた)。"""
+    import re as _re
+    import check_traffic as CT
+    used = set()
+    for f in sorted(ROOT.glob("*.py")):
+        t = f.read_text(encoding="utf-8", errors="replace")
+        for m in _re.finditer(r"""tracker\(\s*["']([a-z0-9-]+)["']""", t):
+            used.add(m.group(1))
+        for m in _re.finditer(r"""beacon_js\(\s*["']([a-z0-9-]+)["']""", t):
+            used.add(m.group(1))
+    missing = sorted(used - set(CT.KEYS))
+    ok = not missing
+    print(f"    traffic keys      : {'OK' if ok else '★ KEYS に無い key ' + str(missing)}"
+          f"  (頁が発火 {len(used)} / 数えている {len(CT.KEYS)})")
+    return ok
+
+
 def syntax_sweep() -> bool:
     """全 .py と巡回 script の構文を一括点検。
     実測で、patch 中の SyntaxError を見落として壊れた file を push した
@@ -216,6 +236,8 @@ def main() -> int:
     if "--selftest" in sys.argv:
         return run_selftest()
     if not syntax_sweep():
+        return 1
+    if not traffic_keys_registered():
         return 1
     if not tracker_single_source():
         return 1

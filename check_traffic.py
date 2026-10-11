@@ -23,7 +23,13 @@ import time
 ROOT = pathlib.Path(__file__).resolve().parent
 HIST = ROOT / "data" / "traffic"
 BASE = "https://abacus.jasoncameron.dev"
-KEYS = {"store": "store", "home": "home", "mini": "mini", "license": "license"}
+# 頁が撃つ key を全部ここで数える。鍵を増やしてここへ載せないと、
+# live で数字が伸びていても日报だけ黙る (company を一度取りこぼした実測)。
+KEYS = {
+    "store": "store", "home": "home", "mini": "mini", "license": "license",
+    "lineup": "lineup", "company": "company", "sample": "sample",
+    "order-click": "order-click", "404": "404", "reverse": "reverse",
+}
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
        "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
 SITE = "https://part676392.github.io/dsh-money-engine"

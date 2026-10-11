@@ -230,7 +230,8 @@ CSV 行数: 面接質問 {rows['interview_questions.csv']:,} ／ 選考フロー
 padding:9px 15px;border-radius:8px;text-decoration:none;font-weight:600"
 onclick="{buy_beacon};return true">注文を開く（$5 から）</a>
 <span style="font-size:.8rem;color:#6d675e"> 開いた form は「1社だけ試す ($5)」を選んだ状態になります。
-企業名を書いて送るだけです。</span></p>
+企業名を書いて送るだけです。<b>注文には GitHub のアカウントがいります</b> (未ログインだと最初にログイン画面へ飛びます。
+そのまま戻ってくるので、書きかけの内容は消えません)。</span></p>
 
 <div class="warn"><b>納品のしかたを先に正直に書きます。</b>
 ここの受信箱は受信だけで、こちらからメールを送れません。だから納品は

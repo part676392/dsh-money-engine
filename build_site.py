@@ -528,7 +528,8 @@ small{{display:block;color:#5d6570;margin-top:26px;font-size:.8rem;line-height:1
         n_txt = f"質問実文 {len(uniq):,} 文" if uniq else "この会社の質問実文は未収録"
         cln += ("<p class='buywrap'><a class='buy' href='" + buy_url + "' onclick=\"" +
                 beacon_js("order-click") + ";return true\">この会社ぶんを <b>$5</b> で受け取る</a>"
-                "<span class='raw'> " + n_txt + "・出典URLつき。開いた注文 form には会社名が既に入っています。</span></p>")
+                "<span class='raw'> " + n_txt + "・出典URLつき。開いた注文 form には会社名が既に入っています。"
+                + "注文には GitHub のアカウントがいります。</span></p>")
 
         # demand は収録時の名前で引くので、束ねる前の名前も順に試す (無いものを無いと言わない)。
         names_try = [comp] + list(ALIAS.get(comp) or [])

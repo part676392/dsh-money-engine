@@ -176,9 +176,21 @@ def prefill_check() -> bool:
             nbad.append(f"{f.name[:-5][:10]} companies 違い")
     if nbad:
         bad.append(f"link 不全 {len(nbad)} 頁 {nbad[:2]}")
+    # 注文に GitHub のアカウントが要ることを隠さない (未ログインだと /login に飛ぶと実測した)。
+    dl = (ROOT / "data-license.html").read_text(encoding="utf-8", errors="replace")
+    if "GitHub のアカウント" not in dl:
+        bad.append("data-license に GitHub アカウントの注意が無い")
+    acct = 0
+    for f in cdir.glob("*.html"):
+        h = f.read_text(encoding="utf-8", errors="replace")
+        if "class='buy'" in h:
+            acct += 1
+            if "GitHub のアカウント" not in h:
+                bad.append(f"{f.name[:-5][:12]} に注意書きが無い")
+                break
     ok = not bad
     print(f"    order prefill     : {'OK' if ok else '★ ' + '; '.join(bad[:2])}"
-          f"  (CTA {n_cta} 頁・form の id {ids}・選択肢 {len(opts)} 個・beacon {n_beacon or n_cta} 頁)")
+          f"  (CTA {n_cta} 頁・注意書き {acct} 頁・form の id {ids}・選択肢 {len(opts)} 個)")
     return ok
 
 

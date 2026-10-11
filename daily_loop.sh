@@ -313,6 +313,19 @@ $(date ...) PR 入口 ★"
     # (実測: index.html の注文欄は 99% 目に在り、20 アクセスで注文発火 0)。
     python3 polish_buy_bars.py     2>&1 | tail -2
   python3 audit_aeo.py        2>&1 | tail -10
+  # 護りが読んだ頁を、この後の builder が書き直していた (実測 3 度目: run 19:35 で
+  # check_card_surface が ★ -> 護り (272行) の後に make_question_lineups (280) / build_sample
+  # (291) / build_store (294) / build_site (306) が走っていた)。頁を書き終えた後の護りだけを
+  # 朝に見る物にする。上の早期護りは signal として残すが集計しない。
+  echo "=== final guards $(date +%H:%M:%S) ==="
+  python3 polish_buy_bars.py      2>&1 | tail -1
+  python3 refresh_order_blocks.py 2>&1 | tail -1
+  if ! python3 check_card_surface.py 2>&1 | tail -5; then
+    echo "  ★★★ GUARD FAIL: card-surface — 配られる頁で支払いの口 / プラン語 / \$25 / 出典の性質が壊れている"
+  fi
+  python3 money_check.py          2>&1 | tail -5
+  python3 check_regression.py     2>&1 | tail -2
+  python3 lint_prose.py           2>&1 | tail -2
   # 履歴頁と計測値はここで再生成したので、二度目の commit で載せる
   # secret を public に押してから ★ が出る順番が逆だった (実測: .note-profile/ 487 件を
   # push した後に secrets 護りが ★ を出した)。Playwright の永続 profile は commit しない。
@@ -344,6 +357,10 @@ $(date ...) PR 入口 ★"
     pages_check "https://x-access-token:${TOK2}@github.com/part676392/dsh-money-engine.git"
 
   RUN=$(awk '/start =====/{buf=""} {buf=buf "\n" $0} END{print buf}' "$LOG")
+  # 集計は sentinel の後だけ見る (護りの後に builder が走る順序を直したので、早期の ★ は
+  # 参考 signal。sentinel が無い古い logs は今まで通り全部見る)。
+  FINAL=$(printf '%s' "$RUN" | awk '/=== final guards/{f=1} f')
+  [ -n "$FINAL" ] && RUN="$FINAL"
   FAIL=""
   echo "$RUN" | grep -q "no secret in public repo: False" && FAIL="$FAIL secret"
   echo "$RUN" | grep -q "money pages ready: False" && FAIL="$FAIL money"

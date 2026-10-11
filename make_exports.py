@@ -52,7 +52,9 @@ def main() -> int:
     rows = []
     for comp, items in (q.get("per_company") or {}).items():
         for it in items:
-            rows.append([comp, it.get("question", ""), it.get("intent", ""),
+            rows.append([comp, it.get("question", ""), it.get("category", "未判定"),
+                         it.get("category_basis", ""), it.get("question_raw", ""),
+                         it.get("intent", ""),
                          it.get("article_title", ""), it.get("url", ""),
                          it.get("price", 0), it.get("chars_of_source_text", 0)])
     # 別の builder が書く CSV も manifest には載せる (行数だけ数える)。
@@ -66,10 +68,14 @@ def main() -> int:
                 manifest.append([extra, max(sum(1 for _ in f) - 1, 0), what])
 
     n = write_csv(EXP / "interview_questions.csv",
-                  ["company", "question", "interviewer_intent", "article_title",
+                  ["company", "question", "category", "category_basis", "question_raw",
+                   "interviewer_intent", "article_title",
                    "source_url", "article_price_yen", "source_text_chars"], rows)
     manifest.append(["interview_questions.csv", n,
-                     "面接で投げられた質問の実文。interviewer_intent は記事が書いた范围のみ"])
+                     "面接で投げられた質問の実文 (記事の小見出しを落とした形)。question_raw は抽出そのまま。"
+                     "category は lineup と同じ12名の機械分類で、未判定を残す。"
+                     "category_basis は 見出し断片 / 語彙 / 空 (未判定)。"
+                     "interviewer_intent は記事が書いた範囲のみ"])
 
     # 2) 選考フロー (1行=1工程 so that it is pivot-able)
     rows = []

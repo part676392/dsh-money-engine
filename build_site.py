@@ -378,6 +378,8 @@ r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
     l4 = _dj("question_lineups.json")
     h4 = _dj("history/index.json")
     n_q4 = f"{int(q4.get('questions_total') or 0):,}"
+    # 1,779 は行数。同じ文が複数社に付くので、実文の数は別に出す (実測: 最多の1文が500行)
+    n_d4 = f"{int(q4.get('questions_distinct_text') or 0):,}"
     n_f4 = f"{int(f4.get('flows_total') or 0)}"
     # rows と言う鍵は無い (実測で KeyError 回避のフォールバックが 467 = 社数を返していた)。
     # 行数は history_record と同じ数え方を用いる (exports の CSV と一致する)。
@@ -385,7 +387,7 @@ r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
     n_h4 = f"{int(h4.get('observations') or 0)}"
     c4 = int(snapshot.get("companies") or 0)
     nav404 = [("index.html", f"企業別の目録トップ ({c4} 社)"),
-              ("interview-questions.html", f"面接質問の実文 {n_q4} 問"),
+              ("interview-questions.html", f"面接質問 {n_q4} 行（重複を除いた実文 {n_d4}）"),
               ("question-lineups.html", f"質問カテゴリの並び順 {n_l4}"),
               ("selection-flows.html", f"公式選考フロー {n_f4} 本"),
               ("sample.html", "納品物見本（3社ぶんの実物）"),
@@ -397,7 +399,7 @@ r.style.display=!v||r.textContent.toLowerCase().includes(v)?'':'none';}});}}
 <html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>その頁は見つかりません｜転職・新卒 選考対策 目録データベース</title>
-<meta name="description" content="アドレスが古いか打ち間違いです。{c4} 社の目録、面接質問の実文 {n_q4} 問、CSV 一式はここから入れます。">
+<meta name="description" content="アドレスが古いか打ち間違いです。{c4} 社の目録、面接質問 {n_q4} 行（実文 {n_d4}）、CSV 一式はここから入れます。">
 <meta name="robots" content="noindex,follow">
 {tracker("404")}
 <style>

@@ -75,6 +75,8 @@ def main() -> int:
     arts = snap.get("articles", 0)
     comps = snap.get("companies", 0)
     nq = q.get("questions_total", 0)
+    # 行と実文は別の数 (実測: 1,779 行 / 実文 1,173 / 最多の1文が 500 行)
+    n_dist = q.get("questions_distinct_text", 0)
     nf = fl.get("flows_total", 0)
     nfc = fl.get("companies_with_flows", 0)
     ns = sg.get("companies_with_mentions", 0)
@@ -122,7 +124,7 @@ def main() -> int:
         "@context": "https://schema.org", "@type": "Service",
         "name": "収録記事データベースのカスタム抽出と履歴一式",
         "serviceType": "data-extraction",
-        "description": (f"収録記事 {arts} 本から機械抽出した面接質問 {nq} 問・"
+        "description": (f"収録記事 {arts} 本から機械抽出した面接質問 {nq:,} 行（重複を除いた実文 {n_dist:,}）・"
                         f"公式選考フロー {nf} 本を、指定企業群について CSV で納品。"
                         "納品は公開URLで渡す（外送信できないため）。"),
         "url": f"{BASE}/data-license.html",
@@ -173,7 +175,7 @@ def main() -> int:
     doc = f"""<!doctype html><html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>データ資産の購入 — カスタム抽出と履歴一式 | 目録</title>
-<meta name="description" content="収録記事 {arts} 本から機械抽出した面接質問 {nq} 問・選考フロー {nf} 本を指定企業群で CSV 納品。納品は公開URL。">
+<meta name="description" content="収録記事 {arts} 本から機械抽出した面接質問 {nq:,} 行（実文 {n_dist:,}）・選考フロー {nf} 本を指定企業群で CSV 納品。納品は公開URL。">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="{BASE}/data-license.html">
 {tracker("license")}
@@ -197,7 +199,7 @@ ol{{font-size:.9rem}} ol li{{margin:8px 0}}
 <p class="sub">目録データベースの無料公開はそのままに、<b>指定した分だけ切り出して渡す</b>形に値札を付けました。</p>
 
 <div class="now"><b>今はいくつ入っているか（自動更新）</b><br>
-収録記事 <b>{arts:,}</b> 本 ／ 企業 <b>{comps}</b> 社 ／ 面接質問の実文 <b>{nq:,}</b> 問 ／
+収録記事 <b>{arts:,}</b> 本 ／ 企業 <b>{comps}</b> 社 ／ 面接質問 <b>{nq:,}</b> 行（重複を除いた実文 <b>{n_dist:,}</b>）／
 公式選考フロー <b>{nf}</b> 本（{nfc} 社）／ 選考段階の言及のある企業 <b>{ns}</b> 社 ／
 機械検証済みの締切 <b>{n_dead}</b> 件<br>
 CSV 行数: 面接質問 {rows['interview_questions.csv']:,} ／ 選考フロー {rows['selection_flows.csv']:,} ／

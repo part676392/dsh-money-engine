@@ -14,6 +14,7 @@
 """
 from __future__ import annotations
 
+import collections
 import json
 import pathlib
 import re
@@ -124,6 +125,65 @@ def qcount_check() -> bool:
     ok = ok and not stale
     print(f"    question count   : 公称={total} JSON本文={body} CSV={rows} "
           f"{'一致' if not stale else '★ 頁に旧値 ' + str(stale[:3])}")
+    return ok
+
+
+def qmeta_check() -> bool:
+    """行と実文の二つの数が、頁・JSON・CSV で揃っているか。
+    実測: 1,779 行のうち 500 行が同一文。延べ数だけ載せると『1,779問ある』嘘になる。"""
+    import csv as _csv
+    j = json.loads((ROOT / "data" / "interview_questions.json").read_text(encoding="utf-8"))
+    total = int(j.get("questions_total") or -1)
+    dist = int(j.get("questions_distinct_text") or -1)
+    cf = j.get("category_frequency") or {}
+    bad = []
+    if sum(cf.values()) != total:
+        bad.append(f"category_frequency 計 {sum(cf.values())} != 行数 {total}")
+    cov = sum(v for k, v in cf.items() if k != "未判定")
+    if total and cov * 100 / total < 55:
+        bad.append(f"分類被打率 {cov * 100 // total}% が下限 55% 未満")
+    fp = ROOT / "exports" / "interview_questions.csv"
+    if not fp.exists():
+        bad.append("interview_questions.csv が無い")
+    else:
+        with open(fp, encoding="utf_8_sig") as f:
+            rd = _csv.DictReader(f)
+            cols = rd.fieldnames or []
+            need = ["category", "category_basis", "question_raw"]
+            miss = [c for c in need if c not in cols]
+            if miss:
+                bad.append(f"CSV 列が無い {miss}")
+            else:
+                cc = collections.Counter()
+                nrow = 0
+                for r in rd:
+                    nrow += 1
+                    cc[r.get("category") or "無印"] += 1
+                if nrow != total:
+                    bad.append(f"CSV {nrow} 行 != JSON {total}")
+                for k, v in cf.items():
+                    if cc.get(k, 0) != v:
+                        bad.append(f"CSV の {k}={cc.get(k,0)} != JSON {v}")
+    # 頁側の公称: 行の数は total、実文の数は dist でなければならない
+    stale_row, stale_dist = [], []
+    for f2 in sorted(list(ROOT.glob("*.html")) + list(ROOT.glob("*.txt"))):
+        raw = f2.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(r"面接質問\s*([0-9][0-9,]*)\s*(問|行)", raw):
+            v = int(m.group(1).replace(",", ""))
+            if v not in (total, 105):
+                stale_row.append(f"{f2.name}:{v}")
+        for m in re.finditer(r"実文\s*([0-9][0-9,]{2,})", raw):
+            v = int(m.group(1).replace(",", ""))
+            if v not in (dist, 105):
+                stale_dist.append(f"{f2.name}:{v}")
+    if stale_row:
+        bad.append(f"頁に旧行数 {stale_row[:3]}")
+    if stale_dist:
+        bad.append(f"頁に旧実文数 {stale_dist[:3]}")
+    ok = not bad
+    print(f"    row / 実文 / 分類   : {'OK' if ok else '★ ' + '; '.join(bad[:3])}"
+          f"  (行 {total:,}・実文 {dist:,}・分類被打 {cov:,}・被打率 "
+          f"{cov * 100 // total if total else 0}%)")
     return ok
 
 
@@ -378,6 +438,8 @@ def main() -> int:
     if not history_pub_check():
         all_ok = False
     if not issue_form_check():
+        all_ok = False
+    if not qmeta_check():
         all_ok = False
     if not outreach_check():
         all_ok = False

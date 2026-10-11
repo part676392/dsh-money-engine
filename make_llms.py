@@ -115,7 +115,7 @@ def main() -> int:
 - [納品一覧]({BASE}/deliveries.html): 注文ごとの進みと納品URL。受信箱は受信専用なので納品は公開URLで渡す
 - [CSV エクスポート]({BASE}/exports/manifest.csv): 面接質問・選考フロー・選考段階を CSV で。UTF-8 BOM 付き、列定義つき
 - [選考段階の言及 {sig.get("companies_with_mentions", "?")} 社]({BASE}/selection-signals.html): 収録記事の{src_word}から抽出した選考段階の言及集計。言及ごとに引用文つき。実測値は生成時に JSON から読む
-- [面接質問 {q.get("questions_total", "?")} 問 / {q.get("companies_with_questions", "?")} 社]({BASE}/interview-questions.html): 収録記事から抽出した質問の実文と、記事が書く面接官の意図。各件に出典URL
+- [面接質問 {q.get("questions_total", "?")} 行（重複を除いた実文 {q.get("questions_distinct_text", "?")}）/ {q.get("companies_with_questions", "?")} 社]({BASE}/interview-questions.html): 収録記事から抽出した質問の実文と、記事が書く面接官の意図。各件に出典URL
 - [質問カテゴリの並び順]({BASE}/question-lineups.html): 467社の羅列を12カテゴリに正規化し {n_rows:,} 行。並び順そのものを持つデータはここ以外に無い。
 - [逆質問の実文]({BASE}/reverse-questions.html): 本文に現れた文だけを抽出 (24文/8社)。薄さはページに明記。- [公式選考フロー {fl.get("flows_total", "?")} 本 / {fl.get("companies_with_flows", "?")} 社]({BASE}/selection-flows.html): 順序付きの選考工程。寄せた前の工程名も JSON の raw に全件保持
 - [注文受付ページ]({BASE}/store/): カスタム執筆の価格と受け口。Service/Offer 構造化データ
@@ -125,7 +125,10 @@ def main() -> int:
 - 面接質問 {n_q:,} 件のうち、面接官の意図が記事に書いてあるのは {n_in:,} 件 ({pct}%)。
   残りは空にしている (推測で文を作らない)。
 - 面接の質問カテゴリの並びは {n_modal} 本 ({modal_pct}%) が完全に同一順。逆質問は中央値第{med_rev}番目＝常に最後。
-- 候補が生記した選考段階の言及: {stage_txt}。書類選考が過半を占める。
+- 面接質問は行数で {n_q:,} 行。同じ文が複数社に付く行があるので、文として重複を除くと {int(q.get("questions_distinct_text") or 0):,} 文。
+  `exports/interview_questions.csv` の `question` は記事の小見出しを落とした形、`question_raw` が抽出そのまま。
+  `category` は選考フロー側と同じ12名の機械分類で、迷った行は `未判定` のまま残す ({q.get("category_coverage_pct","?")}% を分類)。
+- 本文に現れた選考段階の言及: {stage_txt}。書類選考が過半を占める。
 - 無人巡回が積んだ観測は {n_hist} 件 ({hist_span})。`exports/history_timeseries.csv` に無料公開。
   UTF-8 BOM 付きなので `utf-8-sig` で読む。空欄は「その頃は測っていなかった」で 0 ではない。
   各行に元 file の SHA-256 を付け、後から数字を差し替えていないことを検証できるようにした。

@@ -20,6 +20,7 @@ import json
 import pathlib
 import re
 import time
+from question_meta import clean_and_classify
 
 ROOT = pathlib.Path(__file__).resolve().parent
 FULL = ROOT / "data" / "full_bodies.json"
@@ -125,7 +126,13 @@ def main() -> int:
             if not (INTERVIEW_CTX.search(src) or INTERVIEW_CTX.search(r.get("title", "") or "")
                     or INTERVIEW_CTX.search(q)):
                 continue
-            rec = {"question": q, "intent": intent, "source_sentence": src[:300],
+            # 実文に記事の小見出しが接着していた (実測: 「質問のラインナップ… 志望動機まわり なぜ〜」)。
+            # 洗って、lineup と同じ12カテゴリ名に機械で振る。迷えば 未判定 のまま残す。
+            q_clean, cat, basis, stripped = clean_and_classify(q)
+            rec = {"question": q_clean, "question_raw": q, "intent": intent,
+                   "category": cat, "category_basis": basis,
+                   "chrome_stripped": ",".join(stripped),
+                   "source_sentence": src[:300],
                    "article_title": (r.get("title") or "")[:90],
                    "url": r.get("url", ""), "price": r.get("price", 0),
                    "chars_of_source_text": len(text)}
@@ -134,6 +141,21 @@ def main() -> int:
                 per_company[comp].append(rec)
 
     n_comp = len(per_company)
+    # 「1,779 問」は行数で、文として重複を除くと少なくなる (実測: 同一文が 500 行にも重複)。
+    # 延べ数だけ見せるのは嘘なので、三つの数を並べて出す。
+    nq = sum(len(v) for v in per_company.values())
+    texts = [rec["question"] for v in per_company.values() for rec in v]
+    dist_text = len(set(texts))
+    dist_pair = len({(c, rec["question"]) for c, v in per_company.items() for rec in v})
+    rep_text, rep_n = (collections.Counter(texts).most_common(1) or [("", 0)])[0]
+    catfreq = collections.Counter(rec["category"] for v in per_company.values() for rec in v)
+    n_cat = sum(v for k, v in catfreq.items() if k != "未判定")
+    cat_ex = {}
+    for v in per_company.values():
+        for rec in v:
+            cat_ex.setdefault(rec["category"], rec["question"])
+    n_clean = sum(1 for v in per_company.values() for rec in v if rec.get("chrome_stripped"))
+    num_clean = n_clean
     doc = {"generated_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
            "text_source": ("note の記事 HTML から採った本文" if full_used > scanned * 0.5
                            else "API プレビュー混在"),
@@ -144,6 +166,13 @@ def main() -> int:
            "questions_extracted_raw": len(all_q),
            "questions_unattributed": len(all_q) - sum(len(v) for v in per_company.values()),
            "companies_with_questions": n_comp,
+           "questions_distinct_text": dist_text,
+           "questions_distinct_company_text": dist_pair,
+           "top_repeated_text": {"text": rep_text[:120], "rows": rep_n},
+           "chrome_stripped_rows": n_clean,
+           "category_assigned": n_cat,
+           "category_coverage_pct": round(n_cat * 100 / nq, 1) if nq else 0,
+           "category_frequency": dict(catfreq.most_common()),
            "per_company": {k: v for k, v in sorted(per_company.items())},
            "all": all_q}
     OUT_JSON.write_text(json.dumps(doc, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -152,9 +181,22 @@ def main() -> int:
     for comp in sorted(per_company, key=lambda c: -len(per_company[c])):
         for rec in per_company[comp]:
             rows.append(
-                f"<tr><td>{esc(comp)}</td><td>「{esc(rec['question'])}」</td>"
+                f"<tr><td>{esc(comp)}</td><td>{esc(rec['category'])}</td>"
+                f"<td>「{esc(rec['question'])}」</td>"
                 f"<td>{esc(rec['intent'][:110]) if rec['intent'] else '—'}</td>"
                 f"<td>{'¥' + str(rec['price']) if rec['price'] else '無料'}</td></tr>")
+    cat_cells = []
+    for k, v in catfreq.most_common():
+        ex = cat_ex.get(k) or ""
+        cat_cells.append(
+            f"<tr><td>{esc(k)}</td><td>{v:,}</td><td>{round(v * 100 / nq, 1)}%</td>"
+            f"<td>「{esc(ex[:88])}{'…」' if len(ex) > 88 else ''}」</td></tr>")
+    cat_table = ("<table><thead><tr><th>カテゴリ</th><th>行数</th><th>シェア</th>"
+                 "<th>実文の見本 (機械が同じ規則で振ったもの)</th></tr></thead><tbody>"
+                 + chr(10).join(cat_cells) + "</tbody></table>") if cat_cells else ""
+    dup_note = (f"同じ文が複数社に付いています。文として重複を除くと <b>{dist_text:,}</b> 文、"
+                f"企業ごとに見ると <b>{dist_pair:,}</b> 組。最も多い1文だけで <b>{rep_n}</b> 行ぶん "
+                f"(「{esc(rep_text[:34].rstrip('」'))}」)。延べ行数だけを見て「{nq:,}問ある」と読まないでください。")
     top = []
     for comp in sorted(per_company, key=lambda c: -len(per_company[c]))[:20]:
         top.append("<li><strong>" + esc(comp) + "</strong>（" + str(len(per_company[comp])) + "問）："
@@ -163,8 +205,9 @@ def main() -> int:
     ld = json.dumps({
         "@context": "https://schema.org", "@type": "Dataset",
         "name": "収録記事に出てくる面接質問の実文 企業別一覧",
-        "description": (f"{scanned} 本の本文から質問の実文 {len(all_q)} 件を抽出、"
-                        f"{n_comp} 社別に整理。各件に出典記事のURLと価格を添付。"),
+        "description": (f"{scanned} 本の本文から質問の候補 {len(all_q):,} 件を抜き出し、"
+                        f"企業に割り当てた {nq:,} 行（重複を除いた実文 {dist_text:,}）を {n_comp} 社別に整理。"
+                        "各行に出典記事のURL・価格・機械分類をつけた。"),
         "url": f"{BASE}/interview-questions.html",
         "license": "https://creativecommons.org/licenses/by/4.0/",
         "creditText": "CC BY 4.0 は抽出した表・順序・対応づけにだけ適用します。本文の著作権は note の各記事の著者に帰属し、引用は出典URLつきで最小限に留めています。",
@@ -173,8 +216,8 @@ def main() -> int:
 
     doc_html = f"""<!doctype html><html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>面接で投げられた質問 {len(all_q)} 件の実文 — 企業別 | 目録</title>
-<meta name="description" content="{scanned}本の収録記事から面接の質問実文{len(all_q)}件を抽出。{n_comp}社別、各件に出典URLつき。">
+<title>面接で投げられた質問 {nq:,} 行（実文 {dist_text:,}）— 企業別 | 目録</title>
+<meta name="description" content="{scanned}本の収録記事から面接質問 {nq:,} 行（重複を除いた実文 {dist_text:,}）を{n_comp}社別に。各行に出典URLとカテゴリつき。">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="{BASE}/interview-questions.html">
 <script type="application/ld+json">
@@ -190,20 +233,26 @@ th{{background:#efeee9;font-weight:600}} a{{color:#7a5230}}
 ol{{font-size:.88rem}} ol li{{margin:7px 0}}
 .note{{font-size:.8rem;color:#6d675e;margin-top:24px}}
 </style></head><main>
-<h1>面接で投げられた質問 {len(all_q)} 件の実文</h1>
-<p class="sub">収録記事 {scanned} 本（うち本文を HTML から取り直したもの {full_used} 本）から、
-質問の実文 {len(all_q)} 件を抽出しました。助言文 («〜と答えましょう») は数えていません。
-下表は {n_comp} 社に割り当てられた {sum(len(v) for v in per_company.values())} 件で、
-残りの {len(all_q) - sum(len(v) for v in per_company.values())} 件は表題から企業を特定できなかったため
-企業欄を外して <a href="data/interview_questions.json">JSON</a> 側に置いています。</p>
+<h1>面接で投げられた質問 {nq:,} 行（企業に割り当てた実文）</h1>
+<p class="sub">収録記事 {scanned} 本（うち本文を HTML から取り直したもの {full_used} 本）から質問の候補を {len(all_q):,} 件抜き出し、
+そのうち {nq:,} 行を {n_comp} 社に割り当てて下表にしました。残りの {len(all_q) - nq} 件は表題から企業を特定できなかったため、
+企業欄を外して <a href="data/interview_questions.json">JSON</a> 側に置いています。
+同じ文が複数社に付く行があるので、文として重複を除くと {dist_text:,} 文です。
+{num_clean:,} 行は記事の小見出し («質問のラインナップ… 志望動機まわり») を落としてあります。助言文 («〜と答えましょう») は数えていません。</p>
 
 <h2 style="font-size:.98rem;margin:20px 0 8px;border-bottom:1px solid #ddd8cf;padding-bottom:5px">質問が多い順 {min(20, n_comp)} 社</h2>
 <ol>
 {chr(10).join(top)}
 </ol>
 
+<h2 style="font-size:.98rem;margin:20px 0 8px;border-bottom:1px solid #ddd8cf;padding-bottom:5px">重複の実測</h2>
+<p class="sub">{dup_note}</p>
+
+<h2 style="font-size:.98rem;margin:20px 0 8px;border-bottom:1px solid #ddd8cf;padding-bottom:5px">カテゴリ別の行数（機械分類・未判定 {catfreq.get('未判定', 0):,} 行を残しています）</h2>
+{cat_table}
+
 <h2 style="font-size:.98rem;margin:24px 0 8px;border-bottom:1px solid #ddd8cf;padding-bottom:5px">全件（企業別）</h2>
-<table><thead><tr><th>企業</th><th>質問の実文</th><th>面接官の意図（記事が書く範囲）</th><th>価格</th></tr></thead><tbody>
+<table><thead><tr><th>企業</th><th>カテゴリ</th><th>質問の実文</th><th>面接官の意図（記事が書く範囲）</th><th>価格</th></tr></thead><tbody>
 {chr(10).join(rows)}
 </tbody></table>
 

@@ -250,6 +250,12 @@ PY
     echo "  ★★★ GUARD FAIL: source-liveness — 出典URLの生存が変わったか測れていない"
   fi
   # 唯一 人が辿れている入口 (PR 本文の link) の点検。計数が落ちるまで分からなかった (実測)。
+  # 全站のメール口を今の文面で作り直す (builder が inject を呼ばない 11 頁が腐っていた)。
+  if ! python3 refresh_order_blocks.py 2>&1 | tail -3; then
+    RUN="$RUN
+$(date ...) 古いメール文面 ★"
+    echo "  ★★★ GUARD FAIL: mail-copy — 古い料金語のメール口が残っている"
+  fi
   if ! python3 check_pr_links.py 2>&1 | tail -4; then
     RUN="$RUN
 $(date ...) PR 入口 ★"
@@ -353,6 +359,7 @@ $(date ...) PR 入口 ★"
   echo "$RUN" | grep -q "GUARD FAIL: index-probe" && FAIL="$FAIL index-probe"
   echo "$RUN" | grep -q "GUARD FAIL: source-liveness" && FAIL="$FAIL source-liveness"
   echo "$RUN" | grep -q "GUARD FAIL: pr-links" && FAIL="$FAIL pr-links"
+  echo "$RUN" | grep -q "GUARD FAIL: mail-copy" && FAIL="$FAIL mail-copy"
   echo "$RUN" | grep -q "GUARD FAIL: money-check" && FAIL="$FAIL money-check"
   echo "$RUN" | grep -qE "parser self-test: ([0-3])/4" && FAIL="$FAIL parser"
   if [ -n "$FAIL" ]; then

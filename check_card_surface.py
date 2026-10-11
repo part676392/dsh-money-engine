@@ -75,10 +75,31 @@ def plan_prefills(quiet: bool = False) -> bool:
             v = q["plan"][0]
             if v not in opts:
                 bad.append(f"{f.name}: {v!r}")
-    ok = not bad and not noplan
-    first = (bad + noplan)
+    # メール口の件名も同じ選択肢からしか作らせない (全 html を見る。実測で 11 頁が腐っていた)。
+    import glob as _g2
+    bad_mail, n_mail = [], 0
+    for f in sorted(_g2.glob(str(ROOT / "*.html")) + _g2.glob(str(ROOT / "store" / "*.html"))
+                    + _g2.glob(str(ROOT / "company" / "*.html"))):
+        h = pathlib.Path(f).read_text(encoding="utf-8", errors="replace")
+        # href 単位で取る。`mailto:[^"]*subject=` は貪欲で、同じ頁の最後の link の件名しか
+        # 見えず、最初の link を腐らせても ★ が出なかった (制御で実測)。
+        for a_ in re.findall(r"""href=["'][^"']*mailto:[^"']*["']""", h):
+            m = re.search(r"subject=([^&\"]*)", a_)
+            if not m:
+                continue
+            n_mail += 1
+            subj = urllib.parse.unquote(m.group(1))
+            if not subj.startswith("注文: "):
+                continue                      # data-license の『データ購入の注文』等は自由文
+            tier = subj[len("注文: "):].split(" / ")[0]
+            if tier not in opts:
+                bad_mail.append(f"{pathlib.Path(f).name}: {tier!r}")
+                break
+    ok = not bad and not noplan and not bad_mail
+    first = (bad + noplan + bad_mail)
     print("    プラン語の一致    : " + ("OK" if ok else "★ " + first[0][:80])
-          + f" (link {total:,} 本 / 選択肢 {len(opts)} 個 / 用件自由の口 {free_ok} 本は plan 無しを許す)")
+          + f" (link {total:,} 本 / 件名 {n_mail:,} 本 / 選択肢 {len(opts)} 個"
+          + f" / 用件自由の口 {free_ok} 本は plan 無しを許す)")
     return ok
 
 

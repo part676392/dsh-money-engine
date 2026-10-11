@@ -170,6 +170,42 @@ def bar(company: str = "") -> str:
             + "　·　" + ACCOUNT_NOTE + "</p>")
 
 
+def refresh_mail(path) -> int:
+    """頁に有るメール口の href を、今のコードで作り直す (料金語の rot 対策)。
+    実測 (2026-10-11): mailto_link の既定 tier を直しても 11 頁に『1社ぶん ($5)』が残った。
+    その 11 頁 (sample / store / changes / *-questions 等) は builder が inject() を呼ばないので、
+    一度入った文面がそのまま腐っていた。block 自体は触らず href だけ差し替える。"""
+    import pathlib as _p
+    import urllib.parse as _up
+    fp = _p.Path(path)
+    h = fp.read_text(encoding="utf-8")
+    n = 0
+
+    def fix(m):
+        nonlocal n
+        old = m.group(0)
+        subj = ""
+        mm = re.search(r"subject=([^&\"]*)", old)
+        if mm:
+            subj = _up.unquote(mm.group(1))
+        comp = subj.split(" / ", 1)[1].strip() if " / " in subj else ""
+        new = mailto_link(comp)
+        if not new:
+            return old
+        href = re.search(r"href=\"([^\"]*)\"", new)
+        if not href or href.group(1) == _up.unquote(mm.group(1) if mm else ""):
+            pass
+        out = re.sub(r"href=\"[^\"]*\"", "href=\"" + href.group(1) + "\"", old, count=1)
+        if out != old:
+            n += 1
+        return out
+
+    h2 = re.sub(r"<a [^>]*href=\"mailto:[^\"]*\"[^>]*>[^<]*</a>", fix, h)
+    if h2 != h:
+        fp.write_text(h2, encoding="utf-8")
+    return n
+
+
 def inject(path, count_txt: str = "", top: str = "") -> bool:
     """書き出した html に注文欄を足す。
     %書式や .format の土台は {BUY} が展開されないので、後から差す方を信用する。

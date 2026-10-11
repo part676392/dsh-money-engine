@@ -2,13 +2,13 @@
 question_lineups.csv,5494,質問カテゴリの並び順 (企業・位置・カテゴリ)
 reverse_questions.csv,24,逆質問にふれる本文の実文 (出典URLつき)
 history_timeseries.csv,3,無人巡回が積んだ観測の履歴行列表 (SHA-256 付)
-es_deadlines_history.csv,825,締切をいつ・どの記事から拾ったかの台帳 (拾った機械 dev / runner を残す)
-source_liveness.csv,2887,出典記事の生存観測 (http / 有料化)
-history_runs.csv,132,巡回 1 回ごとの実行背骨 (日付 file は同じ日に上書きされるため別粒度)
+es_deadlines_history.csv,840,締切をいつ・どの記事から拾ったかの台帳 (拾った機械 dev / runner を残す)
+source_liveness.csv,2967,出典記事の生存観測 (http / 有料化)
+history_runs.csv,133,巡回 1 回ごとの実行背骨 (日付 file は同じ日に上書きされるため別粒度)
 interview_questions.csv,1779,面接で投げられた質問の実文 (記事の小見出しを落とした形)。question_raw は抽出そのまま。category は lineup と同じ12名の機械分類で、未判定を残す。category_basis は 見出し断片 / 語彙 / 空 (未判定)。interviewer_intent は記事が書いた範囲のみ
 company_pages.csv,496,企業別の頁への道しるべ。質問実文が 0 でも 選考段階の言及だけの頁があるので signal_rows / flow_rows を置く。page_url が空の会社は資料の頁をまだ作れていない。canonical_page_of は名前ゆれを束ねた先 (空なら自分が正規)。alias_pages_on_page はその頁に統合した旧名の数。questions_distinct は同じ会社内で同じ文をまとめた数。signal_rows / flow_rows はその会社について頁に出した 選考段階の言及 と 選考フロー の行数
 selection_flows.csv,96,公式選考フローを1行1工程に割った物。step_as_written が本来の表記
 selection_signals.csv,2021,収録記事に現れた選考段階の言及。quote は1文のみ
 license_scope,,CC BY 4.0 はこの表・順序・対応づけにのみ適用。本文の著作権は note の各記事の著者に帰属 (source_url を参照)
-generated_at,,2026-10-11T23:18:32+0900
+generated_at,,2026-10-11T23:29:01+0900
 encoding,,UTF-8 with BOM (utf-8-sig)

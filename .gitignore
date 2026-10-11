@@ -9,7 +9,8 @@ outbox/shots/
 outbox/wallet.json
 outbox/mailtm.json
 .ext-profile/
-outbox/mailtm-gumroad.json
+outbox/screens/
+outbox/*.png
 outbox/gumroad.json
 .gumroad-profile/
 outbox/mailtm-devto.json

@@ -330,6 +330,11 @@ $(date ...) PR 入口 ★"
   python3 money_check.py          2>&1 | tail -5
   python3 check_regression.py     2>&1 | tail -2
   python3 lint_prose.py           2>&1 | tail -2
+  # 検索の所有権検証: 未取得は ★ にしない (人間のログインが要る扉で、事故ではないから)。
+  # ファイルが現たら配れているか中身まで測る。
+  if ! python3 check_seo_verification.py 2>&1 | tail -4; then
+    echo "  ★★★ GUARD FAIL: seo-verify — 検証ファイルが有るのに配られていない"
+  fi
   # 履歴頁と計測値はここで再生成したので、二度目の commit で載せる
   # secret を public に押してから ★ が出る順番が逆だった (実測: .note-profile/ 487 件を
   # push した後に secrets 護りが ★ を出した)。Playwright の永続 profile は commit しない。
@@ -378,6 +383,7 @@ $(date ...) PR 入口 ★"
   echo "$RUN" | grep -q "GUARD FAIL: discovery" && FAIL="$FAIL discovery"
   echo "$RUN" | grep -q "GUARD FAIL: card-surface" && FAIL="$FAIL card-surface"
   echo "$RUN" | grep -q "GUARD FAIL: release" && FAIL="$FAIL release"
+  echo "$RUN" | grep -q "GUARD FAIL: seo-verify" && FAIL="$FAIL seo-verify"
   echo "$RUN" | grep -q "GUARD FAIL: index-probe" && FAIL="$FAIL index-probe"
   echo "$RUN" | grep -q "GUARD FAIL: source-liveness" && FAIL="$FAIL source-liveness"
   echo "$RUN" | grep -q "GUARD FAIL: pr-links" && FAIL="$FAIL pr-links"

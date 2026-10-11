@@ -66,7 +66,9 @@ def main() -> int:
     q = load(DATA / "interview_questions.json")
     fl = load(DATA / "selection_flows.json")
     sg = load(DATA / "selection_signals.json")
-    dl = load(DATA / "es_deadlines_strict.json")
+    # 面に出している物は es_deadlines_page.json (strict に全 600 記事の wide を畳んだ物)。
+    # strict だけ読んでいた為、締切頁が 15 件なのに商店の数字は 12 件 (少ない方) を出していた。
+    dl = load(DATA / "es_deadlines_page.json") or load(DATA / "es_deadlines_strict.json")
     rel = load(DATA / "rails" / "last_release.json")
     wallet = load(ROOT / "outbox" / "wallet.json")
     mail = load(ROOT / "outbox" / "mailtm.json")

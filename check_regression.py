@@ -140,6 +140,38 @@ def traffic_keys_registered() -> bool:
     return ok
 
 
+def deadline_counts_agree() -> bool:
+    """締切の個数が 面のあちこちで一致していること。
+    実測で締切頁 15 件 / 商店 12 件 に割れていた (商店が strict だけ読んでいた)。"""
+    import json as _json
+    bad, got = [], {}
+    pg = ROOT / "data" / "es_deadlines_page.json"
+    if pg.exists():
+        got["data"] = len(_json.loads(pg.read_text(encoding="utf-8")).get("open") or [])
+    else:
+        bad.append("data/es_deadlines_page.json が無い")
+    d = ROOT / "es-deadlines.html"
+    if d.exists():
+        h = d.read_text(encoding="utf-8", errors="replace")
+        got["面の日付セル"] = len(re.findall(r"<td><b>\d{2}/\d{2}</b></td>", h))
+        m = re.search(r"<h1>[^<]*?・(\d+) 件", h)
+        got["h1"] = int(m.group(1)) if m else -1
+        if got["h1"] < 0:
+            bad.append("h1 に個数が無い")
+    lic = ROOT / "data-license.html"
+    if lic.exists():
+        m = re.search(r"機械検証済みの締切\s*<b>(\d+)</b>", lic.read_text(encoding="utf-8", errors="replace"))
+        got["商店"] = int(m.group(1)) if m else -1
+        if got["商店"] < 0:
+            bad.append("商店に締切の個数が無い")
+    vals = {k: v for k, v in got.items() if v >= 0}
+    if len(set(vals.values())) > 1:
+        bad.append("個数が割れている " + str(vals))
+    ok = not bad
+    print(f"    締切の個数      : {'OK' if ok else '★ ' + '; '.join(bad[:2])}  ({vals})")
+    return ok
+
+
 def deadline_history() -> bool:
     """締切 history 台帳の筋。面に出す 初出日 は台帳に実在する日だけ (捏造禁止)。
     CSV と台帳の行数も照らす (魂の抜けた CSV を永からせない)。"""
@@ -404,6 +436,8 @@ def loop_coverage() -> bool:
 def main() -> int:
     if "--selftest" in sys.argv:
         return run_selftest()
+    if not deadline_counts_agree():
+        return 1
     if not deadline_history():
         return 1
     if not deadline_rows():

@@ -7,14 +7,18 @@
 from __future__ import annotations
 
 import buy_block
+from tracker_js import tracker
 import datetime as dt
+import os
 import html
 import json
 import pathlib
 import re
 
 ROOT = pathlib.Path(__file__).resolve().parent
-TODAY = dt.date(2026, 10, 10)
+# 締切一覧の日付は実日付で動かす (固定日にしていたと、巡回が積もるほど「時点」が嘘になる)。
+# 再現テストは DSH_AS_OF=YYYY-MM-DD で日被せできる。
+TODAY = dt.date.fromisoformat(os.environ["DSH_AS_OF"]) if os.environ.get("DSH_AS_OF") else dt.date.today()
 BASE = "https://part676392.github.io/dsh-money-engine"
 
 
@@ -39,6 +43,56 @@ def from_strict():
     rows.sort(key=lambda r: (r["days"], -(r.get("price") or 0)))
     passed = len(d.get("all", [])) - len(d.get("open", []))
     return rows, passed, "本文の締切記載を機械検証（根拠文つき）"
+
+
+def from_wide():
+    """extract_deadlines_wide.py の全 600 記事引き直し結果。evidence 付きだけ通す。"""
+    p = ROOT / "data" / "es_deadlines_wide.json"
+    if not p.exists():
+        return []
+    d = json.loads(p.read_text(encoding="utf-8"))
+    rows, dropped = [], 0
+    for r in d.get("open", []):
+        try:
+            days = (dt.date.fromisoformat(r["date"]) - TODAY).days
+        except Exception:
+            dropped += 1
+            continue
+        if days < 0 or not r.get("url") or not r.get("evidence"):
+            dropped += 1
+            continue
+        rows.append(dict(r, days=days))
+    if dropped:
+        print("  ★ wide: url/evidence/日付が揃わない %d 行を落とした" % dropped)
+    return rows
+
+
+def merged():
+    """strict (高精度) + wide (全面引き直し) を (url, 日付) で畳む。strict を優先する。"""
+    rows = {}
+    st = from_strict()
+    src = []
+    if st and st[0]:
+        for r in st[0]:
+            rows[(r.get("url"), r.get("date"))] = dict(r, src="strict")
+        src.append("strict %d" % len(st[0]))
+    w = from_wide()
+    add = 0
+    for r in w:
+        k = (r.get("url"), r.get("date"))
+        if k not in rows:
+            rows[k] = dict(r, src="wide")
+            add += 1
+    src.append("wide %d (新規 %d)" % (len(w), add))
+    out = sorted(rows.values(), key=lambda r: (r["days"], -(r.get("price") or 0)))
+    passed = 0
+    for f in ("es_deadlines_strict.json", "es_deadlines_wide.json"):
+        p = ROOT / "data" / f
+        if p.exists():
+            d = json.loads(p.read_text(encoding="utf-8"))
+            passed += max(0, len(d.get("all", [])) - len(d.get("open", [])))
+    method = "全 600 記事の本文から締切語と日付の近接を機械抽出（根拠文つき・" + " / ".join(src) + "）"
+    return out, passed, method
 
 
 def from_titles():
@@ -79,7 +133,7 @@ def render(rows, passed, method):
     nd = rows[0]["days"] if rows else "-"
 
     items = []
-    for r in rows[:20]:
+    for r in rows[:80]:
         badge = "🆓 無料" if not r["price"] else "¥%s" % format(r["price"], ",")
         if r["days"] <= 1:
             urg = "⚰ 明日"
@@ -93,16 +147,23 @@ def render(rows, passed, method):
                          r["date"][5:].replace("-", "/"), urg, esc(r["url"]), esc(r["firm"]),
                          badge, esc(r["title"][:52]), ev))
 
+    # 見出しの語は実集合に合わせる。wide でコンサル以外が入るのに「コンサル一覧」と騙さない。
+    k = re.compile(r"コンサル|ファーム|監査|アドバイザ|EY|PwC|デロイト|KPMG|アビーム|アーンスト|トーマツ|PwC")
+    n_cons = sum(1 for r in rows if k.search((r.get("firm") or "") + " " + (r.get("title") or "")))
+    share = n_cons / max(1, len(rows))
+    label = "28卒 コンサル・ファーム ES 締切" if share >= 0.5 else "28卒 ES 締切"
+    scope = ("%d 件（うちコンサル・ファーム %d 件）" % (len(rows), n_cons)) if share < 0.5 \
+        else ("%d 件" % len(rows))
     ld = {"@context": "https://schema.org", "@type": "ItemList",
-          "name": "28卒 コンサル・ファーム ES 締切一覧 2026年10月",
+          "name": label + "一覧 " + TODAY.strftime("%Y年%m月"),
           "dateModified": TODAY.isoformat(), "numberOfItems": len(rows),
           "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": r["firm"], "url": r["url"]}
                               for i, r in enumerate(rows[:20])]}
 
     doc = """<!doctype html><html lang="ja"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>【%(nearest)s締切】28卒 コンサル ES 締切一覧 %(today)s時点｜%(n)d件</title>
-<meta name="description" content="アビーム・DTFA・EY・PwCなど28卒ESの締切を日付順に%(n)d件。無料%(free)d本・有料%(paid)d本を紐付け。各締切は記事本文の記載を機械検証。">
+<title>【%(nearest)s締切】%(label)s一覧 %(today)s時点｜%(n)d件</title>
+<meta name="description" content="28卒 ES の締切を日付順に %(scope)s。無料%(free)d本・有料%(paid)d本を紐付け。各締切は記事本文の記載を機械検証。">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="%(base)s/es-deadlines.html">
 <script type="application/ld+json">%(ld)s</script>
@@ -115,7 +176,7 @@ a{color:#1a5fd6}.sub{color:#5a6472;font-size:.86rem}
 .box{background:#fff4f2;border-left:4px solid #d0452c;border-radius:8px;padding:12px 14px;margin:16px 0;font-size:.9rem}
 .free{background:#f2f8f2;border-left:4px solid #3f9d3f;border-radius:8px;padding:11px 14px;margin:14px 0;font-size:.85rem}
 @media(max-width:640px){.t{max-width:210px}}</style></head><body><main>
-<h1>28卒 コンサル ES 締切一覧（%(today)s 時点・%(n)d件）</h1>
+<h1>%(label)s一覧（%(today)s 時点・%(scope)s）</h1>
 <p class="sub">%(method)s。締切が迫っている順。</p>
 <div class="box"><b>最速の締切は %(nearest)s（残り %(nd)s 日）。</b>
 3日以内が %(soon)d件、うち無料で読める書き方ガイドが %(soonfree)d件。下の表からそのまま飛べます。</div>
@@ -123,14 +184,16 @@ a{color:#1a5fd6}.sub{color:#5a6472;font-size:.86rem}
 <tbody>
 %(rows)s
 </tbody></table>
+%(tracker)s
 <div class="free">過去締切 %(passed)d 件は除外。各締切日は記事本文の記載を機械抽出し、引用文を各行に併記しています。
 一覧は自動生成・毎日更新。<a href="./">企業別の目錄データベース</a></div>
 </main></body></html>""" % {
         "nearest": nearest, "today": TODAY.strftime("%Y-%m-%d"), "n": len(rows),
+        "label": label, "scope": scope, "n_cons": n_cons,
         "free": n_free, "paid": n_paid, "base": BASE,
         "ld": json.dumps(ld, ensure_ascii=False), "method": method,
         "soon": soon, "soonfree": soon_free, "nd": nd,
-        "rows": "\n".join(items), "passed": passed,
+        "rows": "\n".join(items), "passed": passed, "tracker": tracker("deadlines"),
     }
     (ROOT / "es-deadlines.html").write_text(doc, encoding="utf-8")
     buy_block.inject(ROOT / "es-deadlines.html")
@@ -141,10 +204,9 @@ a{color:#1a5fd6}.sub{color:#5a6472;font-size:.86rem}
 
 
 def main():
-    data = from_strict()
-    if not data or not data[0]:
-        data = from_titles()
-    rows, passed, method = data
+    rows, passed, method = merged()
+    if not rows:
+        rows, passed, method = from_titles()
     render(rows, passed, method)
 
 

@@ -28,7 +28,7 @@ BASE = "https://abacus.jasoncameron.dev"
 KEYS = {
     "store": "store", "home": "home", "mini": "mini", "license": "license",
     "lineup": "lineup", "company": "company", "sample": "sample",
-    "order-click": "order-click", "404": "404", "reverse": "reverse", "changes": "changes", "deliveries": "deliveries", "ai": "ai",
+    "order-click": "order-click", "404": "404", "reverse": "reverse", "changes": "changes", "deliveries": "deliveries", "deadlines": "deadlines", "ai": "ai",
 }
 # クローラ計数 (tracker_js.BOTS が単一の実装)。索引の受け取り側が沈んでいても、
 # クローラが到達したかだけ先に測れる。

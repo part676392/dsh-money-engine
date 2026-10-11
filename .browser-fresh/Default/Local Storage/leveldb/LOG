@@ -1,2 +1,3 @@
-2026/10/10-23:56:04.371 695fe7 Creating DB /Users/moherune/Documents/deepseek-harness/default-workspace/dsh-money-engine/.browser-fresh/Default/Local Storage/leveldb since it was missing.
-2026/10/10-23:56:04.373 695fe7 Reusing MANIFEST /Users/moherune/Documents/deepseek-harness/default-workspace/dsh-money-engine/.browser-fresh/Default/Local Storage/leveldb/MANIFEST-000001
+2026/10/11-13:54:03.225 78ea6b Reusing MANIFEST /Users/moherune/Documents/deepseek-harness/default-workspace/dsh-money-engine/.browser-fresh/Default/Local Storage/leveldb/MANIFEST-000001
+2026/10/11-13:54:03.226 78ea6b Recovering log #3
+2026/10/11-13:54:03.226 78ea6b Reusing old log /Users/moherune/Documents/deepseek-harness/default-workspace/dsh-money-engine/.browser-fresh/Default/Local Storage/leveldb/000003.log 

@@ -105,7 +105,7 @@ try:
         h=open("company/"+f,encoding="utf-8",errors="replace").read()
         # refresh の URL は url= (小文字) で書かれている。大文字 only にすると別名を
         # そのまま検索に渡す (実測: 付録頁 company/トヨタ自動車.html)。
-        m=_re.search(r'http-equiv="refresh"[^>]*?url=([^"'>]+)',h,_re.I)
+        m=_re.search(r'''http-equiv="refresh"[^>]*?url=([^"'>]+)''',h,_re.I)
         if not m:
             m=_re.search(r'<link rel="canonical" href="([^"]+)"',h)
         if not m: return f,None

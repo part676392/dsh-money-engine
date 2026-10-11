@@ -160,6 +160,23 @@ def syntax_sweep() -> bool:
     ok = not bad
     print(f"  syntax sweep      : {'OK' if ok else '★'}  {n} py + 1 sh / 壊れ {len(bad)}"
           + (f"  {bad[:4]}" if bad else ""))
+    # daily_loop.sh の heredoc python も同じ扱いにする。bash -n は中身を見ないため、
+    # IndexNow の python が SyntaxError で死んでも巡回は green と出た (2026-10-11 実測)。
+    loop = ROOT / "daily_loop.sh"
+    if loop.exists():
+        import re as _r
+        txt = loop.read_text(encoding="utf-8")
+        # Association ではなく delimiter を握手にする (PY 以外にも漏れないように)。
+        blocks = [m.group(2) for m in _r.finditer(
+            r"<<-?[ \t]*'?(?P<d>PY|PY3|EOF|PYEOF)'?[ \t]*\n(?P<b>.*?)\n(?P=d)\n", txt, _r.S)]
+        for n, b in enumerate(blocks, 1):
+            try:
+                compile(b, f"daily_loop.sh:heredoc#{n}", "exec")
+            except SyntaxError as e:
+                bad.append(f"daily_loop.sh heredoc#{n}:{e.lineno}:{e.msg}")
+        hb = [x for x in bad if "heredoc" in x]
+        print(f"  loop heredoc      : {'OK' if not hb else '★ ' + str(hb[:2])}"
+              f"  ({len(blocks)} block)")
     return ok
 
 

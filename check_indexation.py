@@ -174,6 +174,11 @@ def discovery_rail() -> bool:
         d_sent = d
         sub, tot = int(d.get("submitted") or 0), max(len(urls), 1)
         sub_line = f"送信 {sub}/{tot} @{d.get('at','')}"
+        # 鮮度: 巡回は日に2回走る。今日の送信記録が無い=送っていない (SyntaxError で
+        # step が死んでいた実測がある 2026-10-11)。
+        today = time.strftime("%Y-%m-%d")
+        if not str(d.get("at", "")).startswith(today):
+            bad.append(f"今日の送信記録が無い ({d.get('at','')})")
         if sub < tot * 0.9:
             bad.append(f"IndexNow 送信 {sub} / sitemap {tot} ({d.get('at','')})")
     else:

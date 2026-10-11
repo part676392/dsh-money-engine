@@ -3,7 +3,7 @@
 > 日本の転職・中途市場で「面接の情報」を実測して積む静的データ資産。
 > 収録 600 本 / 対象 473 社 / 掲載金額合計 ¥1,205,920。毎日 06:10 と 19:40 (JST) に自動更新。
 
-生成: 2026-10-11 22:48 JST
+生成: 2026-10-11 22:37 JST
 この文書にある数値はすべて再取得可能な実測です。推定値と将来見通しは本文に書いていません。
 
 ## Pages
@@ -19,7 +19,7 @@
 - [選考段階の言及 475 社](https://part676392.github.io/dsh-money-engine/selection-signals.html): 収録記事の全文から抽出した選考段階の言及集計。言及ごとに引用文つき。実測値は生成時に JSON から読む
 - [面接質問 1779 行（重複を除いた実文 1173）/ 472 社](https://part676392.github.io/dsh-money-engine/interview-questions.html): 収録記事から抽出した質問の実文と、記事が書く面接官の意図。各件に出典URL
 - [企業別の頁 (473 枚)](https://part676392.github.io/dsh-money-engine/): 会社ごとに質問実文・カテゴリ・出典URL・カテゴリの並びを載せる。
-  質問実文を持つ 496 社ぶんは、すべて頁に到達できる。
+  質問実文を持つ 472 社ぶんは、すべて頁に到達できる。
   「西日本旅客鉄道」と「JR西日本」のように名前ゆれで分裂していた 23 枚は機械に束ね、
   旧名の URL は消さずに noindex の連絡頁にして正規の頁へ飛ぶようにした。
   機械向けの道しるべ: [exports/company_pages.csv](https://part676392.github.io/dsh-money-engine/exports/company_pages.csv) (会社 -> 頁URL -> 束ね先)
@@ -36,7 +36,7 @@
   `exports/interview_questions.csv` の `question` は記事の小見出しを落とした形、`question_raw` が抽出そのまま。
   `category` は選考フロー側と同じ12名の機械分類で、迷った行は `未判定` のまま残す (63.9% を分類)。
 - 本文に現れた選考段階の言及: 書類選考 1,268、最終面接 635、一次面接 284。書類選考が過半を占める。
-- 無人巡回が積んだ観測は 3 件 (2026-10-10T23:47:13+09:00 → 2026-10-11T22:15:54+09:00)。`exports/history_timeseries.csv` に無料公開。
+- 無人巡回が積んだ観測は 3 件 (2026-10-10T23:47:13+09:00 → 2026-10-11T22:37:42+09:00)。`exports/history_timeseries.csv` に無料公開。
   UTF-8 BOM 付きなので `utf-8-sig` で読む。空欄は「その頃は測っていなかった」で 0 ではない。
   各行に元 file の SHA-256 を付け、後から数字を差し替えていないことを検証できるようにした。
 
@@ -53,7 +53,7 @@
 - 1社だけ $5 の中身: その社の質問実文・並び・締切観測・出典URLを CSV 1 本に固めて納品。
   質問実文が 0 文の社にはお金を取らない (締切頁のラベルが正直に出す)。
 - 歴史スナップショット一式 $25 の中身 (実測の行数): `history_timeseries.csv` 3 行 /
-  `es_deadlines_history.csv` 780 行 / `source_liveness.csv` 2647 行。
+  `es_deadlines_history.csv` 795 行 / `source_liveness.csv` 2727 行。
   GitHub Release として Version 付きの zip で降ろせる (中の行数がその日の記録と一致するのは
   `check_release.py` が毎巡回で測る): https://github.com/part676392/dsh-money-engine/releases/latest
 - 注文: https://part676392.github.io/dsh-money-engine/data-license.html ／ issue form (https://github.com/part676392/dsh-money-engine/issues/new?template=order.yml) ／

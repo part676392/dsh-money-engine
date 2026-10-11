@@ -1,0 +1,257 @@
+{
+ "checked_at": "2026-10-11T13:48:11+0900",
+ "counters": {
+  "store": {
+   "value": 4,
+   "delta": 0,
+   "key": "store",
+   "read_error": null
+  },
+  "home": {
+   "value": 26,
+   "delta": 1,
+   "key": "home",
+   "read_error": null
+  },
+  "mini": {
+   "value": 1,
+   "delta": 0,
+   "key": "mini",
+   "read_error": null
+  },
+  "license": {
+   "value": 4,
+   "delta": 0,
+   "key": "license",
+   "read_error": null
+  },
+  "lineup": {
+   "value": 5,
+   "delta": 0,
+   "key": "lineup",
+   "read_error": null
+  },
+  "company": {
+   "value": 1,
+   "delta": 0,
+   "key": "company",
+   "read_error": null
+  },
+  "sample": {
+   "value": 3,
+   "delta": 0,
+   "key": "sample",
+   "read_error": null
+  },
+  "order-click": {
+   "value": 3,
+   "delta": 0,
+   "key": "order-click",
+   "read_error": null
+  },
+  "404": {
+   "value": null,
+   "delta": null,
+   "key": "404",
+   "read_error": "Key not found"
+  },
+  "reverse": {
+   "value": 2,
+   "delta": 0,
+   "key": "reverse",
+   "read_error": null
+  },
+  "changes": {
+   "value": null,
+   "delta": null,
+   "key": "changes",
+   "read_error": "Key not found"
+  },
+  "deliveries": {
+   "value": null,
+   "delta": null,
+   "key": "deliveries",
+   "read_error": "Key not found"
+  },
+  "ai": {
+   "value": null,
+   "delta": null,
+   "key": "ai",
+   "read_error": "Invalid key: length must be between 3 and 64 characters inclusive"
+  },
+  "bot-google": {
+   "value": null,
+   "delta": null,
+   "key": "bot-google",
+   "read_error": "Key not found"
+  },
+  "bot-bing": {
+   "value": null,
+   "delta": null,
+   "key": "bot-bing",
+   "read_error": "Key not found"
+  },
+  "bot-ddg": {
+   "value": null,
+   "delta": null,
+   "key": "bot-ddg",
+   "read_error": "Key not found"
+  },
+  "bot-slurp": {
+   "value": null,
+   "delta": null,
+   "key": "bot-slurp",
+   "read_error": "Key not found"
+  },
+  "bot-marginalia": {
+   "value": null,
+   "delta": null,
+   "key": "bot-marginalia",
+   "read_error": "Key not found"
+  },
+  "bot-mojeek": {
+   "value": null,
+   "delta": null,
+   "key": "bot-mojeek",
+   "read_error": "Key not found"
+  },
+  "bot-brave": {
+   "value": null,
+   "delta": null,
+   "key": "bot-brave",
+   "read_error": "Key not found"
+  },
+  "bot-perplexity": {
+   "value": null,
+   "delta": null,
+   "key": "bot-perplexity",
+   "read_error": "Key not found"
+  },
+  "bot-openai": {
+   "value": null,
+   "delta": null,
+   "key": "bot-openai",
+   "read_error": "Key not found"
+  },
+  "bot-claude": {
+   "value": null,
+   "delta": null,
+   "key": "bot-claude",
+   "read_error": "Key not found"
+  },
+  "bot-ccbot": {
+   "value": null,
+   "delta": null,
+   "key": "bot-ccbot",
+   "read_error": "Key not found"
+  },
+  "bot-amazon": {
+   "value": null,
+   "delta": null,
+   "key": "bot-amazon",
+   "read_error": "Key not found"
+  },
+  "bot-apple": {
+   "value": null,
+   "delta": null,
+   "key": "bot-apple",
+   "read_error": "Key not found"
+  },
+  "bot-petal": {
+   "value": null,
+   "delta": null,
+   "key": "bot-petal",
+   "read_error": "Key not found"
+  },
+  "bot-any": {
+   "value": null,
+   "delta": null,
+   "key": "bot-any",
+   "read_error": "Key not found"
+  },
+  "src-ghrepo": {
+   "value": 1,
+   "surface": "GitHub リポジトリ README",
+   "target": "index.html",
+   "read_error": null,
+   "tagged": true
+  },
+  "src-gist": {
+   "value": null,
+   "surface": "Gist 目録",
+   "target": "exports/questions_catalog.csv",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-release": {
+   "value": null,
+   "surface": "GitHub release notes",
+   "target": "sample.html",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-pr57": {
+   "value": 3,
+   "surface": "PR okhosting/awesome-open-data#57",
+   "target": "index.html",
+   "read_error": null,
+   "tagged": true
+  },
+  "src-pr32": {
+   "value": 5,
+   "surface": "PR taishi-i/awesome-japanese-nlp-resources#32",
+   "target": "index.html",
+   "read_error": null,
+   "tagged": true
+  },
+  "src-hn": {
+   "value": null,
+   "surface": "Hacker News (垢 dshlaba71655)",
+   "target": "index.html",
+   "read_error": "Key not found",
+   "tagged": false
+  },
+  "src-rentry-fic": {
+   "value": null,
+   "surface": "rentry.co b8zgbuyv",
+   "target": "store/",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-rentry-data": {
+   "value": null,
+   "surface": "rentry.co zd3s2wkt",
+   "target": "data-license.html",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-rentry-lineup": {
+   "value": null,
+   "surface": "rentry.co xnvrgn8g",
+   "target": "question-lineups.html",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-rentry-index": {
+   "value": null,
+   "surface": "rentry.co q4aiokt7",
+   "target": "index.html",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-prof": {
+   "value": null,
+   "surface": "GitHub プロフィール頁 README",
+   "target": "index.html / data-license.html / sample.html",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-jopendata": {
+   "value": 6,
+   "surface": "github PR japan-opendata/awesome-japan-opendata#30",
+   "target": "https://github.com/japan-opendata/awesome-japan-opendata/pull/30",
+   "read_error": null,
+   "tagged": true
+  }
+ }
+}

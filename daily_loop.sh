@@ -37,6 +37,34 @@ mkdir -p logs
     fi
     git push -q "$_O" HEAD:main
   }
+
+# Pages の build を同じ commit で二重に走らせない。legacy Pages は競合すると
+# "Page build failed." を出すだけで live は正しかった (2026-10-11 実測:
+# 同じ commit に built と errored が並んだ)。護りは HEAD が配られたかだけを見る。
+pages_trigger() {
+  _U="$1"
+  _SHA=$(git ls-remote "$_U" HEAD 2>/dev/null | cut -f1)
+  _ST=$(gh api "repos/part676392/dsh-money-engine/pages/builds?per_page=12" --jq '.[] | "\(.status) \(.commit)"' 2>/dev/null)
+  if [ -n "$_SHA" ] && printf "%s" "$_ST" | grep -qE "^(built|building|queued) ${_SHA}$"; then
+    echo "  pages: HEAD の build が既にある (飛ばす)"
+  else
+    gh api -X POST repos/part676392/dsh-money-engine/pages/builds >/dev/null 2>&1 \
+      && echo "  pages build 指示"
+  fi
+}
+
+pages_check() {
+  _U="$1"
+  _SHA=$(git ls-remote "$_U" HEAD 2>/dev/null | cut -f1)
+  _ST=$(gh api "repos/part676392/dsh-money-engine/pages/builds?per_page=12" --jq '.[] | "\(.status) \(.commit)"' 2>/dev/null)
+  if [ -z "$_SHA" ]; then echo "  pages build: 照合出来ず (remote SHA が読めない)"; return 0; fi
+  if printf "%s" "$_ST" | grep -q "^built ${_SHA}$"; then
+    echo "  pages build: HEAD が built (live は最新)"
+  else
+    echo "  pages build: ★ HEAD の built が無い / latest=$(printf "%s" "$_ST" | head -1)"
+    echo "  ★★★ GUARD FAIL: pages — Pages に HEAD が配られていない (live が古い)"
+  fi
+}
   TOK0=$(gh auth token 2>/dev/null)
   if [ -z "$TOK0" ]; then
     echo "  ★★★ GUARD FAIL: gh token が空 (git pull で固まる前に終了)"
@@ -69,11 +97,9 @@ mkdir -p logs
     sync_push "https://x-access-token:${TOK}@github.com/part676392/dsh-money-engine.git" \
       && echo "  pushed" || echo "  PUSH FAILED"
     python3 check_regression.py --update 2>&1 | tail -1
-    gh api -X POST repos/part676392/dsh-money-engine/pages/builds >/dev/null 2>&1
+    pages_trigger "https://x-access-token:${TOK}@github.com/part676392/dsh-money-engine.git"
     sleep 40
-    PB=$(gh api repos/part676392/dsh-money-engine/pages/builds --jq '.[0] | .status + " " + (.error.message // "-")' 2>/dev/null)
-    echo "  pages build: $PB"
-    case "$PB" in *errored*) echo "  ★★★ GUARD FAIL: pages — Pages の build が失敗した (live が古い)";; esac && echo "  pages build triggered"
+    pages_check "https://x-access-token:${TOK}@github.com/part676392/dsh-money-engine.git"
     sleep 30
     fi
   else
@@ -232,16 +258,14 @@ PY
     else
       echo "  ★ PUSH UNCONFIRMED local=${LOCAL:0:10} remote=${REMOTE:0:10}"
     fi
-    gh api -X POST repos/part676392/dsh-money-engine/pages/builds >/dev/null 2>&1
+    pages_trigger "https://x-access-token:${TOK2}@github.com/part676392/dsh-money-engine.git"
   fi
   # 守りの集計。各検査は print するだけで exit を汚さないので、赤が出ても
   # 無人実行は朝まで黙ったまま通る (2026-10-11 の secret ignore 漏れが実例)。
   # だから今回の分だけ切り出して赤を1行の警告と状態ファイルにする。
     # build を指示したかに関わらず、今配られている build の状態を最後に1回読む。
     # (指示口が2つで片方は条件付き。errored 2 件が出ても日志に何も出なかった実測がある)
-    PB=$(gh api repos/part676392/dsh-money-engine/pages/builds --jq '.[0] | .status + " " + (.error.message // "-")' 2>/dev/null)
-    echo "  pages build (最後): $PB"
-    case "$PB" in *errored*) echo "  ★★★ GUARD FAIL: pages — Pages の build が失敗 (live が古い)";; esac
+    pages_check "https://x-access-token:${TOK2}@github.com/part676392/dsh-money-engine.git"
 
   RUN=$(awk '/start =====/{buf=""} {buf=buf "\n" $0} END{print buf}' "$LOG")
   FAIL=""

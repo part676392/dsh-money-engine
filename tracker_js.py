@@ -14,6 +14,27 @@ ABACUS = "https://abacus.jasoncameron.dev/hit/dsh-money-engine/"
 # f-string の中で JS の {} を書くと置換フィールドに化けるので、ここで組み立てる。
 SELF_HOST_MARK = "location.hostname"
 
+# クローラを UA で分ける。索引の受け取り側 (referrer) が 0 件のあいだ、
+# 「検索エンジンのクローラが頁に到達したか」が索引の唯一先に測れる証になる (鍵不要)。
+# 順序が意味を持つ: 上から最初に当たった 1 個だけ数える (二重計数を防ぐ)。
+BOTS = [
+    ("Googlebot|Google-InspectionTool|GoogleOther|APIs-Google|AdsBot-Google", "bot-google"),
+    ("bingbot|adidxbot", "bot-bing"),
+    ("DuckDuckBot|DuckDuckGo-Garage", "bot-ddg"),
+    ("Slurp", "bot-slurp"),
+    ("Marginalia", "bot-marginalia"),
+    ("MojeekBot", "bot-mojeek"),
+    ("bravebot|Brave%20Search", "bot-brave"),
+    ("PerplexityBot", "bot-perplexity"),
+    ("OAI-SearchBot|ChatGPT-User|GPTBot", "bot-openai"),
+    ("ClaudeBot|claude-ai|Claude-Web", "bot-claude"),
+    ("CCBot", "bot-ccbot"),
+    ("Amazonbot", "bot-amazon"),
+    ("Applebot", "bot-apple"),
+    ("PetalBot", "bot-petal"),
+]
+BOT_KEYS = [k for _, k in BOTS] + ["bot-any"]
+
 
 def tracker(key: str) -> str:
     """頁に1個入れる <script>。
@@ -35,8 +56,20 @@ def tracker(key: str) -> str:
         + "if(h&&h!==" + SELF_HOST_MARK + "){"
         + "fetch(b+'ref-'+h,{mode:'no-cors',keepalive:true});"
         + "fetch(b+'ref-any',{mode:'no-cors',keepalive:true});}}catch(e3){}}"
+        # クローラ計数: navigator を読めない環境 (node の護りなど) では黙る
+        + "var ua='';try{ua=(navigator&&navigator.userAgent)||'';}catch(e4){}"
+        + "if(ua){var BS=" + _bots_js() + ";"
+        + "for(var i=0;i<BS.length;i++){if(BS[i][0].test(ua)){"
+        + "fetch(b+BS[i][1],{mode:'no-cors',keepalive:true});"
+        + "fetch(b+'bot-any',{mode:'no-cors',keepalive:true});break;}}}"
         + "}catch(e){}})();</script>"
     )
+
+
+def _bots_js() -> str:
+    """JS 側の [regex, key] 表。Python の BOTS が単一の実装。"""
+    inner = ",".join("[/" + pat + "/i,'" + key + "']" for pat, key in BOTS)
+    return "[" + inner + "]"
 
 
 def beacon_js(key: str) -> str:

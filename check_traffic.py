@@ -30,6 +30,11 @@ KEYS = {
     "lineup": "lineup", "company": "company", "sample": "sample",
     "order-click": "order-click", "404": "404", "reverse": "reverse",
 }
+# クローラ計数 (tracker_js.BOTS が単一の実装)。索引の受け取り側が沈んでいても、
+# クローラが到達したかだけ先に測れる。
+from tracker_js import BOT_KEYS as _BOT_KEYS  # noqa: E402
+
+KEYS.update({k: k for k in _BOT_KEYS})
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
        "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
 SITE = "https://part676392.github.io/dsh-money-engine"
@@ -163,6 +168,10 @@ def main() -> int:
               f"  ({len(spots)}/{len(disc.get('github_topics') or [])} を抜き取り)")
 
     import shutil as _sh
+    BOT_UA = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+    BOT_KEY = "bot-google"
+    HUMAN_UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
     node = _sh.which("node")
     tgt = {"question-lineups.html": "lineup", "store/": "store", "sample.html": "sample"}
     if node:
@@ -196,6 +205,34 @@ def main() -> int:
             ok = ok and good
             print(f"    tracker exec {path:20s} {'発火 OK' if good else '★ 発火せず'}  "
                   + str([g.split('/hit/dsh-money-engine/')[-1] for g in hits]))
+
+            # クローラの UA でも発火すること (索引の前提条件を先に測る計器)。
+            bot_js = ("globalThis.__h=[];globalThis.fetch=function(u,o){globalThis.__h.push(String(u));"
+                      "return {then(){},catch(){}};};globalThis.location={search:'',hostname:'x'};"
+                      "globalThis.document={referrer:''};"
+                      "globalThis.navigator={userAgent:'" + BOT_UA + "'};\n" + js
+                      + "\nconsole.log(JSON.stringify(globalThis.__h));\n")
+            tmp.write_text(bot_js, encoding="utf-8")
+            rb = subprocess.run([node, str(tmp)], capture_output=True, text=True, timeout=45)
+            try:
+                bh = [g.split("/hit/dsh-money-engine/")[-1] for g in json.loads(rb.stdout.strip().splitlines()[-1])]
+            except Exception:  # noqa: BLE001
+                bh = []
+            bgood = BOT_KEY in bh and "bot-any" in bh
+            ok = ok and bgood
+            print(f"    tracker bot  {path:20s} {'発火 OK' if bgood else '★ 発火せず'}  {bh}")
+
+            # 人間の UA では bot-* が鳴らないこと (二重計数の否定)。
+            hum = bot_js.replace(BOT_UA, HUMAN_UA, 1)
+            tmp.write_text(hum, encoding="utf-8")
+            rh = subprocess.run([node, str(tmp)], capture_output=True, text=True, timeout=45)
+            try:
+                hh = [g.split("/hit/dsh-money-engine/")[-1] for g in json.loads(rh.stdout.strip().splitlines()[-1])]
+            except Exception:  # noqa: BLE001
+                hh = []
+            hok = not [x for x in hh if x.startswith("bot-")]
+            ok = ok and hok
+            print(f"    tracker human{path:14s} {'bot なし OK' if hok else '★ bot が鳴った'}  {hh}")
         if not ok:
             print("  ★ tracker の発火が証明できない (頁か JS が壊れている)")
     else:

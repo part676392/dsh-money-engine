@@ -126,6 +126,12 @@ def traffic_keys_registered() -> bool:
             used.add(m.group(1))
         for m in _re.finditer(r"""beacon_js\(\s*["']([a-z0-9-]+)["']""", t):
             used.add(m.group(1))
+    # tracker_js が撃つ bot-* も数えているか (UA 表を更新して登録を忘れる事故)。
+    try:
+        from tracker_js import BOT_KEYS as _BK
+        used |= set(_BK)
+    except Exception:  # noqa: BLE001
+        pass
     missing = sorted(used - set(CT.KEYS))
     ok = not missing
     print(f"    traffic keys      : {'OK' if ok else '★ KEYS に無い key ' + str(missing)}"

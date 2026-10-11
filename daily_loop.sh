@@ -115,7 +115,10 @@ fi
   # のままだったので、個数一致の護りが正直に割れを見て push を見送った (guards=regression)。
   python3 build_dataset_store.py 2>&1 | tail -1
 
-  git add -A
+  # secret を public に押してから ★ が出る順番が逆だった (実測: .note-profile/ 487 件を
+  # push した後に secrets 護りが ★ を出した)。Playwright の永続 profile は commit しない。
+  git add -A -- . ":(exclude)*-profile/" 2>/dev/null || git add -A
+  python3 secrets_check.py 2>&1 | tail -3
   if ! git diff --cached --quiet; then
     # 劣化してから push しない。runner を ~/Documents の外に移すと
     # full_bodies.json の無い環境が現れ、質問頁が 1,779 → 94 行に縮んで
@@ -305,7 +308,10 @@ $(date ...) PR 入口 ★"
     python3 polish_buy_bars.py     2>&1 | tail -2
   python3 audit_aeo.py        2>&1 | tail -10
   # 履歴頁と計測値はここで再生成したので、二度目の commit で載せる
-  git add -A
+  # secret を public に押してから ★ が出る順番が逆だった (実測: .note-profile/ 487 件を
+  # push した後に secrets 護りが ★ を出した)。Playwright の永続 profile は commit しない。
+  git add -A -- . ":(exclude)*-profile/" 2>/dev/null || git add -A
+  python3 secrets_check.py 2>&1 | tail -3
   if ! git diff --cached --quiet; then
     git -c user.name="part676392" -c user.email="72697109+part676392@users.noreply.github.com" \
         commit -qm "history refresh $(date +%F)"

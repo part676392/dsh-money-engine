@@ -210,5 +210,6 @@
   "why": "実測で締切頁 32 load に対して注文 link しか計数が無く、どの link を踏んだか分からなかった (上部欄 4 本中 beacon 1 本)",
   "checked_by": "check_regression.strip_beacons()"
  },
- "updated": "2026-10-11"
+ "updated": "2026-10-12",
+ "selftest_note": "2026-10-11T23:5x JST に自苑分離を入れた。それ以前の計数 (home 36 / src-pr32 34 / src-jopendata 11 / src-pr57 8 / src-prof 3 / src-ghrepo 1) は自分の計測と部外者が混ざった値で、内訳は戻せない。分離後に自分として確認できたのは self-home 2 / src-selftest 3 のみ。ただし分離直後に素通り (src 無し) で 1 回自分で開いたので、home の +1 1 件は部外者ではない (実測)。以降、自分のブラウザ点検は ?src=selftest か UA に dsh-selftest を巻く。"
 }

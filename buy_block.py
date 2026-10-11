@@ -206,7 +206,7 @@ def refresh_mail(path) -> int:
     return n
 
 
-def inject(path, count_txt: str = "", top: str = "") -> bool:
+def inject(path, count_txt: str = "", top: str = "", hist: bool = False) -> bool:
     """書き出した html に注文欄を足す。
     %書式や .format の土台は {BUY} が展開されないので、後から差す方を信用する。
     top を渡すと </h1> の直後にも上部欄を差す (実測: 注文欄が 99% 目にしか無かった)。"""
@@ -238,7 +238,7 @@ def inject(path, count_txt: str = "", top: str = "") -> bool:
     # 「order link が有るから挿さない」にすると、行に $5 を置いた頁 (締切頁) で下端の注文欄が
     # 永久に入らなかった (実測 live: mailto 無し)。marker で数える。
     if BLOCK_OPEN not in h:
-        block = html(count_txt=count_txt)
+        block = html(count_txt=count_txt, hist=hist)
         if "</main>" in h:
             h = h.replace("</main>", block + "</main>", 1)
         elif "</body>" in h:

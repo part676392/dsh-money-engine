@@ -13,7 +13,9 @@
 from __future__ import annotations
 
 import buy_block
-BUY = buy_block.html()
+# $25 の中身 (manifest の実測) も一緒に載せる。実測 (2026-10-11): 歴史一式を出していたのは
+# 2 面だけで、一番読まれている締切頁には有った物が無い側 (sample / lineups) と有る側がばらばらだった。
+BUY = buy_block.html(hist=True)
 import collections
 import html
 import urllib.parse

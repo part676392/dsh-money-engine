@@ -103,6 +103,45 @@ def plan_prefills(quiet: bool = False) -> bool:
     return ok
 
 
+def history_honest(quiet: bool = False) -> bool:
+    """$25 の中身を実数で出している面と、manifest の実測が一致しているかの点検。
+    実測 (2026-10-11): 中身を出していたのは 2 面だけで、質問実文を出す面と同じ数が抜けていた。"""
+    import csv as _csv
+    man = {}
+    mf = ROOT / "exports" / "manifest.csv"
+    if mf.exists():
+        with open(mf, encoding="utf_8_sig") as fh:
+            for r in _csv.DictReader(fh):
+                man[r.get("file", "")] = int(r.get("rows") or 0)
+    if not man:
+        print("    $25 の中身        : ★ manifest が読めない")
+        return False
+    need = {k: v for k, v in man.items()
+            if k in ("history_timeseries.csv", "es_deadlines_history.csv", "source_liveness.csv")}
+    missing, stale, shown = [], [], 0
+    for rel in PRICED:
+        f = ROOT / rel
+        h = f.read_text(encoding="utf-8", errors="replace") if f.exists() else ""
+        i = h.find("歴史スナップショット一式 ($25) の中身")
+        if i < 0:
+            missing.append(rel)
+            continue
+        shown += 1
+        seg = re.sub(r"<[^>]+>", " ", h[i:i + 700])
+        for fname, rows in need.items():
+            m = re.search(re.escape(fname) + r"\s*\((\d+) 行\)", seg)
+            if not m:
+                stale.append(f"{rel}: {fname} の行数が無い")
+            elif int(m.group(1)) != rows:
+                stale.append(f"{rel}: {fname} {m.group(1)} 行 / manifest {rows} 行")
+    ok = not missing and not stale
+    first = (missing + stale)
+    print("    $25 の中身        : " + ("OK" if ok else "★ " + first[0][:76])
+          + f" ({shown}/{len(PRICED)} 面が実数を出し、manifest {len(need)} ファイルと一致"
+          + f" / 全站 {len(list((ROOT).glob('*.html')))} 頁に展開)")
+    return ok
+
+
 def card_links(h: str) -> list:
     return [u for u in HTML_ATTR.findall(h) if any(k in u for k in CARD_HOSTS)]
 
@@ -152,7 +191,8 @@ def check(quiet: bool = False) -> bool:
         else:
             lying.append(rel)
     plans_ok = plan_prefills(quiet)
-    ok = not lying and not no_mail and plans_ok
+    hist_ok = history_honest(quiet)
+    ok = not lying and not no_mail and plans_ok and hist_ok
     print(f"    カードで買えるか  : "
           + ("OK" if ok else f"★ 支払いを何も書いていない {len(lying)} 面 / メール口の無い {len(no_mail)} 面 (実測)"
              if no_mail else
@@ -166,6 +206,8 @@ def check(quiet: bool = False) -> bool:
         print(f"      ★ メール口の無い面: {no_mail[:4]}")
     if not plans_ok:
         print("      ★ form に無いプラン語か、plan の無い link が有る")
+    if not hist_ok:
+        print("      ★ $25 の中身を実数で出していない / manifest と違う面が有る")
     return ok
 
 

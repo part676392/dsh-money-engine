@@ -334,7 +334,8 @@ def main():
         ROOT / "es-deadlines.html",
         count_txt=(f"締切 {len(rows)} 件・{n_firms}社（収録内訳: 質問実文あり {n_q} 社 / "
                    f"締切・書き方の記事だけ {n_stub} 社）。質問実文 0 文の社は買わないでください"
-                   "——上の表のラベルが正直に出します。"))
+                   "——上の表のラベルが正直に出します。"),
+        hist=True)
     # 面を出した後に台帳へ積む (面の 初出日 は前の巡回までの台帳からしか引かない)
     DH.append()
     DH.write_csv()

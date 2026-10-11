@@ -56,14 +56,29 @@ pages_trigger() {
 pages_check() {
   _U="$1"
   _SHA=$(git ls-remote "$_U" HEAD 2>/dev/null | cut -f1)
-  _ST=$(gh api "repos/part676392/dsh-money-engine/pages/builds?per_page=12" --jq '.[] | "\(.status) \(.commit)"' 2>/dev/null)
   if [ -z "$_SHA" ]; then echo "  pages build: 照合出来ず (remote SHA が読めない)"; return 0; fi
-  if printf "%s" "$_ST" | grep -q "^built ${_SHA}$"; then
-    echo "  pages build: HEAD が built (live は最新)"
+  _PEND=0
+  for _t in 1 2 3 4; do
+    _ST=$(gh api "repos/part676392/dsh-money-engine/pages/builds?per_page=15" --jq '.[] | "\(.status) \(.commit)"' 2>/dev/null)
+    if printf "%s" "$_ST" | grep -q "^built ${_SHA}$"; then
+      echo "  pages build: HEAD が built (live は最新)"
+      return 0
+    fi
+    _PEND=$(printf "%s" "$_ST" | grep -cE "^(building|queued) ${_SHA}$")
+    if [ "$_PEND" -gt 0 ] && [ "$_t" -lt 4 ]; then
+      echo "  pages build: HEAD を build 中 ($_t/4 を待つ)"
+      sleep 30
+      continue
+    fi
+    break
+  done
+  _LATEST=$(printf "%s" "$_ST" | head -1)
+  if [ "$_PEND" -gt 0 ]; then
+    echo "  pages build: ★ HEAD の build が 90 秒たっても終わらない / latest=${_LATEST}"
   else
-    echo "  pages build: ★ HEAD の built が無い / latest=$(printf "%s" "$_ST" | head -1)"
-    echo "  ★★★ GUARD FAIL: pages — Pages に HEAD が配られていない (live が古い)"
+    echo "  pages build: ★ HEAD の built が無い (無いか errored) / latest=${_LATEST}"
   fi
+  echo "  ★★★ GUARD FAIL: pages — Pages に HEAD が配られていない (live が古い)"
 }
   TOK0=$(gh auth token 2>/dev/null)
   if [ -z "$TOK0" ]; then

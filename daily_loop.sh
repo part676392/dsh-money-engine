@@ -237,6 +237,12 @@ PY
   # 守りの集計。各検査は print するだけで exit を汚さないので、赤が出ても
   # 無人実行は朝まで黙ったまま通る (2026-10-11 の secret ignore 漏れが実例)。
   # だから今回の分だけ切り出して赤を1行の警告と状態ファイルにする。
+    # build を指示したかに関わらず、今配られている build の状態を最後に1回読む。
+    # (指示口が2つで片方は条件付き。errored 2 件が出ても日志に何も出なかった実測がある)
+    PB=$(gh api repos/part676392/dsh-money-engine/pages/builds --jq '.[0] | .status + " " + (.error.message // "-")' 2>/dev/null)
+    echo "  pages build (最後): $PB"
+    case "$PB" in *errored*) echo "  ★★★ GUARD FAIL: pages — Pages の build が失敗 (live が古い)";; esac
+
   RUN=$(awk '/start =====/{buf=""} {buf=buf "\n" $0} END{print buf}' "$LOG")
   FAIL=""
   echo "$RUN" | grep -q "no secret in public repo: False" && FAIL="$FAIL secret"

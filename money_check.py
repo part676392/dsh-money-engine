@@ -629,6 +629,12 @@ def outreach_check() -> bool:
     return ok
 
 
+def _404_fetch() -> str:
+    """護りが JS の形を手写ししない (tracker_js が単一の実装)。"""
+    from tracker_js import page_fetch
+    return page_fetch("404")
+
+
 def not_found_check() -> bool:
     """迷った人を目録と値段に戻せるか。GitHub 既定の 404 だと資産の名前も $5 も消える。
     ステータスコードは 404 のままにする (嘘の 200 にしない)。"""
@@ -643,7 +649,7 @@ def not_found_check() -> bool:
         "値段の入口": "1社だけ $5" in body,
         "目録へのlink": "interview-questions.html" in body,
         "noindex": 'content="noindex' in body,
-        "訪問計": 'fetch(b+"404"' in body,
+        "訪問計": _404_fetch() in body,
     }
     ok = code == "404" and all(need.values())
     print(f"  404 の受け皿       : {'OK' if ok else '★'}  HTTP {code}  "

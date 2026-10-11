@@ -36,12 +36,19 @@ BOTS = [
 BOT_KEYS = [k for _, k in BOTS] + ["bot-any"]
 
 
+def page_fetch(key: str) -> str:
+    """頁計数の fetch 呼び出し断片。護りが JS の文字列を手写しすると、形を変えた時に
+    黙って ★ を撒く (実測 2026-10-11: 自苑分離で `fetch(b+"404"` が消え、404 の受け皿の
+    護りが ★ になった)。生成側と護りの両方がここを呼んで、1 箇所に留める。"""
+    return "fetch(b+(sl?'self-" + key + "':'" + key + "')"
+
+
 def tracker(key: str) -> str:
     """頁に1個入れる <script>。
     - 鍵 `key` を叩く (頁別の計数)
     - `?src=<token>` があれば `src-<token>` も叩く (流入源)
     - `?src=selftest` (自分の護り・点検で開いた訪問) は頁計数を汚さず `self-<key>` へ。
-      実測 2026-10-11: home 32 / lineup 7 という读数に自分の計測が何件混じるか読めず、
+      実測 2026-10-11: home 32 / lineup 7 という読値に自分の計測が何件混じるか読めず、
       「部外者が来たか」に答えられなかった。分離すると残りが部外者だけになる。
     - `document.referrer` の host を `ref-<host>` で叩き、全量を `ref-any` に足す。
       自サイト内遷移 (same host) は数えない。
@@ -54,7 +61,7 @@ def tracker(key: str) -> str:
         + "var ua='';try{ua=(navigator&&navigator.userAgent)||'';}catch(e4){}"
         # 自苑の合図は 2 通り受け付ける: ?src=selftest か、UA に dsh-selftest を巻いた訪問。
         + "var sl=(m==='selftest')||(/dsh-selftest/.test(ua));"
-        + "fetch(b+(sl?'self-" + key + "':'" + key + "'), {mode:'no-cors',keepalive:true});"
+        + page_fetch(key) + ", {mode:'no-cors',keepalive:true});"
         + "if(m){fetch(b+'src-'+m, {mode:'no-cors',keepalive:true});}"
         + "var r='';try{r=document.referrer||'';}catch(e2){}"
         + "if(r&&!sl){try{var h=new URL(r).hostname.toLowerCase().replace(/[^a-z0-9.-]/g,'');"

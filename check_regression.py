@@ -454,12 +454,18 @@ def tracker_single_source() -> bool:
         for m in re.finditer(r"<script>\(function\(\)\{.*?</script>", h, re.S):
             # 頁には URL が変数 b に入っていて、鍵は fetch(b+"home" の形 (旧) か
             # fetch(b+(sl?'self-home':'home' の形 (自苑分離入り, 2026-10-11) でしか現れない。
+            from tracker_js import page_fetch as _pf
             old = re.search(r'fetch\(b\+"([a-z0-9-]+)"', m.group(0))
-            new = re.search(r"fetch\(b\+\(sl\?'([a-z0-9-]+)':'([a-z0-9-]+)'\)", m.group(0))
+            # 新形 (self 分離, 2026-10-11) は tracker_js.page_fetch が単一の実装。
+            # 鍵だけ抜いて、断片が生成物と 1 文字も違わないかを見る。
+            new = re.search(r"sl\?'([a-z0-9-]+)':'([a-z0-9-]+)'", m.group(0))
             if new:
                 key, selfkey = new.group(2), new.group(1)
                 if selfkey != "self-" + key:
                     drift.append(f"{p.name}(selfkey:{selfkey})")
+                    continue
+                if _pf(key) not in m.group(0):
+                    drift.append(f"{p.name}(fetch形が生成物と違う)")
                     continue
             elif old:
                 key = old.group(1)

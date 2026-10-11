@@ -575,6 +575,7 @@ def outreach_check() -> bool:
         with open(sf, encoding="utf_8_sig") as fh:
             sig = max(sum(1 for _ in fh) - 1, 0)
     bad = []
+    merged_ok = []
     for r in rails:
         repo, num = r["repo"], r["pr"]
         out = subprocess.run(["gh", "api", f"repos/{repo}/pulls/{num}"],
@@ -595,7 +596,14 @@ def outreach_check() -> bool:
         except Exception:  # noqa: BLE001
             bad.append(f"#{num} comment が読めない")
         if d.get("state") != "open":
-            bad.append(f"#{num} state={d.get('state')} (不成立・併合なら台帳を更新)")
+            # 併合は勝利なので失敗にしない (実測: okhosting#57 が 13:20JST に merged になった)。
+            # ただし台帳に merged を残す役割は残すので、落ちていたら教えてもらう。
+            if d.get("merged"):
+                if not r.get("merged"):
+                    bad.append(f"#{num} は併合済みだが台帳に merged が無い (data/outreach.json)")
+                merged_ok.append(f"{repo}#{num}")
+                continue
+            bad.append(f"#{num} state={d.get('state')} (不成立なら台帳を更新)")
             continue
         if f"{nq:,}" not in body:
             bad.append(f"#{num} に公開質問数 {nq:,} が無い")
@@ -614,8 +622,10 @@ def outreach_check() -> bool:
         if sig and f"{sig:,}" not in body:
             bad.append(f"#{num} の stage 言及が CSV 行数 {sig:,} で無い")
     ok = not bad
-    print(f"    outreach 文面      : {'OK' if ok else '★ ' + '; '.join(bad[:3])}"
-          f"  ({len(rails)} 先 / 質問 {nq:,}・stage {sig:,})")
+    tail = f"  ({len(rails)} 先 / 質問 {nq:,}・stage {sig:,})"
+    if merged_ok:
+        tail += " / 併合 " + ", ".join(merged_ok)
+    print(f"    outreach 文面      : {'OK' if ok else '★ ' + '; '.join(bad[:3])}{tail}")
     return ok
 
 

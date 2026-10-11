@@ -1,0 +1,19 @@
+{
+ "checked_at": "2026-10-11T22:01:04+0900",
+ "crypto": {
+  "address": "0xA51eafFA20576898EA3A8233E28BD0833995ff37",
+  "rpc_ok": "3/4",
+  "total_eth": 0.0,
+  "live": false
+ },
+ "gumroad": {
+  "configured": true,
+  "url": "https://gumroad.com/l/bopcg",
+  "http": 200,
+  "price_shown": "¥950",
+  "blocked_by_payout": true,
+  "buy_buttons": [],
+  "card_field": false,
+  "for_sale": false
+ }
+}

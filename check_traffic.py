@@ -40,13 +40,36 @@ UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 SITE = "https://part676392.github.io/dsh-money-engine"
 
 
-def api(path: str) -> dict:
-    try:
-        r = subprocess.run(["curl", "-s", "--max-time", "15", f"{BASE}{path}"],
-                           capture_output=True, text=True, timeout=20)
-        return json.loads(r.stdout) if r.stdout.strip() else {}
-    except Exception as e:  # noqa: BLE001
-        return {"error": str(e)[:70]}
+def api(path: str, tries: int = 3) -> dict:
+    """読み取り失敗を 0 に化かさないために、失敗は error で返して 2 度引き直す。
+    実測: 39 本を連打すると src-pr32 (live 5) が黙って 0 と記録されていた。"""
+    last = {}
+    for i in range(max(1, tries)):
+        try:
+            r = subprocess.run(["curl", "-s", "--max-time", "15", f"{BASE}{path}"],
+                               capture_output=True, text=True, timeout=20)
+            if r.stdout.strip():
+                try:
+                    d = json.loads(r.stdout)
+                except ValueError:
+                    last = {"error": "JSON で無い応答 " + r.stdout[:40].replace("\n", " ")}
+                else:
+                    if isinstance(d, dict) and "value" in d:
+                        return d
+                    last = d if isinstance(d, dict) else {"error": str(d)[:60]}
+            else:
+                last = {"error": f"空応答 (curl rc={r.returncode})"}
+        except Exception as e:  # noqa: BLE001
+            last = {"error": str(e)[:70]}
+        err = str(last.get("error", ""))
+        if "Key not found" in err:
+            return last          # 未踏は本物なので引き直さない
+        if i + 1 < tries:
+            # 間借り先は quota を文章で返す ("Try again in 1.99s")。その秒数だけ待つ。
+            m = re.search(r"Try again in ([0-9.]+)", err)
+            wait = float(m.group(1)) + 1.5 if m else 1.5 + i
+            time.sleep(min(wait, 12.0))
+    return last
 
 
 def esc_ref(s: object) -> str:
@@ -107,9 +130,11 @@ def main() -> int:
         v = g.get("value")
         old = (prev.get("counters", {}).get(label) or {}).get("value")
         delta = (v - old) if (isinstance(v, int) and isinstance(old, int)) else None
-        out["counters"][label] = {"value": v, "delta": delta, "key": key}
+        out["counters"][label] = {"value": v, "delta": delta, "key": key,
+                                  "read_error": g.get("error")}
         arrow = "" if not delta else f"  ↑ +{delta}"
-        print(f"  {label:6s} hits={v}{arrow}", flush=True)
+        shown = v if isinstance(v, int) else "未取得"
+        print(f"  {label:6s} hits={shown}{arrow}", flush=True)
 
     # 流入源: 外に出した URL に ?src=<key> を付けた。頁の JS が param を見て
     # src-<key> にも hit を置くので、どの面から human が来たかが分離できる。
@@ -121,21 +146,57 @@ def main() -> int:
         print(f"  ★ 台帳が読めない: {str(e)[:60]}")
     retired = []
     src_total = 0
+    n_unknown_src = []
+    n_err_src = []
     for s in reg.get("sources", []):
         if s.get("retired"):          # 置き換えた面は数えない (雑音をやめる)
             retired.append(s["key"])
             continue
-        v = api(f"/get/dsh-money-engine/src-{s['key']}").get("value")
-        v = 0 if v is None else v
-        src_total += v
+        g = api(f"/get/dsh-money-engine/src-{s['key']}")
+        v = g.get("value")
+        err = g.get("error")
+        if isinstance(v, int):
+            src_total += v
         out["counters"]["src-" + s["key"]] = {"value": v, "surface": s["surface"],
-                                              "target": s.get("target")}
+                                              "target": s.get("target"),
+                                              "read_error": err}
+        time.sleep(1.1)     # 連打で相手が黙る (実測: quota 1 分あたり)。間隔あけ
         flag = "" if s.get("tagged", True) else "  [未打直: URL に ?src= が無い]"
         out["counters"]["src-" + s["key"]]["tagged"] = bool(s.get("tagged", True))
-        print(f"  流入 {s['key']:9s} hits={v}  ({s['surface']}){flag}", flush=True)
+        if v is None:
+            n_unknown_src.append(s["key"])
+        shown_s = v if isinstance(v, int) else "未取得"
+        print(f"  流入 {s['key']:9s} hits={shown_s}  ({s['surface']}){flag}", flush=True)
     print(f"  流入源つき合計: {src_total}", flush=True)
     if retired:
         print(f"  退役済み (数えない): {retired}", flush=True)
+
+    # 台帳 (high water mark)。abacus の鍵は増える一方なので、減った = 鍵が作り直された意味。
+    # 読み取り失敗 (value 無し) は台帳に書かない。失敗を 0 と混ぜるのが元の故障だった。
+    led_f = HIST / "ledger.json"
+    led = json.loads(led_f.read_text(encoding="utf-8")) if led_f.exists() else {}
+    drops = []
+    for k, rec in out["counters"].items():
+        v = rec.get("value")
+        if not isinstance(v, int):
+            continue
+        mx = (led.get(k) or {}).get("max")
+        if isinstance(mx, int) and v < mx:
+            drops.append(f"{k} {mx}→{v}")
+        if not isinstance(mx, int) or v > mx:
+            led[k] = {"max": v, "at": out["checked_at"]}
+    led_f.write_text(json.dumps(led, ensure_ascii=False, indent=1), encoding="utf-8")
+    never = [k for k, rec in out["counters"].items()
+             if k.startswith("src-") and rec.get("read_error") == "Key not found"]
+    failed = [k for k, rec in out["counters"].items()
+              if k.startswith("src-") and rec.get("read_error") and rec["read_error"] != "Key not found"]
+    print(f"  台帳: 記録 {len(led)} 鍵 / 面が一度も叩かれていない {len(never)} 鍵 / "
+          f"読み取り失敗 {len(failed)} 鍵", flush=True)
+    if drops:
+        print(f"  ★ 鍵が減った (作り直された) {drops[:3]}  過去の流入は失われる", flush=True)
+    if failed:
+        print(f"  ★ 読み取り失敗 {failed[:3]}  (0 と混ぜないため未取得のまま)", flush=True)
+    measure_bad = bool(drops or failed)
 
     print(f"\n  site: {SITE}/store/  (pixel は実在する img)")
     (HIST / "latest.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -282,7 +343,7 @@ def main() -> int:
             print("  ★ tracker の発火が証明できない (頁か JS が壊れている)")
     else:
         print("    tracker exec        : node が無いので実行検査は省略")
-    return 0
+    return 1 if measure_bad else 0
 
 
 if __name__ == "__main__":

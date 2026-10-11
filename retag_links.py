@@ -33,6 +33,63 @@ def url(target: str, key: str) -> str:
     return f"{SITE}/{target}{sep}src={key}"
 
 
+# 面に貼った URL が壊れていると、そこに人流が来ても 0 のまま (実測: gist の 3 link 中 2 本
+# が 404 — exports/questions_catalog.csv は実在せず、store/** は markdown の残骸)。
+STALE = {
+    "/exports/questions_catalog.csv": "/exports/interview_questions.csv",
+}
+
+
+# URL の本体に置いてよい文字。audit 側は * を含める (壊れた store/** を捕まえるため)、
+# repair 側は * を含まない (末尾の残骸を '*'{2,} で明示的に拾う)。
+URL_TAIL = r'''[^\s)"'<>]'''
+URL_TAIL_NOSTAR = r'''[^\s)"'<>*]'''
+
+
+def repair(text: str) -> str:
+    """既有の面に貼られた古いパスと残骸を直す (毎日執行で退行しても戻せる)。"""
+    out = text
+    for bad, good in STALE.items():
+        out = out.replace(bad, good)
+    out = re.sub("(" + re.escape(SITE) + "/" + URL_TAIL_NOSTAR + "*?)[*]{2,}", r"\1", out)
+    # store/** -> store// のように二重スラッシュが残るとこれも 404 になり得る
+    # 一度では畳み切れなかった多重スラッシュ (`///` -> `//`) を安定するまで直す。
+    for _ in range(3):
+        nxt = re.sub("(" + re.escape(SITE) + "/" + URL_TAIL_NOSTAR + "+)/{2,}", r"\1/", out)
+        if nxt == out:
+            break
+        out = nxt
+    return out
+
+
+def retag(text: str, tag: str) -> str:
+    """面に貼った URL に ?src= が無いと、人が来てもどの面からか分からない。"""
+    def fix(m):
+        u = m.group(0)
+        if "src=" in u:
+            return u
+        return u + ("&" if "?" in u else "?") + "src=" + tag
+
+    return re.sub(re.escape(SITE) + "/" + URL_TAIL + "*", fix, text)
+
+
+def audit_links(text: str) -> list:
+    """面に貼った自分の URL を全部実際に叩いて 200 以外を出す。"""
+    import time
+    links = sorted(set(re.findall(re.escape(SITE) + "/" + URL_TAIL + "*", text)))
+    bad = []
+    for u in links:
+        r = subprocess.run(["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}",
+                            "--max-time", "25", u], capture_output=True, text=True, timeout=35)
+        code = r.stdout.strip() or "000"
+        if code != "200":
+            bad.append((code, u.replace(SITE, "")))
+        time.sleep(0.4)
+    print(f"    面 link 実測: {len(links)} 本 / 200 以外 {len(bad)} 本"
+          + (f"  {bad[:3]}" if bad else ""))
+    return bad
+
+
 def main() -> int:
     tok = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True,
                          timeout=30).stdout.strip()
@@ -109,6 +166,17 @@ def main() -> int:
         except Exception as e:  # noqa: BLE001
             fname, cur = None, ""
             print(f"  ★ gist parse: {str(e)[:60]}")
+        fixed = retag(repair(cur), "gist") if fname else ""
+        if fname and fixed != cur:
+            payload = json.dumps({"files": {fname: {"content": fixed}}})
+            r = subprocess.run(["gh", "api", "-X", "PATCH", f"gists/{GIST}",
+                                "--input", "-"], input=payload, capture_output=True,
+                               text=True, timeout=90)
+            if r.returncode == 0:
+                done.append("gist の link を直しにいった (古いパス・残骸)")
+                cur = fixed
+            else:
+                skipped.append(f"gist 直し ★ {r.stderr[:70]}")
         if fname and "src=gist" not in cur:
             nb = cur.rstrip() + f"\n\nData page: {url('index.html', 'gist')}\nSample CSV: {url('exports/questions_catalog.csv', 'gist')}\n"
             payload = json.dumps({"files": {fname: {"content": nb}}})
@@ -125,9 +193,13 @@ def main() -> int:
         elif fname:
             skipped.append("gist 済み")
 
+    bad_links = audit_links(cur if fname else "")
     print(f"  打ち直し完了: {', '.join(done) if done else '無し'}")
     if skipped:
         print(f"  スキップ/要確認: {', '.join(skipped)}")
+    if bad_links:
+        print(f"  ★ 面の link が死んでいる {bad_links[:3]}")
+        return 1
     return 0
 
 

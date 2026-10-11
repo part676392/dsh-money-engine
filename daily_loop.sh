@@ -156,10 +156,16 @@ for ep in ["https://api.indexnow.org/indexnow","https://www.bing.com/indexnow"]:
 PY
 
   python3 check_distribution.py 2>&1 | tail -7
-  python3 retag_links.py       2>&1 | tail -3   # 面が ?src= を保っているか (自分の面だけ)
+  if ! python3 retag_links.py 2>&1 | tail -4; then
+    # 面に貼った link が死んでいたり ?src= を失っていると、人が来ても計数に残らない
+    echo "  ★★★ GUARD FAIL: surface-links — 面の link が死んでいるか ?src= を失った"
+  fi
   python3 publish_rentry.py      2>&1 | tail -5
   python3 check_hn.py            2>&1 | tail -3
-  python3 check_traffic.py 2>&1 | tail -12   # 4鍵+pixel+見出し。6 だと store/home が消える (実測になった)
+  if ! python3 check_traffic.py 2>&1 | tail -12; then
+    # 計数が読めない日は「0 件」ではなく未取得。測れない日を日志に残す。
+    echo "  ★★★ GUARD FAIL: traffic — 流入の計数が読めない (未取得)"
+  fi   # 4鍵+pixel+見出し。6 だと store/home が消える (実測になった)
   if ! python3 check_indexation.py 2>&1 | tail -14; then
     # 発見の配管 (sitemap 全量の IndexNow 送信 / key file / robots) が切れたら日志に ★
     echo "  ★★★ GUARD FAIL: discovery — 索引に渡す配管が切れている"
@@ -235,6 +241,8 @@ PY
   echo "$RUN" | grep -q "PUSH UNCONFIRMED" && FAIL="$FAIL push"
   echo "$RUN" | grep -q "GUARD FAIL: regression" && FAIL="$FAIL regression"
   echo "$RUN" | grep -q "GUARD FAIL: prose" && FAIL="$FAIL prose"
+  echo "$RUN" | grep -q "GUARD FAIL: traffic" && FAIL="$FAIL traffic"
+  echo "$RUN" | grep -q "GUARD FAIL: surface-links" && FAIL="$FAIL surface-links"
   echo "$RUN" | grep -q "GUARD FAIL: discovery" && FAIL="$FAIL discovery"
   echo "$RUN" | grep -q "GUARD FAIL: money-check" && FAIL="$FAIL money-check"
   echo "$RUN" | grep -qE "parser self-test: ([0-3])/4" && FAIL="$FAIL parser"

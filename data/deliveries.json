@@ -16,5 +16,14 @@
   "url": "https://github.com/part676392/dsh-money-engine/issues/2",
   "title": "カスタム抽出 〜50社 (5)",
   "received_at": "2026-10-10"
+ },
+ "GH-3": {
+  "kind": "issue",
+  "status": "受領 (送金待ち)",
+  "url": "https://github.com/part676392/dsh-money-engine/issues/3",
+  "title": "注文: 西日本旅客鉄道株式会社 ぶん",
+  "received_at": "2026-10-11",
+  "acked_at": "2026-10-11T23:01:17+09:00",
+  "ack_url": "https://github.com/part676392/dsh-money-engine/issues/3#issuecomment-6109812765"
  }
 }

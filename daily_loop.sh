@@ -264,6 +264,12 @@ $(date ...) PR 入口 ★"
   python3 check_payment.py 2>&1 | tail -7
   python3 check_orders.py 2>&1 | tail -14
   python3 check_orders.py --selftest 2>&1 | tail -3
+  # 受注 -> 買い手への初動 (送金先と納品の道) を人でなく返す
+  python3 ack_orders.py            2>&1 | tail -3
+  python3 ack_orders.py --selftest 2>&1 | tail -1
+  # 暗号の着金を拾って納品物を出す (増分が無い巡回は静かに終わる)
+  python3 confirm_payment.py            2>&1 | tail -2
+  python3 confirm_payment.py --selftest 2>&1 | tail -1
   python3 check_payment_rail.py 2>&1 | tail -5
 # 護りが読むのは disk の頁。再生成の直後に囀す (idempotent)。
 # polish を末尾だけにおいていたら money_check が上部欄の無い頁を見て ★ を撒いた (実測)。

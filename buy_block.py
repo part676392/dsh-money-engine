@@ -31,7 +31,9 @@ ACCOUNT_NOTE = "注文には GitHub のアカウントがいります"
 HONEST = "カード決済はまだ用意できていません"
 CARD_NOTE = ("支払い: 暗号送金 (Base / Arbitrum / Polygon / ETH) か、この帳簿への GitHub 注文。"
              + HONEST + " (受取方法の登録を Gumroad が要求していて、そこだけ人が 1 分やる必要)。"
-             "送金だけの方でも注文 form を出せばこっちで合わせます。")
+             "送金だけの方でも注文 form を出せばこっちで合わせます。"
+             "注文 form には、巡回が自動で送金先 (4チェーン対応のアドレス) と納品物への道を"
+             "その issue に返します (人が起きるまで待ちません)。")
 _CARD_WRAP = ("margin:8px 0 0;padding:8px 12px;background:#f2f5f9;border:1px solid #dfe5ec;"
               "border-radius:6px;font-size:.8rem;color:#5b6570;line-height:1.65")
 

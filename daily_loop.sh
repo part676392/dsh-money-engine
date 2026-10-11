@@ -94,6 +94,10 @@ pages_check() {
 # polish を末尾だけにおいていたら money_check が上部欄の無い頁を見て ★ を撒いた (実測)。
   python3 polish_buy_bars.py     2>&1 | tail -1
   python3 make_deadlines.py  2>&1 | tail -2
+  # 商店 (data-license) は締切の個数を書くので、締切頁を作った直後に作り直す。
+  # 実測: make_deadlines (96行) で頁が 15 件、build_dataset_store (253行) まで data-license が 12 件
+  # のままだったので、個数一致の護りが正直に割れを見て push を見送った (guards=regression)。
+  python3 build_dataset_store.py 2>&1 | tail -1
 
   git add -A
   if ! git diff --cached --quiet; then

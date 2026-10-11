@@ -27,7 +27,9 @@ BASE = "https://abacus.jasoncameron.dev"
 # live で数字が伸びていても日报だけ黙る (company を一度取りこぼした実測)。
 KEYS = {
     "store": "store", "home": "home", "mini": "mini", "license": "license",
+    # host root (part676392.github.io) の入口頁。2026-10-12 に開いたので数える側に 入れた。
     "lineup": "lineup", "company": "company", "sample": "sample",
+    "root": "root",
     "order-click": "order-click", "order-mail": "order-mail",
     "cta-sample": "cta-sample", "cta-deadlines": "cta-deadlines",
     "cta-alltext": "cta-alltext", "cta-row": "cta-row", "404": "404", "reverse": "reverse", "changes": "changes", "deliveries": "deliveries", "deadlines": "deadlines", "ai": "ai",

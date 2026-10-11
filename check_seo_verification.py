@@ -42,6 +42,33 @@ def live(p: Path) -> tuple[int, str]:
     return (int(code) if code.isdigit() else 0), body.strip()
 
 
+def host_root_check() -> bool:
+    """host root (part676392.github.io) が生きているか。2026-10-12 に開くまで 404 だった。
+    検索ロボットは project page でも host 直下の /robots.txt を読むので、そこに sitemap の
+    在処が有るかを見る。"""
+    import subprocess
+    key = (ROOT / "data" / "indexnow.key").read_text(encoding="utf-8").strip()
+    bad = []
+    code = int(subprocess.run(["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}",
+                              "--max-time", "25", "https://part676392.github.io/robots.txt"],
+                             capture_output=True, text=True).stdout or 0)
+    body = subprocess.run(["curl", "-s", "--max-time", "25",
+                           "https://part676392.github.io/robots.txt"],
+                          capture_output=True, text=True).stdout or ""
+    if code != 200:
+        bad.append(f"/robots.txt HTTP {code}")
+    if "dsh-money-engine/sitemap.xml" not in body:
+        bad.append("Sitemap の行が sitemap.xml を指していない")
+    kc = int(subprocess.run(["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}",
+                             "--max-time", "25", f"https://part676392.github.io/{key}.txt"],
+                            capture_output=True, text=True).stdout or 0)
+    if kc != 200:
+        bad.append(f"/{key[:8]}.txt HTTP {kc}")
+    ok = not bad
+    print(f"    host root        : {'OK  /robots.txt 200 + Sitemap 一行 + 鍵 200' if ok else '★ ' + '; '.join(bad)}")
+    return ok
+
+
 def check() -> bool:
     files = candidates()
     if not files:
@@ -71,7 +98,8 @@ def check() -> bool:
 
 
 if __name__ == "__main__":
-    ok = check()
+    root_ok = host_root_check()
+    ok = check() and root_ok
     if not ok:
-        print("★★★ GUARD FAIL: seo-verify — 検証ファイルが有るのに配られていない / 中身が違う")
+        print("★★★ GUARD FAIL: seo-verify — host root (robots/sitemap/鍵) か検証ファイルの配信が壊れている")
     sys.exit(0 if ok else 1)

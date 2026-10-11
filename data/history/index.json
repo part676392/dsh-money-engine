@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-10-11T23:18:20+0900",
+ "generated_at": "2026-10-11T23:12:00+0900",
  "observations": 3,
  "first_captured_at": "2026-10-10T23:47:13+09:00",
- "last_captured_at": "2026-10-11T23:15:29+09:00",
+ "last_captured_at": "2026-10-11T23:11:58+09:00",
  "runs_recorded": 132,
  "runs_csv": "exports/history_runs.csv",
  "grain_note": "observations は 日付×場所 の 1 件 (同じ日の再実行は上書き)。走った回数の-series は runs_csv に別粒度で置く。",
@@ -17,8 +17,6 @@
   "companies_with_questions",
   "flows",
   "signals",
-  "stage_mentions",
-  "company_stage_pairs",
   "lineup_rows",
   "lineup_companies",
   "lineup_modal_pct",
@@ -55,8 +53,6 @@
    "companies_with_questions": "",
    "flows": "",
    "signals": "",
-   "stage_mentions": "",
-   "company_stage_pairs": "",
    "lineup_rows": "",
    "lineup_companies": "",
    "lineup_modal_pct": "",
@@ -81,8 +77,8 @@
    "_file": "2026-10-10.json"
   },
   {
-   "captured_at": "2026-10-11T22:56:55+09:00",
-   "location": "runner",
+   "captured_at": "2026-10-11T19:56:13+09:00",
+   "location": "dev",
    "articles": "600",
    "companies": "473",
    "listed_value_yen": "1205920",
@@ -91,8 +87,6 @@
    "companies_with_questions": "472",
    "flows": "56",
    "signals": "2780",
-   "stage_mentions": "",
-   "company_stage_pairs": "",
    "lineup_rows": "5494",
    "lineup_companies": "467",
    "lineup_modal_pct": "64",
@@ -103,7 +97,7 @@
    "orders_rehearsal": "1",
    "orders_closed": "1",
    "delivered": "1",
-   "traffic_total": "51",
+   "traffic_total": "49",
    "traffic_home": "",
    "traffic_store": "",
    "traffic_license": "",
@@ -114,11 +108,11 @@
    "cash_usd": "0",
    "cash_eth": "0",
    "sha256_source": "",
-   "_file": "2026-10-11.runner.json"
+   "_file": "2026-10-11.dev.json"
   },
   {
-   "captured_at": "2026-10-11T23:15:29+09:00",
-   "location": "dev",
+   "captured_at": "2026-10-11T23:11:58+09:00",
+   "location": "runner",
    "articles": "600",
    "companies": "473",
    "listed_value_yen": "1205920",
@@ -126,18 +120,16 @@
    "questions_raw": "1873",
    "companies_with_questions": "472",
    "flows": "56",
-   "signals": "2021",
-   "stage_mentions": "2780",
-   "company_stage_pairs": "1423",
+   "signals": "2780",
    "lineup_rows": "5494",
    "lineup_companies": "467",
    "lineup_modal_pct": "64",
    "reverse_quotes": "24",
    "reverse_companies": "8",
    "deadlines_open": "12",
-   "orders_real": "1",
+   "orders_real": "0",
    "orders_rehearsal": "1",
-   "orders_closed": "1",
+   "orders_closed": "2",
    "delivered": "1",
    "traffic_total": "53",
    "traffic_home": "",
@@ -150,7 +142,7 @@
    "cash_usd": "0",
    "cash_eth": "0",
    "sha256_source": "",
-   "_file": "2026-10-11.dev.json"
+   "_file": "2026-10-11.runner.json"
   }
  ]
 }

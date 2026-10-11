@@ -1,5 +1,5 @@
 {
- "captured_at": "2026-10-11T22:56:55+09:00",
+ "captured_at": "2026-10-11T23:11:58+09:00",
  "location": "runner",
  "articles": 600,
  "companies": 473,
@@ -25,18 +25,18 @@
  "deadlines_open": 12,
  "orders_real": 0,
  "orders_rehearsal": 1,
- "orders_closed": 1,
+ "orders_closed": 2,
  "delivered": 1,
  "traffic": {
-  "home": 31,
+  "home": 32,
   "store": 4,
   "license": 4,
   "sample": 3,
   "mini": 1,
-  "lineup": 6,
+  "lineup": 7,
   "reverse": 2
  },
- "traffic_total": 51,
+ "traffic_total": 53,
  "cash_usd": 0,
  "cash_eth": 0
 }

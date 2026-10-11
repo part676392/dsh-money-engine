@@ -19,7 +19,7 @@
  },
  "GH-3": {
   "kind": "issue",
-  "status": "受領 (送金待ち)",
+  "status": "不成立 (送金なし)",
   "url": "https://github.com/part676392/dsh-money-engine/issues/3",
   "title": "注文: 西日本旅客鉄道株式会社 ぶん",
   "received_at": "2026-10-11",

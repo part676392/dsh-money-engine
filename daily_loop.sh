@@ -149,6 +149,8 @@ PY
   python3 make_release.py        2>&1 | tail -4
   python3 make_ai_gap.py        2>&1 | tail -2
   python3 make_changes.py       2>&1 | tail -2
+  # プロフィール頁 (part676392/part676392) の 数字は data から再生成。手書きだと古くなる (491社 実測)。
+  python3 build_profile_readme.py 2>&1 | tail -2
   python3 make_llms.py        2>&1 | tail -2
   # 注文 form (order.yml) の値段と社数は data から作る。手書きだと頁が先に進んで form が古くなる。
   python3 build_issue_template.py 2>&1 | tail -2

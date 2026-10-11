@@ -129,6 +129,46 @@ def qcount_check() -> bool:
     return ok
 
 
+def profile_check() -> bool:
+    """GitHub プロフィール頁 (part676392/part676392) の数字がこちら再生成と一致しているか。
+    raw.githubusercontent は CDN で 1 分ほど古い値を返す実測があるので API で読む。
+    プロフィールは目録の顔。そこに古い数字 (491社 / 1,779 問) が残ると全部の信用が落ちる。"""
+    import base64
+    import build_profile_readme as BP
+    try:
+        out = subprocess.run(["gh", "api", f"repos/{BP.OWNER_REPO}/contents/README.md",
+                             "--jq", ".content"], capture_output=True, text=True, timeout=90)
+    except Exception as e:  # noqa: BLE001
+        print(f"    profile 頁        : 読み飛ばし ({str(e)[:40]})")
+        return True
+    if out.returncode != 0:
+        print("    profile 頁        : 読めない (token scope?) ので省略")
+        return True
+    live = base64.b64decode(out.stdout.strip()).decode("utf-8", "replace")
+    want = BP.section()
+    i = live.find(BP.MARK)
+    sec_live = live[i:] if i >= 0 else ""
+    bad = []
+    if not sec_live:
+        bad.append("データ資産 の節が無い")
+    else:
+        for line in want.split("\n"):
+            ln = line.strip()
+            if len(ln) > 12 and ln not in sec_live:
+                bad.append(f"live に無い行: {ln[:56]}")
+                break
+    n_link = sec_live.count("src=prof")
+    if n_link < 4:
+        bad.append(f"計測 link が {n_link} 本しかない")
+    for pat, why in ((r"1,873\s*問", "raw 抽出値を問で公称"), (r"491\s*社", "束ねる前の社数")):
+        if re.search(pat, sec_live):
+            bad.append(why)
+    ok = not bad
+    print(f"    profile 頁        : {'OK' if ok else '★ ' + '; '.join(bad[:2])}"
+          f"  (live {len(sec_live):,}字・計測 link {n_link} 本)")
+    return ok
+
+
 def prefill_check() -> bool:
     """注文 link の prefill が form の仕样と合っているか。
     GitHub は field の `id` を query key に使う (公式仕样)。id や選択肢の文字列が動くと、
@@ -648,6 +688,8 @@ def main() -> int:
     if not history_pub_check():
         all_ok = False
     if not issue_form_check():
+        all_ok = False
+    if not profile_check():
         all_ok = False
     if not prefill_check():
         all_ok = False

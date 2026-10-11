@@ -22,6 +22,19 @@ TODAY = dt.date.fromisoformat(os.environ["DSH_AS_OF"]) if os.environ.get("DSH_AS
 BASE = "https://part676392.github.io/dsh-money-engine"
 
 
+YEAR_OK = (2025, 2030)
+
+
+def sane(iso: str) -> bool:
+    """西暦の見当を点検。capture 群に 2000 を足さず 西暦 26 年として通した実測がある
+    (days=-730503 で全行が過去扱いになり、開いている行が 0 になった)。"""
+    try:
+        y = int(iso[:4])
+    except Exception:
+        return False
+    return YEAR_OK[0] <= y <= YEAR_OK[1]
+
+
 def esc(s):
     return html.escape(str(s if s is not None else ""), quote=True)
 
@@ -37,7 +50,7 @@ def from_strict():
             days = (dt.date.fromisoformat(r["date"]) - TODAY).days
         except Exception:
             continue
-        if days < 0:
+        if days < 0 or not sane(r["date"]):
             continue
         rows.append(dict(r, days=days))
     rows.sort(key=lambda r: (r["days"], -(r.get("price") or 0)))
@@ -58,7 +71,7 @@ def from_wide():
         except Exception:
             dropped += 1
             continue
-        if days < 0 or not r.get("url") or not r.get("evidence"):
+        if days < 0 or not r.get("url") or not r.get("evidence") or not sane(r["date"]):
             dropped += 1
             continue
         rows.append(dict(r, days=days))

@@ -140,6 +140,38 @@ def traffic_keys_registered() -> bool:
     return ok
 
 
+def deadline_rows() -> bool:
+    """締切行の西暦と、頁に出た行数の実測照合。
+    西暦 26 年バグ (実測 days=-730503) は頁に出ると全部『過去』に見える。"""
+    bad, n_rows, shown = [], 0, 0
+    for f in ("es_deadlines_page.json", "es_deadlines_wide.json", "es_deadlines_strict.json"):
+        p = ROOT / "data" / f
+        if not p.exists():
+            continue
+        d = json.loads(p.read_text(encoding="utf-8"))
+        rows = d.get("open", [])
+        n_rows += len(rows)
+        for r in rows:
+            iso = str(r.get("date") or "")
+            try:
+                y = int(iso[:4])
+            except ValueError:
+                bad.append(f"{f}: 日付が読めない {iso!r}")
+                continue
+            if not (2025 <= y <= 2030):
+                bad.append(f"{f}: 西暦 {y} が筋外 ({iso})")
+    page = ROOT / "es-deadlines.html"
+    if page.exists():
+        h = page.read_text(encoding="utf-8", errors="replace")
+        shown = len(re.findall(r"<td><b>\d{2}/\d{2}</b></td>", h))
+        if shown == 0:
+            bad.append("es-deadlines.html に締切の日付セルが 0 個")
+    ok = not bad
+    print(f"    締切行の西暦      : {'OK' if ok else '★ ' + '; '.join(bad[:3])}"
+          f"  (data {n_rows} 行 / 面に {shown} 行)")
+    return ok
+
+
 def markup_shape() -> bool:
     """頁の骨格。<body> を開かず </body> だけ閉じていた頁が 9 枚有った (実測)。
     人は浏览器で見るだけだから気づかないが、抽出側が本文の始まりを見失う。"""
@@ -295,6 +327,8 @@ def loop_coverage() -> bool:
 def main() -> int:
     if "--selftest" in sys.argv:
         return run_selftest()
+    if not deadline_rows():
+        return 1
     if not markup_shape():
         return 1
     if not syntax_sweep():

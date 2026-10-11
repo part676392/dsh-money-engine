@@ -72,7 +72,9 @@ def main() -> int:
                 continue
             mo, da = int(m.group(2)), int(m.group(3))
             try:
-                d = dt.date(int(m.group(1)), mo, da)
+                # DATE の捕獲群は "26"/"27" (20 は外のリテラル)。ここに 2000 を足し忘れると
+                # 西暦 26 年になって全行が過去扱いになる (実測 days=-730503 / 開 0 行)。
+                d = dt.date(2000 + int(m.group(1)), mo, da)
             except ValueError:
                 continue
             dk = (key, d.isoformat())

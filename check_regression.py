@@ -13,6 +13,7 @@ import ast
 import csv
 import json
 import pathlib
+import re
 import subprocess
 import sys
 import time
@@ -171,7 +172,8 @@ def tracker_single_source() -> bool:
     ok = owners == ["tracker_js.py"]
     print(f"  tracker source      : {'OK' if ok else '★ 複製がある'}  実装 {owners}")
     # 頁側にも同じ検査: tracker を持つ頁は例外なく参照元節を持つ
-    pages, nopage = 0, []
+    pages, nopage, drift = 0, [], []
+    from tracker_js import tracker as _tr
     for p in list(ROOT.glob("*.html")) + list((ROOT / "store").glob("*.html")):
         h = p.read_text(encoding="utf-8", errors="replace")
         if "<script>(function(){try{var b=" not in h:
@@ -179,8 +181,20 @@ def tracker_single_source() -> bool:
         pages += 1
         if "document.referrer" not in h:
             nopage.append(p.name)
+        # tracker_js が今吐く JS と 1 文字でも違えば複製。定数だけを共有して本文を
+        # 手書きコピーした頁 (question-lineups / sample) が旧 JS で live に出た実測がある。
+        for m in re.finditer(r"<script>\(function\(\)\{.*?</script>", h, re.S):
+            # 頁には URL が変数 b に入っていて、鍵は fetch(b+"home" の形にしか現れない。
+            mm = re.search(r'fetch\(b\+"([a-z0-9-]+)"', m.group(0))
+            if not mm:
+                drift.append(p.name + ":key?")
+            elif m.group(0) != _tr(mm.group(1)):
+                drift.append(f"{p.name}({mm.group(1)})")
     ok = ok and not nopage
     print(f"  referrer on pages   : {'OK' if not nopage else '★ 節が無い頁 ' + str(nopage[:4])}"
+          f"  ({pages} 頁中)")
+    ok = ok and not drift
+    print(f"  tracker と一致      : {'OK' if not drift else '★ 頁に旧 JS ' + str(drift[:4])}"
           f"  ({pages} 頁中)")
     return ok
 

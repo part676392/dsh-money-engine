@@ -109,12 +109,14 @@ def inbox() -> str:
     return ""
 
 
-def mailto_link(company: str = "", tier: str = "1社ぶん ($5)") -> str:
+def mailto_link(company: str = "", tier: str = order_link.ENTRY_PLAN) -> str:
     """3 番目の支払い口 (メール)。GitHub のアカウントもカードも要らない。
     実測: order-click は 3 件で全部こちらの点検。人が click しやすい口を増やす。"""
     to = inbox()
     if not to:
         return ""
+    # tier は form の選択肢と一字一句揃える (実測: 「1社ぶん ($5)」でメールし、form には
+    # 「1社だけ試す ($5)」しか無い、という食い違いが有った。単一の源 = order_link.ENTRY_PLAN)
     subj = "注文: " + tier + (" / " + company if company else "")
     body = ("会社名: " + (company or "(ここに入れます)") + "\n"
             + "個数: " + tier + "\n"

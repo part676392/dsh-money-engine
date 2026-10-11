@@ -62,7 +62,7 @@ https://part676392.github.io/dsh-money-engine/?src=prof
 - 公式選考フロー **96 行**（22社・工程順つき）、段階への言及 **2,021 行**（475社・根拠文つき）
 - 質問のカテゴリ分類 **1,136 行（63%）**
 - 企業別の頁 **473 枚**（別名で割れていた URLs は本体へ誘導） — 機械が辿る道: https://part676392.github.io/dsh-money-engine/exports/company_pages.csv?src=prof
-- 巡回は **毎日 06:10 / 19:40 JST** に自動で走り、取得日を `data/history/` に積む（観測 3 件・実行背骨 40 行、各行に SHA-256）
+- 巡回は **毎日 06:10 / 19:40 JST** に自動で走り、取得日を `data/history/` に積む（観測 3 件・実行背骨 42 行、各行に SHA-256）
 
 機械可読: https://part676392.github.io/dsh-money-engine/exports/manifest.csv?src=prof
 1社だけの抽出 **$5** から: https://part676392.github.io/dsh-money-engine/data-license.html?src=prof

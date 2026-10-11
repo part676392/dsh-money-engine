@@ -218,6 +218,10 @@ PY
     # 発見の配管 (sitemap 全量の IndexNow 送信 / key file / robots) が切れたら日志に ★
     echo "  ★★★ GUARD FAIL: discovery — 索引に渡す配管が切れている"
   fi
+  if ! python3 check_index_probe.py 2>&1 | tail -3; then
+    # 索入室が測れない日 (クエリ壊れ / 結果頁の外殻無し) を 0 件と混ぜない
+    echo "  ★★★ GUARD FAIL: index-probe — 索入室を測れなかった (0 件と区別する)"
+  fi
   python3 check_payment.py 2>&1 | tail -7
   python3 check_orders.py 2>&1 | tail -14
   python3 check_orders.py --selftest 2>&1 | tail -3
@@ -308,6 +312,7 @@ PY
   echo "$RUN" | grep -q "GUARD FAIL: pages" && FAIL="$FAIL pages"
   echo "$RUN" | grep -q "GUARD FAIL: discovery" && FAIL="$FAIL discovery"
   echo "$RUN" | grep -q "GUARD FAIL: card-surface" && FAIL="$FAIL card-surface"
+  echo "$RUN" | grep -q "GUARD FAIL: index-probe" && FAIL="$FAIL index-probe"
   echo "$RUN" | grep -q "GUARD FAIL: money-check" && FAIL="$FAIL money-check"
   echo "$RUN" | grep -qE "parser self-test: ([0-3])/4" && FAIL="$FAIL parser"
   if [ -n "$FAIL" ]; then

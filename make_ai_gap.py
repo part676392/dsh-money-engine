@@ -13,6 +13,8 @@
 from __future__ import annotations
 
 from tracker_js import tracker
+import buy_block
+BUY = buy_block.html()
 import datetime as dt
 import html
 import json
@@ -227,7 +229,7 @@ a{{color:#7a5230}}
 
 <p class="note"><b>権利の範囲:</b> CC BY 4.0 は抽出した表・順序・対応づけにだけ適用します。本文の著作権は note の各記事の著者に帰属し、この頁にあるのは出典URLつきの最小限の引用です。<br>更新: {today}　収集: 主要検索エンジンのキーワード候補を正規化して企業名を含む語のみ抽出。人手の推測は含みません。<br>
 他の観測の積み上がりは <a href="changes.html">運用履歴</a> に公開しています。</p>
-{tracker("ai")}</main></body></html>"""
+{tracker("ai")}{BUY}</main></body></html>"""
 
     bad = assert_check(doc)
     if bad:

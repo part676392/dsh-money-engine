@@ -12,6 +12,8 @@
 """
 from __future__ import annotations
 
+import buy_block
+BUY = buy_block.html()
 import datetime as dt
 import html
 import json
@@ -238,7 +240,7 @@ a{{color:#f0c98a}}
 Page built {today}. No reviews are shown because there are none yet.</p>
 </main>
 {TRACKER_STORE}
-</body></html>"""
+{BUY}</body></html>"""
     (OUT / "index.html").write_text(doc, encoding="utf-8")
     json.dump({"title": p["title"], "words": v["words"], "price_usd": PRICE_USD,
                "wallet": addr, "built": today},

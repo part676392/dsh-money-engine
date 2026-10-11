@@ -9,6 +9,8 @@
 """
 from __future__ import annotations
 
+import buy_block
+BUY = buy_block.html()
 import csv
 import html
 import io
@@ -205,7 +207,7 @@ ul{{font-size:.85rem}} li{{margin:5px 0}}
 　出典: <a href="https://note.com/shushoku_career1">note / 転職ナビ・中途キャリアの研究所</a>
 　権利: 記事本文の著作権は各記事の著者に帰属。ここにあるのは抽出した表・順序・対応づけと1文の引用です。
 　<a href="data-license.html">購入</a> ／ <a href="exports/sample_dossier.csv">CSV</a> ／ <a href="./">目録へ</a></p>
-</main></body></html>"""
+{BUY}</main></body></html>"""
     OUT.write_text(doc, encoding="utf-8")
     print(f"  wrote sample.html ({len(doc):,} chars) + exports/sample_dossier.csv ({cpath.stat().st_size:,}B)")
     for d in picks:

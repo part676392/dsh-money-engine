@@ -9,6 +9,8 @@
 """
 from __future__ import annotations
 
+import buy_block
+BUY = buy_block.html()
 import collections
 import csv
 import html
@@ -258,7 +260,7 @@ th,td{{border-bottom:1px solid #eee6da;padding:6px 8px;text-align:left}}th{{back
 　出典: <a href="https://note.com/shushoku_career1">note / 転職ナビ・中途キャリアの研究所</a>
 　権利: 記事本文の著作権は各記事の著者に帰属。公開するのはカテゴリ正規化と並び順。
 　<a href="./">目録へ</a> ／ <a href="reverse-questions.html">逆質問の実文</a> ／ <a href="interview-questions.html">面接質問</a></p>
-</main></body></html>"""
+{BUY}</main></body></html>"""
     OUT.write_text(doc, encoding="utf-8")
     print(f"  wrote question-lineups.html ({len(doc):,} chars) + exports/question_lineups.csv ({n_rows} 行)")
     print(f"  羅列 {n_blob} 本 / 企業 {n_comp} / 写し {n_item:,} 語 / 破棄 {n_unmapped:,} 語 "

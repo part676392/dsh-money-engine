@@ -14,6 +14,7 @@
 """
 from __future__ import annotations
 
+import buy_block
 import collections
 import html
 import json
@@ -262,6 +263,7 @@ ol{{font-size:.88rem}} ol li{{margin:7px 0}}
 　<a href="es-deadlines.html">締切</a> ／ <a href="changes.html">運用履歴</a></p>
 </main></body></html>"""
     OUT_HTML.write_text(doc_html, encoding="utf-8")
+    buy_block.inject(OUT_HTML)
     print(f"  wrote interview-questions.html ({len(doc_html):,} bytes) + interview_questions.json")
     print(f"  scanned={scanned} full_body={full_used} questions={len(all_q)} companies={n_comp}")
     for comp in sorted(per_company, key=lambda c: -len(per_company[c]))[:3]:

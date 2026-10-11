@@ -6,6 +6,7 @@
 """
 from __future__ import annotations
 
+import buy_block
 import datetime as dt
 import html
 import json
@@ -132,6 +133,7 @@ a{color:#1a5fd6}.sub{color:#5a6472;font-size:.86rem}
         "rows": "\n".join(items), "passed": passed,
     }
     (ROOT / "es-deadlines.html").write_text(doc, encoding="utf-8")
+    buy_block.inject(ROOT / "es-deadlines.html")
     json.dump({"generated": TODAY.isoformat(), "method": method, "open": rows},
               open(ROOT / "data" / "es_deadlines_page.json", "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)

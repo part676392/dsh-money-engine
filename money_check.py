@@ -220,6 +220,45 @@ def _profile_audit(live: str) -> bool:
     return ok
 
 
+def cta_check() -> bool:
+    """人間が着く面に注文欄が在るか。
+    実測: index.html は访问 17 件で注文 link 0 / 羅列 5 件で 0 / store 4 件で 0。
+    買う場所を探す人に買う場所が無かった。link・価格・GitHub アカウントの注意を点検する。"""
+    import urllib.parse
+    tpl_f = ROOT / ".github" / "ISSUE_TEMPLATE" / "order.yml"
+    if not tpl_f.exists():
+        print("    面の注文欄      : ★ order.yml が無い")
+        return False
+    tpl = tpl_f.read_text(encoding="utf-8")
+    opts = [ln.split("- ", 1)[1].strip() for ln in tpl.split("\n") if ln.strip().startswith("- ")]
+    pages = [p for p in list(ROOT.glob("*.html")) + list((ROOT / "store").glob("*.html"))
+             if p.name != "404.html"]
+    bad = []
+    for f in pages:
+        h = f.read_text(encoding="utf-8", errors="replace")
+        if 'http-equiv="refresh"' in h:      # 別名の連絡頁は本体へ誘導すれば十分
+            continue
+        rel = f.name if f.parent == ROOT else f"store/{f.name}"
+        hrefs = (re.findall(r"href='([^']*template=order\.yml[^']*)'", h)
+                 + re.findall(r'href="([^"]*template=order\.yml[^"]*)"', h))
+        if not hrefs:
+            bad.append(f"{rel} に注文 link が無い")
+            continue
+        if "$5" not in h:
+            bad.append(f"{rel} が価格 ($5) を出していない")
+        if "注文には GitHub のアカウント" not in h:
+            bad.append(f"{rel} に GitHub アカウントの注意が無い")
+        for u in hrefs:
+            q = urllib.parse.parse_qs(urllib.parse.urlparse(u.replace("&amp;", "&")).query)
+            for plan in q.get("plan", []):
+                if plan not in opts:
+                    bad.append(f"{rel} の plan「{plan[:20]}」が form の選択肢に無い")
+    ok = not bad
+    print(f"    面の注文欄      : {'OK' if ok else '★ ' + '; '.join(bad[:3])}"
+          f"  ({len(pages)} 頁を点検)")
+    return ok
+
+
 def prefill_check() -> bool:
     """注文 link の prefill が form の仕様と合っているか。
     GitHub は field の `id` を query key に使う (公式仕样)。id や選択肢の文字列が動くと、
@@ -753,6 +792,8 @@ def main() -> int:
     if not outreach_check():
         all_ok = False
     if not not_found_check():
+        all_ok = False
+    if not cta_check():
         all_ok = False
     print(f"\n  money pages ready: {all_ok}")
     out = ROOT / "data" / "rails" / "money_latest.json"

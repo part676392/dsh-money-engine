@@ -13,6 +13,8 @@
 """
 from __future__ import annotations
 
+import buy_block
+BUY = buy_block.html()
 import collections
 import html
 import json
@@ -219,7 +221,7 @@ a{{color:#7a5230}} code{{background:#eceae4;padding:1px 5px;border-radius:4px;fo
 
 <p class="note"><b>権利の範囲:</b> CC BY 4.0 は抽出した表・順序・対応づけにだけ適用します。本文の著作権は note の各記事の著者に帰属し、この頁にあるのは出典URLつきの最小限の引用です。<br>更新: {time.strftime('%Y-%m-%d %H:%M JST')}（毎日 06:10 / 19:40 に自動再生成）　抽出方法: 文単位に分割し、語彙を含む文のみ採用。引用は抽出そのまま。
 　他の観測の積み上がりは <a href="changes.html">運用履歴</a>、検索需要は <a href="ai-interviews.html">AI・録上面接の需要語</a> に公開しています。</p>
-</main></body></html>"""
+{BUY}</main></body></html>"""
     OUT_HTML.write_text(doc_html, encoding="utf-8")
     print(f"  wrote selection-signals.html ({len(doc_html):,} bytes) + selection_signals.json")
     print(f"  articles={matched_articles} companies={n_comp} mentions={total_mentions} quotes={quoted}")

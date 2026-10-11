@@ -11,6 +11,8 @@
 from __future__ import annotations
 
 from tracker_js import tracker
+import buy_block
+BUY = buy_block.html()
 import html
 import json
 import pathlib
@@ -154,7 +156,7 @@ a{{color:#7a5230}} .note{{font-size:.8rem;color:#6d675e;margin-top:22px}}
 <p class="note">更新: {time.strftime('%Y-%m-%d %H:%M JST')}（毎日 06:10 / 19:40 に自動再生成）
 　注文のしかた: <a href="data-license.html">データ資産の購入</a> ／
 　<a href="store/">カスタム小説</a> ／ <a href="sample.html">納品物見本</a> ／ <a href="./">目録へ</a></p>
-{tracker("deliveries")}</main></body></html>"""
+{tracker("deliveries")}{BUY}</main></body></html>"""
     dest = pathlib.Path("/tmp/deliveries_fixture.html") if fixture else OUT
     dest.write_text(doc, encoding="utf-8")
     print(f"  wrote {dest.name} ({len(doc):,} chars)")

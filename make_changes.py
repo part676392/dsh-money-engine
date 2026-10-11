@@ -15,6 +15,8 @@
 from __future__ import annotations
 
 from tracker_js import tracker
+import buy_block
+BUY = buy_block.html()
 import glob
 import html
 import json
@@ -207,7 +209,7 @@ a{{color:#7a5230}}
 <p style="font-size:.86rem">{rows_ai_scan()}</p>
 
 <p class="note">更新: {today}（毎晩 06:10 / 19:40 に自動再生成）／ 元データ: <code>data/history/</code>, <code>data/traffic/</code>, <code>data/payments/</code></p>
-{tracker("changes")}</main></body></html>"""
+{tracker("changes")}{BUY}</main></body></html>"""
     OUT.write_text(doc, encoding="utf-8")
     print(f"  wrote changes.html ({len(doc):,} bytes)  days={n_days}  "
           f"traffic keys={list(ld.keys())}")

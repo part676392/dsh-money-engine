@@ -18,6 +18,8 @@
 """
 from __future__ import annotations
 
+import buy_block
+BUY = buy_block.html()
 import collections
 import html
 import json
@@ -250,7 +252,7 @@ th{{background:#efeee9;font-weight:600}} a{{color:#7a5230}}
 　機械抽出なので枠の切れ目がずれることがあります。生データ: <a href="data/selection_flows.json">data/selection_flows.json</a>
 　他の観測: <a href="interview-questions.html">面接質問 {NQ} 問</a> ／
 　<a href="selection-signals.html">選考段階の言及</a> ／ <a href="changes.html">運用履歴</a></p>
-</main></body></html>"""
+{BUY}</main></body></html>"""
     OUT_HTML.write_text(doc_html, encoding="utf-8")
     print(f"  wrote selection-flows.html ({len(doc_html):,} bytes) + selection_flows.json")
     narr = [r["raw"] for rows in per_company.values() for r in rows

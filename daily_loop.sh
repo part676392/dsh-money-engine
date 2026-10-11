@@ -93,6 +93,22 @@ pages_check() {
 # 護りが読むのは disk の頁。再生成の直後に囀す (idempotent)。
 # polish を末尾だけにおいていたら money_check が上部欄の無い頁を見て ★ を撒いた (実測)。
   python3 polish_buy_bars.py     2>&1 | tail -1
+# 全 600 記事の本文を network から引く広い抽出 (実測 ~8 分 / 0.35 秒 sleep)。
+# 1 日 1 回だけ: 3 枠 x 毎巡回でやると note 側に負荷を掛けすぎるので回数を守る。
+# 実測: これを手動・dev だけでやっていたので、runner の締切頁は古い wide に基づいていた。
+WIDE_MARK="logs/.wide_$(date +%Y%m%d)"
+mkdir -p logs
+if [ ! -f "$WIDE_MARK" ]; then
+  echo "  広い締切抽出を開始 (600 記事)"
+  if python3 extract_deadlines_wide.py 2>&1 | tail -3; then
+    touch "$WIDE_MARK"
+    find logs -name ".wide_*" -mtime +14 -delete 2>/dev/null || true
+  else
+    echo "  ★ 広い締切抽出が落ちた (今日は mark を置かないので次回やり直す)"
+  fi
+else
+  echo "  広い締切抽出: 今日は済み ($WIDE_MARK)"
+fi
   python3 make_deadlines.py  2>&1 | tail -2
   # 商店 (data-license) は締切の個数を書くので、締切頁を作った直後に作り直す。
   # 実測: make_deadlines (96行) で頁が 15 件、build_dataset_store (253行) まで data-license が 12 件

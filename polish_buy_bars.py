@@ -114,7 +114,7 @@ def strip_html(company: str, table: dict) -> str:
             "　<a style='color:#2547c9' href='" +
             ("/dsh-money-engine/company/" + urllib.parse.quote(company) + ".html" if company
              else "/dsh-money-engine/interview-questions.html") +
-            "'>全量を見る</a></p><ul style='margin:0;padding-left:1.2em;font-size:.95rem;line-height:1.6'>"
+            "' onclick=\"" + buy_block.beacon_js("cta-alltext") + ";return true\">全量を見る</a></p><ul style='margin:0;padding-left:1.2em;font-size:.95rem;line-height:1.6'>"
             + items + "</ul></div>")
     return STRIP_START + prev + buy_block.bar(company) + buy_block.card_note() + STRIP_END
 

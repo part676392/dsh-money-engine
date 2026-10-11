@@ -170,5 +170,17 @@
    "hiring"
   ],
   "updated": "2026-10-11"
+ },
+ "link_counters": {
+  "updated": "2026-10-11",
+  "keys": [
+   "order-click",
+   "order-mail",
+   "cta-sample",
+   "cta-deadlines",
+   "cta-alltext"
+  ],
+  "why": "実測で締切頁 32 load に対して注文 link しか計数が無く、どの link を踏んだか分からなかった (上部欄 4 本中 beacon 1 本)",
+  "checked_by": "check_regression.strip_beacons()"
  }
 }

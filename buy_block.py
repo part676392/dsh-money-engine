@@ -128,15 +128,18 @@ def mailto_link(company: str = "", tier: str = "1社ぶん ($5)") -> str:
 def deadline_link(company: str = "") -> str:
     """締切一覧への直線。実測で link を持つのは 3 頁だけで、473 の企業頁から行けなかった。
     人が着くのは企業頁の方なので、上の行に置く。"""
-    return ('<a style="' + _BAR_A + '" href="/dsh-money-engine/es-deadlines.html">'
-            '⏰ 締切一覧</a>')
+    # 計数の穴: 上部欄 link のうち注文 link だけ beacon を持っていた
+    # (実測: 締切頁 32 load で、どの link を踏んだか分からなかった)。
+    return ('<a style="' + _BAR_A + '" href="/dsh-money-engine/es-deadlines.html"'
+            ' onclick="' + beacon_js("cta-deadlines") + ';return true">⏰ 締切一覧</a>')
 
 
 def _free_sample(company: str) -> str:
     # 常に絶対道。store/ の頁で href="sample.html" にすると store/sample.html に
     # 解決されて 404 になった (実測: internal links 10 折れ / ★ sample.html x10)。
     label = ("他の会社の無料サンプル" if company else "無料サンプル (実文を先に見る)")
-    return ('<a style="' + _BAR_A + '" href="/dsh-money-engine/sample.html">' + label + "</a>")
+    return ('<a style="' + _BAR_A + '" href="/dsh-money-engine/sample.html"'
+            ' onclick="' + beacon_js("cta-sample") + ';return true">' + label + "</a>")
 
 
 def html(company: str = "", count_txt: str = "", hist: bool = False) -> str:

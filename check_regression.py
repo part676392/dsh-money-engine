@@ -140,6 +140,40 @@ def traffic_keys_registered() -> bool:
     return ok
 
 
+def strip_beacons() -> bool:
+    """h1 直下の strip に有る link は全部 beacon を持つこと。
+    実測: 締切頁 32 load で注文 link しか計数が無かった (上部欄 4 本中 1 本)。"""
+    import random
+    pages = sorted((ROOT / "company").glob("*.html"))
+    pages += [ROOT / p for p in ("index.html", "es-deadlines.html", "sample.html",
+                                 "question-lineups.html", "data-license.html",
+                                 "store/index.html", "store/mini.html") if (ROOT / p).exists()]
+    rnd = random.Random(20261011)
+    sample = [ROOT / "es-deadlines.html", ROOT / "index.html"] + rnd.sample(pages, min(24, len(pages)))
+    bad, n_links, n_bea = [], 0, 0
+    for f in sample:
+        if not f.exists():
+            continue
+        h = f.read_text(encoding="utf-8", errors="replace")
+        if "noindex" in h:
+            continue   # 別名のリダイレクト頁 stub (実測 23 頁)。本家に strip を置くので数えない
+        i, j = h.find("<!--buy-strip-->"), h.find("<!--/buy-strip-->")
+        if i < 0 or j < 0:
+            bad.append(f.name + " に strip が無い")
+            continue
+        seg = h[i:j]
+        for m in re.finditer(r"<a\b[^>]*>", seg):
+            n_links += 1
+            if "fetch(" in m.group(0):
+                n_bea += 1
+            else:
+                bad.append(f.name + " の link に beacon 無し: " + (m.group(0)[:64]))
+    ok = not bad
+    print(f"    上部欄の計数      : {'OK' if ok else '★ ' + bad[0][:96]} ({n_bea}/{n_links} 本・{len(sample)} 頁)"
+          )
+    return ok
+
+
 def deadline_counts_agree() -> bool:
     """締切の個数が 面のあちこちで一致していること。
     実測で締切頁 15 件 / 商店 12 件 に割れていた (商店が strict だけ読んでいた)。"""
@@ -436,6 +470,8 @@ def loop_coverage() -> bool:
 def main() -> int:
     if "--selftest" in sys.argv:
         return run_selftest()
+    if not strip_beacons():
+        return 1
     if not deadline_counts_agree():
         return 1
     if not deadline_history():

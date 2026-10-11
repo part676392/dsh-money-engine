@@ -8,5 +8,5 @@ company_pages.csv,472,企業別の頁への道しるべ。page_url が空の会�
 selection_flows.csv,96,公式選考フローを1行1工程に割った物。step_as_written が本来の表記
 selection_signals.csv,2021,収録記事に現れた選考段階の言及。quote は1文のみ
 license_scope,,CC BY 4.0 はこの表・順序・対応づけにのみ適用。本文の著作権は note の各記事の著者に帰属 (source_url を参照)
-generated_at,,2026-10-11T09:46:30+0900
+generated_at,,2026-10-11T09:46:21+0900
 encoding,,UTF-8 with BOM (utf-8-sig)

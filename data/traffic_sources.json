@@ -132,6 +132,22 @@
    "note": "2026-10-11 に自分で開いた。面接質問 DB を「企業・事業主」の節に足した",
    "where": "PR 本文 (2026-10-11 に ES 締切の面の link を 1 行追記した / ?src=<鍵>)",
    "updated": "2026-10-11"
+  },
+  {
+   "key": "gist-deadlines",
+   "surface": "Gist 締切表",
+   "target": "es-deadlines.html",
+   "where": "gist 871c364b0df3d09e7810fe36d3d0016a の本文 (es-deadlines.md)",
+   "tagged": true,
+   "updated": "2026-10-11"
+  },
+  {
+   "key": "gist-lineup",
+   "surface": "Gist 質問の並び順",
+   "target": "question-lineups.html",
+   "where": "gist cdaf690435b566d729893d12a69d9670 の本文 (question-lineups.md)",
+   "tagged": true,
+   "updated": "2026-10-11"
   }
  ],
  "discovery": {

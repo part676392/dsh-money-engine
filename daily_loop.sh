@@ -58,15 +58,15 @@ pages_check() {
   _SHA=$(git ls-remote "$_U" HEAD 2>/dev/null | cut -f1)
   if [ -z "$_SHA" ]; then echo "  pages build: 照合出来ず (remote SHA が読めない)"; return 0; fi
   _PEND=0
-  for _t in 1 2 3 4; do
+  for _t in $(seq 1 10); do
     _ST=$(gh api "repos/part676392/dsh-money-engine/pages/builds?per_page=15" --jq '.[] | "\(.status) \(.commit)"' 2>/dev/null)
     if printf "%s" "$_ST" | grep -q "^built ${_SHA}$"; then
       echo "  pages build: HEAD が built (live は最新)"
       return 0
     fi
     _PEND=$(printf "%s" "$_ST" | grep -cE "^(building|queued) ${_SHA}$")
-    if [ "$_PEND" -gt 0 ] && [ "$_t" -lt 4 ]; then
-      echo "  pages build: HEAD を build 中 ($_t/4 を待つ)"
+    if [ "$_PEND" -gt 0 ] && [ "$_t" -lt 10 ]; then
+      echo "  pages build: HEAD を build 中 ($_t/10 を待つ)"
       sleep 30
       continue
     fi
@@ -74,7 +74,7 @@ pages_check() {
   done
   _LATEST=$(printf "%s" "$_ST" | head -1)
   if [ "$_PEND" -gt 0 ]; then
-    echo "  pages build: ★ HEAD の build が 90 秒たっても終わらない / latest=${_LATEST}"
+    echo "  pages build: ★ HEAD の build が 300 秒たっても終わらない / latest=${_LATEST}"
   else
     echo "  pages build: ★ HEAD の built が無い (無いか errored) / latest=${_LATEST}"
   fi
@@ -255,6 +255,8 @@ PY
   python3 make_history_series.py 2>&1 | tail -3
   python3 make_exports.py        2>&1 | tail -6
   python3 build_dataset_store.py 2>&1 | tail -4
+  # Gist 2 本は data から作り直す (作っただけだと締切が凍る)。CSV が出来上がった後に置く。
+  python3 make_gists.py           2>&1 | tail -2
   python3 build_sample.py        2>&1 | tail -6
   # 執筆物の店と mini は巡回に入っておらず、無人では再生成されなかった (2026-10-11 実測:
   # build_store / build_mini が daily_loop に一行も無い)。価格・受信箱・tracker が枯れる。

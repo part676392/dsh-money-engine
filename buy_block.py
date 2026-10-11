@@ -187,14 +187,19 @@ def inject(path, count_txt: str = "", top: str = "") -> bool:
     h2 = re.sub(re.escape(BLOCK_OPEN) + r"[\s\S]*?" + re.escape(BLOCK_CLOSE), "", h)
     kept = []
     for para in re.split(r"(</p>)", h2):
-        if "template=order.yml" in para or MAIL_NOTE in para:
+        # 落とすのは下端の注文欄 (_WRAP の #e3e7ed) とメール行 (MAIL_NOTE) だけ。
+        # 上部欄 (strip) は #fff7e8 なので触らない。実測: 「template=order.yml を含む段落を
+        # 全部落とす」だと、行ごとに $5 を置いた締切頁では表ごと消える (2026-10-11)。
+        if MAIL_NOTE in para or ("template=order.yml" in para and "#e3e7ed" in para):
             continue
         kept.append(para)
     h2 = "".join(kept)
     if h2 != h:
         h = h2
         changed = True
-    if "template=order.yml" not in h:
+    # 「order link が有るから挿さない」にすると、行に $5 を置いた頁 (締切頁) で下端の注文欄が
+    # 永久に入らなかった (実測 live: mailto 無し)。marker で数える。
+    if BLOCK_OPEN not in h:
         block = html(count_txt=count_txt)
         if "</main>" in h:
             h = h.replace("</main>", block + "</main>", 1)

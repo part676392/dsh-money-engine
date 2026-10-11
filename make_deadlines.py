@@ -241,6 +241,10 @@ def main():
     if not rows:
         rows, passed, method = from_titles()
     render(rows, passed, method)
+    # 下端の注文欄 (メール口つき) を自分の頁に差し直す。実測 (2026-10-11 17:28 live):
+    # 一番読まれている締切頁 (34 load) に mailto が無く、上の strip だけだった。
+    n_firms = len({r["firm"] for r in rows})
+    buy_block.inject(ROOT / "es-deadlines.html", count_txt=f"締切 {len(rows)} 件・{n_firms}社")
     # 面を出した後に台帳へ積む (面の 初出日 は前の巡回までの台帳からしか引かない)
     DH.append()
     DH.write_csv()

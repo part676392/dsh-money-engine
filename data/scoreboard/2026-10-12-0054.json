@@ -1,0 +1,162 @@
+{
+ "checked_at": "2026-10-12T00:54:39+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "reddit.com",
+    "reddit.com",
+    "zhihu.com",
+    "douban.com",
+    "douban.com",
+    "zhihu.com",
+    "reddit.com",
+    "reddit.com",
+    "douban.com",
+    "reddit.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "ja.wiktionary.org",
+    "adtechmanagement.com",
+    "chigai-hikaku.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "63,900",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "ja.wikipedia.org",
+    "yomiuri.co.jp",
+    "president.jp",
+    "yomiuri.co.jp",
+    "etuyama.com",
+    "asohata.com",
+    "news.tv-asahi.co.jp",
+    "fnn.jp",
+    "mainichi.jp",
+    "sankei.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "36,000",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "weblio.jp",
+    "x.com",
+    "e-kae-library.com",
+    "youtube.com",
+    "nicovideo.jp",
+    "youtube.com",
+    "ja.wikipedia.org",
+    "ja.wiktionary.org",
+    "adtechmanagement.com",
+    "kotobank.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "396,000",
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "ja.wiktionary.org",
+    "adtechmanagement.com",
+    "chigai-hikaku.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "63,900",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "support.google.com",
+    "support.google.com",
+    "zhihu.com",
+    "zhihu.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "53",
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "vegevegesuper623.blog.fc2.com",
+    "vegevegesuper623.blog.fc2.com",
+    "labelb.blog.fc2.com",
+    "eigafan.net",
+    "labelb.blog.fc2.com",
+    "eigafan.net",
+    "mstyle555.blog97.fc2.com",
+    "ameblo.jp",
+    "kawarabe4.fc2.net",
+    "gkichi.blog.fc2.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "15,800",
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

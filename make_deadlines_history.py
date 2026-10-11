@@ -44,7 +44,7 @@ def append(quiet: bool = False) -> dict:
     nrun = seen_runs.get(d, 0) + 1
     fresh = []
     for r in rows:
-        fresh.append({"seen": d, "run": nrun, "date": r.get("date"), "firm": r.get("firm"),
+        fresh.append({"seen": d, "run": nrun, "machine": WHERE, "date": r.get("date"), "firm": r.get("firm"),
                       "days": r.get("days"), "price": r.get("price") or 0, "url": r.get("url"),
                       "title": (r.get("title") or "")[:120],
                       "evidence": (r.get("evidence") or "")[:200], "key": r.get("key")})
@@ -62,7 +62,13 @@ def append(quiet: bool = False) -> dict:
 
 
 def _lines(all_machines: bool = True) -> list:
-    """台帳を読む。面の 初出日・回数・CSV は両機械を畳んだものを使う (堀なので落とさない)。"""
+    """台帳を読む。面の 初出日・回数・CSV は両機械を畳んだものを使う (堀なので落とさない)。
+
+    machine は各機械の台帳を追記した時に自分の名をを入れる。入っていない旧行
+    (実測: 150 行すべて machine=None。setdefault を except 節の中に落としていた) は、
+    どの file から読んだかで埋める。それを忘れると dev と runner の別観測が
+    同じ鍵に潰れて回数が半分に減った (150 行 -> 75 行)。
+    """
     out = []
     for f in (ALL_LEDGERS if all_machines else LEDGERS):
         if not f.exists():
@@ -71,11 +77,21 @@ def _lines(all_machines: bool = True) -> list:
         with f.open(encoding="utf-8") as fh:
             for line in fh:
                 try:
-                    out.append(json.loads(line))
-                    r.setdefault("machine", tag)
+                    r = json.loads(line)
                 except Exception:
                     continue
-    return out
+                if not r.get("machine"):
+                    r["machine"] = tag
+                out.append(r)
+    seen, ded = set(), []
+    for r in out:
+        # merge=union で同じ観測が 2 行になる事があるので読む側で畳む (A/B 実測の保護)
+        k = (r.get("seen"), r.get("run"), r.get("url"), r.get("date"), r.get("machine"))
+        if k in seen:
+            continue
+        seen.add(k)
+        ded.append(r)
+    return ded
 
 
 def ledger_count() -> int:

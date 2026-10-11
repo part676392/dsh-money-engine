@@ -145,7 +145,16 @@ def profile_check() -> bool:
         print("    profile 頁        : 読めない (token scope?) ので省略")
         return True
     live = base64.b64decode(out.stdout.strip()).decode("utf-8", "replace")
-    want = BP.section()
+    # 再生成したものと突合すると、巡回の途中で 実行背骨 の行数が増えるので、
+    # 生成の瞬間差で ★ になる (10:24 実測)。 committed した生成物と突合する。
+    if BP.LOCAL.exists():
+        loc = BP.LOCAL.read_text(encoding="utf-8")
+        i0 = loc.find(BP.MARK)
+        want = loc[i0:] if i0 >= 0 else ""
+        src_name = "data/profile_readme.md"
+    else:
+        want = BP.section()
+        src_name = "再生成した節"
     i = live.find(BP.MARK)
     sec_live = live[i:] if i >= 0 else ""
     bad = []
@@ -155,7 +164,7 @@ def profile_check() -> bool:
         for line in want.split("\n"):
             ln = line.strip()
             if len(ln) > 12 and ln not in sec_live:
-                bad.append(f"live に無い行: {ln[:56]}")
+                bad.append(f"live に無い行 ({src_name}): {ln[:56]}")
                 break
     n_link = sec_live.count("src=prof")
     if n_link < 4:

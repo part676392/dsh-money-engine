@@ -1,0 +1,21 @@
+{
+ "checked_at": "2026-10-11T18:39:01+0900",
+ "crypto": {
+  "address": "0xA51eafFA20576898EA3A8233E28BD0833995ff37",
+  "rpc_ok": "3/4",
+  "total_eth": 0.0,
+  "live": false
+ },
+ "gumroad": {
+  "configured": true,
+  "probe_failed": true,
+  "for_sale": false,
+  "blocked_by_payout": null,
+  "http": null,
+  "price_shown": "",
+  "buy_buttons": null,
+  "card_field": null,
+  "url": null,
+  "error": "node:internal/modules/cjs/loader:1595\n  throw err;\n  ^\n\nError: Cannot find module 'playwright'\nRequire stack:\n- /Users/moherune/dsh-runner/dsh-money-engine/rail"
+ }
+}

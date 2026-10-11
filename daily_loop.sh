@@ -222,14 +222,14 @@ PY
   python3 check_orders.py 2>&1 | tail -14
   python3 check_orders.py --selftest 2>&1 | tail -3
   python3 check_payment_rail.py 2>&1 | tail -5
-  if ! python3 check_card_surface.py 2>&1 | tail -5; then
-    # 料金を出す面にカード口が無く、しかも『買えない』と書いて無い = 嘘の店
-    echo "  ★★★ GUARD FAIL: card-surface — 料金を出す面がカードで買えず、正直な注記も無い"
-  fi
 # 護りが読むのは disk の頁。再生成の直後に囀す (idempotent)。
 # polish を末尾だけにおいていたら money_check が上部欄の無い頁を見て ★ を撒いた (実測)。
   python3 polish_buy_bars.py     2>&1 | tail -1
   python3 money_check.py          2>&1 | tail -6
+  if ! python3 check_card_surface.py 2>&1 | tail -5; then
+    # 料金を出す面にカード口が無く、しかも『買えない』と書いて無い = 嘘の店
+    echo "  ★★★ GUARD FAIL: card-surface — 料金を出す面がカードで買えず、正直な注記も無い"
+  fi
   python3 secrets_check.py       2>&1 | tail -7
   python3 check_signup_rails.py 2>&1 | tail -6
   python3 scoreboard.py 2>&1 | tail -3

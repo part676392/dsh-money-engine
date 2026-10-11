@@ -1,0 +1,162 @@
+{
+ "checked_at": "2026-10-11T23:28:21+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "facebook.com",
+    "facebook.com",
+    "business.facebook.com",
+    "facebook.com",
+    "facebook.com",
+    "facebook.com",
+    "facebook.com",
+    "facebook.com",
+    "facebook.com",
+    "facebook.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "55",
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "ja.wiktionary.org",
+    "adtechmanagement.com",
+    "chigai-hikaku.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "63,900",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "50",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "weblio.jp",
+    "youtube.com",
+    "x.com",
+    "youtube.com",
+    "nicovideo.jp",
+    "e-kae-library.com",
+    "ja.wiktionary.org",
+    "ja.wikipedia.org",
+    "kotobank.jp",
+    "meaning-dictionary.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "396,000",
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "ja.wiktionary.org",
+    "adtechmanagement.com",
+    "chigai-hikaku.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "63,900",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "nap-camp.com",
+    "jpcamp.jp",
+    "nap-camp.com",
+    "public-camp.com",
+    "hinata.me",
+    "camp-enjoy.jp",
+    "hinata.me",
+    "autocamp-akagi.com",
+    "camp-navi.com",
+    "camp-enjoy.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "395,000",
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "asahi.com",
+    "asahi.com",
+    "support.asahi.com",
+    "book.asahi.com",
+    "book.asahi.com",
+    "publications.asahi.com",
+    "publications.asahi.com",
+    "support.asahi.com",
+    "dot.asahi.com",
+    "digital.asahi.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "67",
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

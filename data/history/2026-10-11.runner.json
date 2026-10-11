@@ -1,5 +1,5 @@
 {
- "captured_at": "2026-10-11T23:11:58+09:00",
+ "captured_at": "2026-10-11T23:28:58+09:00",
  "location": "runner",
  "articles": 600,
  "companies": 473,
@@ -16,7 +16,9 @@
  "questions_raw": 1873,
  "companies_with_questions": 472,
  "flows": 56,
- "signals": 2780,
+ "signals": 2021,
+ "stage_mentions": 2780,
+ "company_stage_pairs": 1423,
  "lineup_rows": 5494,
  "lineup_companies": 467,
  "lineup_modal_pct": 64,

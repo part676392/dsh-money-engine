@@ -1,0 +1,162 @@
+{
+ "checked_at": "2026-10-11T09:43:20+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "offleashk9training.com",
+    "offleashk9training.com",
+    "facebook.com",
+    "off-leash-k9-training-texas.wheree.com",
+    "olk9dfw.com",
+    "facebook.com",
+    "yelp.com",
+    "youtube.com",
+    "youtube.com",
+    "yelp.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "108,000",
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "pizza-la.co.jp",
+    "pizza-la.co.jp",
+    "pizza-navi.com",
+    "otokurashi.net",
+    "delivery-nav.com",
+    "delivery-nav.com",
+    "aumo.jp",
+    "chisou-media.jp",
+    "westhouse.jp",
+    "store.levecolle.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "9,330",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "meaning-difference.com",
+    "chigai-hikaku.com",
+    "doda.jp",
+    "tenshoku.mynavi.jp",
+    "kotobank.jp",
+    "next.rikunabi.com",
+    "求人ボックス.com",
+    "saiyo-doda.jp",
+    "tenshoku.mynavi.jp",
+    "imi-chigai.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "73,000",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "weblio.jp",
+    "youtube.com",
+    "x.com",
+    "e-kae-library.com",
+    "youtube.com",
+    "nicovideo.jp",
+    "ja.wiktionary.org",
+    "ja.wikipedia.org",
+    "kotobank.jp",
+    "x.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "397,000",
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp",
+    "web.travel.rakuten.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "50",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "ejje.weblio.jp",
+    "winners-english.com",
+    "talking-english.net",
+    "e-grammar.info",
+    "saruwakakun.com",
+    "dailyeigo.com",
+    "ei-navi.jp",
+    "cooori.com",
+    "shinuwakaeng.com",
+    "weblio.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "604,000",
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "jp-guide.net",
+    "hansoku-style.jp",
+    "筆耕.com",
+    "exia.co.jp",
+    "目録.jp",
+    "ja.wikipedia.org",
+    "docoic.com",
+    "目録.jp",
+    "simum.jp",
+    "toyo-pri.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "45,100",
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

@@ -1,0 +1,154 @@
+{
+ "checked_at": "2026-10-11T12:41:26+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "hankyu-kankobus.co.jp",
+    "hankyu-kankobus.co.jp",
+    "osaka-airport.co.jp",
+    "hanshin-bus.co.jp",
+    "osaka-airport.co.jp",
+    "jointmat.hatenablog.com",
+    "shinkibus.co.jp",
+    "bushikaku.net",
+    "narakotsu.co.jp",
+    "hanshin-bus.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "7,510",
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "50",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 2,
+   "domains": [
+    "yurtec.co.jp",
+    "yurtec.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "3",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "weblio.jp",
+    "x.com",
+    "youtube.com",
+    "e-kae-library.com",
+    "youtube.com",
+    "nicovideo.jp",
+    "ja.wiktionary.org",
+    "ja.wikipedia.org",
+    "iikae-note.com",
+    "kotobank.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "398,000",
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "police.pref.saitama.lg.jp",
+    "police.pref.saitama.lg.jp",
+    "webmap.police.pref.saitama.lg.jp",
+    "webmap.police.pref.saitama.lg.jp",
+    "police.pref.saitama.lg.jp",
+    "police.pref.saitama.lg.jp",
+    "police.pref.saitama.lg.jp",
+    "police.pref.saitama.lg.jp",
+    "police.pref.saitama.lg.jp",
+    "police.pref.saitama.lg.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "56",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "ejje.weblio.jp",
+    "winners-english.com",
+    "talking-english.net",
+    "e-grammar.info",
+    "saruwakakun.com",
+    "dailyeigo.com",
+    "ei-navi.jp",
+    "cooori.com",
+    "shinuwakaeng.com",
+    "weblio.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "604,000",
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "jp-guide.net",
+    "hansoku-style.jp",
+    "筆耕.com",
+    "exia.co.jp",
+    "目録.jp",
+    "ja.wikipedia.org",
+    "docoic.com",
+    "目録.jp",
+    "simum.jp",
+    "toyo-pri.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "45,100",
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

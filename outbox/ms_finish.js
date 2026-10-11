@@ -44,6 +44,17 @@ async function pick(p, btnSel, optText) {
   if (await alt.count()) { await alt.click(); await p.waitForTimeout(900); log('      選んだ (li): ' + optText); return true; }
   log('  ★ 選択肢が見つからない: ' + optText); return false;
 }
+// credential は gitignore なので、ツリーが違うと無い (実測: runner で readFileSync が throw して
+// 巡回の log に Node の stack が 4 行落ちていた)。無いのは事故じゃないので静かに状態だけ残す。
+for (const f of ['outbox/mailtm.json', 'outbox/ms-account.json']) {
+  if (!fs.existsSync(f)) {
+    fs.writeFileSync('outbox/ms-state.json', JSON.stringify({
+      attempted_on: new Date().toISOString().slice(0, 10), completed: false,
+      blocked: 'no_creds', at: new Date().toISOString() }, null, 1));
+    console.error('  credential が無いので休む: ' + f);
+    process.exit(0);
+  }
+}
 (async () => {
   const tok = await mailToken();
   const t0 = Date.now();
@@ -59,6 +70,14 @@ async function pick(p, btnSel, optText) {
     for (let round = 0; round < 12; round++) {
       const t = await text();
       log('  [' + round + '] ' + t.slice(0, 80));
+      if (/too many|try again later/i.test(t)) {
+        log('  ★ Microsoft が code 発行を限速した: ' + t.slice(0, 130));
+        fs.writeFileSync('outbox/ms-auto-result.json', JSON.stringify({ url: p.url(), text: t, blocked: 'rate_limit' }, null, 1));
+        fs.writeFileSync('outbox/ms-state.json', JSON.stringify({
+          attempted_on: new Date().toISOString().slice(0, 10), completed: false,
+          blocked: 'rate_limit', at: new Date().toISOString(), url: p.url() }, null, 1));
+        break;
+      }
       if (/Enter your email address/i.test(t)) {
         const e = p.locator('input[type="email"]').first();
         if (await e.count()) { await e.click(); await e.fill(''); await p.waitForTimeout(200);
@@ -88,14 +107,6 @@ async function pick(p, btnSel, optText) {
         const w = p.locator('input[type="password"], #Password').first();
         if (await w.count()) { await w.click(); await w.pressSequentially(acct.password, { delay: 25 });
           await p.waitForTimeout(700); await p.keyboard.press('Tab'); await p.waitForTimeout(400); await next(); continue; }
-      }
-      if (/too many|try again later|後で/i.test(t)) {
-        log('  ★ Microsoft が code 発行を限速した: ' + t.slice(0, 130));
-        fs.writeFileSync('outbox/ms-auto-result.json', JSON.stringify({ url: p.url(), text: t, blocked: 'rate_limit' }, null, 1));
-        fs.writeFileSync('outbox/ms-state.json', JSON.stringify({
-          attempted_on: new Date().toISOString().slice(0, 10), completed: false,
-          blocked: 'rate_limit', at: new Date().toISOString(), url: p.url() }, null, 1));
-        break;
       }
       if (/Add some details/i.test(t)) {
         await pick(p, '#BirthMonthDropdown', MONTHS[Number(BM) - 1]);

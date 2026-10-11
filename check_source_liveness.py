@@ -134,8 +134,38 @@ def check(quiet: bool = False) -> dict:
     return stats
 
 
+CSV_OUT = ROOT / "exports" / "source_liveness.csv"
+CSV_COLS = ["seen", "at", "key", "url", "http", "bytes", "paywall", "price", "title"]
+
+
+def write_csv(quiet: bool = False) -> int:
+    """$25 の『歴史スナップショット一式』に入れる成果物としても出す (店に出す物は CSV)。"""
+    import csv as _csv
+    rows = []
+    if LEDGER.exists():
+        for line in LEDGER.open(encoding="utf-8"):
+            try:
+                rows.append(json.loads(line))
+            except Exception:
+                continue
+    if not rows:
+        return 0
+    rows.sort(key=lambda r: (str(r.get("seen")), str(r.get("at")), str(r.get("key"))))
+    CSV_OUT.parent.mkdir(parents=True, exist_ok=True)
+    with CSV_OUT.open("w", encoding="utf_8_sig", newline="") as fh:
+        w = _csv.DictWriter(fh, fieldnames=CSV_COLS, extrasaction="ignore")
+        w.writeheader()
+        for r in rows:
+            r["url"] = f"{BASE}/{r.get('key')}"
+            w.writerow(r)
+    if not quiet:
+        print(f"  生存 CSV   : {CSV_OUT.name} {len(rows)} 行")
+    return len(rows)
+
+
 if __name__ == "__main__":
     st = check()
+    write_csv()
     # 死んだ出典は約束の違反 / http が取れない日は測れていない (0 と区別する)
     if st["dead"] or st["paywalled"] or st["no_http"]:
         print("★★★ GUARD FAIL: source-liveness — 出典の生存が変わったか測れていない")

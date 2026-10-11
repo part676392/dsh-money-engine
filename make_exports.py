@@ -63,6 +63,8 @@ def main() -> int:
     for extra, what in (("question_lineups.csv", "質問カテゴリの並び順 (企業・位置・カテゴリ)"),
                         ("reverse_questions.csv", "逆質問にふれる本文の実文 (出典URLつき)"),
                         ("history_timeseries.csv", "無人巡回が積んだ観測の履歴行列表 (SHA-256 付)"),
+                        ("es_deadlines_history.csv", "締切をいつ・どの記事から拾ったかの台帳 (拾った機械 dev / runner を残す)"),
+                        ("source_liveness.csv", "出典記事の生存観測 (http / 有料化)"),
                         ("history_runs.csv", "巡回 1 回ごとの実行背骨 (日付 file は同じ日に上書きされるため別粒度)")):
         fp = EXP / extra
         if fp.exists():

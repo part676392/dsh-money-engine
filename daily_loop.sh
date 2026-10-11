@@ -333,6 +333,8 @@ $(date ...) PR 入口 ★"
   # 検索の所有権検証: 未取得は ★ にしない (人間のログインが要る扉で、事故ではないから)。
   # ファイルが現たら配れているか中身まで測る。
   # AI が読む索引から値段と権利が消えたら、注記が届かないまま一人歩きする
+  # 頁の実数を manifest に合わせる (先に測ると歴史が伸びた分で ★ になる。実測 20:57 run)
+  python3 make_llms.py             2>&1 | tail -1
   if ! python3 check_llms_rights.py 2>&1 | tail -3; then
     echo "  ★★★ GUARD FAIL: llms-rights — llms.txt から料金か権利が消えている"
   fi
@@ -367,7 +369,35 @@ $(date ...) PR 入口 ★"
   # だから今回の分だけ切り出して赤を1行の警告と状態ファイルにする。
     # build を指示したかに関わらず、今配られている build の状態を最後に1回読む。
     # (指示口が2つで片方は条件付き。errored 2 件が出ても日志に何も出なかった実測がある)
-    pages_check "https://x-access-token:${TOK2}@github.com/part676392/dsh-money-engine.git"
+    # Microsoft account (Bing Webmaster 用) を agent で作る試み。code 発行の 1 日上限に当たったので
+  # 1 日 1 回だけ作り直しにいく (実測 2026-10-11: "You've requested too many codes today")。
+  if [ -x "$HOME/.local/bin/node" ] && [ -f outbox/ms_finish.js ]; then
+    MS_TODO=$(python3 - <<'PYO'
+import json, pathlib, datetime
+p = pathlib.Path("outbox/ms-state.json")
+if not p.exists():
+    print("go"); raise SystemExit
+try:
+    d = json.loads(p.read_text(encoding="utf-8"))
+except Exception:
+    print("go"); raise SystemExit
+if d.get("completed"):
+    print("done")
+elif d.get("attempted_on") == datetime.date.today().isoformat():
+    print("wait")
+else:
+    print("go")
+PYO
+)
+    case "$MS_TODO" in
+      go)   echo "  Microsoft account: 作り直しを試みる"
+            NODE_PATH="$PWD/node_modules" "$HOME/.local/bin/node" outbox/ms_finish.js 2>&1 | tail -3 ;;
+      wait) echo "  Microsoft account: 今日分は限速済み (明日再試行)" ;;
+      done) echo "  Microsoft account: 完成" ;;
+    esac
+  fi
+
+  pages_check "https://x-access-token:${TOK2}@github.com/part676392/dsh-money-engine.git"
 
   RUN=$(awk '/start =====/{buf=""} {buf=buf "\n" $0} END{print buf}' "$LOG")
   # 集計は sentinel の後だけ見る (護りの後に builder が走る順序を直したので、早期の ★ は

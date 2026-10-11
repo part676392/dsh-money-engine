@@ -34,10 +34,16 @@ def fetch(name: str) -> str:
 
 
 def manifest_rows() -> dict:
+    """manifest は配られている物と比べる。実測 (21:0x): ローカル manifest は 720 行、
+    live の llms.txt は 735 行で ★ になった — dev と runner が別々に歴史を積むので
+    別ツリーの数とぶつかる。同じ場所 (live) 同士で比べる。"""
     out = {}
-    with (ROOT / "exports" / "manifest.csv").open(encoding="utf_8_sig", newline="") as fh:
-        for r in csv.DictReader(fh):
-            out[r.get("file", "")] = r.get("rows", "")
+    raw = fetch("exports/manifest.csv")
+    if len(raw) < 40:
+        raw = (ROOT / "exports" / "manifest.csv").read_text(encoding="utf_8-sig", errors="replace")
+    for r in csv.DictReader(raw.splitlines()):
+        if r.get("file"):
+            out[r["file"]] = r.get("rows", "")
     return out
 
 

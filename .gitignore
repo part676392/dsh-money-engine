@@ -16,7 +16,6 @@ outbox/gumroad.json
 .gumroad-profile/
 outbox/mailtm-devto.json
 outbox/hn-account.txt
-
 # 秘密: 使い捨て mail.tm の password / token / cookie は public repo に置かない
 outbox/*.txt
 outbox/*attempt*.json
@@ -24,8 +23,6 @@ outbox/login-*.json
 outbox/login-*.log
 outbox/mailtm-*.json
 outbox/mastodon-signup.json
-outbox/gumroad.json
-outbox/wallet.json
 .reddit-profile/
 .browser-profile*/
 outbox/sweep-*.log
@@ -33,7 +30,6 @@ outbox/login-run*.log
 data/full_bodies.json
 outbox/*-signup.json
 dist/
-
 # git に書き戻されない目撃者 (run の開始/終了)
 logs/runs.jsonl
 # 派生の「最新」だけを入れるファイル。dev と runner が同じ行を上書きして
@@ -49,7 +45,6 @@ data/traffic/latest.json
 # 日志は git に追わない (dev と runner が同じ行を append して紛争させる。運用履歴の
 # 素材は data/{history,payments,traffic}/ の日付付き JSON で、日志は読んでいない)
 logs/
-
 # 「最新」派生は全部ローカル専用。日付付きが本体。
 data/demand-latest.json
 data/distribution/latest.json
@@ -58,13 +53,19 @@ data/rails/secrets_latest.json
 data/rails/signup_latest.json
 data/scoreboard/latest.json
 data/snapshot-latest.json
-
 # 納品台帳は dev だけが書く。衝突停の実測2回があるので載せない。
 outbox/rentry.json
-
 # Playwright の永続 profile (Chromium が secret っぽい値を書く: 実測 .note-profile/Default/Preferences に secret=...)
 .note-profile/
 *-profile/
 # release 護りが降ろす zip (毎回上書きする測定物なので repo に積まない)
 outbox/release_probe.zip
 dist/
+outbox/ms-account.json
+outbox/ms-state.json
+outbox/ms-auto-result.json
+outbox/ms-signin-result.json
+outbox/wmt-state.json
+outbox/ms-code.txt
+outbox/bing-signin-state.json
+outbox/ms-signup-state.json

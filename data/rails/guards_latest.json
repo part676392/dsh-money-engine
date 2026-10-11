@@ -1,7 +1,5 @@
 {
- "checked_at": "2026-10-11T17:20:15+0900",
- "green": false,
- "failed": [
-  "source-liveness"
- ]
+ "checked_at": "2026-10-11T17:28:55+0900",
+ "green": true,
+ "failed": []
 }

@@ -165,10 +165,15 @@ def render(rows, passed, method):
             seen = "初出 %s%s" % (fs[5:].replace("-", "/"), (" / %d回目" % n) if n > 1 else "")
         else:
             seen = "今日初出"
+        # 行ごとに $5 の口を置く (実測: 締切頁 34 load で注文 link は画面上部に 1 本だけ。
+        # 必要な物が目の前に有る場所で押せるようにする。計数は cta-row で行数と照合できる)。
+        buy = ("<a href=\"" + esc(buy_block.url(r["firm"])).replace("&", "&amp;") +
+               "\" onclick=\"" + buy_block.beacon_js("cta-row") +
+               ";return true\">$5</a>")
         items.append("<tr><td><b>%s</b></td><td>%s</td><td><a href='%s'>%s</a></td><td>%s</td>"
-                     "<td class='t'>%s%s<span class='hs'>%s</span></td></tr>" % (
+                     "<td class='t'>%s%s<span class='hs'>%s</span></td><td>%s</td></tr>" % (
                          r["date"][5:].replace("-", "/"), urg, esc(r["url"]), esc(r["firm"]),
-                         badge, esc(r["title"][:52]), ev, esc(seen)))
+                         badge, esc(r["title"][:52]), ev, esc(seen), buy))
 
     # 見出しの語は実集合に合わせる。wide でコンサル以外が入るのに「コンサル一覧」と騙さない。
     k = re.compile(r"コンサル|ファーム|監査|アドバイザ|EY|PwC|デロイト|KPMG|アビーム|アーンスト|トーマツ|PwC")
@@ -203,7 +208,7 @@ a{color:#1a5fd6}.sub{color:#5a6472;font-size:.86rem}
 <p class="sub">%(method)s。締切が迫っている順。</p>
 <div class="box"><b>最速の締切は %(nearest)s（残り %(nd)s 日）。</b>
 3日以内が %(soon)d件、うち無料で読める書き方ガイドが %(soonfree)d件。下の表からそのまま飛べます。</div>
-<table><thead><tr><th>締切</th><th>猶予</th><th>企業</th><th>資料</th><th>記事と根拠記載・初出</th></tr></thead>
+<table><thead><tr><th>締切</th><th>猶予</th><th>企業</th><th>資料</th><th>記事と根拠記載・初出</th><th>1社ぶん</th></tr></thead>
 <tbody>
 %(rows)s
 </tbody></table>

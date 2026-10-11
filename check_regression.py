@@ -140,6 +140,31 @@ def traffic_keys_registered() -> bool:
     return ok
 
 
+def deadline_row_ctas() -> bool:
+    """締切頁: 行の数と $5 の口の数が一致していること (全部に beacon 付き)。
+    実測: 34 load で注文の口は画面上部の 1 本だけだった。行ごとに置く約束の点検。"""
+    f = ROOT / "es-deadlines.html"
+    if not f.exists():
+        print("    締切行の口        : ★ es-deadlines.html が無い")
+        return False
+    h = f.read_text(encoding="utf-8", errors="replace")
+    rows = len(re.findall(r"<td><b>\d{2}/\d{2}</b></td>", h))
+    anchors = re.findall(r"""<a href="[^"]*template=order\.yml[^"]*"[^>]*>""", h)
+    ctas = [a for a in anchors if "cta-row" in a]
+    nob = [a for a in ctas if "fetch(" not in a]
+    bad = []
+    if rows != len(ctas):
+        bad.append(f"行 {rows} / 口 {len(ctas)} が違う")
+    if nob:
+        bad.append(f"beacon の無い口 {len(nob)} 本")
+    if not rows:
+        bad.append("締切行が 0 (開いている締切が無い日は正常なので ★ にしない)")
+        return True
+    ok = not bad
+    print(f"    締切行の口        : {'OK' if ok else '★ ' + '; '.join(bad)} (行 {rows} / 口 {len(ctas)} / beacon {len(ctas) - len(nob)})")
+    return ok
+
+
 def strip_beacons() -> bool:
     """h1 直下の strip に有る link は全部 beacon を持つこと。
     実測: 締切頁 32 load で注文 link しか計数が無かった (上部欄 4 本中 1 本)。"""
@@ -470,6 +495,8 @@ def loop_coverage() -> bool:
 def main() -> int:
     if "--selftest" in sys.argv:
         return run_selftest()
+    if not deadline_row_ctas():
+        return 1
     if not strip_beacons():
         return 1
     if not deadline_counts_agree():

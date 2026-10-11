@@ -22,6 +22,7 @@ import re
 import subprocess
 import time
 
+SITE = "https://part676392.github.io/dsh-money-engine"
 ROOT = pathlib.Path(__file__).resolve().parent
 BASE = "https://part676392.github.io/dsh-money-engine"
 PAGES = ["store/", "store/mini.html"]
@@ -256,6 +257,30 @@ def cta_check() -> bool:
     ok = not bad
     print(f"    面の注文欄      : {'OK' if ok else '★ ' + '; '.join(bad[:3])}"
           f"  ({len(pages)} 頁を点検)")
+    return ok
+
+
+def live_cta_check() -> bool:
+    """live の頁に注文欄が在るか (生 HTTP で見る)。
+    local と repo が正しくても Pages の build が失敗すると live は古いまま。
+    実測: build が 2 回 errored して live に注文欄が 5 分無かった。"""
+    pages = ["", "question-lineups.html", "store/", "sample.html", "es-deadlines.html",
+             "changes.html", "store/mini.html"]
+    bad = []
+    for p in pages:
+        r = subprocess.run(["curl", "-s", "--max-time", "30", f"{SITE.rstrip('/')}/{p}"],
+                           capture_output=True, text=True, timeout=40)
+        h = r.stdout
+        if not h:
+            bad.append(f"{p or 'index'}: 応答が無い")
+            continue
+        if "template=order.yml" not in h:
+            bad.append(f"{p or 'index'}: live に注文欄が無い (Pages が古い/build 失敗?)")
+        elif "$5" not in h:
+            bad.append(f"{p or 'index'}: live に価格が無い")
+    ok = not bad
+    print(f"    live の注文欄     : {'OK' if ok else '★ ' + '; '.join(bad[:2])}"
+          f"  ({len(pages)} 面を live で点検)")
     return ok
 
 
@@ -794,6 +819,8 @@ def main() -> int:
     if not not_found_check():
         all_ok = False
     if not cta_check():
+        all_ok = False
+    if not live_cta_check():
         all_ok = False
     print(f"\n  money pages ready: {all_ok}")
     out = ROOT / "data" / "rails" / "money_latest.json"

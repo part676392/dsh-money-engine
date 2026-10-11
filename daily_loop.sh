@@ -69,7 +69,11 @@ mkdir -p logs
     sync_push "https://x-access-token:${TOK}@github.com/part676392/dsh-money-engine.git" \
       && echo "  pushed" || echo "  PUSH FAILED"
     python3 check_regression.py --update 2>&1 | tail -1
-    gh api -X POST repos/part676392/dsh-money-engine/pages/builds >/dev/null 2>&1 && echo "  pages build triggered"
+    gh api -X POST repos/part676392/dsh-money-engine/pages/builds >/dev/null 2>&1
+    sleep 40
+    PB=$(gh api repos/part676392/dsh-money-engine/pages/builds --jq '.[0] | .status + " " + (.error.message // "-")' 2>/dev/null)
+    echo "  pages build: $PB"
+    case "$PB" in *errored*) echo "  ★★★ GUARD FAIL: pages — Pages の build が失敗した (live が古い)";; esac && echo "  pages build triggered"
     sleep 30
     fi
   else
@@ -243,6 +247,7 @@ PY
   echo "$RUN" | grep -q "GUARD FAIL: prose" && FAIL="$FAIL prose"
   echo "$RUN" | grep -q "GUARD FAIL: traffic" && FAIL="$FAIL traffic"
   echo "$RUN" | grep -q "GUARD FAIL: surface-links" && FAIL="$FAIL surface-links"
+  echo "$RUN" | grep -q "GUARD FAIL: pages" && FAIL="$FAIL pages"
   echo "$RUN" | grep -q "GUARD FAIL: discovery" && FAIL="$FAIL discovery"
   echo "$RUN" | grep -q "GUARD FAIL: money-check" && FAIL="$FAIL money-check"
   echo "$RUN" | grep -qE "parser self-test: ([0-3])/4" && FAIL="$FAIL parser"

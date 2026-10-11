@@ -1,9 +1,9 @@
 {
- "generated_at": "2026-10-11T14:51:08+0900",
+ "generated_at": "2026-10-11T15:04:17+0900",
  "observations": 3,
  "first_captured_at": "2026-10-10T23:47:13+09:00",
- "last_captured_at": "2026-10-11T14:51:06+09:00",
- "runs_recorded": 73,
+ "last_captured_at": "2026-10-11T15:04:15+09:00",
+ "runs_recorded": 74,
  "runs_csv": "exports/history_runs.csv",
  "grain_note": "observations は 日付×場所 の 1 件 (同じ日の再実行は上書き)。走った回数の-series は runs_csv に別粒度で置く。",
  "columns": [
@@ -111,7 +111,7 @@
    "_file": "2026-10-11.dev.json"
   },
   {
-   "captured_at": "2026-10-11T14:51:06+09:00",
+   "captured_at": "2026-10-11T15:04:15+09:00",
    "location": "runner",
    "articles": "600",
    "companies": "473",
@@ -126,7 +126,7 @@
    "lineup_modal_pct": "64",
    "reverse_quotes": "24",
    "reverse_companies": "8",
-   "deadlines_open": "12",
+   "deadlines_open": "11",
    "orders_real": "0",
    "orders_rehearsal": "1",
    "orders_closed": "1",

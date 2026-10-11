@@ -1,7 +1,5 @@
 {
- "checked_at": "2026-10-11T12:21:18+0900",
- "green": false,
- "failed": [
-  "pages"
- ]
+ "checked_at": "2026-10-11T12:26:41+0900",
+ "green": true,
+ "failed": []
 }

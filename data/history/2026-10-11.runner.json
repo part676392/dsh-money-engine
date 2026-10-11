@@ -1,5 +1,5 @@
 {
- "captured_at": "2026-10-11T18:14:23+09:00",
+ "captured_at": "2026-10-11T18:28:15+09:00",
  "location": "runner",
  "articles": 600,
  "companies": 473,
@@ -22,7 +22,7 @@
  "lineup_modal_pct": 64,
  "reverse_quotes": 24,
  "reverse_companies": 8,
- "deadlines_open": 11,
+ "deadlines_open": 12,
  "orders_real": 0,
  "orders_rehearsal": 1,
  "orders_closed": 1,

@@ -1,4 +1,4 @@
 ﻿captured_at,location,articles,companies,listed_value_yen,questions,questions_raw,companies_with_questions,flows,signals,lineup_rows,lineup_companies,lineup_modal_pct,reverse_quotes,reverse_companies,deadlines_open,orders_real,orders_rehearsal,orders_closed,delivered,traffic_total,traffic_home,traffic_store,traffic_license,traffic_sample,traffic_lineup,traffic_reverse,traffic_mini,cash_usd,cash_eth,sha256_source
 2026-10-10T23:47:13+09:00,,600,491,1205920,,,,,,,,,,,,,,,,,,,,,,,,,,72f89163f73c4ff7ce095950f7b91c95186b1a2095450149730c8a4b33aa9967
 2026-10-11T16:43:22+09:00,dev,600,473,1205920,1779,1873,472,56,2780,5494,467,64,24,8,12,0,1,1,1,47,28,4,4,3,5,2,1,0,0,09e3fa5c49ba3d47b1251f79a27a7068b5bb8e7dae2af1981bbb788d53fd00e9
-2026-10-11T18:14:23+09:00,runner,600,473,1205920,1779,1873,472,56,2780,5494,467,64,24,8,11,0,1,1,1,47,28,4,4,3,5,2,1,0,0,ed626f864a4e019491bae379594fa06de2ff85efdb326cb6fc152830bc65da25
+2026-10-11T18:28:15+09:00,runner,600,473,1205920,1779,1873,472,56,2780,5494,467,64,24,8,12,0,1,1,1,47,28,4,4,3,5,2,1,0,0,7bdc8740cfabc76b3282ffc98b1c9409faa8f3cd7f81da801604872a721735e4

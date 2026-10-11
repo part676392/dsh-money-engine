@@ -1,154 +1,161 @@
 {
- "_why": "访问計は合計しか数えない。だから『どの面から human が来たか』を unknown にしていた (2026-10-11 実測: home=4 store=3 license=4 sample=1 で源が不明)。公開済みの面に ?src=<key> 付きURLを打ち直し、src-<key> を別 counter にする。",
- "_how": "外に出す URL は必ず https://part676392.github.io/dsh-money-engine/<頁>?src=<key> の形。頁側の JS が param を見て src-<key> にも hit を置く (check_traffic.py がここを読む。",
- "sources": [
-  {
-   "key": "ghrepo",
-   "surface": "GitHub リポジトリ README",
-   "target": "index.html",
-   "where": "README.md の先頭リンク",
-   "updated": "2026-10-11",
-   "tagged": true
-  },
-  {
-   "key": "gist",
-   "surface": "Gist 目録",
-   "target": "exports/questions_catalog.csv",
-   "where": "gist 8f51111c9ac743c672cf3a04ed863fcf の本文",
-   "updated": "2026-10-11",
-   "tagged": true
-  },
-  {
-   "key": "rentry1",
-   "surface": "rentry.co x4piimss",
-   "target": "index.html",
-   "where": "rentry ページ本文",
-   "updated": "2026-10-11",
-   "tagged": false,
-   "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す",
-   "retired": true,
-   "retire_note": "旧 rentry 面。rentry-fic / rentry-data / rentry-lineup / rentry-index に置き換えた (未打直のまま残すと雑音)"
-  },
-  {
-   "key": "rentry2",
-   "surface": "rentry.co 4n73c73h",
-   "target": "data-license.html",
-   "where": "rentry ページ本文",
-   "updated": "2026-10-11",
-   "tagged": false,
-   "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す",
-   "retired": true,
-   "retire_note": "旧 rentry 面。rentry-fic / rentry-data / rentry-lineup / rentry-index に置き換えた (未打直のまま残すと雑音)"
-  },
-  {
-   "key": "rentry3",
-   "surface": "rentry.co mpw4i6zu",
-   "target": "store/",
-   "where": "rentry ページ本文",
-   "updated": "2026-10-11",
-   "tagged": false,
-   "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す",
-   "retired": true,
-   "retire_note": "旧 rentry 面。rentry-fic / rentry-data / rentry-lineup / rentry-index に置き換えた (未打直のまま残すと雑音)"
-  },
-  {
-   "key": "release",
-   "surface": "GitHub release notes",
-   "target": "sample.html",
-   "where": "snap-* release の本文",
-   "updated": "2026-10-11",
-   "tagged": true
-  },
-  {
-   "key": "pr57",
-   "surface": "PR okhosting/awesome-open-data#57",
-   "target": "index.html",
-   "where": "PR 本文",
-   "updated": "2026-10-11",
-   "tagged": true
-  },
-  {
-   "key": "pr32",
-   "surface": "PR taishi-i/awesome-japanese-nlp-resources#32",
-   "target": "index.html",
-   "where": "PR 本文",
-   "updated": "2026-10-11",
-   "tagged": true
-  },
-  {
-   "key": "hn",
-   "surface": "Hacker News (垢 dshlaba71655)",
-   "target": "index.html",
-   "where": "Show HN は showlim + story-toofast。comment は 302 だが作られない (未確認mail)",
-   "tagged": false,
-   "updated": "2026-10-11"
-  },
-  {
-   "key": "rentry-fic",
-   "surface": "rentry.co b8zgbuyv",
-   "target": "store/",
-   "where": "rentry.co/b8zgbuyv (edit_code 所有)",
-   "tagged": true,
-   "updated": "2026-10-11"
-  },
-  {
-   "key": "rentry-data",
-   "surface": "rentry.co zd3s2wkt",
-   "target": "data-license.html",
-   "where": "rentry.co/zd3s2wkt (edit_code 所有)",
-   "tagged": true,
-   "updated": "2026-10-11"
-  },
-  {
-   "key": "rentry-lineup",
-   "surface": "rentry.co xnvrgn8g",
-   "target": "question-lineups.html",
-   "where": "rentry.co/xnvrgn8g (edit_code 所有)",
-   "tagged": true,
-   "updated": "2026-10-11"
-  },
-  {
-   "key": "rentry-index",
-   "surface": "rentry.co q4aiokt7",
-   "target": "index.html",
-   "where": "rentry.co/q4aiokt7 (edit_code 所有)",
-   "tagged": true,
-   "updated": "2026-10-11"
-  },
-  {
-   "key": "prof",
-   "surface": "GitHub プロフィール頁 README",
-   "target": "index.html / data-license.html / sample.html",
-   "where": "part676392/part676392 README の データ資産 節 (3 link)",
-   "updated": "2026-10-11",
-   "tagged": true,
-   "note": "bio と blog も起きたいが token scope に user が無く PATCH /user が 404 (実測 scopes: gist,read:org,repo)。人間側の再認証待ち"
+  "_why": "访问計は合計しか数えない。だから『どの面から human が来たか』を unknown にしていた (2026-10-11 実測: home=4 store=3 license=4 sample=1 で源が不明)。公開済みの面に ?src=<key> 付きURLを打ち直し、src-<key> を別 counter にする。",
+  "_how": "外に出す URL は必ず https://part676392.github.io/dsh-money-engine/<頁>?src=<key> の形。頁側の JS が param を見て src-<key> にも hit を置く (check_traffic.py がここを読む。",
+  "sources": [
+    {
+      "key": "ghrepo",
+      "surface": "GitHub リポジトリ README",
+      "target": "index.html",
+      "where": "README.md の先頭リンク",
+      "updated": "2026-10-11",
+      "tagged": true
+    },
+    {
+      "key": "gist",
+      "surface": "Gist 目録",
+      "target": "exports/questions_catalog.csv",
+      "where": "gist 8f51111c9ac743c672cf3a04ed863fcf の本文",
+      "updated": "2026-10-11",
+      "tagged": true
+    },
+    {
+      "key": "rentry1",
+      "surface": "rentry.co x4piimss",
+      "target": "index.html",
+      "where": "rentry ページ本文",
+      "updated": "2026-10-11",
+      "tagged": false,
+      "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す",
+      "retired": true,
+      "retire_note": "旧 rentry 面。rentry-fic / rentry-data / rentry-lineup / rentry-index に置き換えた (未打直のまま残すと雑音)"
+    },
+    {
+      "key": "rentry2",
+      "surface": "rentry.co 4n73c73h",
+      "target": "data-license.html",
+      "where": "rentry ページ本文",
+      "updated": "2026-10-11",
+      "tagged": false,
+      "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す",
+      "retired": true,
+      "retire_note": "旧 rentry 面。rentry-fic / rentry-data / rentry-lineup / rentry-index に置き換えた (未打直のまま残すと雑音)"
+    },
+    {
+      "key": "rentry3",
+      "surface": "rentry.co mpw4i6zu",
+      "target": "store/",
+      "where": "rentry ページ本文",
+      "updated": "2026-10-11",
+      "tagged": false,
+      "note": "打直できない旧面。新面に置換済みだが計数は別建てで残す",
+      "retired": true,
+      "retire_note": "旧 rentry 面。rentry-fic / rentry-data / rentry-lineup / rentry-index に置き換えた (未打直のまま残すと雑音)"
+    },
+    {
+      "key": "release",
+      "surface": "GitHub release notes",
+      "target": "sample.html",
+      "where": "snap-* release の本文",
+      "updated": "2026-10-11",
+      "tagged": true
+    },
+    {
+      "key": "pr57",
+      "surface": "PR okhosting/awesome-open-data#57",
+      "target": "index.html",
+      "where": "PR 本文",
+      "updated": "2026-10-11",
+      "tagged": true
+    },
+    {
+      "key": "pr32",
+      "surface": "PR taishi-i/awesome-japanese-nlp-resources#32",
+      "target": "index.html",
+      "where": "PR 本文",
+      "updated": "2026-10-11",
+      "tagged": true
+    },
+    {
+      "key": "hn",
+      "surface": "Hacker News (垢 dshlaba71655)",
+      "target": "index.html",
+      "where": "Show HN は showlim + story-toofast。comment は 302 だが作られない (未確認mail)",
+      "tagged": false,
+      "updated": "2026-10-11"
+    },
+    {
+      "key": "rentry-fic",
+      "surface": "rentry.co b8zgbuyv",
+      "target": "store/",
+      "where": "rentry.co/b8zgbuyv (edit_code 所有)",
+      "tagged": true,
+      "updated": "2026-10-11"
+    },
+    {
+      "key": "rentry-data",
+      "surface": "rentry.co zd3s2wkt",
+      "target": "data-license.html",
+      "where": "rentry.co/zd3s2wkt (edit_code 所有)",
+      "tagged": true,
+      "updated": "2026-10-11"
+    },
+    {
+      "key": "rentry-lineup",
+      "surface": "rentry.co xnvrgn8g",
+      "target": "question-lineups.html",
+      "where": "rentry.co/xnvrgn8g (edit_code 所有)",
+      "tagged": true,
+      "updated": "2026-10-11"
+    },
+    {
+      "key": "rentry-index",
+      "surface": "rentry.co q4aiokt7",
+      "target": "index.html",
+      "where": "rentry.co/q4aiokt7 (edit_code 所有)",
+      "tagged": true,
+      "updated": "2026-10-11"
+    },
+    {
+      "key": "prof",
+      "surface": "GitHub プロフィール頁 README",
+      "target": "index.html / data-license.html / sample.html",
+      "where": "part676392/part676392 README の データ資産 節 (3 link)",
+      "updated": "2026-10-11",
+      "tagged": true,
+      "note": "bio と blog も起きたいが token scope に user が無く PATCH /user が 404 (実測 scopes: gist,read:org,repo)。人間側の再認証待ち"
+    },
+    {
+      "key": "jopendata",
+      "surface": "github PR japan-opendata/awesome-japan-opendata#30",
+      "target": "https://github.com/japan-opendata/awesome-japan-opendata/pull/30",
+      "tagged": true,
+      "note": "2026-10-11 に自分で開いた。面接質問 DB を「企業・事業主」の節に足した"
+    }
+  ],
+  "discovery": {
+    "_note": "?src= を付けられない面 (GitHub topic 一覧) の検査。topic 頁の順位は star 依存で確認できないので、過大に書かない。ここでは『topic 連携が生きているか』だけを見る (search API で hit>=1)。topic を消されても気づけるようにする。",
+    "github_topics": [
+      "aeo",
+      "careers",
+      "data-collection",
+      "dataset",
+      "hiring",
+      "interview-preparation",
+      "interview-questions",
+      "japan",
+      "japanese-nlp",
+      "job-hunting",
+      "json-ld",
+      "recruiting",
+      "seo",
+      "static-site"
+    ],
+    "spot_check": [
+      "interview-questions",
+      "japanese-nlp",
+      "dataset",
+      "hiring"
+    ],
+    "updated": "2026-10-11"
   }
- ],
- "discovery": {
-  "_note": "?src= を付けられない面 (GitHub topic 一覧) の検査。topic 頁の順位は star 依存で確認できないので、過大に書かない。ここでは『topic 連携が生きているか』だけを見る (search API で hit>=1)。topic を消されても気づけるようにする。",
-  "github_topics": [
-   "aeo",
-   "careers",
-   "data-collection",
-   "dataset",
-   "hiring",
-   "interview-preparation",
-   "interview-questions",
-   "japan",
-   "japanese-nlp",
-   "job-hunting",
-   "json-ld",
-   "recruiting",
-   "seo",
-   "static-site"
-  ],
-  "spot_check": [
-   "interview-questions",
-   "japanese-nlp",
-   "dataset",
-   "hiring"
-  ],
-  "updated": "2026-10-11"
- }
 }

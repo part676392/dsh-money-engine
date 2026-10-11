@@ -19,8 +19,9 @@ ROOT = pathlib.Path(__file__).resolve().parent
 SITE = "https://part676392.github.io/dsh-money-engine"
 GIST = "8f51111c9ac743c672cf3a04ed863fcf"
 REPO = "part676392/dsh-money-engine"
-PRS = {"pr57": "okhosting/awesome-open-data", "pr32": "taishi-i/awesome-japanese-nlp-resources"}
-PRNUM = {"pr57": "57", "pr32": "32"}
+PRS = {"pr57": "okhosting/awesome-open-data", "pr32": "taishi-i/awesome-japanese-nlp-resources",
+    "jopendata": "japan-opendata/awesome-japan-opendata"}
+PRNUM = {"pr57": "57", "pr32": "32", "jopendata": "30"}
 
 
 def gh(*args: str) -> tuple:

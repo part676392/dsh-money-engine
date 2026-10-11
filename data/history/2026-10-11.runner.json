@@ -1,5 +1,5 @@
 {
- "captured_at": "2026-10-11T12:41:55+09:00",
+ "captured_at": "2026-10-11T12:59:52+09:00",
  "location": "runner",
  "articles": 600,
  "companies": 473,
@@ -28,7 +28,7 @@
  "orders_closed": 1,
  "delivered": 1,
  "traffic": {
-  "home": 20,
+  "home": 22,
   "store": 4,
   "license": 4,
   "sample": 3,
@@ -36,7 +36,7 @@
   "lineup": 5,
   "reverse": 2
  },
- "traffic_total": 39,
+ "traffic_total": 41,
  "cash_usd": 0,
  "cash_eth": 0
 }

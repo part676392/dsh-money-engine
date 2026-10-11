@@ -595,7 +595,7 @@ def outreach_check() -> bool:
         except Exception:  # noqa: BLE001
             bad.append(f"#{num} comment が読めない")
         if d.get("state") != "open":
-            bad.append(f"#{num} state={d.get('state')} (閉結・併合なら台帳を更新)")
+            bad.append(f"#{num} state={d.get('state')} (不成立・併合なら台帳を更新)")
             continue
         if f"{nq:,}" not in body:
             bad.append(f"#{num} に公開質問数 {nq:,} が無い")

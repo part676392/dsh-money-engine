@@ -13,6 +13,17 @@ ISSUES = "https://github.com/part676392/dsh-money-engine/issues/new"
 ENTRY_PLAN = "1社だけ試す ($5)"
 
 
+# 『注文だったが金が入らず閉じた』状態の語。旧字 (閉結) は私の造語で日本語として変なので
+# 不成立 に変えたが、台帳 data/deliveries.json には 2026-10-11 までの旧値が残っている。
+CLOSED_WORDS = ("不成立", "閉結")
+
+
+def is_closed(status) -> bool:
+    """台帳の status が『閉じた注文』を指すか (旧値も読む)。"""
+    txt = str(status or "")
+    return any(w in txt for w in CLOSED_WORDS)
+
+
 def url(company: str = "", plan: str = "", title: str = "") -> str:
     q = {"template": "order.yml"}
     if title:

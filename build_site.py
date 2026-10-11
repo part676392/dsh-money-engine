@@ -66,8 +66,9 @@ def history_record(snap: dict, loc: str) -> dict:
     # deliveries.json は id 辞書。orders_total の様な集計鍵は無い (実測で null になった)。
     dvi = list(dv.values()) if isinstance(dv, dict) else (dv or [])
     n_rehearsal = sum(1 for x in dvi if str(x.get("kind", "")) == "rehearsal")
-    # 閉結 (送金なし) は注文として数えない (gh issue を消すと実注文が永久に残っていた)。
-    n_closed = sum(1 for x in dvi if "閉結" in str(x.get("status", "")))
+    # 不成立 (送金なし) は注文として数えない (gh issue を消すと実注文が永久に残っていた)。
+    # 旧字 閉結 の台帳値も order_link.is_closed が読む (台帳に 2026-10-11 までの値が残っている)
+    n_closed = sum(1 for x in dvi if order_link.is_closed(x.get("status")))
     n_delivered = sum(1 for x in dvi if "delivered" in str(x.get("status", "")).lower()
                       or "納品" in str(x.get("status", "")))
     cnt = abacus_counts()

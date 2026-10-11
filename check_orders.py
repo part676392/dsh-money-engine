@@ -200,13 +200,13 @@ def issue_orders() -> dict:
             led = json.loads(dpath.read_text(encoding="utf-8"))
         except Exception:  # noqa: BLE001
             led = {}
-    # 閉結したまま受領中が台帳に残ると実注文が水増しされる (実測: closed 直後も
+    # 不成立 (送金なし) のまま受領中が台帳に残ると実注文が水増しされる (実測: closed 直後も
     # labels 付き query が #2 を返し続けた = GitHub の index 遅延が数秒)。次の巡回で落ちる。
     open_keys = {f"GH-{x['number']}" for x in real}
     for k, v in led.items():
         if k.startswith("GH-") and k not in open_keys and "納品" not in str(v.get("status", "")):
-            v["status"] = "閉結 (送金なし)"
-            print(f"  台帳 {k}: 閉結として落とした")
+            v["status"] = "不成立 (送金なし)"
+            print(f"  台帳 {k}: 不成立として落とした")
     for x in real:
         k = f"GH-{x['number']}"
         if k not in led:

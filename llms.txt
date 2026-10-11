@@ -3,7 +3,7 @@
 > 日本の転職・中途市場で「面接の情報」を実測して積む静的データ資産。
 > 収録 600 本 / 対象 473 社 / 掲載金額合計 ¥1,205,920。毎日 06:10 と 19:40 (JST) に自動更新。
 
-生成: 2026-10-12 00:55 JST
+生成: 2026-10-12 06:17 JST
 この文書にある数値はすべて再取得可能な実測です。推定値と将来見通しは本文に書いていません。
 
 ## Pages
@@ -36,7 +36,7 @@
   `exports/interview_questions.csv` の `question` は記事の小見出しを落とした形、`question_raw` が抽出そのまま。
   `category` は選考フロー側と同じ12名の機械分類で、迷った行は `未判定` のまま残す (63.9% を分類)。
 - 本文に現れた選考段階の言及: 書類選考 1,268、最終面接 635、一次面接 284。書類選考が過半を占める。
-- 無人巡回が積んだ観測は 5 件 (2026-10-10T23:47:13+09:00 → 2026-10-12T00:55:17+09:00)。`exports/history_timeseries.csv` に無料公開。
+- 無人巡回が積んだ観測は 5 件 (2026-10-10T23:47:13+09:00 → 2026-10-12T06:17:13+09:00)。`exports/history_timeseries.csv` に無料公開。
   UTF-8 BOM 付きなので `utf-8-sig` で読む。空欄は「その頃は測っていなかった」で 0 ではない。
   各行に元 file の SHA-256 を付け、後から数字を差し替えていないことを検証できるようにした。
 
@@ -53,7 +53,7 @@
 - 1社だけ $5 の中身: その社の質問実文・並び・締切観測・出典URLを CSV 1 本に固めて納品。
   質問実文が 0 文の社にはお金を取らない (締切頁のラベルが正直に出す)。
 - 歴史スナップショット一式 $25 の中身 (実測の行数): `history_timeseries.csv` 5 行 /
-  `es_deadlines_history.csv` 960 行 / `source_liveness.csv` 3287 行。
+  `es_deadlines_history.csv` 975 行 / `source_liveness.csv` 3367 行。
   GitHub Release として Version 付きの zip で降ろせる (中の行数がその日の記録と一致するのは
   `check_release.py` が毎巡回で測る): https://github.com/part676392/dsh-money-engine/releases/latest
 - 注文: https://part676392.github.io/dsh-money-engine/data-license.html ／ issue form (https://github.com/part676392/dsh-money-engine/issues/new?template=order.yml) ／

@@ -60,3 +60,7 @@ data/snapshot-latest.json
 
 # 納品台帳は dev だけが書く。衝突停の実測2回があるので載せない。
 outbox/rentry.json
+
+# Playwright の永続 profile (Chromium が secret っぽい値を書く: 実測 .note-profile/Default/Preferences に secret=...)
+.note-profile/
+*-profile/

@@ -147,6 +147,10 @@ PY
     git -c user.name="part676392" -c user.email="72697109+part676392@users.noreply.github.com" \
         commit -qm "history refresh $(date +%F)"
     TOK2=$(gh auth token 2>/dev/null)
+    # 実行中にこちら側が push されることが実測である (run 中に HISTORY PUSH FAILED になった)。
+    # だから push の前に pull --rebase して、自分の commit を remote の後ろへ乗せ直す。
+    git pull --rebase --autostash -q "https://x-access-token:${TOK2}@github.com/part676392/dsh-money-engine.git" main \
+      || echo "  history pull failed (そのまま push を試す)"
     git push -q "https://x-access-token:${TOK2}@github.com/part676392/dsh-money-engine.git" HEAD:main \
       && echo "  history push ok (exit)" || echo "  HISTORY PUSH FAILED"
     # exit=0 は証じゃない (自分がそう習った)。local と remote の full SHA を突き合わせる。

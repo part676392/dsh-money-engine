@@ -222,6 +222,10 @@ PY
     # 索入室が測れない日 (クエリ壊れ / 結果頁の外殻無し) を 0 件と混ぜない
     echo "  ★★★ GUARD FAIL: index-probe — 索入室を測れなかった (0 件と区別する)"
   fi
+  if ! python3 check_source_liveness.py 2>&1 | tail -4; then
+    # 出典が死んだ / 有料化 / 測れない を面の約束の違反として立てる
+    echo "  ★★★ GUARD FAIL: source-liveness — 出典URLの生存が変わったか測れていない"
+  fi
   python3 check_payment.py 2>&1 | tail -7
   python3 check_orders.py 2>&1 | tail -14
   python3 check_orders.py --selftest 2>&1 | tail -3
@@ -313,6 +317,7 @@ PY
   echo "$RUN" | grep -q "GUARD FAIL: discovery" && FAIL="$FAIL discovery"
   echo "$RUN" | grep -q "GUARD FAIL: card-surface" && FAIL="$FAIL card-surface"
   echo "$RUN" | grep -q "GUARD FAIL: index-probe" && FAIL="$FAIL index-probe"
+  echo "$RUN" | grep -q "GUARD FAIL: source-liveness" && FAIL="$FAIL source-liveness"
   echo "$RUN" | grep -q "GUARD FAIL: money-check" && FAIL="$FAIL money-check"
   echo "$RUN" | grep -qE "parser self-test: ([0-3])/4" && FAIL="$FAIL parser"
   if [ -n "$FAIL" ]; then

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import buy_block
 from tracker_js import tracker
+import make_deadlines_history as DH
 import datetime as dt
 import os
 import html
@@ -145,6 +146,8 @@ def render(rows, passed, method):
     soon_free = sum(1 for r in rows if r["days"] <= 3 and not r["price"])
     nd = rows[0]["days"] if rows else "-"
 
+    firsts = DH.first_seen()
+    times = DH.times_seen()
     items = []
     for r in rows[:80]:
         badge = "🆓 無料" if not r["price"] else "¥%s" % format(r["price"], ",")
@@ -155,10 +158,17 @@ def render(rows, passed, method):
         else:
             urg = "⏳ 残り%d日" % r["days"]
         ev = "<div class='ev'>「%s」</div>" % esc(r["evidence"][:62]) if r.get("evidence") else ""
+        k = (r["url"], r["date"])
+        fs = firsts.get(k)
+        n = times.get(k, 0)
+        if fs:
+            seen = "初出 %s%s" % (fs[5:].replace("-", "/"), (" / %d回目" % n) if n > 1 else "")
+        else:
+            seen = "今日初出"
         items.append("<tr><td><b>%s</b></td><td>%s</td><td><a href='%s'>%s</a></td><td>%s</td>"
-                     "<td class='t'>%s%s</td></tr>" % (
+                     "<td class='t'>%s%s<span class='hs'>%s</span></td></tr>" % (
                          r["date"][5:].replace("-", "/"), urg, esc(r["url"]), esc(r["firm"]),
-                         badge, esc(r["title"][:52]), ev))
+                         badge, esc(r["title"][:52]), ev, esc(seen)))
 
     # 見出しの語は実集合に合わせる。wide でコンサル以外が入るのに「コンサル一覧」と騙さない。
     k = re.compile(r"コンサル|ファーム|監査|アドバイザ|EY|PwC|デロイト|KPMG|アビーム|アーンスト|トーマツ|PwC")
@@ -184,7 +194,7 @@ def render(rows, passed, method):
 main{max-width:960px;margin:0 auto;padding:26px 16px 60px}h1{font-size:1.3rem;margin:0 0 4px}
 table{width:100%%;border-collapse:collapse;background:#fff;border:1px solid #e3e7ed;border-radius:9px;font-size:.83rem;overflow:hidden}
 th{background:#eef1f5;padding:9px;text-align:left}td{padding:8px 9px;border-top:1px solid #eceff3;vertical-align:top}
-.t{color:#5a6472;font-size:.79rem}.ev{color:#8a93a0;font-size:.72rem;margin-top:3px}
+.t{color:#5a6472;font-size:.79rem}.hs{display:block;color:#3f7d5a;font-size:.72rem;margin-top:2px}.ev{color:#8a93a0;font-size:.72rem;margin-top:3px}
 a{color:#1a5fd6}.sub{color:#5a6472;font-size:.86rem}
 .box{background:#fff4f2;border-left:4px solid #d0452c;border-radius:8px;padding:12px 14px;margin:16px 0;font-size:.9rem}
 .free{background:#f2f8f2;border-left:4px solid #3f9d3f;border-radius:8px;padding:11px 14px;margin:14px 0;font-size:.85rem}
@@ -193,12 +203,15 @@ a{color:#1a5fd6}.sub{color:#5a6472;font-size:.86rem}
 <p class="sub">%(method)s。締切が迫っている順。</p>
 <div class="box"><b>最速の締切は %(nearest)s（残り %(nd)s 日）。</b>
 3日以内が %(soon)d件、うち無料で読める書き方ガイドが %(soonfree)d件。下の表からそのまま飛べます。</div>
-<table><thead><tr><th>締切</th><th>猶予</th><th>企業</th><th>資料</th><th>記事と根拠記載</th></tr></thead>
+<table><thead><tr><th>締切</th><th>猶予</th><th>企業</th><th>資料</th><th>記事と根拠記載・初出</th></tr></thead>
 <tbody>
 %(rows)s
 </tbody></table>
 %(tracker)s
-<div class="free">過去締切 %(passed)d 件は除外。各締切日は記事本文の記載を機械抽出し、引用文を各行に併記しています。
+<div class="free">この表は %(hist_days)d 日ぶん蓄積しています (台帳は前回巡回までに %(hist_lines)d 行)。
+毎巡回で「いつ・どの記事にどう書かれていたか」を追記しているので、記事が消えても引き直せます
+(<a href="./exports/es_deadlines_history.csv">es_deadlines_history.csv</a>)。
+過去締切 %(passed)d 件は除外。各締切日は記事本文の記載を機械抽出し、引用文を各行に併記しています。
 一覧は自動生成・毎日更新。<a href="./">企業別の目錄データベース</a></div>
 </main></body></html>""" % {
         "nearest": nearest, "today": TODAY.strftime("%Y-%m-%d"), "n": len(rows),
@@ -207,6 +220,8 @@ a{color:#1a5fd6}.sub{color:#5a6472;font-size:.86rem}
         "ld": json.dumps(ld, ensure_ascii=False), "method": method,
         "soon": soon, "soonfree": soon_free, "nd": nd,
         "rows": "\n".join(items), "passed": passed, "tracker": tracker("deadlines"),
+        "hist_days": len(firsts) and len({v for v in firsts.values()}) or 0,
+        "hist_lines": DH.ledger_count(),
     }
     (ROOT / "es-deadlines.html").write_text(doc, encoding="utf-8")
     buy_block.inject(ROOT / "es-deadlines.html")
@@ -221,6 +236,9 @@ def main():
     if not rows:
         rows, passed, method = from_titles()
     render(rows, passed, method)
+    # 面を出した後に台帳へ積む (面の 初出日 は前の巡回までの台帳からしか引かない)
+    DH.append()
+    DH.write_csv()
 
 
 if __name__ == "__main__":

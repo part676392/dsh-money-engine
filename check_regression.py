@@ -140,6 +140,49 @@ def traffic_keys_registered() -> bool:
     return ok
 
 
+def deadline_history() -> bool:
+    """締切 history 台帳の筋。面に出す 初出日 は台帳に実在する日だけ (捏造禁止)。
+    CSV と台帳の行数も照らす (魂の抜けた CSV を永からせない)。"""
+    leds = [ROOT / "data" / "history" / f"deadlines.{w}.jsonl" for w in ("dev", "runner")]
+    have = [f for f in leds if f.exists()]
+    csvp = ROOT / "exports" / "es_deadlines_history.csv"
+    page = ROOT / "es-deadlines.html"
+    bad, n = [], 0
+    seen_days = set()
+    if not have:
+        bad.append("台帳 deadlines.dev.jsonl / deadlines.runner.jsonl が無い")
+    for led in have:
+        for i, line in enumerate(led.open(encoding="utf-8"), 1):
+            try:
+                r = json.loads(line)
+            except Exception:
+                bad.append(f"{led.name} {i} 行目が json で読めない")
+                continue
+            n += 1
+            for f in ("seen", "date", "url", "firm"):
+                if not r.get(f):
+                    bad.append(f"{led.name} {i} 行目に {f} が無い")
+                    break
+            seen_days.add(str(r.get("seen")))
+    if not csvp.exists():
+        bad.append("exports/es_deadlines_history.csv が無い")
+    else:
+        rows = len(csvp.read_text(encoding="utf_8_sig").strip().split("\n")) - 1
+        if rows != n:
+            bad.append(f"CSV {rows} 行 / 台帳 {n} 行 でズレ")
+    if page.exists():
+        h = page.read_text(encoding="utf-8", errors="replace")
+        shown = set(re.findall(r"初出 (\d{2}/\d{2})", h))
+        want = {d[5:].replace("-", "/") for d in seen_days if len(d) == 10}
+        ghost = sorted(shown - want)
+        if ghost:
+            bad.append(f"面に台帳へ無い 初出日: {ghost[:3]}")
+    ok = not bad
+    print(f"    締切 history    : {'OK' if ok else '★ ' + '; '.join(bad[:3])}"
+          f"  (台帳 {n} 行 / 初出 {len(seen_days)} 日)")
+    return ok
+
+
 def deadline_rows() -> bool:
     """締切行の西暦と、頁に出た行数の実測照合。
     西暦 26 年バグ (実測 days=-730503) は頁に出ると全部『過去』に見える。"""
@@ -317,16 +360,32 @@ def loop_coverage() -> bool:
     loop = (ROOT / "daily_loop.sh").read_text(encoding="utf-8", errors="replace")
     builders = [p.name for p in sorted(ROOT.glob("*.py"))
                 if p.name.startswith(("build_", "make_"))]
+    called = [n for n in builders if n in loop]
     out = [n for n in builders if n not in loop]
+    # 巡回から直呼びで無く、呼ばれている builder から import されている物も「回されている」に入れる
+    # (make_deadlines_history.py は make_deadlines.py が面を出した後に積む設計。二重に積むと
+    #  1 巡回で 2 回数えて history が水増しになる)。
+    via = []
+    for n in list(out):
+        mod = n[:-3]
+        for c in called:
+            src = (ROOT / c).read_text(encoding="utf-8", errors="replace")
+            if re.search(r"^import " + mod + r"\b|^from " + mod + r" import", src, re.M):
+                out.remove(n)
+                via.append(f"{n}←{c}")
+                break
     ok = not out
     print(f"  loop coverage     : {'OK' if ok else '★ 巡回から呼ばれない builder ' + str(out)}"
-          f"  ({len(builders)} builder 中)")
+          f"  ({len(builders)} builder 中 / import 経由 {len(via)})"
+          + ("" if not via else "\n    import 経由: " + ", ".join(via)))
     return ok
 
 
 def main() -> int:
     if "--selftest" in sys.argv:
         return run_selftest()
+    if not deadline_history():
+        return 1
     if not deadline_rows():
         return 1
     if not markup_shape():

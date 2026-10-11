@@ -86,22 +86,41 @@ def main() -> int:
     cdir = ROOT / "company"
     base = "https://part676392.github.io/dsh-money-engine"
     per = q.get("per_company") or {}
+    # 頁は質問実文だけじゃない: 選考段階の言及 (signals) や 選考フロー だけの会社の頁も出る。
+    # 実測 (2026-10-11): sitemap 473 頁のうち 16 頁 (JERAインターン / アビーム 戦略コンサルタントコース /
+    # DTFA など) に company_pages.csv の行が無く、CSV を落とした人にはその頁が存在しない事になっていた。
+    sig_ct, flow_ct = collections.Counter(), collections.Counter()
+    for fn, into in (("selection_signals.json", sig_ct), ("selection_flows.json", flow_ct)):
+        fp = ROOT / "data" / fn
+        if fp.exists():
+            try:
+                pc = json.loads(fp.read_text(encoding="utf-8")).get("per_company") or {}
+            except Exception:  # noqa: BLE001
+                pc = {}
+            for k, v in pc.items():
+                if k:
+                    into[k] += len(v or [])
     # 名前ゆれを束ねたので、頁は canonical の名前でしか無い。旧名の URL は連絡頁に残る。
     from company_names import canon_map
     names = [f.name[:-5] for f in cdir.glob("*.html")] if cdir.exists() else []
-    cm, _al = canon_map(list(per) + names)
+    # 盤面の全部の頁を表に出す (頁が有って行が無い、が起きると CSV を落とした人に届かない)。
+    # 実測: DTFA / アビーム 戦略コンサルタントコース など 8 頁は data 側の key が canonical に
+    # 束ねられた側なので per / signals / flows の key に出て来ない。頁名その物も universe に入れる。
+    universe = sorted(set(per) | set(sig_ct) | set(flow_ct) | set(names))
+    cm, _al = canon_map(universe + names)
     split = collections.Counter()
     for n in names:
         split[cm.get(n, n)] += 1
     prows = []
-    for comp in sorted(per):
+    for comp in universe:
         ck = cm.get(comp, comp)
         fn = ck + ".html"
         fp = cdir / fn
         ex = fp.exists()
-        ts = {(r.get("question") or "").strip() for r in per[comp] if (r.get("question") or "").strip()}
+        own = per.get(comp) or []
+        ts = {(r.get("question") or "").strip() for r in own if (r.get("question") or "").strip()}
         cats = {}
-        for r in per[comp]:
+        for r in own:
             k = r.get("category") or "未判定"
             cats[k] = cats.get(k, 0) + 1
         if comp != ck:
@@ -109,17 +128,20 @@ def main() -> int:
         else:
             redirect_to = ""
         prows.append([comp, (base + "/company/" + urllib.parse.quote(fn)) if ex else "",
-                      1 if ex else 0, redirect_to, split[ck] - 1, len(per[comp]), len(ts),
+                      1 if ex else 0, redirect_to, split[ck] - 1, len(per.get(comp) or []), len(ts),
+                      sig_ct.get(comp, 0), flow_ct.get(comp, 0),
                       "、".join(f"{k}:{v}" for k, v in sorted(cats.items(), key=lambda x: -x[1]))])
     n = write_csv(EXP / "company_pages.csv",
                   ["company", "page_url", "page_exists", "canonical_page_of",
                    "alias_pages_on_page", "question_rows",
-                   "questions_distinct", "categories"], prows)
+                   "questions_distinct", "signal_rows", "flow_rows", "categories"], prows)
     manifest.append(["company_pages.csv", n,
-                     "企業別の頁への道しるべ。page_url が空の会社は資料の頁をまだ作れていない。"
+                     "企業別の頁への道しるべ。質問実文が 0 でも 選考段階の言及だけの頁があるので signal_rows / flow_rows を置く。"
+                     "page_url が空の会社は資料の頁をまだ作れていない。"
                      "canonical_page_of は名前ゆれを束ねた先 (空なら自分が正規)。"
                      "alias_pages_on_page はその頁に統合した旧名の数。"
-                     "questions_distinct は同じ会社内で同じ文をまとめた数"])
+                     "questions_distinct は同じ会社内で同じ文をまとめた数。"
+                     "signal_rows / flow_rows はその会社について頁に出した 選考段階の言及 と 選考フロー の行数"])
 
     # 2) 選考フロー (1行=1工程 so that it is pivot-able)
     rows = []

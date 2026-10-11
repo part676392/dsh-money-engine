@@ -338,6 +338,11 @@ $(date ...) PR 入口 ★"
   if ! python3 check_llms_rights.py 2>&1 | tail -3; then
     echo "  ★★★ GUARD FAIL: llms-rights — llms.txt から料金か権利が消えている"
   fi
+
+  # 落としてもらう CSV に頁が全部載っているか (実測で 16 頁落ちていた)
+  if ! python3 check_catalog_coverage.py 2>&1 | tail -2; then
+    echo "  ★★★ GUARD FAIL: catalog-coverage — company_pages.csv に載っていない企業頁がある"
+  fi
   if ! python3 check_seo_verification.py 2>&1 | tail -4; then
     echo "  ★★★ GUARD FAIL: seo-verify — 検証ファイルが有るのに配られていない"
   fi
@@ -419,6 +424,7 @@ PYO
   echo "$RUN" | grep -q "GUARD FAIL: release" && FAIL="$FAIL release"
   echo "$RUN" | grep -q "GUARD FAIL: seo-verify" && FAIL="$FAIL seo-verify"
   echo "$RUN" | grep -q "GUARD FAIL: llms-rights" && FAIL="$FAIL llms-rights"
+  echo "$RUN" | grep -q "GUARD FAIL: catalog-coverage" && FAIL="$FAIL catalog-coverage"
   echo "$RUN" | grep -q "GUARD FAIL: index-probe" && FAIL="$FAIL index-probe"
   echo "$RUN" | grep -q "GUARD FAIL: source-liveness" && FAIL="$FAIL source-liveness"
   echo "$RUN" | grep -q "GUARD FAIL: pr-links" && FAIL="$FAIL pr-links"

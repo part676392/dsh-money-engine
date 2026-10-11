@@ -33,6 +33,7 @@ import os
 # 制御 (guard が本当に走るか確かめる注入) と実運用で台帳を分ける為、外から差し替えられる。
 PER_RUN = int(os.environ.get("DSH_LIVENESS_PER_RUN", "80"))
 SLEEP = float(os.environ.get("DSH_LIVENESS_SLEEP", "0.35"))
+RETRY_SLEEP = float(os.environ.get("DSH_LIVENESS_RETRY", "6"))
 BASE = os.environ.get("DSH_NOTE_BASE", "https://note.com/shushoku_career1/n")
 if os.environ.get("DSH_LIVENESS_LEDGER"):
     LEDGER = pathlib.Path(os.environ["DSH_LIVENESS_LEDGER"])
@@ -94,7 +95,7 @@ def check(quiet: bool = False) -> dict:
     corpus = json.load(open(CORPUS, encoding="utf-8"))
     keys = [(n.get("key"), n.get("name") or "", n.get("price") or 0) for n in corpus if n.get("key")]
     prev = last_seen()
-    rows, dead, paywalled = [], [], []
+    rows, dead, paywalled, flaky = [], [], [], []
     for key, name, price in sample(keys):
         code, size, body = fetch(key)
         paid = any(m in body for m in PAYWALL)
@@ -104,7 +105,18 @@ def check(quiet: bool = False) -> dict:
         rows.append(r)
         b = prev.get(key)
         if b and b.get("http") == 200 and code != 200:
-            dead.append(f"{key} {code} (前回 200) {name[:24]}")
+            # 再試行してから死者を決める。実測 (2026-10-11 17:09): note.com の 1 本が 503 を
+            # 返しただけで巡回ごと ★ になった。一時的な 5xx を「出典が死んだ」と嘘をつきたくない
+            # 半面、本当に死んだ物は約束 (出典URLつき) の違反なので見逃さない。
+            time.sleep(RETRY_SLEEP)
+            code2, size2, _b2 = fetch(key)
+            r["retry_http"] = code2
+            if code2 == 200:
+                flaky.append(f"{key} {code} -> 再試行 200 {name[:24]}")
+            else:
+                r["http"] = code2
+                r["bytes"] = size2
+                dead.append(f"{key} {code}/{code2} (再試行も・前回 200) {name[:24]}")
         if b and not b.get("paywall") and paid:
             paywalled.append(f"{key} 無料→有料 {name[:24]}")
         time.sleep(SLEEP)
@@ -121,7 +133,8 @@ def check(quiet: bool = False) -> dict:
                 continue
     http0 = [r for r in rows if r["http"] == 0]
     stats = {"observed": len(rows), "ledger": ledger_count(), "covered": len(seen_keys),
-             "of": len(keys), "dead": dead, "paywalled": paywalled, "no_http": len(http0)}
+             "of": len(keys), "dead": dead, "paywalled": paywalled,
+             "flaky": flaky, "no_http": len(http0)}
     if not quiet:
         print(f"  出典の生存      : 今回 {stats['observed']} 本 / 累計 {stats['covered']}/{len(keys)} 記事"
               f" / 200 以外 {len([r for r in rows if r['http'] != 200])} / 有料化 {len(paywalled)}")
@@ -129,6 +142,8 @@ def check(quiet: bool = False) -> dict:
             print(f"    ★ 死んだ出典 {len(dead)}: {dead[:3]}")
         if paywalled:
             print(f"    ★ 有料化 {len(paywalled)}: {paywalled[:3]}")
+        if flaky:
+            print(f"    一時不稳 {len(flaky)} (再試行で 200 / ★ にはしない): {flaky[:2]}")
         if http0:
             print(f"    ★ http が取れない {len(http0)} 本 (測れていない)")
     return stats

@@ -1,5 +1,7 @@
 {
- "checked_at": "2026-10-11T09:07:11+0900",
- "green": true,
- "failed": []
+ "checked_at": "2026-10-11T09:29:35+0900",
+ "green": false,
+ "failed": [
+  "push"
+ ]
 }

@@ -1,0 +1,51 @@
+{
+ "checked_at": "2026-10-12T13:21:53+0900",
+ "surfaces": {
+  "gist": {
+   "url": "https://gist.github.com/part676392/8f51111c9ac743c672cf3a04ed863fcf",
+   "bytes": 109596,
+   "http": 200,
+   "ok": true,
+   "missing": [],
+   "rate_limited": false
+  },
+  "rentry_v2": {
+   "url": "https://rentry.co/4n73c73h",
+   "bytes": 14775,
+   "http": 200,
+   "ok": true,
+   "missing": [],
+   "rate_limited": false
+  },
+  "rentry_v3": {
+   "url": "https://rentry.co/x4piimss",
+   "bytes": 14585,
+   "http": 200,
+   "ok": true,
+   "missing": [],
+   "rate_limited": false
+  },
+  "dpaste": {
+   "url": "https://dpaste.com/EQKXKAGQW",
+   "bytes": 28000,
+   "http": 200,
+   "ok": true,
+   "missing": [],
+   "rate_limited": false
+  }
+ },
+ "pull_requests": {
+  "okhosting/awesome-open-data#57": {
+   "state": "closed",
+   "merged_at": "2026-10-11T13:20:11Z",
+   "comments": "1",
+   "url": "https://github.com/okhosting/awesome-open-data/pull/57"
+  },
+  "taishi-i/awesome-japanese-nlp-resources#32": {
+   "state": "open",
+   "merged_at": null,
+   "comments": "1",
+   "url": "https://github.com/taishi-i/awesome-japanese-nlp-resources/pull/32"
+  }
+ }
+}

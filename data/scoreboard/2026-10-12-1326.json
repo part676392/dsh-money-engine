@@ -1,0 +1,162 @@
+{
+ "checked_at": "2026-10-12T13:26:21+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "dairitenkensyu.com",
+    "msa-form.dga.jp",
+    "oph.ms-ins.com",
+    "ms-ins.com",
+    "mypage.ms-ad-staffing.co.jp",
+    "ms-adnp.jp",
+    "home.gncs.ms-ad-ga.jp",
+    "edp.ms-ins.com",
+    "bgs-p1.ms-ins.com",
+    "ms-ad-systems.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "620",
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "ja.wiktionary.org",
+    "weblio.jp",
+    "jinjibu.jp",
+    "adtechmanagement.com",
+    "job-q.me"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "61,200",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "meaning-difference.com",
+    "chigai-hikaku.com",
+    "kotobank.jp",
+    "imi-chigai.com",
+    "saiyo-doda.jp",
+    "nihongo-wakaremichi.com",
+    "kotobasta.com",
+    "doda.jp",
+    "weblio.jp",
+    "tenshoku.mynavi.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "67,400",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "iikae-note.com",
+    "e-kae-library.com",
+    "weblio.jp",
+    "nicovideo.jp",
+    "iikaeru.tech",
+    "youtube.com",
+    "x.com",
+    "adtechmanagement.com",
+    "meaning-dictionary.com",
+    "youtube.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "390,000",
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "ja.wiktionary.org",
+    "weblio.jp",
+    "jinjibu.jp",
+    "adtechmanagement.com",
+    "job-q.me"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "61,200",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "ejje.weblio.jp",
+    "winners-english.com",
+    "english-difference.com",
+    "saruwakakun.com",
+    "e-grammar.info",
+    "talking-english.net",
+    "cooori.com",
+    "dailyeigo.com",
+    "dictionary.cambridge.org",
+    "shinuwakaeng.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "595,000",
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "google.co.jp",
+    "google.com",
+    "google.com",
+    "drive.google.com",
+    "ja.wikipedia.org",
+    "google.co.jp",
+    "translate.google.co.jp",
+    "news.google.com",
+    "about.google",
+    "maps.google.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "2,440,000",
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

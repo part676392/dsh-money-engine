@@ -1,0 +1,495 @@
+{
+ "checked_at": "2026-10-12T19:41:59+0900",
+ "counters": {
+  "store": {
+   "value": 4,
+   "delta": 0,
+   "key": "store",
+   "read_error": null
+  },
+  "self-store": {
+   "value": null,
+   "key": "self-store",
+   "read_error": "Key not found"
+  },
+  "home": {
+   "value": 40,
+   "delta": 0,
+   "key": "home",
+   "read_error": null
+  },
+  "self-home": {
+   "value": 2,
+   "key": "self-home",
+   "read_error": null
+  },
+  "mini": {
+   "value": 1,
+   "delta": 0,
+   "key": "mini",
+   "read_error": null
+  },
+  "self-mini": {
+   "value": null,
+   "key": "self-mini",
+   "read_error": "Key not found"
+  },
+  "license": {
+   "value": 4,
+   "delta": 0,
+   "key": "license",
+   "read_error": null
+  },
+  "self-license": {
+   "value": null,
+   "key": "self-license",
+   "read_error": "Key not found"
+  },
+  "lineup": {
+   "value": 9,
+   "delta": 0,
+   "key": "lineup",
+   "read_error": null
+  },
+  "self-lineup": {
+   "value": null,
+   "key": "self-lineup",
+   "read_error": "Key not found"
+  },
+  "company": {
+   "value": 4,
+   "delta": 0,
+   "key": "company",
+   "read_error": null
+  },
+  "self-company": {
+   "value": null,
+   "key": "self-company",
+   "read_error": "Key not found"
+  },
+  "sample": {
+   "value": 3,
+   "delta": 0,
+   "key": "sample",
+   "read_error": null
+  },
+  "self-sample": {
+   "value": null,
+   "key": "self-sample",
+   "read_error": "Key not found"
+  },
+  "root": {
+   "value": 11,
+   "delta": 0,
+   "key": "root",
+   "read_error": null
+  },
+  "self-root": {
+   "value": null,
+   "key": "self-root",
+   "read_error": "Key not found"
+  },
+  "order-click": {
+   "value": 3,
+   "delta": 0,
+   "key": "order-click",
+   "read_error": null
+  },
+  "self-order-click": {
+   "value": null,
+   "key": "self-order-click",
+   "read_error": "Key not found"
+  },
+  "order-mail": {
+   "value": 1,
+   "delta": 0,
+   "key": "order-mail",
+   "read_error": null
+  },
+  "self-order-mail": {
+   "value": null,
+   "key": "self-order-mail",
+   "read_error": "Key not found"
+  },
+  "cta-sample": {
+   "value": 1,
+   "delta": 0,
+   "key": "cta-sample",
+   "read_error": null
+  },
+  "self-cta-sample": {
+   "value": null,
+   "key": "self-cta-sample",
+   "read_error": "Key not found"
+  },
+  "cta-deadlines": {
+   "value": 1,
+   "delta": 0,
+   "key": "cta-deadlines",
+   "read_error": null
+  },
+  "self-cta-deadlines": {
+   "value": null,
+   "key": "self-cta-deadlines",
+   "read_error": "Key not found"
+  },
+  "cta-alltext": {
+   "value": 2,
+   "delta": 0,
+   "key": "cta-alltext",
+   "read_error": null
+  },
+  "self-cta-alltext": {
+   "value": null,
+   "key": "self-cta-alltext",
+   "read_error": "Key not found"
+  },
+  "cta-row": {
+   "value": 1,
+   "delta": 0,
+   "key": "cta-row",
+   "read_error": null
+  },
+  "self-cta-row": {
+   "value": null,
+   "key": "self-cta-row",
+   "read_error": "Key not found"
+  },
+  "404": {
+   "value": null,
+   "delta": null,
+   "key": "404",
+   "read_error": "Key not found"
+  },
+  "self-404": {
+   "value": null,
+   "key": "self-404",
+   "read_error": "Key not found"
+  },
+  "reverse": {
+   "value": 2,
+   "delta": 0,
+   "key": "reverse",
+   "read_error": null
+  },
+  "self-reverse": {
+   "value": null,
+   "key": "self-reverse",
+   "read_error": "Key not found"
+  },
+  "changes": {
+   "value": 2,
+   "delta": 0,
+   "key": "changes",
+   "read_error": null
+  },
+  "self-changes": {
+   "value": null,
+   "key": "self-changes",
+   "read_error": "Key not found"
+  },
+  "deliveries": {
+   "value": null,
+   "delta": null,
+   "key": "deliveries",
+   "read_error": "Key not found"
+  },
+  "self-deliveries": {
+   "value": null,
+   "key": "self-deliveries",
+   "read_error": "Key not found"
+  },
+  "deadlines": {
+   "value": 37,
+   "delta": 2,
+   "key": "deadlines",
+   "read_error": null
+  },
+  "self-deadlines": {
+   "value": null,
+   "key": "self-deadlines",
+   "read_error": "Key not found"
+  },
+  "ai": {
+   "value": null,
+   "delta": null,
+   "key": "ai",
+   "read_error": "Invalid key: length must be between 3 and 64 characters inclusive"
+  },
+  "self-ai": {
+   "value": null,
+   "key": "self-ai",
+   "read_error": "Key not found"
+  },
+  "bot-google": {
+   "value": null,
+   "delta": null,
+   "key": "bot-google",
+   "read_error": "Key not found"
+  },
+  "self-bot-google": {
+   "value": null,
+   "key": "self-bot-google",
+   "read_error": "Key not found"
+  },
+  "bot-bing": {
+   "value": null,
+   "delta": null,
+   "key": "bot-bing",
+   "read_error": "Key not found"
+  },
+  "self-bot-bing": {
+   "value": null,
+   "key": "self-bot-bing",
+   "read_error": "Key not found"
+  },
+  "bot-ddg": {
+   "value": null,
+   "delta": null,
+   "key": "bot-ddg",
+   "read_error": "Key not found"
+  },
+  "self-bot-ddg": {
+   "value": null,
+   "key": "self-bot-ddg",
+   "read_error": "Key not found"
+  },
+  "bot-slurp": {
+   "value": null,
+   "delta": null,
+   "key": "bot-slurp",
+   "read_error": "Key not found"
+  },
+  "self-bot-slurp": {
+   "value": null,
+   "key": "self-bot-slurp",
+   "read_error": "Key not found"
+  },
+  "bot-marginalia": {
+   "value": null,
+   "delta": null,
+   "key": "bot-marginalia",
+   "read_error": "Key not found"
+  },
+  "self-bot-marginalia": {
+   "value": null,
+   "key": "self-bot-marginalia",
+   "read_error": "Key not found"
+  },
+  "bot-mojeek": {
+   "value": null,
+   "delta": null,
+   "key": "bot-mojeek",
+   "read_error": "Key not found"
+  },
+  "self-bot-mojeek": {
+   "value": null,
+   "key": "self-bot-mojeek",
+   "read_error": "Key not found"
+  },
+  "bot-brave": {
+   "value": null,
+   "delta": null,
+   "key": "bot-brave",
+   "read_error": "Key not found"
+  },
+  "self-bot-brave": {
+   "value": null,
+   "key": "self-bot-brave",
+   "read_error": "Key not found"
+  },
+  "bot-perplexity": {
+   "value": null,
+   "delta": null,
+   "key": "bot-perplexity",
+   "read_error": "Key not found"
+  },
+  "self-bot-perplexity": {
+   "value": null,
+   "key": "self-bot-perplexity",
+   "read_error": "Key not found"
+  },
+  "bot-openai": {
+   "value": null,
+   "delta": null,
+   "key": "bot-openai",
+   "read_error": "Key not found"
+  },
+  "self-bot-openai": {
+   "value": null,
+   "key": "self-bot-openai",
+   "read_error": "Key not found"
+  },
+  "bot-claude": {
+   "value": 2,
+   "delta": 0,
+   "key": "bot-claude",
+   "read_error": null
+  },
+  "self-bot-claude": {
+   "value": null,
+   "key": "self-bot-claude",
+   "read_error": "Key not found"
+  },
+  "bot-ccbot": {
+   "value": null,
+   "delta": null,
+   "key": "bot-ccbot",
+   "read_error": "Key not found"
+  },
+  "self-bot-ccbot": {
+   "value": null,
+   "key": "self-bot-ccbot",
+   "read_error": "Key not found"
+  },
+  "bot-amazon": {
+   "value": null,
+   "delta": null,
+   "key": "bot-amazon",
+   "read_error": "Key not found"
+  },
+  "self-bot-amazon": {
+   "value": null,
+   "key": "self-bot-amazon",
+   "read_error": "Key not found"
+  },
+  "bot-apple": {
+   "value": null,
+   "delta": null,
+   "key": "bot-apple",
+   "read_error": "Key not found"
+  },
+  "self-bot-apple": {
+   "value": null,
+   "key": "self-bot-apple",
+   "read_error": "Key not found"
+  },
+  "bot-petal": {
+   "value": null,
+   "delta": null,
+   "key": "bot-petal",
+   "read_error": "Key not found"
+  },
+  "self-bot-petal": {
+   "value": null,
+   "key": "self-bot-petal",
+   "read_error": "Key not found"
+  },
+  "bot-any": {
+   "value": 2,
+   "delta": 0,
+   "key": "bot-any",
+   "read_error": null
+  },
+  "self-bot-any": {
+   "value": null,
+   "key": "self-bot-any",
+   "read_error": "Key not found"
+  },
+  "src-ghrepo": {
+   "value": 1,
+   "surface": "GitHub リポジトリ README",
+   "target": "index.html",
+   "read_error": null,
+   "tagged": true
+  },
+  "src-gist": {
+   "value": null,
+   "surface": "Gist 目録",
+   "target": "exports/questions_catalog.csv",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-release": {
+   "value": null,
+   "surface": "GitHub release notes",
+   "target": "sample.html",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-pr57": {
+   "value": 10,
+   "surface": "PR okhosting/awesome-open-data#57",
+   "target": "index.html",
+   "read_error": null,
+   "tagged": true
+  },
+  "src-pr32": {
+   "value": 36,
+   "surface": "PR taishi-i/awesome-japanese-nlp-resources#32",
+   "target": "index.html",
+   "read_error": null,
+   "tagged": true
+  },
+  "src-hn": {
+   "value": null,
+   "surface": "Hacker News (垢 dshlaba71655)",
+   "target": "index.html",
+   "read_error": "Key not found",
+   "tagged": false
+  },
+  "src-rentry-fic": {
+   "value": null,
+   "surface": "rentry.co b8zgbuyv",
+   "target": "store/",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-rentry-data": {
+   "value": null,
+   "surface": "rentry.co zd3s2wkt",
+   "target": "data-license.html",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-rentry-lineup": {
+   "value": null,
+   "surface": "rentry.co xnvrgn8g",
+   "target": "question-lineups.html",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-rentry-index": {
+   "value": null,
+   "surface": "rentry.co q4aiokt7",
+   "target": "index.html",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-prof": {
+   "value": 3,
+   "surface": "GitHub プロフィール頁 README",
+   "target": "index.html / data-license.html / sample.html",
+   "read_error": null,
+   "tagged": true
+  },
+  "src-jopendata": {
+   "value": 13,
+   "surface": "github PR japan-opendata/awesome-japan-opendata#30",
+   "target": "https://github.com/japan-opendata/awesome-japan-opendata/pull/30",
+   "read_error": null,
+   "tagged": true
+  },
+  "src-gist-deadlines": {
+   "value": null,
+   "surface": "Gist 締切表",
+   "target": "es-deadlines.html",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-gist-lineup": {
+   "value": null,
+   "surface": "Gist 質問の並び順",
+   "target": "question-lineups.html",
+   "read_error": "Key not found",
+   "tagged": true
+  },
+  "src-selftest": {
+   "value": 3,
+   "surface": "自分の護り・点検で開いた访问",
+   "target": "self-<key> に回る (部外者_COUNT から除外)",
+   "read_error": null,
+   "tagged": true
+  }
+ }
+}

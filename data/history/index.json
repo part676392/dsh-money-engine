@@ -1,9 +1,9 @@
 {
- "generated_at": "2026-10-12T13:27:00+0900",
+ "generated_at": "2026-10-12T19:47:12+0900",
  "observations": 5,
  "first_captured_at": "2026-10-10T23:47:13+09:00",
- "last_captured_at": "2026-10-12T13:26:58+09:00",
- "runs_recorded": 151,
+ "last_captured_at": "2026-10-12T19:47:10+09:00",
+ "runs_recorded": 152,
  "runs_csv": "exports/history_runs.csv",
  "grain_note": "observations は 日付×場所 の 1 件 (同じ日の再実行は上書き)。走った回数の-series は runs_csv に別粒度で置く。",
  "columns": [
@@ -189,7 +189,7 @@
    "_file": "2026-10-12.dev.json"
   },
   {
-   "captured_at": "2026-10-12T13:26:58+09:00",
+   "captured_at": "2026-10-12T19:47:10+09:00",
    "location": "runner",
    "articles": "600",
    "companies": "473",

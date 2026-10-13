@@ -1,0 +1,162 @@
+{
+ "checked_at": "2026-10-13T13:26:15+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "amazon.co.jp",
+    "amazon.co.jp",
+    "aboutamazon.jp",
+    "ja.wikipedia.org",
+    "instagram.com",
+    "cdn.amazon.co.jp",
+    "ja.wikipedia.org",
+    "ssofaast-wms.amazon.co.jp",
+    "cdn.amazon.co.jp",
+    "amazon.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "note.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "kyoin-pref-osaka.com",
+    "line-next.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "71,900",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "rakuten.co.jp",
+    "rakuten.co.jp",
+    "event.rakuten.co.jp",
+    "item.rakuten.co.jp",
+    "event.rakuten.co.jp",
+    "books.rakuten.co.jp",
+    "item.rakuten.co.jp",
+    "toto.rakuten.co.jp",
+    "ranking.rakuten.co.jp",
+    "glogin.rms.rakuten.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "fujispeedway.jp",
+    "suruga-saison-cup.jp",
+    "fujimotorsportsforest.jp",
+    "fsw.tv",
+    "mtfuji.keizai.biz",
+    "cb-asahi.co.jp",
+    "mtfuji.keizai.biz",
+    "runnet.jp",
+    "suruga-saison-cup.jp",
+    "fujimotorsportsforest.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "129",
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "note.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "kyoin-pref-osaka.com",
+    "line-next.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "71,900",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "yahoo.co.jp",
+    "news.yahoo.co.jp",
+    "transit.yahoo.co.jp",
+    "sports.yahoo.co.jp",
+    "finance.yahoo.co.jp",
+    "weather.yahoo.co.jp",
+    "weather.yahoo.co.jp",
+    "map.yahoo.co.jp",
+    "news.yahoo.co.jp",
+    "services.yahoo.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "jalan.net",
+    "travel.rakuten.co.jp",
+    "jp.hotels.com",
+    "agoda.com",
+    "trivago.jp",
+    "travel.rakuten.co.jp",
+    "jalan.net",
+    "booking.com",
+    "booking.com",
+    "route-inn.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "188,000",
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

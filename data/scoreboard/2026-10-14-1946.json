@@ -1,0 +1,162 @@
+{
+ "checked_at": "2026-10-14T19:46:41+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "minkara.carview.co.jp",
+    "note.com",
+    "bike-library.blog",
+    "karugamomoto.com",
+    "hondago-bikerental.jp",
+    "scrambler-life.com",
+    "minkara.carview.co.jp",
+    "lifewithmotorcycles.com",
+    "bbs.kakaku.com",
+    "torobike.hatenablog.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "4,030",
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "adtechmanagement.com",
+    "ving.co.jp",
+    "adtechmanagement.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "50,700",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "meaning-difference.com",
+    "chigai-hikaku.com",
+    "kotobank.jp",
+    "imi-chigai.com",
+    "saiyo-doda.jp",
+    "doda.jp",
+    "kotobasta.com",
+    "nihongo-wakaremichi.com",
+    "employment.en-japan.com",
+    "next.rikunabi.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "56,800",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "weblio.jp",
+    "e-kae-library.com",
+    "x.com",
+    "youtube.com",
+    "ja.wiktionary.org",
+    "ja.wikipedia.org",
+    "kotobank.jp",
+    "meaning-dictionary.com",
+    "aiueo.cc",
+    "nihongobu.net"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "career-ch.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "adtechmanagement.com",
+    "ving.co.jp",
+    "adtechmanagement.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "50,700",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "yahoo.co.jp",
+    "news.yahoo.co.jp",
+    "typhoon.yahoo.co.jp",
+    "news.yahoo.co.jp",
+    "mail.yahoo.co.jp",
+    "sports.yahoo.co.jp",
+    "baseball.yahoo.co.jp",
+    "weather.yahoo.co.jp",
+    "weather.yahoo.co.jp",
+    "roadway.yahoo.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "detail.chiebukuro.yahoo.co.jp",
+    "support.google.com",
+    "detail.chiebukuro.yahoo.co.jp",
+    "support.google.com",
+    "community.qlik.com",
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "support.google.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "77",
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

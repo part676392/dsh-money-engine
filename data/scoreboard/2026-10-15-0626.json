@@ -1,0 +1,161 @@
+{
+ "checked_at": "2026-10-15T06:25:49+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "jalan.net",
+    "jalan.net",
+    "list.jalan.net",
+    "jalan.net",
+    "jalan.net",
+    "jalan.net",
+    "jalan.net",
+    "jalan.net",
+    "jalan.net",
+    "jalan.net"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "career-ch.com",
+    "reibuncnt.jp",
+    "jinjibu.jp",
+    "wantedly.com",
+    "campus.doda.jp",
+    "pref.saitama.lg.jp",
+    "biz.ababa.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "45,600",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "support.google.com",
+    "support.google.com",
+    "zhihu.com",
+    "zhihu.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "64",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "weblio.jp",
+    "e-kae-library.com",
+    "ja.wiktionary.org",
+    "x.com",
+    "enuncia.online",
+    "kotobank.jp",
+    "nihongobu.net",
+    "aiueo.cc",
+    "nihongo-appliedlinguistics.net",
+    "youtube.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "career-ch.com",
+    "reibuncnt.jp",
+    "jinjibu.jp",
+    "wantedly.com",
+    "campus.doda.jp",
+    "pref.saitama.lg.jp",
+    "biz.ababa.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "45,600",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 9,
+   "domains": [
+    "en.wikipedia.org",
+    "ejje.weblio.jp",
+    "en.wikipedia.org",
+    "merriam-webster.com",
+    "moviefone.com",
+    "imdb.com",
+    "justwatch.com",
+    "imdb.com",
+    "movieweb.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "534,000",
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "jp-guide.net",
+    "hansoku-style.jp",
+    "筆耕.com",
+    "exia.co.jp",
+    "目録.jp",
+    "ja.wikipedia.org",
+    "目録.jp",
+    "docoic.com",
+    "toyo-pri.jp",
+    "simum.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

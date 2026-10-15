@@ -1,14 +1,14 @@
 {
- "generated": "2026-10-15",
- "today": "2026-10-15",
+ "generated": "2026-10-16",
+ "today": "2026-10-16",
  "method": "wide-adjacency 40字 / 2026+2027 / 全 600 記事 fetch",
- "fetched": 599,
- "fails": 1,
+ "fetched": 600,
+ "fails": 0,
  "all": [
   {
    "firm": "アビーム デジタルコンサルタントコース",
    "date": "2026-10-15",
-   "days": 0,
+   "days": -1,
    "price": 0,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/nd2bfbfeca158",
@@ -19,7 +19,7 @@
   {
    "firm": "アビーム 公共経営コンサルタント",
    "date": "2026-10-15",
-   "days": 0,
+   "days": -1,
    "price": 0,
    "likes": 1,
    "url": "https://note.com/shushoku_career1/n/n000cf436adc9",
@@ -30,7 +30,7 @@
   {
    "firm": "アビーム 戦略コンサルタントコース",
    "date": "2026-10-15",
-   "days": 0,
+   "days": -1,
    "price": 0,
    "likes": 1,
    "url": "https://note.com/shushoku_career1/n/n686acec4c239",
@@ -41,7 +41,7 @@
   {
    "firm": "アビームコンサルティング P&O職",
    "date": "2026-10-15",
-   "days": 0,
+   "days": -1,
    "price": 0,
    "likes": 2,
    "url": "https://note.com/shushoku_career1/n/n75badbfdc7ab",
@@ -52,7 +52,7 @@
   {
    "firm": "アビームコンサルティング",
    "date": "2026-10-15",
-   "days": 0,
+   "days": -1,
    "price": 0,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/ncebf5eb6363c",
@@ -63,7 +63,7 @@
   {
    "firm": "アビームコンサルティング",
    "date": "2026-09-30",
-   "days": -15,
+   "days": -16,
    "price": 0,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/ncebf5eb6363c",
@@ -74,7 +74,7 @@
   {
    "firm": "アビームコンサルティング",
    "date": "2026-10-29",
-   "days": 14,
+   "days": 13,
    "price": 0,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/ncebf5eb6363c",
@@ -85,7 +85,7 @@
   {
    "firm": "アクセンチュア本",
    "date": "2026-10-08",
-   "days": -7,
+   "days": -8,
    "price": 0,
    "likes": 1,
    "url": "https://note.com/shushoku_career1/n/nba6aa9f6cf03",
@@ -96,7 +96,7 @@
   {
    "firm": "EYストラテジー・アンド・コンサルティングの",
    "date": "2026-10-16",
-   "days": 1,
+   "days": 0,
    "price": 1980,
    "likes": 1,
    "url": "https://note.com/shushoku_career1/n/nbf6c3f7d3459",
@@ -107,7 +107,7 @@
   {
    "firm": "アビームコンサルティングの",
    "date": "2026-10-15",
-   "days": 0,
+   "days": -1,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/n91395221d8ab",
@@ -118,7 +118,7 @@
   {
    "firm": "デロイト トーマツ ファイナンシャルアドバイザリ",
    "date": "2026-10-15",
-   "days": 0,
+   "days": -1,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/nac6a65e6a2b7",
@@ -129,7 +129,7 @@
   {
    "firm": "アビームコンサルティングの",
    "date": "2026-10-15",
-   "days": 0,
+   "days": -1,
    "price": 1980,
    "likes": 2,
    "url": "https://note.com/shushoku_career1/n/n398fadd48662",
@@ -140,7 +140,7 @@
   {
    "firm": "アビームコンサルティングの",
    "date": "2026-10-15",
-   "days": 0,
+   "days": -1,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/n494fa9e88ece",
@@ -151,7 +151,7 @@
   {
    "firm": "PwCコンサルティング",
    "date": "2026-10-18",
-   "days": 3,
+   "days": 2,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/n7485e377decd",
@@ -162,7 +162,7 @@
   {
    "firm": "NTT東日本の",
    "date": "2026-09-27",
-   "days": -18,
+   "days": -19,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/n15a40d611922",
@@ -173,7 +173,7 @@
   {
    "firm": "NTT東日本の",
    "date": "2026-10-16",
-   "days": 1,
+   "days": 0,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/n15a40d611922",
@@ -184,7 +184,7 @@
   {
    "firm": "三菱UFJリサーチ＆コンサルティングの",
    "date": "2026-10-18",
-   "days": 3,
+   "days": 2,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/n669c7b22cd0d",
@@ -195,7 +195,7 @@
   {
    "firm": "アクセンチュアの本",
    "date": "2026-10-08",
-   "days": -7,
+   "days": -8,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/n0528fb818c21",
@@ -206,7 +206,7 @@
   {
    "firm": "日本総合研究所の",
    "date": "2026-10-05",
-   "days": -10,
+   "days": -11,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/n582626a77351",
@@ -217,7 +217,7 @@
   {
    "firm": "野村総合研究所（NRI）の",
    "date": "2026-09-30",
-   "days": -15,
+   "days": -16,
    "price": 1980,
    "likes": 1,
    "url": "https://note.com/shushoku_career1/n/n8c8cb58f25c6",
@@ -228,7 +228,7 @@
   {
    "firm": "三菱総合研究所の",
    "date": "2026-09-28",
-   "days": -17,
+   "days": -18,
    "price": 1980,
    "likes": 4,
    "url": "https://note.com/shushoku_career1/n/n6af790f46a20",
@@ -239,7 +239,7 @@
   {
    "firm": "NTT西日本の",
    "date": "2026-11-05",
-   "days": 21,
+   "days": 20,
    "price": 1980,
    "likes": 1,
    "url": "https://note.com/shushoku_career1/n/n42a0b71b6e75",
@@ -250,7 +250,7 @@
   {
    "firm": "コクヨの",
    "date": "2026-09-24",
-   "days": -21,
+   "days": -22,
    "price": 1980,
    "likes": 1,
    "url": "https://note.com/shushoku_career1/n/n20382abfc0ad",
@@ -261,7 +261,7 @@
   {
    "firm": "JERAインターン",
    "date": "2026-09-23",
-   "days": -22,
+   "days": -23,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/na4e636b31fff",
@@ -272,7 +272,7 @@
   {
    "firm": "JERAインターン",
    "date": "2026-09-27",
-   "days": -18,
+   "days": -19,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/na4e636b31fff",
@@ -283,108 +283,9 @@
  ],
  "open": [
   {
-   "firm": "アビーム デジタルコンサルタントコース",
-   "date": "2026-10-15",
-   "days": 0,
-   "price": 0,
-   "likes": 0,
-   "url": "https://note.com/shushoku_career1/n/nd2bfbfeca158",
-   "key": "nd2bfbfeca158",
-   "evidence": "ES締切は 2026年10月15日",
-   "title": "アビーム デジタルコンサルタントコースのES、何を書く？例文の型と10/15締切"
-  },
-  {
-   "firm": "アビーム 公共経営コンサルタント",
-   "date": "2026-10-15",
-   "days": 0,
-   "price": 0,
-   "likes": 1,
-   "url": "https://note.com/shushoku_career1/n/n000cf436adc9",
-   "key": "n000cf436adc9",
-   "evidence": "締切 : 2026年10月15日",
-   "title": "アビーム 公共経営コンサルタントのES、何を書く？志望動機の書き方と締切【28卒】"
-  },
-  {
-   "firm": "アビーム 戦略コンサルタントコース",
-   "date": "2026-10-15",
-   "days": 0,
-   "price": 0,
-   "likes": 1,
-   "url": "https://note.com/shushoku_career1/n/n686acec4c239",
-   "key": "n686acec4c239",
-   "evidence": "ES締切は2026年10月15日",
-   "title": "アビーム 戦略コンサルタントコースのES、何を書く？秋ターム締切と例文の型【28卒】"
-  },
-  {
-   "firm": "アビームコンサルティング",
-   "date": "2026-10-15",
-   "days": 0,
-   "price": 0,
-   "likes": 0,
-   "url": "https://note.com/shushoku_career1/n/ncebf5eb6363c",
-   "key": "ncebf5eb6363c",
-   "evidence": "締切は、2026年10月15日",
-   "title": "アビームコンサルティングのESは何を書く？ビジネスコンサルタントコースの書き方と締切"
-  },
-  {
-   "firm": "アビームコンサルティング P&O職",
-   "date": "2026-10-15",
-   "days": 0,
-   "price": 0,
-   "likes": 2,
-   "url": "https://note.com/shushoku_career1/n/n75badbfdc7ab",
-   "key": "n75badbfdc7ab",
-   "evidence": "ES締切は2026年10月15日",
-   "title": "アビームコンサルティング P&O職のES、何を書く？秋ターム締切と書き方【28卒】"
-  },
-  {
-   "firm": "アビームコンサルティングの",
-   "date": "2026-10-15",
-   "days": 0,
-   "price": 1980,
-   "likes": 0,
-   "url": "https://note.com/shushoku_career1/n/n91395221d8ab",
-   "key": "n91395221d8ab",
-   "evidence": "締切：2026年10月15日",
-   "title": "アビームコンサルティングのインターンES例文と書き方｜P&O職秋ターム選考の例文8選と空欄テンプレ"
-  },
-  {
-   "firm": "アビームコンサルティングの",
-   "date": "2026-10-15",
-   "days": 0,
-   "price": 1980,
-   "likes": 2,
-   "url": "https://note.com/shushoku_career1/n/n398fadd48662",
-   "key": "n398fadd48662",
-   "evidence": "ES締切：2026年10月15日",
-   "title": "アビームコンサルティングのインターンES例文と書き方｜戦略コンサルタントコース秋ターム選考の例文8選と空欄テンプレ"
-  },
-  {
-   "firm": "アビームコンサルティングの",
-   "date": "2026-10-15",
-   "days": 0,
-   "price": 1980,
-   "likes": 0,
-   "url": "https://note.com/shushoku_career1/n/n494fa9e88ece",
-   "key": "n494fa9e88ece",
-   "evidence": "ES締切は2026年10月15日",
-   "title": "アビームコンサルティングのインターンES例文と書き方｜公共経営コンサルタントコースの例文9選と空欄テンプレ"
-  },
-  {
-   "firm": "デロイト トーマツ ファイナンシャルアドバイザリ",
-   "date": "2026-10-15",
-   "days": 0,
-   "price": 1980,
-   "likes": 0,
-   "url": "https://note.com/shushoku_career1/n/nac6a65e6a2b7",
-   "key": "nac6a65e6a2b7",
-   "evidence": "応募締切：2026年10月15日",
-   "title": "【28卒】デロイト トーマツ ファイナンシャルアドバイザリーの本選考ES例文と書き方｜M&A/クライシス職の想定設問・例文8選と空欄テンプレ"
-  },
-  {
    "firm": "EYストラテジー・アンド・コンサルティングの",
    "date": "2026-10-16",
-   "days": 1,
+   "days": 0,
    "price": 1980,
    "likes": 1,
    "url": "https://note.com/shushoku_career1/n/nbf6c3f7d3459",
@@ -395,7 +296,7 @@
   {
    "firm": "NTT東日本の",
    "date": "2026-10-16",
-   "days": 1,
+   "days": 0,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/n15a40d611922",
@@ -406,7 +307,7 @@
   {
    "firm": "PwCコンサルティング",
    "date": "2026-10-18",
-   "days": 3,
+   "days": 2,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/n7485e377decd",
@@ -417,7 +318,7 @@
   {
    "firm": "三菱UFJリサーチ＆コンサルティングの",
    "date": "2026-10-18",
-   "days": 3,
+   "days": 2,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/n669c7b22cd0d",
@@ -428,7 +329,7 @@
   {
    "firm": "アビームコンサルティング",
    "date": "2026-10-29",
-   "days": 14,
+   "days": 13,
    "price": 0,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/ncebf5eb6363c",
@@ -439,7 +340,7 @@
   {
    "firm": "NTT西日本の",
    "date": "2026-11-05",
-   "days": 21,
+   "days": 20,
    "price": 1980,
    "likes": 1,
    "url": "https://note.com/shushoku_career1/n/n42a0b71b6e75",

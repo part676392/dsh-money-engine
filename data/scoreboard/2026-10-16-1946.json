@@ -1,0 +1,162 @@
+{
+ "checked_at": "2026-10-16T19:46:39+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "illust-stock.com",
+    "illust-stock.com",
+    "illust-stock.com",
+    "illust-stock.com",
+    "illust-stock.com",
+    "illust-stock.com",
+    "illust-stock.com",
+    "illust-stock.com",
+    "illust-stock.com",
+    "illust-stock.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "saiyou2.metro.tokyo.lg.jp",
+    "career-ch.com",
+    "saiyou2.metro.tokyo.lg.jp",
+    "reibuncnt.jp",
+    "kouseisaiyou.mhlw.go.jp",
+    "biz.ababa.co.jp",
+    "jinjibu.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "youtube.com",
+    "youtube.com",
+    "youtube.com",
+    "youtube.com",
+    "youtube.com",
+    "youtube.com",
+    "ja.wikipedia.org",
+    "music.youtube.com",
+    "youtube.com",
+    "play.google.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "2,050,000",
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "zhihu.com",
+    "zhihu.com",
+    "wenwen.sogou.com",
+    "wenwen.sogou.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "zhihu.com",
+    "wenwen.sogou.com",
+    "wenwen.sogou.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "58",
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "saiyou2.metro.tokyo.lg.jp",
+    "career-ch.com",
+    "saiyou2.metro.tokyo.lg.jp",
+    "reibuncnt.jp",
+    "kouseisaiyou.mhlw.go.jp",
+    "biz.ababa.co.jp",
+    "jinjibu.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "52,400",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "faq.ikyu.com",
+    "faq.ikyu.com",
+    "faq.ikyu.com",
+    "faq.ikyu.com",
+    "faq.ikyu.com",
+    "faq.ikyu.com",
+    "faq.ikyu.com",
+    "faq.ikyu.com",
+    "faq.ikyu.com",
+    "faq.ikyu.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "jp-guide.net",
+    "hansoku-style.jp",
+    "筆耕.com",
+    "exia.co.jp",
+    "目録.jp",
+    "ja.wikipedia.org",
+    "目録.jp",
+    "docoic.com",
+    "toyo-pri.jp",
+    "amazon.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "46,600",
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

@@ -1,0 +1,162 @@
+{
+ "checked_at": "2026-10-16T13:26:24+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "yahoo.co.jp",
+    "news.yahoo.co.jp",
+    "transit.yahoo.co.jp",
+    "sports.yahoo.co.jp",
+    "weather.yahoo.co.jp",
+    "developer.yahoo.co.jp",
+    "finance.yahoo.co.jp",
+    "weather.yahoo.co.jp",
+    "services.yahoo.co.jp",
+    "news.yahoo.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "saiyou2.metro.tokyo.lg.jp",
+    "saiyou2.metro.tokyo.lg.jp",
+    "career-ch.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "ja.wiktionary.org"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "50,500",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "earthcast.co.jp",
+    "jma.go.jp",
+    "data.jma.go.jp",
+    "eewrk.org",
+    "earthcast.co.jp",
+    "jma.go.jp",
+    "youtube.com",
+    "ja.wikipedia.org",
+    "data.jma.go.jp",
+    "unnerv.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "oil-info.ieej.or.jp",
+    "oil-info.ieej.or.jp",
+    "oil-info.ieej.or.jp",
+    "oil-info.ieej.or.jp",
+    "oil-info.ieej.or.jp",
+    "oil-info.ieej.or.jp",
+    "oil-info.ieej.or.jp",
+    "oil-info.ieej.or.jp",
+    "oil-info.ieej.or.jp",
+    "oil-info.ieej.or.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "manawin.jp",
+    "chigaiwa.com",
+    "kotobank.jp",
+    "reibuncnt.jp",
+    "saiyou2.metro.tokyo.lg.jp",
+    "saiyou2.metro.tokyo.lg.jp",
+    "career-ch.com",
+    "weblio.jp",
+    "jinjibu.jp",
+    "ja.wiktionary.org"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "50,500",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "ejje.weblio.jp",
+    "eow.alc.co.jp",
+    "english-difference.com",
+    "winners-english.com",
+    "e-grammar.info",
+    "saruwakakun.com",
+    "talking-english.net",
+    "dailyeigo.com",
+    "cooori.com",
+    "ei-navi.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "jp-guide.net",
+    "hansoku-style.jp",
+    "筆耕.com",
+    "exia.co.jp",
+    "目録.jp",
+    "ja.wikipedia.org",
+    "docoic.com",
+    "目録.jp",
+    "toyo-pri.jp",
+    "amazon.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

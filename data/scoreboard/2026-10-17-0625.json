@@ -1,0 +1,162 @@
+{
+ "checked_at": "2026-10-17T06:24:46+0900",
+ "site": "part676392.github.io/dsh-money-engine",
+ "queries": {
+  "site_query": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "pokemon.co.jp",
+    "pokemon.co.jp",
+    "zukan.pokemon.co.jp",
+    "sv-news.pokemon.co.jp",
+    "zukan.pokemon.co.jp",
+    "sv-news.pokemon.co.jp",
+    "soundlibrary.pokemon.co.jp",
+    "pokemon.co.jp",
+    "pokemon.co.jp",
+    "pokemon.co.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "site:part676392.github.io/dsh-money-engine"
+  },
+  "brand": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "yahoo.co.jp",
+    "ext.yahoo.co.jp",
+    "support.yahoo-net.jp",
+    "finance.yahoo.co.jp",
+    "support.yahoo-net.jp",
+    "howto.thefilibusterblog.com",
+    "detail.chiebukuro.yahoo.co.jp",
+    "promo-search.yahoo.co.jp",
+    "detail.chiebukuro.yahoo.co.jp",
+    "pcmaster.blog"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "269",
+   "blocked": false,
+   "query": "選考対策 目録データベース"
+  },
+  "longtail": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "meaning-difference.com",
+    "chigai-hikaku.com",
+    "kotobank.jp",
+    "imi-chigai.com",
+    "kotobasta.com",
+    "nihongo-wakaremichi.com",
+    "saiyo-doda.jp",
+    "weblio.jp",
+    "on.tech",
+    "adtechmanagement.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "中途面接対策 企業別 目録"
+  }
+ },
+ "phrases": {
+  "\"この目録を運営している人\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "weblio.jp",
+    "x.com",
+    "e-kae-library.com",
+    "ja.wiktionary.org",
+    "youtube.com",
+    "meaning-dictionary.com",
+    "ja.wikipedia.org",
+    "dic.pixiv.net",
+    "youtube.com",
+    "kotobank.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "\"この目録を運営している人\""
+  },
+  "\"選考ステージ指定\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "youtube.com",
+    "support.google.com",
+    "support.google.com",
+    "zhihu.com",
+    "zhihu.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com",
+    "support.google.com"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": "87",
+   "blocked": false,
+   "query": "\"選考ステージ指定\""
+  },
+  "\"After-Hours Spin Cycle\"": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "ejje.weblio.jp",
+    "e-grammar.info",
+    "eow.alc.co.jp",
+    "winners-english.com",
+    "shinuwakaeng.com",
+    "talking-english.net",
+    "dailyeigo.com",
+    "saruwakakun.com",
+    "cooori.com",
+    "nativecamp.net"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "\"After-Hours Spin Cycle\""
+  },
+  "site:part676392.github.io intitle:目録": {
+   "http_ok": true,
+   "organic_count": 10,
+   "domains": [
+    "jp-guide.net",
+    "hansoku-style.jp",
+    "筆耕.com",
+    "exia.co.jp",
+    "目録.jp",
+    "ja.wikipedia.org",
+    "目録.jp",
+    "docoic.com",
+    "toyo-pri.jp",
+    "mayonez.jp"
+   ],
+   "our_hits": [],
+   "our_links_on_page": 0,
+   "parser_alive": true,
+   "reported_total": null,
+   "blocked": false,
+   "query": "site:part676392.github.io intitle:目録"
+  }
+ }
+}

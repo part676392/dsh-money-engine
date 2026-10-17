@@ -1,11 +1,11 @@
 {
- "generated": "2026-10-17",
+ "generated": "2026-10-18",
  "method": "全 600 記事の本文から締切語と日付の近接を機械抽出（根拠文つき・strict 3 / wide 4 (新規 1)）",
  "open": [
   {
    "firm": "PwCコンサルティング",
    "date": "2026-10-18",
-   "days": 1,
+   "days": 0,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/n7485e377decd",
@@ -16,7 +16,7 @@
   {
    "firm": "三菱UFJリサーチ＆コンサルティングの",
    "date": "2026-10-18",
-   "days": 1,
+   "days": 0,
    "price": 1980,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/n669c7b22cd0d",
@@ -27,7 +27,7 @@
   {
    "firm": "アビームコンサルティング",
    "date": "2026-10-29",
-   "days": 12,
+   "days": 11,
    "price": 0,
    "likes": 0,
    "url": "https://note.com/shushoku_career1/n/ncebf5eb6363c",
@@ -38,7 +38,7 @@
   {
    "firm": "NTT西日本の",
    "date": "2026-11-05",
-   "days": 19,
+   "days": 18,
    "price": 1980,
    "likes": 1,
    "url": "https://note.com/shushoku_career1/n/n42a0b71b6e75",
